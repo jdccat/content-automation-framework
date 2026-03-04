@@ -76,38 +76,47 @@ def generate(
 def generate_index(out_dir: str | Path = "docs") -> Path:
     """docs/ 내 HTML 대시보드를 스캔하여 index.html 을 생성한다.
 
+    버전 파일명(YYYY-MM_client_YYYYMMDD.html)만 인식.
     월별 그룹핑, 최신 버전 강조. GitHub Pages에서 바로 서빙 가능.
     """
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    # index.html 자체는 제외하고 스캔
-    html_files = sorted(
-        (f for f in out_dir.glob("*.html") if f.name != "index.html"),
-        reverse=True,
+    # 버전 파일만 스캔 (YYYY-MM_client_YYYYMMDD.html 패턴)
+    versioned = re.compile(
+        r"^(\d{4})-(\d{2})_([^_]+)_(\d{4})(\d{2})(\d{2})\.html$"
     )
+    entries: list[tuple[str, str, str, Path]] = []  # (month, client, datestamp, path)
+    for f in out_dir.glob("*.html"):
+        m = versioned.match(f.name)
+        if not m:
+            continue
+        year, month, client = m.group(1), m.group(2), m.group(3)
+        ds_y, ds_m, ds_d = m.group(4), m.group(5), m.group(6)
+        month_key = f"{year}-{month}"
+        datestamp = f"{ds_y}-{ds_m}-{ds_d}"
+        entries.append((month_key, client, datestamp, f))
 
-    # 월별 그룹핑: "2026-03" → [파일목록]
-    groups: dict[str, list[Path]] = {}
-    pattern = re.compile(r"^(\d{4}-\d{2})_")
-    for f in html_files:
-        m = pattern.match(f.name)
-        month = m.group(1) if m else "기타"
-        groups.setdefault(month, []).append(f)
+    # 월별 그룹핑, 날짜 역순
+    entries.sort(key=lambda e: (e[0], e[2]), reverse=True)
+    groups: dict[str, list[tuple[str, str, Path]]] = {}
+    for month_key, client, datestamp, path in entries:
+        groups.setdefault(month_key, []).append((client, datestamp, path))
 
     rows_html = []
-    for month in sorted(groups, reverse=True):
-        files = groups[month]
-        for i, f in enumerate(files):
+    for month_key in sorted(groups, reverse=True):
+        items = groups[month_key]
+        for i, (client, datestamp, f) in enumerate(items):
             is_latest = i == 0
+            label = _display_label(month_key, client)
+            update_date = _format_date_ko(datestamp)
             badge = ' <span style="background:#059669;color:#fff;padding:1px 8px;border-radius:999px;font-size:10px;font-weight:600;margin-left:6px">최신</span>' if is_latest else ""
             weight = "700" if is_latest else "400"
             bg = "#F0FDF4" if is_latest else "#fff"
             rows_html.append(
                 f'<tr style="background:{bg}">'
-                f'<td style="padding:10px 14px;font-weight:{weight}">{month}</td>'
-                f'<td style="padding:10px 14px"><a href="{f.name}" style="color:#7C3AED;text-decoration:none;font-weight:{weight}">{f.name}</a>{badge}</td>'
-                f'<td style="padding:10px 14px;color:#6B7280;font-size:12px">{_file_size_label(f)}</td>'
+                f'<td style="padding:10px 14px"><a href="{f.name}" style="color:#7C3AED;text-decoration:none;font-weight:{weight}">{label}</a>{badge}</td>'
+                f'<td style="padding:10px 14px;color:#6B7280;font-size:12px">{update_date}</td>'
                 f"</tr>"
             )
 
@@ -117,11 +126,19 @@ def generate_index(out_dir: str | Path = "docs") -> Path:
     return index_path
 
 
-def _file_size_label(f: Path) -> str:
-    size = f.stat().st_size
-    if size < 1024:
-        return f"{size} B"
-    return f"{size / 1024:.1f} KB"
+CLIENT_KO = {"wishket": "위시켓"}
+
+
+def _display_label(month_key: str, client: str) -> str:
+    """'2026-03', 'wishket' → '위시켓 3월 정규 콘텐츠 전략'."""
+    client_ko = CLIENT_KO.get(client, client)
+    month_num = int(month_key.split("-")[1])
+    return f"{client_ko} {month_num}월 정규 콘텐츠 전략"
+
+
+def _format_date_ko(datestamp: str) -> str:
+    """'2026-03-04' → '2026.03.04 업데이트'."""
+    return datestamp.replace("-", ".") + " 업데이트"
 
 
 # ── 내부 헬퍼 ────────────────────────────────────────────────────
@@ -523,7 +540,7 @@ a:hover{text-decoration:underline!important}
 <h1>콘텐츠 전략 대시보드</h1>
 <p class="sub">월별 발행 전략 대시보드 버전 목록</p>
 <table>
-<tr><th>월</th><th>파일</th><th>크기</th></tr>
+<tr><th>콘텐츠 전략</th><th>업데이트</th></tr>
 %%ROWS%%
 </table>
 </body>
