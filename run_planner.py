@@ -169,16 +169,16 @@ def _print_partial_summary(result: dict, stage: int) -> None:
     print(f"스냅샷: {snapshot_hint}", file=sys.stderr)
 
 
-def _push_dashboard(target_month: str, client_name: str) -> None:
-    """docs/ 대시보드를 git commit + push 한다 (GitHub Pages 자동 배포)."""
-    html_file = f"docs/{target_month}_{client_name}.html"
+def _push_dashboard(dashboard_path: str | Path, target_month: str, client_name: str) -> None:
+    """docs/ 대시보드를 git commit + push 한다 (GitHub Pages 자동 배포).
+
+    버전 파일 + index.html 을 함께 push.
+    """
+    dashboard_path = str(dashboard_path)
+    index_file = "docs/index.html"
     try:
-        # 변경 사항 확인
-        diff = subprocess.run(
-            ["git", "diff", "--cached", "--quiet", html_file],
-            capture_output=True,
-        )
-        subprocess.run(["git", "add", html_file, "docs/.nojekyll"], check=True)
+        files_to_add = [dashboard_path, index_file, "docs/.nojekyll"]
+        subprocess.run(["git", "add"] + files_to_add, check=True)
         status = subprocess.run(
             ["git", "diff", "--cached", "--quiet"],
             capture_output=True,
@@ -193,7 +193,7 @@ def _push_dashboard(target_month: str, client_name: str) -> None:
             capture_output=True,
         )
         subprocess.run(["git", "push"], check=True, capture_output=True)
-        print(f"대시보드 배포 완료: {html_file} → GitHub Pages", file=sys.stderr)
+        print(f"대시보드 배포 완료: {dashboard_path} → GitHub Pages", file=sys.stderr)
     except FileNotFoundError:
         print("[경고] git을 찾을 수 없습니다 — push 건너뜀", file=sys.stderr)
     except subprocess.CalledProcessError as exc:
@@ -215,8 +215,12 @@ def _print_final_summary(plan: ContentPlan) -> None:
     print(f"업데이트 후보: {len(plan.update_candidates)}개", file=sys.stderr)
 
 
-def _save_output(plan: ContentPlan, target_month: str, client_name: str) -> None:
-    """ContentPlan을 output/planner/ 에 JSON + Markdown + HTML 대시보드로 저장한다."""
+def _save_output(plan: ContentPlan, target_month: str, client_name: str) -> Path | None:
+    """ContentPlan을 output/planner/ 에 JSON + Markdown + HTML 대시보드로 저장한다.
+
+    Returns:
+        대시보드 HTML 경로 (생성 실패 시 None).
+    """
     out_dir = Path("output/planner")
     out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -231,13 +235,19 @@ def _save_output(plan: ContentPlan, target_month: str, client_name: str) -> None
         print(f"기획 문서: {md_path}", file=sys.stderr)
 
     # HTML 대시보드 생성 (docs/ → GitHub Pages 배포용)
+    dashboard_path: Path | None = None
     try:
         from core.dashboard import generate as generate_dashboard
+        from core.dashboard import generate_index
 
         dashboard_path = generate_dashboard(json_path, out_dir="docs")
         print(f"대시보드: {dashboard_path}", file=sys.stderr)
+        index_path = generate_index(out_dir="docs")
+        print(f"인덱스: {index_path}", file=sys.stderr)
     except Exception as exc:
         print(f"[경고] 대시보드 생성 실패: {exc}", file=sys.stderr)
+
+    return dashboard_path
 
 
 # ── 메인 ─────────────────────────────────────────────────────────
@@ -296,12 +306,12 @@ async def main(args: argparse.Namespace) -> None:
         _print_partial_summary(run_result, args.stage)  # type: ignore[arg-type]
     else:
         plan = run_result  # type: ignore[assignment]
-        _save_output(plan, target_month, args.client)
+        dashboard_path = _save_output(plan, target_month, args.client)
         _print_final_summary(plan)
 
         # GitHub Pages 대시보드 배포
-        if not args.no_push:
-            _push_dashboard(target_month, args.client)
+        if not args.no_push and dashboard_path:
+            _push_dashboard(dashboard_path, target_month, args.client)
 
         # Google Sheets 업로드 (환경변수 설정된 경우)
         creds_json = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON")

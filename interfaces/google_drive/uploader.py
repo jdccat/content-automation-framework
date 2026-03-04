@@ -125,9 +125,11 @@ def _upload_sync(plan: ContentPlan, folder_id: str, creds_json_path: str) -> str
 
     sh = _get_or_create_spreadsheet(gc, drive, folder_id)
     strategy = _parse_strategy_summary(plan.planning_document or "")
-    rows, layout = _build_rows(plan, strategy)
+    today = date.today()
+    rows, layout = _build_rows(plan, strategy, run_date=today)
 
-    ws = _get_or_create_worksheet(sh, plan.target_month, len(rows) + 5)
+    tab_name = _versioned_tab_name(plan.target_month, today)
+    ws = _get_or_create_worksheet(sh, tab_name, len(rows) + 5)
 
     # ① 이전 병합 먼저 해제
     #    ws.clear()는 셀 값만 지우고 merge는 유지됨.
@@ -147,18 +149,31 @@ def _upload_sync(plan: ContentPlan, folder_id: str, creds_json_path: str) -> str
     _format_sheet(sh, ws, layout)
 
     url = f"https://docs.google.com/spreadsheets/d/{sh.id}/edit"
-    logger.info("Google Sheets 업로드 완료: %s (탭: %s)", url, plan.target_month)
+    logger.info("Google Sheets 업로드 완료: %s (탭: %s)", url, tab_name)
     return url
 
 
 # ── 행 데이터 조립 ───────────────────────────────────────────────
 
-def _build_rows(plan: ContentPlan, strategy: dict) -> tuple[list[list], dict]:
+def _versioned_tab_name(month: str, run_date: date) -> str:
+    """월별 탭 이름에 실행 날짜를 붙인다. 예: '2026-03 (03/04)'."""
+    return f"{month} ({run_date.strftime('%m/%d')})"
+
+
+def _build_rows(
+    plan: ContentPlan, strategy: dict, run_date: date | None = None,
+) -> tuple[list[list], dict]:
     rows: list[list] = []
     layout: dict = {}
     E = [""] * NUM_COLS
 
-    total       = len(plan.content_pieces)
+    today = run_date or date.today()
+    # 과거 발행일 콘텐츠 필터링
+    filtered_pieces = [
+        p for p in plan.content_pieces
+        if not p.publish_date or not _is_past_date(p.publish_date, today)
+    ]
+    total       = len(filtered_pieces)
     content_dir = _extract_direction(plan, strategy)
     intent_text = " · ".join(plan.intent) if plan.intent else _extract_intent(strategy)
     questions   = list(plan.categories or [])
@@ -219,7 +234,7 @@ def _build_rows(plan: ContentPlan, strategy: dict) -> tuple[list[list], dict]:
     rows.append(PUB_HEADERS + [""] + RAT_HEADERS)
 
     layout["row_data_start"] = len(rows)
-    for piece in sorted(plan.content_pieces, key=lambda p: p.publish_date or ""):
+    for piece in sorted(filtered_pieces, key=lambda p: p.publish_date or ""):
         rows.append(_piece_to_row(piece))
     layout["row_data_end"] = len(rows)
 
@@ -247,16 +262,24 @@ def _get_or_create_spreadsheet(gc: gspread.Client, drive, folder_id: str) -> gsp
     )
 
 
-def _get_or_create_worksheet(sh: gspread.Spreadsheet, month: str, total_rows: int) -> gspread.Worksheet:
+def _get_or_create_worksheet(sh: gspread.Spreadsheet, tab_name: str, total_rows: int) -> gspread.Worksheet:
     try:
-        ws = sh.worksheet(month)
+        ws = sh.worksheet(tab_name)
         ws.clear()
         return ws
     except gspread.WorksheetNotFound:
-        return sh.add_worksheet(title=month, rows=total_rows, cols=NUM_COLS)
+        return sh.add_worksheet(title=tab_name, rows=total_rows, cols=NUM_COLS)
 
 
 # ── 데이터 변환 ──────────────────────────────────────────────────
+
+def _is_past_date(date_str: str, today: date) -> bool:
+    """publish_date 문자열이 today 이전이면 True."""
+    try:
+        return date.fromisoformat(date_str) < today
+    except ValueError:
+        return False
+
 
 def _piece_to_row(piece: ContentPiece) -> list:
     try:

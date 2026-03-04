@@ -2,7 +2,8 @@
 
 사용법:
   python -m core.dashboard output/planner/2026-03_wishket_plan.json
-  → docs/2026-03_wishket.html 생성
+  → docs/2026-03_wishket_20260304.html 생성 (run_date 기준 버전)
+  → docs/index.html 자동 생성 (월별 인덱스)
 
 파이프라인 내부:
   run_planner.py 완료 후 자동 호출.
@@ -35,8 +36,17 @@ DAY_KO = {0: "월", 1: "화", 2: "수", 3: "목", 4: "금", 5: "토", 6: "일"}
 # ── 공개 API ─────────────────────────────────────────────────────
 
 
-def generate(plan_path: str | Path, out_dir: str | Path = "docs") -> Path:
+def generate(
+    plan_path: str | Path,
+    out_dir: str | Path = "docs",
+    run_date: date | None = None,
+) -> Path:
     """ContentPlan JSON 을 읽어 HTML 대시보드를 생성한다.
+
+    Args:
+        plan_path: ContentPlan JSON 경로.
+        out_dir: 출력 디렉토리 (기본 docs/).
+        run_date: 버전 기준 날짜 (기본 today).
 
     Returns:
         생성된 HTML 파일의 Path.
@@ -45,16 +55,73 @@ def generate(plan_path: str | Path, out_dir: str | Path = "docs") -> Path:
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
+    if run_date is None:
+        run_date = date.today()
+
     with open(plan_path, encoding="utf-8") as f:
         plan = json.load(f)
 
-    items = _build_items(plan)
+    items = _build_items(plan, run_date)
     html = _render(plan, items)
 
-    filename = f"{plan.get('target_month', 'unknown')}_{plan.get('client_name', 'client')}.html"
+    month = plan.get("target_month", "unknown")
+    client = plan.get("client_name", "client")
+    datestamp = run_date.strftime("%Y%m%d")
+    filename = f"{month}_{client}_{datestamp}.html"
     out_file = out_dir / filename
     out_file.write_text(html, encoding="utf-8")
     return out_file
+
+
+def generate_index(out_dir: str | Path = "docs") -> Path:
+    """docs/ 내 HTML 대시보드를 스캔하여 index.html 을 생성한다.
+
+    월별 그룹핑, 최신 버전 강조. GitHub Pages에서 바로 서빙 가능.
+    """
+    out_dir = Path(out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    # index.html 자체는 제외하고 스캔
+    html_files = sorted(
+        (f for f in out_dir.glob("*.html") if f.name != "index.html"),
+        reverse=True,
+    )
+
+    # 월별 그룹핑: "2026-03" → [파일목록]
+    groups: dict[str, list[Path]] = {}
+    pattern = re.compile(r"^(\d{4}-\d{2})_")
+    for f in html_files:
+        m = pattern.match(f.name)
+        month = m.group(1) if m else "기타"
+        groups.setdefault(month, []).append(f)
+
+    rows_html = []
+    for month in sorted(groups, reverse=True):
+        files = groups[month]
+        for i, f in enumerate(files):
+            is_latest = i == 0
+            badge = ' <span style="background:#059669;color:#fff;padding:1px 8px;border-radius:999px;font-size:10px;font-weight:600;margin-left:6px">최신</span>' if is_latest else ""
+            weight = "700" if is_latest else "400"
+            bg = "#F0FDF4" if is_latest else "#fff"
+            rows_html.append(
+                f'<tr style="background:{bg}">'
+                f'<td style="padding:10px 14px;font-weight:{weight}">{month}</td>'
+                f'<td style="padding:10px 14px"><a href="{f.name}" style="color:#7C3AED;text-decoration:none;font-weight:{weight}">{f.name}</a>{badge}</td>'
+                f'<td style="padding:10px 14px;color:#6B7280;font-size:12px">{_file_size_label(f)}</td>'
+                f"</tr>"
+            )
+
+    index_html = _INDEX_TEMPLATE.replace("%%ROWS%%", "\n".join(rows_html))
+    index_path = out_dir / "index.html"
+    index_path.write_text(index_html, encoding="utf-8")
+    return index_path
+
+
+def _file_size_label(f: Path) -> str:
+    size = f.stat().st_size
+    if size < 1024:
+        return f"{size} B"
+    return f"{size / 1024:.1f} KB"
 
 
 # ── 내부 헬퍼 ────────────────────────────────────────────────────
@@ -82,14 +149,26 @@ def _format_rationale(piece: dict) -> str:
     return text
 
 
-def _build_items(plan: dict) -> list[dict]:
-    """content_pieces → JS D 배열 형식 리스트."""
+def _build_items(plan: dict, run_date: date | None = None) -> list[dict]:
+    """content_pieces → JS D 배열 형식 리스트.
+
+    run_date 이전 발행일의 콘텐츠는 제외한다 (플랜 원본은 보존).
+    """
+    today = run_date or date.today()
     pieces = sorted(
         plan.get("content_pieces", []),
         key=lambda p: p.get("publish_date", ""),
     )
     items = []
     for p in pieces:
+        # 과거 발행일 필터링
+        pub_str = p.get("publish_date", "")
+        if pub_str:
+            try:
+                if date.fromisoformat(pub_str) < today:
+                    continue
+            except ValueError:
+                pass
         pub = p.get("publish_date", "")
         dt = date.fromisoformat(pub) if pub else None
 
@@ -419,6 +498,39 @@ function renderDetail(){
 """
 
 
+# ── 인덱스 HTML 템플릿 ──────────────────────────────────────────
+
+_INDEX_TEMPLATE = r"""<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>콘텐츠 전략 대시보드</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#111;background:#fff;max-width:800px;margin:0 auto;padding:40px 20px}
+h1{font-size:22px;font-weight:800;margin-bottom:6px}
+.sub{font-size:13px;color:#6B7280;margin-bottom:28px}
+table{width:100%;border-collapse:collapse;border:1px solid #E5E7EB;border-radius:8px;overflow:hidden}
+th{background:#F9FAFB;text-align:left;padding:10px 14px;font-size:11px;font-weight:700;color:#9CA3AF;letter-spacing:.5px;border-bottom:1px solid #E5E7EB}
+td{border-bottom:1px solid #F3F4F6}
+tr:last-child td{border-bottom:none}
+a:hover{text-decoration:underline!important}
+</style>
+</head>
+<body>
+<div style="font-size:11px;font-weight:700;color:#7C3AED;letter-spacing:1.2px;margin-bottom:4px">WISHKET BLOG · CONTENT STRATEGY</div>
+<h1>콘텐츠 전략 대시보드</h1>
+<p class="sub">월별 발행 전략 대시보드 버전 목록</p>
+<table>
+<tr><th>월</th><th>파일</th><th>크기</th></tr>
+%%ROWS%%
+</table>
+</body>
+</html>
+"""
+
+
 # ── CLI 실행 ─────────────────────────────────────────────────────
 
 if __name__ == "__main__":
@@ -432,3 +544,5 @@ if __name__ == "__main__":
     out = sys.argv[2] if len(sys.argv) > 2 else "docs"
     result = generate(plan_json, out)
     print(f"대시보드 생성 완료: {result}")
+    idx = generate_index(out)
+    print(f"인덱스 생성 완료: {idx}")
