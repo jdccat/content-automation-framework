@@ -357,7 +357,10 @@ h1{font-size:24px;font-weight:800;margin:4px 0}
 </style>
 </head>
 <body>
+<div style="display:flex;justify-content:space-between;align-items:center">
 <div class="label">WISHKET BLOG · CONTENT STRATEGY</div>
+<a href="index.html" style="font-size:12px;font-weight:600;color:#7C3AED;text-decoration:none;padding:5px 14px;border:1px solid #7C3AED30;border-radius:6px;transition:background .15s" onmouseover="this.style.background='#F5F3FF'" onmouseout="this.style.background='transparent'">&#8592; 전체 목록</a>
+</div>
 <h1>%%YEAR_MONTH%% 콘텐츠 전략</h1>
 <p class="desc">%%DESC%%</p>
 
