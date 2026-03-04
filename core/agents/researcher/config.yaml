@@ -1,0 +1,64 @@
+name: researcher
+version: 5
+
+models:
+  main: gpt-5.2
+  mini: gpt-4.1-mini
+
+input: natural_language_string
+output_schema: ResearchResult
+
+context_path: clients/{client}/context.yaml
+
+seed_filter:
+  enabled: true
+
+archive:
+  runs_dir: archive/researcher/runs
+  index_file: archive/researcher/index.json
+
+longtail:
+  max_second_pass: 10
+
+focus:
+  max_ratio: 0.70               # 포커스 클러스터 최대 비율 (전체 대비)
+
+# 경쟁사 도메인 목록 — ContentMeta.is_competitor, GeoCitation.is_competitor 플래그에 사용
+competitor_domains:
+  - wishket.com        # 자사 도메인은 is_own_domain 별도 처리
+  # 외주 개발 플랫폼 경쟁사
+  - freemoa.net
+  - kmong.com
+  - soomgo.com
+  - loud.kr
+  - elancer.co.kr
+  - codeit.kr
+
+quality_gate:
+  clusters_min: 1
+  keywords_per_cluster_min: 3
+
+# 단계별 도구 매핑 (spec v2)
+tools:
+  # 1단계: 키워드 확장 및 클러스터링
+  stage1_expansion:
+    - autocomplete          # 구글/네이버 자동완성
+    - google_related        # 구글 연관 검색어
+    - google_paa            # People Also Ask
+    - naver_searchad        # 키워드 도구 — 롱테일/동의어/유사 표현
+
+  # 2단계: 검증 수집 (구글/네이버 분리)
+  stage2_validation:
+    - naver_searchad        # 월간 검색량 (PC/모바일 분리)
+    - google_trends         # 구글 6개월 추이
+    - naver_datalab         # 네이버 6개월 추이
+    - google_search         # 구글 상위 10개 + SERP 피처
+    - naver_search          # 네이버 상위 10개
+    - web_fetch             # 구글 상위 콘텐츠 H2 수집
+
+  # 3단계: 외부 AI 환경 수집
+  stage3_geo:
+    - ai_search             # ChatGPT 인용 수집
+    - perplexity_search     # Perplexity 인용 수집
+    # claude_search         # Claude 인용 수집 (미구현 — 브라우저 기반)
+    # gemini_search         # Gemini 인용 수집 (미구현 — 브라우저 기반)

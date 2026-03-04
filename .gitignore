@@ -1,0 +1,10 @@
+.env
+.venv/
+output/
+snapshots/
+credentials/
+clients/*/content_db/
+__pycache__/
+*.pyc
+.DS_Store
+.browser_profiles/

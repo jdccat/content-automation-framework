@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026년 3월 위시켓 블로그 콘텐츠 전략</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#111;background:#fff;max-width:1000px;margin:0 auto;padding:28px 20px}
+.label{font-size:11px;font-weight:700;color:#7C3AED;letter-spacing:1.2px}
+h1{font-size:24px;font-weight:800;margin:4px 0}
+.desc{font-size:13px;color:#6B7280;line-height:1.6;margin-bottom:24px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
+.stat{background:#F9FAFB;border-radius:10px;padding:14px 16px;border:1px solid #F3F4F6}
+.stat-label{font-size:10px;font-weight:700;color:#9CA3AF;letter-spacing:.8px;margin-bottom:4px}
+.stat-val{font-size:22px;font-weight:800}.stat-sub{font-size:11px;color:#6B7280;margin-top:2px}
+.dist{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:28px}
+.dist-box{background:#F9FAFB;border-radius:10px;padding:14px;border:1px solid #F3F4F6}
+.dist-title{font-size:10px;font-weight:700;color:#9CA3AF;letter-spacing:.8px;margin-bottom:8px}
+.dist-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.dist-row span:last-child{font-size:13px;font-weight:700}
+.badge{display:inline-block;padding:1px 7px;border-radius:999px;font-size:10px;font-weight:600;white-space:nowrap}
+.b-funnel-고려{background:#D9770614;color:#D97706;border:1px solid #D9770630}
+.b-funnel-인지{background:#2563EB14;color:#2563EB;border:1px solid #2563EB30}
+.b-funnel-전환{background:#05966914;color:#059669;border:1px solid #05966930}
+.b-funnel-미분류{background:#6B728014;color:#6B7280;border:1px solid #6B728030}
+.b-geo-비교형{background:#7C3AED14;color:#7C3AED;border:1px solid #7C3AED30}
+.b-geo-문제해결형{background:#DB277714;color:#DB2777;border:1px solid #DB277730}
+.b-geo-정의형{background:#0891B214;color:#0891B2;border:1px solid #0891B230}
+.tabs{display:flex;border-bottom:1px solid #E5E7EB;margin-bottom:0}
+.tab{padding:8px 18px;font-size:13px;font-weight:500;color:#999;background:transparent;border:1px solid transparent;border-bottom:1px solid #E5E7EB;border-radius:8px 8px 0 0;cursor:pointer;margin-bottom:-1px}
+.tab.active{font-weight:700;color:#111;background:#fff;border:1px solid #E5E7EB;border-bottom:1px solid #fff}
+.panel{border:1px solid #E5E7EB;border-top:none;border-radius:0 0 10px 10px;background:#fff}
+.cal-head{display:grid;grid-template-columns:74px 56px 82px 1fr 80px 80px;padding:10px 16px 8px;font-size:10px;font-weight:700;color:#9CA3AF;letter-spacing:.5px;border-bottom:1px solid #F3F4F6}
+.cal-row{display:grid;grid-template-columns:74px 56px 82px 1fr 80px 80px;padding:10px 16px;align-items:center;cursor:pointer;border-bottom:1px solid #F9FAFB;transition:background .1s}
+.cal-row:nth-child(odd){background:#FAFBFC}
+.cal-row:hover,.cal-row.sel{background:#F5F3FF}
+.cal-date{font-size:13px;font-weight:700}.cal-day{font-size:10px;color:#999;margin-left:4px}
+.cal-title{font-size:13px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-right:8px}
+.cal-vol{font-size:12px;color:#444}
+.pri-bar{display:flex;align-items:center;gap:5px}
+.pri-track{width:48px;height:5px;border-radius:3px;background:#F3F4F6;overflow:hidden}
+.pri-fill{height:100%;border-radius:3px}
+.pri-num{font-size:11px;font-weight:700}
+.detail{padding:0 20px 20px;display:none}
+.detail.show{display:block}
+.nav{display:flex;justify-content:space-between;align-items:center;padding:10px 0 16px;border-bottom:1px solid #F3F4F6;margin-bottom:20px}
+.nav-btn{background:none;border:none;cursor:pointer;font-size:12px;color:#7C3AED}
+.nav-btn:disabled{color:#D1D5DB;cursor:default}
+.nav-dots{display:flex;gap:4px}
+.nav-dot{width:24px;height:24px;border-radius:6px;border:none;font-size:11px;font-weight:600;cursor:pointer;background:#F3F4F6;color:#999}
+.nav-dot.active{background:#7C3AED;color:#fff}
+.d-meta{font-size:11px;color:#9CA3AF;font-weight:600;margin-bottom:4px}
+.d-title{font-size:20px;font-weight:800;line-height:1.35;margin-bottom:10px}
+.d-badges{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px}
+.d-badges .badge{padding:2px 10px;font-size:11px}
+.d-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.d-card{background:#F9FAFB;border-radius:8px;padding:14px}
+.d-card-label{font-size:10px;font-weight:700;color:#9CA3AF;letter-spacing:.8px;margin-bottom:6px}
+.d-card-text{font-size:13px;color:#374151;line-height:1.55}
+.d-card-text.italic{font-size:14px;font-style:italic;line-height:1.5}
+.info-card{border-radius:8px;padding:12px 14px;margin-bottom:10px}
+.info-card .lbl{font-size:10px;font-weight:700;letter-spacing:.8px;margin-bottom:4px}
+.info-card .txt{font-size:13px;line-height:1.6}
+.ic-parent{background:#FEFCE8;border:1px solid #FEF08A}.ic-parent .lbl{color:#A16207}.ic-parent .txt{color:#713F12}
+.ic-question{background:#F0FDF4;border:1px solid #BBF7D0}.ic-question .lbl{color:#166534}.ic-question .txt{color:#14532D}
+.h2-list{margin-top:6px}
+.h2-label{font-size:10px;font-weight:700;color:#9CA3AF;letter-spacing:.8px;margin-bottom:10px}
+.h2-item{display:flex;gap:10px;margin-bottom:6px;align-items:flex-start}
+.h2-tag{min-width:22px;height:22px;border-radius:6px;background:#F3F4F6;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#666;flex-shrink:0}
+.h2-text{font-size:13px;color:#374151;line-height:1.5}
+.empty{padding:40px 16px;text-align:center;font-size:14px;color:#999}
+.empty-btns{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:16px}
+.empty-btn{padding:6px 12px;border-radius:6px;border:1px solid #E5E7EB;background:#fff;cursor:pointer;font-size:12px;color:#333}
+@media(max-width:700px){.stats{grid-template-columns:1fr 1fr}.dist{grid-template-columns:1fr}.d-grid{grid-template-columns:1fr}.cal-head,.cal-row{grid-template-columns:60px 48px 70px 1fr 60px 60px;font-size:11px}}
+</style>
+</head>
+<body>
+<div class="label">WISHKET BLOG · CONTENT STRATEGY</div>
+<h1>2026년 3월 콘텐츠 전략</h1>
+<p class="desc">'비교 판단' 의도의 검색자를 대상으로 '판단 기준 제시' 방향의 콘텐츠 13건을 기획하여 월·수·금 주 3회 발행한다.</p>
+
+<div class="stats">
+  <div class="stat"><div class="stat-label">총 콘텐츠</div><div class="stat-val">13건</div><div class="stat-sub">주 3회 · 월/수/금</div></div>
+  <div class="stat"><div class="stat-label">전략 방향</div><div class="stat-val" style="font-size:16px;margin-top:6px">판단 기준 제시</div><div class="stat-sub">고려 단계 집중</div></div>
+  <div class="stat"><div class="stat-label">주요 검색 의도</div><div class="stat-val" style="font-size:16px;margin-top:6px">비교 판단</div><div class="stat-sub">비교형 8건 · 문제해결형 5건</div></div>
+</div>
+
+<div style="background:#F9FAFB;border-radius:10px;padding:16px 18px;border:1px solid #F3F4F6;margin-bottom:20px">
+  <div class="stat-label" style="margin-bottom:10px">사용자 입력 질문 (3건)</div>
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <div style="display:flex;align-items:flex-start;gap:8px"><span style="min-width:18px;height:18px;border-radius:5px;background:#7C3AED;color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">1</span><span style="font-size:13px;color:#374151;line-height:1.5">1. ERP 외주 개발 업체를 고를 때 가장 중요하게 봐야 할 기준은 무엇인가요?</span></div>
+    <div style="display:flex;align-items:flex-start;gap:8px"><span style="min-width:18px;height:18px;border-radius:5px;background:#7C3AED;color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">2</span><span style="font-size:13px;color:#374151;line-height:1.5">2. 앱 개발 견적이 업체마다 다른 이유는 무엇이며 어떤 기준으로 판단해야 하나요?</span></div>
+    <div style="display:flex;align-items:flex-start;gap:8px"><span style="min-width:18px;height:18px;border-radius:5px;background:#7C3AED;color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">3</span><span style="font-size:13px;color:#374151;line-height:1.5">3. 외주 개발 프로젝트를 진행할 때 가장 자주 발생하는 문제는 무엇이며, 어떻게 해결할 수 있나요?</span></div>
+  </div>
+</div>
+
+<div class="dist">
+  <div class="dist-box"><div class="dist-title">퍼널 분포</div><div id="funnelDist"></div></div>
+  <div class="dist-box"><div class="dist-title">GEO 구조</div><div id="geoDist"></div></div>
+  <div class="dist-box"><div class="dist-title">카테고리</div><div id="catDist"></div></div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" id="tabCal" onclick="showView('cal')">발행 캘린더</button>
+  <button class="tab" id="tabDetail" onclick="showView('detail')">콘텐츠 상세</button>
+</div>
+
+<div class="panel">
+  <div id="viewCal">
+    <div class="cal-head"><span>발행일</span><span>퍼널</span><span>GEO</span><span>제목 (SEO)</span><span>검색량</span><span>우선순위</span></div>
+    <div id="calRows"></div>
+  </div>
+  <div id="viewDetail" style="display:none">
+    <div id="detailEmpty" class="empty">
+      콘텐츠를 선택하세요
+      <div class="empty-btns" id="emptyBtns"></div>
+    </div>
+    <div id="detailContent" class="detail"></div>
+  </div>
+</div>
+
+<script>
+const D=[{"date": "03.02", "day": "월", "cat": "앱 개발 견적", "funnel": "고려", "geo": "비교형", "seo": "앱 개발 외주 vs 프리랜서, 상황별 선택 기준 비교", "ctr": "프리랜서에게 앱 맡기기 전에 따져봐야 할 것들", "h2": ["앱 개발 외주 vs 프리랜서, 무엇을 기준으로 고를까", "비용·기간·품질 관리 — 항목별 비교", "앱 개발 외주 vs 프리랜서, 상황별 선택 기준", "프리랜서 앱 개발 시 발생할 수 있는 리스크와 예방법"], "cta": "견적 비교", "purpose": "앱 개발 외주와 프리랜서 방식의 차이를 조건별로 비교해 상황에 맞는 선택을 돕는다", "vol": 3570, "pri": 10.0, "parentQ": "2. 앱 개발 견적이 업체마다 다른 이유는 무엇이며 어떤 기준으로 판단해야 하나요?", "question": "앱 개발 외주와 프리랜서 중 어떤 방식을 선택해야 하나요?", "rationale": "데이터 — 연관 검색어 클러스터 전체 네이버 검색량 월 3,570회, 트렌드 상승. 카테고리 전체에서 가장 높은 검색량과 상승 트렌드를 동시에 보유한 주제로, 선점 가치가 매우 높고 대규모 유입을 기대할 수 있다.\n방향 — 외주 업체와 프리랜서 각각의 장단점을 병렬 비교하고 상황별 선택 기준을 제시하는 구조로 작성된다. '판단 기준 제시' 방향성에 정합하며, 방식 선택을 고민하는 탐색 초기 독자에게 명확한 의사결정 프레임을 제공해 위시켓 플랫폼으로의 유입 효과를 극대화한다.\n퍼널 — 고려: 검색자는 앱 개발을 외주로 진행하려 하지만 개발사에 맡길지 프리랜서에게 맡길지 방식을 비교하는 상태다. 외주 자체는 전제로 하고 있으나 어떤 방식이 자신의 상황에 맞는지 조건을 따지는 비교·선택 단계에 해당한다. SERP 상위 콘텐츠에 '개발자 양성과정 후기' 등 인지성 콘텐츠가 일부 섞여 있으나, 질문 자체의 'vs' 비교·선택 맥락이 더 강하다.", "trend": "상승"}, {"date": "03.04", "day": "수", "cat": "앱 개발 견적", "funnel": "전환", "geo": "문제해결형", "seo": "앱 개발 견적 받기 전 준비해야 할 3가지", "ctr": "준비 없이 앱 개발 견적 받으면 호구가 되는 이유", "h2": ["앱 개발 견적을 받기 전에 준비하지 않으면 생기는 일", "앱 개발 견적 요청 전 준비해야 할 3가지", "앱 개발 견적서 양식과 항목별 확인 방법", "앱 개발 견적 비교 시 중점적으로 봐야 할 점", "견적 준비 완료 후 다음 단계"], "cta": "프로젝트 등록", "purpose": "앱 개발 견적을 요청하기 전 준비해야 할 사항을 단계별로 안내해 견적 요청 실행을 돕는다", "vol": 340, "pri": 6.5, "parentQ": "2. 앱 개발 견적이 업체마다 다른 이유는 무엇이며 어떤 기준으로 판단해야 하나요?", "question": "앱 개발 견적을 받기 전에 준비해야 할 사항은 무엇인가요?", "rationale": "데이터 — 연관 검색어 클러스터 전체 네이버 검색량 월 340회, 트렌드 안정. 견적 요청 직전 단계의 준비 사항을 탐색하는 수요가 꾸준히 유지되고 있어 전환 의도가 높은 독자를 유입할 수 있다.\n방향 — 견적 요청 전 준비해야 할 사항을 단계별 체크리스트 형식으로 구조화하는 콘텐츠로 작성된다. '판단 기준 제시' 방향성에 정합하며, 전환 단계 독자가 준비 과정에서 위시켓 플랫폼을 자연스럽게 활용하도록 유도하는 효과를 기대할 수 있다.\n퍼널 — 전환: 검색자는 앱 개발 견적을 받기로 결정하고 그 전에 준비해야 할 사항을 실무적으로 확인하려는 상태다. '견적을 받기 전에 준비해야 할 사항'은 견적 요청이라는 행동을 바로 앞두고 실행 준비를 하는 단계에 해당한다. SERP 상위 콘텐츠도 '견적 받기 전에 꼭 확인해야 할 것', '호구 탈출 기준' 등 견적 요청 실행을 위한 실무 준비 콘텐츠 위주로 구성되어 있다.", "trend": "안정"}, {"date": "03.06", "day": "금", "cat": "앱 개발 견적", "funnel": "고려", "geo": "비교형", "seo": "앱 개발 업체 선택 전 핵심 주의사항 4가지", "ctr": "앱 개발 업체 포트폴리오, 이렇게 읽으면 속지 않는다", "h2": ["앱 개발 업체, 맡기기 전에 반드시 확인해야 할 것", "앱 개발 업체 선택 기준 — 잘 만들어주는 곳의 특징 4가지", "앱 개발 업체 비교 시 포트폴리오를 읽는 방법", "앱 개발 업체와의 계약 시 주의해야 할 사항"], "cta": "견적 비교", "purpose": "앱 개발 업체 선택 전 반드시 확인해야 할 핵심 주의사항을 체계적으로 제시해 선정 실패를 예방한다", "vol": 800, "pri": 7.2, "parentQ": "2. 앱 개발 견적이 업체마다 다른 이유는 무엇이며 어떤 기준으로 판단해야 하나요?", "question": "앱 개발 업체를 선택할 때 반드시 확인해야 할 핵심 주의사항은 무엇인가요?", "rationale": "데이터 — 연관 검색어 클러스터 전체 네이버 검색량 월 800회, 트렌드 안정. 카테고리 내 상위 검색량을 기록하는 주제로, 앱 개발 업체 선택 단계의 핵심 탐색 수요를 대표하는 콘텐츠 기회다.\n방향 — 업체 선택 시 반드시 확인해야 할 핵심 항목을 우선순위 순으로 정리하는 체크리스트형 구조로 작성된다. '판단 기준 제시' 방향성에 정합하며, 높은 검색량을 바탕으로 고려 단계 독자에게 명확한 선택 기준을 제공해 위시켓 플랫폼으로의 전환을 자연스럽게 유도한다.\n퍼널 — 고려: 검색자는 앱 개발을 외주로 맡기기로 하고 업체를 선택하기 전에 핵심 주의사항을 확인하려는 상태다. 특정 플랫폼이나 업체를 정하지 않고 선정 기준과 체크리스트를 탐색하는 비교·평가 단계에 해당한다. SERP 상위 콘텐츠도 '맡기기 전 알아야 할 핵심 주의사항', '잘 만들어주는 곳 특징', '선택 고민된다면 필독' 등 업체 선정 판단을 돕는 콘텐츠 위주로 구성되어 있다.", "trend": "안정"}, {"date": "03.09", "day": "월", "cat": "외주 개발 프로젝트", "funnel": "전환", "geo": "문제해결형", "seo": "외주 개발 계약서 필수 조항 6가지와 독소조항 대응법", "ctr": "이 조항 빠진 외주 계약서, 사인하면 안 됩니다", "h2": ["외주 개발 계약서 없이 시작하면 생기는 일", "외주 개발 계약서에 반드시 넣어야 할 6가지 조항", "외주 개발 계약서 독소조항 유형과 대응 방법", "외주 개발 계약서 작성 시 유의사항 체크리스트", "계약서 검토 후 다음 단계는?"], "cta": "프로젝트 등록", "purpose": "외주 개발 계약서에 반드시 포함해야 할 조항을 구체적으로 안내해 계약 실행 단계의 리스크를 예방한다", "vol": 120, "pri": 5.6, "parentQ": "3. 외주 개발 프로젝트를 진행할 때 가장 자주 발생하는 문제는 무엇이며, 어떻게 해결할 수 있나요?", "question": "외주 개발 계약서에 반드시 포함해야 할 조항은 무엇인가요?", "rationale": "데이터 — 연관 검색어 클러스터 전체 네이버 검색량 월 120회, 트렌드 안정. 검색량은 낮지만 계약 단계에 진입한 전환 의도가 높은 독자가 탐색하는 주제로, 실질적 전환 기여 가치가 크다.\n방향 — 계약서에 포함해야 할 필수 조항을 항목별 체크리스트 형식으로 구조화하는 콘텐츠로 작성된다. '판단 기준 제시' 방향성에 정합하며, 계약 직전 단계 독자에게 구체적 행동 기준을 제공해 위험 회피와 신뢰 형성에 기여한다.\n퍼널 — 전환: 검색자는 외주 개발을 진행하기로 결정하고 계약 단계에서 실무적으로 필요한 정보를 찾는 상태다. '계약서에 반드시 포함해야 할 조항'은 이미 업체를 선정했거나 선정 직전에 계약 실행을 준비하는 행동 직전 탐색에 해당한다. SERP 상위 콘텐츠도 '사인 전 확인사항', '독소조항', '하자보수 범위 명시' 등 계약 실행 실무 정보 위주로 구성되어 있어 전환 단계 탐색임을 뒷받침한다.", "trend": "안정"}, {"date": "03.11", "day": "수", "cat": "앱 개발 견적", "funnel": "고려", "geo": "문제해결형", "seo": "앱 개발 비용 절감 방법 4가지, 품질 유지하면서 줄이는 법", "ctr": "앱 개발 비용, 비싸다고 잘 나오는 건 아닙니다", "h2": ["앱 개발 비용, 왜 예상보다 항상 더 나올까", "앱 개발 비용을 결정하는 핵심 요소", "앱 개발 비용 절감 팁 — 품질을 유지하면서 줄이는 방법", "앱 개발 비용 비교 — 비싸다고 무조건 잘 나오는 건 아니다"], "cta": "견적 비교", "purpose": "앱 개발 비용 절감의 현실적인 방법을 구체적으로 제시해 비용 부담을 줄이는 의사결정을 돕는다", "vol": 760, "pri": 7.2, "parentQ": "2. 앱 개발 견적이 업체마다 다른 이유는 무엇이며 어떤 기준으로 판단해야 하나요?", "question": "앱 개발 비용을 절감할 수 있는 현실적인 방법은 무엇인가요?", "rationale": "데이터 — 연관 검색어 클러스터 전체 네이버 검색량 월 760회, 트렌드 안정. 비용 절감에 대한 높은 탐색 수요가 안정적으로 유지되고 있어 예산 민감 독자층을 대규모로 유입할 수 있는 주제다.\n방향 — 앱 개발 비용을 현실적으로 절감할 수 있는 방법을 항목별로 분류·설명하는 실용형 구조로 작성된다. '판단 기준 제시' 방향성에 정합하며, 예산 제약을 가진 독자에게 구체적 절감 기준을 제시해 위시켓 플랫폼 활용의 실질적 이점을 자연스럽게 연결한다.\n퍼널 — 고려: 검색자는 앱 개발 비용에 부담을 느끼며 현실적인 절감 방법을 탐색하는 상태다. 외주 개발을 선택지로 인식하고 있지만 비용 구조를 파악하고 최적의 방법을 따지는 비교·검토 단계에 해당한다. SERP 상위 콘텐츠도 '비용 기준 정리', '비싸다고 잘 나오는 건 아니다', '절감 방법' 등 비용 판단을 위한 정보 제공 콘텐츠 위주로 구성되어 있다.", "trend": "안정"}, {"date": "03.13", "day": "금", "cat": "외주 개발 프로젝트", "funnel": "고려", "geo": "문제해결형", "seo": "외주 개발 프로젝트 위험 요소 5가지와 예방 방법", "ctr": "외주 개발 프로젝트 손실 사례에서 반복되는 패턴", "h2": ["외주 개발 프로젝트에서 가장 자주 발생하는 문제 유형", "외주 개발 실패 원인 분석 — 손실 사례로 보는 패턴", "외주 개발 프로젝트 위험 요소별 예방 방법", "외주 개발 품질 보증을 위한 관리 팁", "외주 개발 시 주의사항 최종 체크리스트"], "cta": "견적 비교", "purpose": "외주 개발 프로젝트에서 발생 가능한 위험 요소를 유형별로 정리하고 사전 예방 방법을 제시한다", "vol": 500, "pri": 6.8, "parentQ": "3. 외주 개발 프로젝트를 진행할 때 가장 자주 발생하는 문제는 무엇이며, 어떻게 해결할 수 있나요?", "question": "외주 개발 프로젝트에서 발생할 수 있는 위험 요소는 무엇인가요?", "rationale": "데이터 — 연관 검색어 클러스터 전체 네이버 검색량 월 500회, 트렌드 안정. 외주 개발 리스크에 대한 탐색 수요가 안정적으로 유지되고 있어 고려 단계 독자를 지속적으로 유입할 수 있는 주제다.\n방향 — 외주 개발 과정에서 발생 가능한 위험 요소를 단계별·유형별로 분류해 설명하는 구조로 작성된다. '판단 기준 제시' 방향성에 정합하며, 독자가 리스크를 사전에 인식하고 대비책을 갖추도록 유도해 위시켓 플랫폼에 대한 신뢰를 높인다.\n퍼널 — 고려: 검색자는 외주 개발 프로젝트를 진행할지 검토하면서 발생 가능한 위험 요소를 사전에 파악하려는 상태다. 외주를 선택지로 인식하고 있지만 실행 여부나 방법을 결정하기 전에 리스크를 따지는 비교·평가 단계에 해당한다. SERP 상위 콘텐츠도 '손실 사례와 예방책', '커뮤니케이션 패턴', '진행 후기' 등 외주 실행 전 판단을 돕는 콘텐츠 위주로 구성되어 있다.", "trend": "안정"}, {"date": "03.16", "day": "월", "cat": "ERP 외주 개발 업체", "funnel": "고려", "geo": "비교형", "seo": "ERP 외주 개발 업체 검증 기준 5가지", "ctr": "ERP 외주 잘하는 대표가 파트너를 검증하는 방법", "h2": ["ERP 외주 개발 업체 선정, 왜 파트너 검증이 핵심인가", "ERP 외주 개발 업체 검증 기준 5가지", "ERP 외주 개발 업체 비교 — 이런 회사에 맡기세요", "ERP 외주 계약 시 주의사항과 파트너 검증 체크리스트"], "cta": "견적 비교", "purpose": "ERP 외주 개발 업체를 선정할 때 파트너를 검증하는 실질적 기준과 방법을 제시한다", "vol": 500, "pri": 6.8, "parentQ": "1. ERP 외주 개발 업체를 고를 때 가장 중요하게 봐야 할 기준은 무엇인가요?", "question": "ERP 외주 개발 업체를 선정할 때 파트너를 어떻게 검증해야 하나요?", "rationale": "데이터 — 연관 검색어 클러스터 전체 네이버 검색량 월 500회, 트렌드 안정. ERP 외주 파트너 검증에 대한 탐색 수요가 꾸준히 유지되고 있어 B2B 고관여 독자를 안정적으로 유입할 수 있는 주제다.\n방향 — ERP 외주 업체 검증을 위한 항목을 단계별·기준별로 구조화하는 체크리스트형 콘텐츠로 작성된다. '판단 기준 제시' 방향성에 정합하며, 도입 실패 리스크가 큰 ERP 프로젝트 특성상 검증 기준을 명확히 제시함으로써 독자의 신뢰를 확보하고 위시켓 플랫폼 활용을 유도한다.\n퍼널 — 고려: 검색자는 ERP 외주 개발을 진행하기로 하고 파트너(업체)를 어떻게 검증할지 기준을 탐색하는 상태다. 외주를 전제로 하고 있지만 특정 업체를 정하기 전에 검증 방법을 따지는 비교·선정 단계에 해당한다. SERP 상위 콘텐츠도 '파트너를 어떻게 검증할까', '이런 회사에 맡기세요' 등 업체 선정 판단을 돕는 콘텐츠 위주로 구성되어 있다.", "trend": "안정"}, {"date": "03.18", "day": "수", "cat": "외주 개발 프로젝트", "funnel": "고려", "geo": "비교형", "seo": "외주 개발사 검증 기준 5가지, 포트폴리오 너머를 봐야 한다", "ctr": "포트폴리오 보고 고른 외주 개발사가 실패하는 이유", "h2": ["포트폴리오만 보고 외주 개발사를 골랐다가 생기는 일", "외주 개발사 신뢰성 평가를 위한 5가지 검증 기준", "외주 개발 업체 선정 기준별 체크리스트", "외주 개발사 후기와 평가를 읽는 방법", "우리 프로젝트에 맞는 외주 개발사, 어떻게 찾을까"], "cta": "견적 비교", "purpose": "포트폴리오 외에 외주 개발사를 검증할 수 있는 실질적 기준을 제시해 업체 선정 판단을 돕는다", "vol": 440, "pri": 6.7, "parentQ": "3. 외주 개발 프로젝트를 진행할 때 가장 자주 발생하는 문제는 무엇이며, 어떻게 해결할 수 있나요?", "question": "외주 개발사를 고를 때 포트폴리오 외에 반드시 확인해야 할 검증 기준은 무엇인가요?", "rationale": "데이터 — 연관 검색어 클러스터 전체 네이버 검색량 월 440회, 트렌드 안정. 꾸준한 탐색 수요가 유지되고 있어 외주 개발사 검증 기준에 대한 실질적 콘텐츠의 지속적 유입을 기대할 수 있다.\n방향 — 포트폴리오 외 검증 항목을 체크리스트 형식으로 구조화하는 콘텐츠로 작성된다. '판단 기준 제시' 방향성에 정합하며, 고려 단계 독자가 업체 선택 시 놓치기 쉬운 기준을 명확히 인식하도록 돕는다.\n퍼널 — 고려: 검색자는 외주 개발사를 선택하는 과정에 있으며, 포트폴리오 외에 추가로 확인해야 할 검증 기준을 탐색하는 상태다. 이미 외주를 전제로 하고 있지만, 아직 특정 업체나 플랫폼을 정하지 않고 선정 기준을 따지는 비교·평가 단계에 해당한다. SERP 상위 콘텐츠도 '고르는 기준', '문제 발생 시 대처' 등 선정 판단을 돕는 콘텐츠 위주로 구성되어 있어 고려 단계 탐색임을 뒷받침한다.", "trend": "안정"}, {"date": "03.20", "day": "금", "cat": "앱 개발 견적", "funnel": "고려", "geo": "비교형", "seo": "개발 견적 업체 선택 기준 4가지와 주의사항", "ctr": "견적 싼 곳 골랐다가 프로젝트 기간 2배 된 이유", "h2": ["개발 견적 업체, 왜 선택이 어려울까", "개발 견적 업체 선택 기준 4가지", "견적 싼 곳 찾다가 프로젝트 기간이 2배 되는 이유", "개발 견적 업체 비교 시 반드시 확인할 항목"], "cta": "견적 비교", "purpose": "개발 견적 업체 선택 시 주의해야 할 점을 구체적 기준으로 제시해 업체 선정 판단을 돕는다", "vol": 380, "pri": 6.6, "parentQ": "2. 앱 개발 견적이 업체마다 다른 이유는 무엇이며 어떤 기준으로 판단해야 하나요?", "question": "개발 견적 업체를 선택할 때 주의해야 할 점은 무엇인가요?", "rationale": "데이터 — 연관 검색어 클러스터 전체 네이버 검색량 월 380회, 트렌드 안정. 견적 업체 선택 시 주의사항에 대한 꾸준한 탐색 수요가 존재하며, 비교 판단 단계 독자를 안정적으로 유입할 수 있다.\n방향 — 견적 업체 선택 시 주의해야 할 항목을 병렬 나열 형식으로 구조화하는 콘텐츠로 작성된다. '판단 기준 제시' 방향성에 정합하며, 독자가 견적 비교 과정에서 흔히 간과하는 함정을 사전에 인지하도록 돕는다.\n퍼널 — 고려: 검색자는 개발 견적을 받을 업체를 선택하는 과정에서 주의사항을 탐색하는 상태다. 이미 외주 개발을 전제로 하고 있으며, 어떤 업체를 골라야 하는지 기준을 따지는 비교·선정 단계에 해당한다. SERP 상위 콘텐츠도 '업체마다 왜 다른지', '업체 선정 잘하는 법', '싼 곳 찾다가 실패한 사례' 등 선정 판단을 위한 콘텐츠 위주로 구성되어 있다.", "trend": "안정"}, {"date": "03.23", "day": "월", "cat": "외주 개발 프로젝트", "funnel": "고려", "geo": "비교형", "seo": "외주 개발 비용 차이 나는 이유 4가지와 비교 기준", "ctr": "외주 개발 비용, 싼 견적이 결국 비싸지는 이유", "h2": ["외주 개발 비용, 왜 업체마다 이렇게 다를까", "외주 개발 비용을 결정하는 4가지 핵심 요소", "저렴한 견적이 결국 비싸지는 이유 — 숨겨진 추가 비용 구조", "외주 개발 비용 비교 시 반드시 확인할 항목"], "cta": "견적 비교", "purpose": "외주 개발 비용이 업체마다 다른 구조적 원인을 설명하고 합리적인 비용 판단 기준을 제시한다", "vol": 220, "pri": 6.1, "parentQ": "3. 외주 개발 프로젝트를 진행할 때 가장 자주 발생하는 문제는 무엇이며, 어떻게 해결할 수 있나요?", "question": "외주 개발 비용이 업체마다 크게 차이 나는 이유는 무엇인가요?", "rationale": "데이터 — 연관 검색어 클러스터 전체 네이버 검색량 월 220회, 트렌드 안정. 비용 차이의 원인을 이해하려는 수요가 꾸준히 존재하며, 가격 비교 탐색 단계 독자를 위한 설명형 콘텐츠로 안정적 유입을 확보할 수 있다.\n방향 — 업체별 비용 차이를 유발하는 요인들을 항목별로 분류·설명하는 정의형 구조로 작성된다. '판단 기준 제시' 방향성에 정합하며, 독자가 단순 가격 비교를 넘어 비용 구조를 이해하고 합리적 판단을 내리도록 유도한다.\n퍼널 — 고려: 검색자는 외주 개발 비용이 업체마다 왜 다른지 이해하려는 상태로, 견적 비교와 업체 선정을 앞두고 판단 기준을 세우는 단계에 있다. 외주 자체를 모르는 것이 아니라 비용 구조를 파악해 합리적인 선택을 하려는 탐색이므로 고려 단계에 해당한다. SERP 상위 콘텐츠도 '왜 차이 나는지', '정확히 알아내는 방법' 등 비교 판단을 위한 정보 제공 콘텐츠로 구성되어 있다.", "trend": "안정"}, {"date": "03.25", "day": "수", "cat": "ERP 외주 개발 업체", "funnel": "고려", "geo": "비교형", "seo": "ERP 외주 개발 vs 패키지 솔루션, 상황별 선택 기준", "ctr": "ERP 패키지 솔루션 골랐다가 후회하는 회사의 공통점", "h2": ["ERP 시스템 도입, 외주 개발과 패키지 솔루션 중 무엇을 고를까", "ERP란 무엇인가 — 외주 개발과 패키지 솔루션의 구조 차이", "비용·기간·유연성 — ERP 외주 개발 vs 패키지 솔루션 항목별 비교", "우리 회사에 맞는 ERP 도입 방식은? 상황별 선택 기준"], "cta": "견적 비교", "purpose": "ERP 시스템 도입 시 외주 개발과 패키지 솔루션의 차이를 조건별로 비교해 방식 선택을 돕는다", "vol": 180, "pri": 5.9, "parentQ": "1. ERP 외주 개발 업체를 고를 때 가장 중요하게 봐야 할 기준은 무엇인가요?", "question": "ERP 시스템을 도입할 때 외주 개발과 패키지 솔루션 중 어떤 방식이 더 적합한가요?", "rationale": "데이터 — 연관 검색어 클러스터 전체 네이버 검색량 월 180회, 트렌드 안정. ERP 도입 방식 비교에 대한 탐색 수요가 꾸준히 유지되고 있으며, 도입 초기 의사결정 단계의 고관여 독자를 유입할 수 있는 주제다.\n방향 — 외주 개발과 패키지 솔루션의 특성을 상황별 적합성 기준으로 병렬 비교하는 구조로 작성된다. '판단 기준 제시' 방향성에 정합하며, ERP 도입 방식을 결정하지 못한 독자에게 명확한 선택 프레임을 제공해 외주 개발 수요를 위시켓 플랫폼으로 연결하는 효과를 기대할 수 있다.\n퍼널 — 고려: 검색자는 ERP 시스템 도입을 검토하면서 외주 개발과 패키지 솔루션 중 어떤 방식이 자신의 상황에 맞는지 비교하는 상태다. 도입 자체는 전제로 하고 있으나 방식 선택을 아직 결정하지 않은 비교·검토 단계에 해당한다. SERP 상위 콘텐츠에 'ERP란 무엇인가' 등 인지성 콘텐츠가 반복되고 있어 인지 단계 신호가 있으나, 질문 자체가 외주 개발 vs 패키지 솔루션이라는 명확한 비교·선택 구조를 가지고 있어 고려 단계로 판단한다.", "trend": "안정"}, {"date": "03.27", "day": "금", "cat": "ERP 외주 개발 업체", "funnel": "고려", "geo": "비교형", "seo": "ERP 외주 개발 비용 산정 기준과 적정 가격 판단법", "ctr": "저렴한 ERP 외주 제작, 이것 모르면 100% 돈 날립니다", "h2": ["ERP 외주 개발 비용, 왜 업체마다 이렇게 다를까", "ERP 외주 개발 비용을 결정하는 핵심 요소", "저렴한 ERP 외주 제작, 이것 모르면 돈 날리는 이유", "ERP 외주 비용 비교 시 적정 가격 판단 기준"], "cta": "견적 비교", "purpose": "ERP 외주 개발 비용 산정 구조를 설명하고 적정 가격을 판단하는 기준을 제시한다", "vol": 160, "pri": 5.8, "parentQ": "1. ERP 외주 개발 업체를 고를 때 가장 중요하게 봐야 할 기준은 무엇인가요?", "question": "ERP 외주 개발 비용은 어떻게 산정되며 적정 가격을 판단하는 기준은 무엇인가요?", "rationale": "데이터 — 연관 검색어 클러스터 전체 네이버 검색량 월 160회, 트렌드 안정. 검색량은 낮지만 ERP 비용 산정 기준을 탐색하는 수요는 구매 의사결정 단계에 근접한 고관여 독자로 구성되어 전환 기여 가치가 높다.\n방향 — ERP 외주 개발 비용의 산정 방식과 적정 가격 판단 기준을 항목별로 설명하는 정의형 구조로 작성된다. '판단 기준 제시' 방향성에 정합하며, 비용 협상 및 업체 비교 단계의 독자에게 객관적 판단 근거를 제공해 합리적 의사결정을 지원한다.\n퍼널 — 고려: 검색자는 ERP 외주 개발 비용이 어떻게 산정되는지 파악하고 적정 가격을 판단하려는 상태다. 외주를 선택지로 인식하고 있으며 비용 구조를 이해해 합리적인 업체 선정 판단을 내리려는 비교·검토 단계에 해당한다. SERP 상위 콘텐츠도 '저렴한 외주 제작 시 주의사항', '비용 비교', '이런 회사에 맡기세요' 등 비용 판단과 업체 선정을 위한 콘텐츠 위주로 구성되어 있다.", "trend": "안정"}, {"date": "03.30", "day": "월", "cat": "ERP 외주 개발 업체", "funnel": "고려", "geo": "문제해결형", "seo": "ERP 웹 전환 시 주의사항 4가지와 실패 예방법", "ctr": "ERP 웹으로 바꾸려다 프로젝트 엎어지는 이유", "h2": ["ERP 웹 전환, 왜 생각보다 복잡할까", "ERP 웹 개발 전환 시 단계별 주의사항", "ERP 웹 전환 프로젝트에서 반복되는 실패 패턴", "웹 ERP 전환 외주 업체 선정 시 확인할 기준"], "cta": "견적 비교", "purpose": "기존 ERP 시스템을 웹 기반으로 전환할 때 발생하는 주요 문제와 주의사항을 단계별로 안내한다", "vol": 160, "pri": 5.8, "parentQ": "1. ERP 외주 개발 업체를 고를 때 가장 중요하게 봐야 할 기준은 무엇인가요?", "question": "기존 ERP 시스템을 웹 기반으로 전환할 때 주의해야 할 점은 무엇인가요?", "rationale": "데이터 — 연관 검색어 클러스터 전체 네이버 검색량 월 160회, 트렌드 안정. 검색량은 낮지만 기존 ERP 전환이라는 구체적 니즈를 가진 독자가 탐색하는 주제로, 프로젝트 발주 의도가 높은 고관여 수요로 볼 수 있다.\n방향 — 웹 기반 ERP 전환 시 발생할 수 있는 주의사항을 단계별·유형별로 분류해 설명하는 체크리스트형 구조로 작성된다. '판단 기준 제시' 방향성에 정합하며, 전환 프로젝트를 앞둔 독자에게 실질적 리스크 대비 기준을 제공해 위시켓 플랫폼을 통한 전문 파트너 탐색으로 자연스럽게 유도한다.\n퍼널 — 고려: 검색자는 기존 ERP 시스템을 웹 기반으로 전환하는 것을 검토하면서 주의해야 할 점을 탐색하는 상태다. 전환 자체를 고려하고 있지만 실행 여부와 방법을 결정하기 전에 리스크와 조건을 따지는 비교·검토 단계에 해당한다. SERP 상위 콘텐츠에 특정 제품 소개나 사례 콘텐츠가 섞여 있으나, 질문 자체가 전환 시 주의사항이라는 조건 탐색 구조를 가지고 있어 고려 단계로 판단한다. naver_knowledge_snippet=true 신호가 있으나 질문의 비교·검토 맥락이 더 강하다.", "trend": "안정"}];
+
+let sel=null;
+const cnt=(arr,k)=>{const m={};arr.forEach(r=>{const v=r[k];m[v]=(m[v]||0)+1});return m};
+
+function distHTML(counts,type){
+  return Object.entries(counts).map(([k,v])=>`<div class="dist-row"><span class="badge b-${type}-${k}">${k}</span><span>${v}건</span></div>`).join("");
+}
+function catDistHTML(counts){
+  return Object.entries(counts).map(([k,v])=>`<div class="dist-row"><span style="font-size:12px;color:#374151">${k}</span><span>${v}건</span></div>`).join("");
+}
+document.getElementById("funnelDist").innerHTML=distHTML(cnt(D,"funnel"),"funnel");
+document.getElementById("geoDist").innerHTML=distHTML(cnt(D,"geo"),"geo");
+document.getElementById("catDist").innerHTML=catDistHTML(cnt(D,"cat"));
+
+function priColor(s){return s>=7?"#059669":s>=5?"#D97706":"#DC2626"}
+function priHTML(s){
+  const c=priColor(s);
+  return `<div class="pri-bar"><div class="pri-track"><div class="pri-fill" style="width:${s*10}%;background:${c}"></div></div><span class="pri-num" style="color:${c}">${s.toFixed(1)}</span></div>`;
+}
+
+const calEl=document.getElementById("calRows");
+D.forEach((r,i)=>{
+  const row=document.createElement("div");
+  row.className="cal-row";
+  row.onclick=()=>{sel=i;showView("detail");renderDetail()};
+  row.innerHTML=`
+    <div><span class="cal-date">${r.date}</span><span class="cal-day">${r.day}</span></div>
+    <span class="badge b-funnel-${r.funnel}">${r.funnel}</span>
+    <span class="badge b-geo-${r.geo}">${r.geo}</span>
+    <div class="cal-title">${r.seo}</div>
+    <span class="cal-vol">${r.vol.toLocaleString()}</span>
+    ${priHTML(r.pri)}`;
+  calEl.appendChild(row);
+});
+
+const emptyEl=document.getElementById("emptyBtns");
+D.forEach((r,i)=>{
+  const btn=document.createElement("button");
+  btn.className="empty-btn";
+  btn.textContent=`${r.date} ${r.seo.substring(0,18)}…`;
+  btn.onclick=()=>{sel=i;renderDetail()};
+  emptyEl.appendChild(btn);
+});
+
+function showView(v){
+  document.getElementById("viewCal").style.display=v==="cal"?"block":"none";
+  document.getElementById("viewDetail").style.display=v==="detail"?"block":"none";
+  document.getElementById("tabCal").className=v==="cal"?"tab active":"tab";
+  document.getElementById("tabDetail").className=v==="detail"?"tab active":"tab";
+  if(v==="detail"&&sel!==null)renderDetail();
+  if(v==="detail"&&sel===null){document.getElementById("detailEmpty").style.display="block";document.getElementById("detailContent").className="detail"}
+}
+
+function renderDetail(){
+  if(sel===null)return;
+  const r=D[sel];
+  document.getElementById("detailEmpty").style.display="none";
+  const el=document.getElementById("detailContent");
+  el.className="detail show";
+
+  const trendIcon=r.trend==="상승"?"↑":r.trend==="하락"?"↓":"→";
+  const trendColor=r.trend==="상승"?"#059669":"#6B7280";
+
+  const dots=D.map((_,i)=>`<button class="nav-dot ${i===sel?"active":""}" onclick="sel=${i};renderDetail()">${i+1}</button>`).join("");
+  const h2s=r.h2.map(h=>`<div class="h2-item"><span class="h2-tag">H2</span><span class="h2-text">${h}</span></div>`).join("");
+
+  el.innerHTML=`
+    <div class="nav">
+      <button class="nav-btn" ${sel<=0?"disabled":""} onclick="sel--;renderDetail()">← 이전</button>
+      <div class="nav-dots">${dots}</div>
+      <button class="nav-btn" ${sel>=D.length-1?"disabled":""} onclick="sel++;renderDetail()">다음 →</button>
+    </div>
+    <div class="d-meta">${r.date} (${r.day}) · ${r.cat}</div>
+    <div class="d-title">${r.seo}</div>
+    <div class="d-badges">
+      <span class="badge b-funnel-${r.funnel}">${r.funnel}</span>
+      <span class="badge b-geo-${r.geo}">${r.geo}</span>
+      <span class="badge" style="background:#37415114;color:#374151;border:1px solid #37415130">CTA: ${r.cta}</span>
+      <span class="badge" style="background:#6B728014;color:#6B7280;border:1px solid #6B728030">${r.vol.toLocaleString()}회/월</span>
+      <span class="badge" style="background:${trendColor}14;color:${trendColor};border:1px solid ${trendColor}30">트렌드 ${r.trend} ${trendIcon}</span>
+      <span class="badge" style="background:${priColor(r.pri)}14;color:${priColor(r.pri)};border:1px solid ${priColor(r.pri)}30">우선순위 ${r.pri.toFixed(1)}</span>
+    </div>
+    <div class="d-grid">
+      <div class="d-card"><div class="d-card-label">제목 기타 후보</div><div class="d-card-text italic">${r.ctr}</div></div>
+      <div class="d-card"><div class="d-card-label">발행 목적</div><div class="d-card-text">${r.purpose}</div></div>
+    </div>
+    <div class="info-card ic-parent"><div class="lbl">상위 질문</div><div class="txt">${r.parentQ}</div></div>
+    <div class="info-card ic-question"><div class="lbl">선정 질문</div><div class="txt">${r.question}</div></div>
+    <div class="h2-list"><div class="h2-label">H2 구조</div>${h2s}</div>
+    ${(()=>{
+      const txt=r.rationale;
+      const dm=txt.match(/데이터\s*—\s*([\s\S]*?)(?=\n방향|$)/);
+      const drm=txt.match(/방향\s*—\s*([\s\S]*?)(?=\n퍼널|$)/);
+      const fm=txt.match(/퍼널\s*—\s*([\s\S]*?)$/);
+      const pd=dm?dm[1].trim():"";
+      const pdr=drm?drm[1].trim():"";
+      const pf=fm?fm[1].trim():"";
+      return `
+        <div style="font-size:10px;font-weight:700;color:#9CA3AF;letter-spacing:.8px;margin:20px 0 10px">선정 근거</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+          <div class="info-card" style="background:#EFF6FF;border:1px solid #BFDBFE;margin:0"><div class="lbl" style="color:#1D4ED8">데이터</div><div class="txt" style="color:#1E3A5F">${pd}</div></div>
+          <div class="info-card" style="background:#F5F3FF;border:1px solid #DDD6FE;margin:0"><div class="lbl" style="color:#5B21B6">방향</div><div class="txt" style="color:#3B0764">${pdr}</div></div>
+          <div class="info-card" style="background:#F0FDF4;border:1px solid #BBF7D0;margin:0"><div class="lbl" style="color:#166534">퍼널</div><div class="txt" style="color:#14532D">${pf}</div></div>
+        </div>`;
+    })()}`;
+
+  document.querySelectorAll(".cal-row").forEach((row,i)=>{row.classList.toggle("sel",i===sel)});
+}
+</script>
+</body>
+</html>
