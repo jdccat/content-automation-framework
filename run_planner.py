@@ -19,6 +19,7 @@ import asyncio
 import json
 import logging
 import os
+import subprocess
 import sys
 from datetime import date
 from pathlib import Path
@@ -168,6 +169,37 @@ def _print_partial_summary(result: dict, stage: int) -> None:
     print(f"스냅샷: {snapshot_hint}", file=sys.stderr)
 
 
+def _push_dashboard(target_month: str, client_name: str) -> None:
+    """docs/ 대시보드를 git commit + push 한다 (GitHub Pages 자동 배포)."""
+    html_file = f"docs/{target_month}_{client_name}.html"
+    try:
+        # 변경 사항 확인
+        diff = subprocess.run(
+            ["git", "diff", "--cached", "--quiet", html_file],
+            capture_output=True,
+        )
+        subprocess.run(["git", "add", html_file, "docs/.nojekyll"], check=True)
+        status = subprocess.run(
+            ["git", "diff", "--cached", "--quiet"],
+            capture_output=True,
+        )
+        if status.returncode == 0:
+            print("대시보드 변경 없음 — push 건너뜀", file=sys.stderr)
+            return
+
+        subprocess.run(
+            ["git", "commit", "-m", f"dashboard: {target_month} {client_name}"],
+            check=True,
+            capture_output=True,
+        )
+        subprocess.run(["git", "push"], check=True, capture_output=True)
+        print(f"대시보드 배포 완료: {html_file} → GitHub Pages", file=sys.stderr)
+    except FileNotFoundError:
+        print("[경고] git을 찾을 수 없습니다 — push 건너뜀", file=sys.stderr)
+    except subprocess.CalledProcessError as exc:
+        print(f"[경고] 대시보드 push 실패: {exc}", file=sys.stderr)
+
+
 def _print_final_summary(plan: ContentPlan) -> None:
     """최종 ContentPlan 요약을 stderr에 출력한다."""
     print("\n=== 플래너 완료 ===", file=sys.stderr)
@@ -267,6 +299,10 @@ async def main(args: argparse.Namespace) -> None:
         _save_output(plan, target_month, args.client)
         _print_final_summary(plan)
 
+        # GitHub Pages 대시보드 배포
+        if not args.no_push:
+            _push_dashboard(target_month, args.client)
+
         # Google Sheets 업로드 (환경변수 설정된 경우)
         creds_json = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON")
         folder_id = os.getenv("GOOGLE_DRIVE_FOLDER_ID")
@@ -332,6 +368,12 @@ def _parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--published",
         help="기발행 콘텐츠 DB JSON 경로 (PublishedContent 배열, 없으면 빈 리스트)",
+    )
+    parser.add_argument(
+        "--no-push",
+        action="store_true",
+        dest="no_push",
+        help="대시보드 git push 비활성화 (기본값: push 활성화)",
     )
 
     args = parser.parse_args()
