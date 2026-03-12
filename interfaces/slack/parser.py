@@ -18,6 +18,8 @@ class PipelineParams:
     questions: list[str]
     content_direction: str
     target_month: str  # "2026-04"
+    question_tags: list[dict] = field(default_factory=list)  # 질문별 태깅 [{question, intent, direction}]
+    pipeline_mode: str = "basic"  # "basic" | "full"
 
 
 @dataclass
@@ -75,11 +77,85 @@ def parse(text: str) -> PipelineParams | ParseError:
             f"허용값: {' / '.join(DIRECTION_OPTIONS)}"
         ))
 
+    # 기존 텍스트 파싱: 전역 intent/direction을 각 질문에 배정
+    question_tags = [
+        {"question": q, "intent": intent, "direction": content_direction}
+        for q in questions
+    ]
+
     return PipelineParams(
         intent=intent,
         questions=questions,
         content_direction=content_direction,
         target_month=target_month or _next_month(),
+        question_tags=question_tags,
+    )
+
+
+def parse_json(data: dict) -> PipelineParams | ParseError:
+    """JSON 입력 → PipelineParams. 질문별 intent/direction 지원.
+
+    입력:
+        {
+            "questions": [
+                {"question": "...", "intent": "비교 판단", "direction": "판단 기준 제시"},
+                ...
+            ],
+            "target_month": "2026-04"
+        }
+    """
+    questions_raw = data.get("questions", [])
+    if not questions_raw:
+        return ParseError(_error("'questions' 배열이 비어 있습니다."))
+
+    question_tags: list[dict] = []
+    questions: list[str] = []
+
+    for item in questions_raw:
+        q = item.get("question", "").strip()
+        if not q:
+            continue
+        q_intent = item.get("intent", "").strip()
+        q_direction = item.get("direction", "").strip()
+
+        if q_intent and q_intent not in INTENT_OPTIONS:
+            return ParseError(_error(
+                f"'intent' 값이 올바르지 않습니다. (입력: *{q_intent}*)\n"
+                f"허용값: {' / '.join(INTENT_OPTIONS)}"
+            ))
+        if q_direction and q_direction not in DIRECTION_OPTIONS:
+            return ParseError(_error(
+                f"'direction' 값이 올바르지 않습니다. (입력: *{q_direction}*)\n"
+                f"허용값: {' / '.join(DIRECTION_OPTIONS)}"
+            ))
+
+        questions.append(q)
+        question_tags.append({
+            "question": q,
+            "intent": q_intent,
+            "direction": q_direction,
+        })
+
+    if not questions:
+        return ParseError(_error("유효한 질문이 없습니다."))
+
+    # 레거시 호환: 첫 번째 질문의 값을 전역으로 사용
+    first_intent = question_tags[0]["intent"]
+    first_direction = question_tags[0]["direction"]
+
+    if not first_intent:
+        return ParseError(_error("첫 번째 질문의 'intent'가 비어 있습니다."))
+    if not first_direction:
+        return ParseError(_error("첫 번째 질문의 'direction'이 비어 있습니다."))
+
+    target_month = data.get("target_month", "").strip()
+
+    return PipelineParams(
+        intent=first_intent,
+        questions=questions,
+        content_direction=first_direction,
+        target_month=target_month or _next_month(),
+        question_tags=question_tags,
     )
 
 

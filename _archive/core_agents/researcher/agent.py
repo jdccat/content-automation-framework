@@ -16,8 +16,10 @@ import yaml
 
 from core.schemas import (
     ClusterDraft,
+    HubResearchData,
     ParsedInput,
     RawKeywordPool,
+    ResearchProfile,
     ResearchResult,
     Stage1Output,
     Stage2Output,
@@ -25,8 +27,7 @@ from core.schemas import (
 )
 from core.agents.researcher import stage1 as stage1_mod
 from core.agents.researcher.prompts import load_prompt
-from core.agents.researcher.stage2 import stage2_validation
-from core.agents.researcher.stage3 import stage3_geo
+from core.agents.researcher.research_unit import stage2_validation, stage3_geo
 from core.agents.researcher.assembler import (
     assemble_result,
     check_quality_gate,
@@ -38,7 +39,12 @@ from core.agents.researcher.archive import (
     load_archive_reps,
     save_archive,
 )
-from core.agents.researcher.snapshot import save_snapshot
+from core.agents.researcher.snapshot import (
+    save_hub_research_per_seed,
+    save_manifest,
+    save_snapshot,
+)
+from core.agents.researcher.stage1_hub import stage1_hub_research
 from core.agents.researcher.parser import (
     _chunk,
     _extract_domain,
@@ -50,6 +56,7 @@ from core.agents.researcher.parser import (
     _parse_web_fetch_result,
     _strip_particle,
     parse_input,
+    parse_json_input,
 )
 from core.tools.ai_search import ai_search
 from core.tools.autocomplete import search_suggestions
@@ -179,6 +186,72 @@ class ResearcherAgent:
 
         self._save_archive(result, stage1)
         return result
+
+    async def run_json(
+        self,
+        data: dict,
+        *,
+        output_dir: str = "",
+        snapshot_dir: str = "snapshots",
+        profile: ResearchProfile | None = None,
+    ) -> list[HubResearchData]:
+        """JSON 입력 → 시드별 독립 출력.
+
+        흐름:
+        1. parse_json_input() → ParsedInput
+        2. stage1_hub_research() → list[HubResearchData]
+        3. 시드별 JSON 파일 + manifest.json 저장
+        4. list[HubResearchData] 반환
+        """
+        parsed = parse_json_input(data)
+        run_date = str(date.today())
+
+        if not parsed.seed_questions:
+            logger.warning("run_json: 파싱된 시드 질문 없음")
+            return []
+
+        if not output_dir:
+            output_dir = f"output/researcher/{run_date}"
+
+        logger.info(
+            "run_json 시작: seeds=%d, output_dir=%s",
+            len(parsed.seed_questions), output_dir,
+        )
+
+        # 스냅샷: input
+        save_snapshot("input", parsed, run_date, snapshot_dir)
+
+        # Stage 1 허브 리서치
+        hub_data_list = await stage1_hub_research(
+            parsed.seed_questions,
+            config=self._config,
+            safe_tool_call=self._safe_tool_call,
+            llm_call_fn=self._llm_call,
+            search_suggestions_fn=search_suggestions,
+            google_related_fn=google_related_searches,
+            google_paa_fn=google_paa,
+            naver_keyword_volume_fn=naver_keyword_volume,
+            google_search_fn=google_search,
+            google_keyword_trend_fn=google_keyword_trend,
+            naver_keyword_trend_fn=naver_keyword_trend,
+            naver_blog_search_fn=naver_blog_search,
+            web_fetch_fn=web_fetch,
+            naver_serp_features_fn=naver_serp_features,
+            ai_search_fn=ai_search,
+            perplexity_search_fn=perplexity_search,
+            geo_claude_fn=geo_claude_browser,
+            geo_gemini_fn=geo_gemini_browser,
+            profile=profile,
+            snapshot_dir=snapshot_dir,
+            run_date=run_date,
+        )
+
+        # 시드별 파일 + manifest 저장
+        save_hub_research_per_seed(hub_data_list, run_date, output_dir)
+        save_manifest(hub_data_list, run_date, output_dir, parsed=parsed)
+
+        logger.info("run_json 완료: %d 시드 저장", len(hub_data_list))
+        return hub_data_list
 
     # ── 입력 파싱 ────────────────────────────────────────────────
 

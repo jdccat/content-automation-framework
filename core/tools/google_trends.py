@@ -61,8 +61,7 @@ async def google_keyword_trend(keywords: list[str]) -> str:
         keywords: 비교할 키워드 목록 (최대 5개, 문자열만).
 
     Returns:
-        JSON — {trends: {키워드: {average, series, direction}},
-                related_queries: {키워드: [{query, value}]}}.
+        JSON — {trends: {키워드: {average, series, direction}}}.
     """
     if not keywords:
         return json.dumps({"error": "키워드를 1개 이상 입력하세요."})
@@ -100,26 +99,11 @@ async def google_keyword_trend(keywords: list[str]) -> str:
             else:
                 trends[kw] = {"average": 0.0, "series": [], "direction": "stable"}
 
-    # 연관 검색어
-    related_data: dict[str, list[dict]] = {}
-    try:
-        related = await asyncio.to_thread(pytrends.related_queries)
-        for kw in keywords:
-            if kw in related and related[kw].get("top") is not None:
-                top_df = related[kw]["top"]
-                related_data[kw] = [
-                    {"query": str(row["query"]), "value": int(row["value"])}
-                    for _, row in top_df.head(10).iterrows()
-                ]
-            else:
-                related_data[kw] = []
-    except Exception as e:
-        logger.warning("Google Trends 연관 검색어 조회 실패: %s", e)
-        for kw in keywords:
-            related_data.setdefault(kw, [])
+    # related_queries 호출 제거 — 추가 HTTP 요청이 429를 유발하므로 삭제.
+    # 연관 검색어는 naver_volume의 related_keywords로 대체.
 
     logger.info("Google Trends 조회 완료: %s", {k: v["average"] for k, v in trends.items()})
     return json.dumps(
-        {"trends": trends, "related_queries": related_data},
+        {"trends": trends},
         ensure_ascii=False,
     )

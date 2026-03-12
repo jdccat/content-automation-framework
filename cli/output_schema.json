@@ -1,0 +1,150 @@
+{
+  "input_question": "원본 질문 텍스트",
+  "intent": "추론된 질문 의도",
+  "content_direction": "추론된 콘텐츠 방향성",
+
+  "seed_selection": {
+    "candidates": [
+      {"perspective": "핵심 행위", "keyword": "후보 A"},
+      {"perspective": "대상", "keyword": "후보 B"},
+      {"perspective": "목적", "keyword": "후보 C"},
+      {"perspective": "검색 사용자", "keyword": "후보 D"},
+      {"perspective": "콘텐츠 기획자", "keyword": "후보 E"}
+    ],
+    "selected": "최종 선택된 시드 키워드",
+    "reason": "선택 근거 (반복 등장 또는 검색 사용자 관점 우선)"
+  },
+
+  "seed": {
+    "keyword": "최종 선택된 시드 키워드",
+    "keyword_variants": ["변형1", "변형2"],
+    "volume": {
+      "monthly_pc": 10,
+      "monthly_mobile": 10,
+      "monthly_total": 20
+    },
+    "variant_volumes": {
+      "변형1": {"monthly_pc": 10, "monthly_mobile": 10, "monthly_total": 20},
+      "변형2": {"monthly_pc": 10, "monthly_mobile": 10, "monthly_total": 20}
+    },
+    "naver_trend": {
+      "average": 0,
+      "direction": "stable",
+      "series": [{"period": "2026-01-05", "ratio": 42.0}]
+    },
+    "google_trend": {
+      "average": 0,
+      "direction": "stable",
+      "series": [{"period": "2026-01-05", "ratio": 35.0}]
+    },
+    "variant_trends": {
+      "변형1": {
+        "naver": {"average": 0, "direction": "stable"},
+        "google": {"average": 0, "direction": "stable"}
+      }
+    },
+    "serp": {
+      "google": [
+        {
+          "title": "페이지 제목",
+          "url": "https://...",
+          "h2_headings": ["H2 1", "H2 2"]
+        }
+      ],
+      "naver": [
+        {
+          "title": "블로그 제목",
+          "url": "https://...",
+          "postdate": "20260301"
+        }
+      ]
+    },
+    "serp_features": {
+      "google": {
+        "has_ai_overview": true,
+        "has_featured_snippet": false,
+        "has_paa": true
+      },
+      "naver": {
+        "has_knowledge_snippet": false,
+        "has_smart_block": true,
+        "smart_block_components": ["VIEW", "뉴스"]
+      }
+    },
+    "paa_questions": ["PAA 질문1", "PAA 질문2"],
+    "h2_topics": ["H2 토픽 1", "H2 토픽 2"],
+    "geo_citations": {
+      "쿼리1 텍스트": {
+        "chatgpt": {
+          "answer_snippet": "AI 답변 요약 (최대 200자)",
+          "citations": [{"url": "https://...", "title": "인용 제목", "is_wishket": false}]
+        },
+        "claude": {
+          "answer_snippet": "AI 답변 요약 (최대 200자)",
+          "citations": [{"url": "https://...", "title": "인용 제목", "is_wishket": false}]
+        },
+        "gemini": {
+          "answer_snippet": "AI 답변 요약 (최대 200자)",
+          "citations": [{"url": "https://...", "title": "인용 제목", "is_wishket": false}]
+        }
+      },
+      "쿼리2 텍스트": {
+        "chatgpt": {"answer_snippet": "...", "citations": []},
+        "claude": {"error": "rate_limit (재시도 3회 실패)"}
+      }
+    },
+    "related_keywords_raw": ["연관1", "연관2"]
+  },
+
+  "fan_out_selection": {
+    "candidate_sets": {
+      "A_paa": [{"keyword": "후보", "relation": "관계"}],
+      "B_h2": [{"keyword": "후보", "relation": "관계"}],
+      "C_related": [{"keyword": "후보", "relation": "관계"}],
+      "D_user_journey": [{"keyword": "후보", "relation": "관계"}],
+      "E_wishket_strategy": [{"keyword": "후보", "relation": "관계"}]
+    },
+    "merged_candidates": [
+      {"keyword": "후보", "appeared_in": ["A_paa", "D_user_journey"], "count": 2}
+    ],
+    "selection_reason": "다중 세트 등장 + 관점 다양성 기준 선별"
+  },
+
+  "fan_outs": [
+    {
+      "keyword": "팬아웃 키워드",
+      "question": "자연어 질문 형태",
+      "relation": "시드와의 관계",
+      "content_angle": "콘텐츠 각도 설명",
+      "volume": {
+        "monthly_pc": 10,
+        "monthly_mobile": 10,
+        "monthly_total": 20
+      },
+      "naver_trend": {
+        "average": 0,
+        "direction": "stable"
+      },
+      "google_trend": {
+        "average": 0,
+        "direction": "stable"
+      },
+      "top_competitors": [
+        {
+          "title": "경쟁 콘텐츠 제목",
+          "url": "https://...",
+          "h2_headings": ["H2 1", "H2 2"]
+        }
+      ]
+    }
+  ],
+
+  "metadata": {
+    "timestamp": "2026-03-09T12:00:00",
+    "seed_keyword_variants_count": 8,
+    "fan_out_count": 4,
+    "tools_used": ["naver_volume", "naver_trend", "google_trend", "autocomplete", "naver_serp", "WebSearch", "WebFetch", "web_fetch", "geo_chatgpt", "geo_claude", "geo_gemini"],
+    "geo_services_checked": ["chatgpt", "claude", "gemini"],
+    "geo_queries_count": 3
+  }
+}

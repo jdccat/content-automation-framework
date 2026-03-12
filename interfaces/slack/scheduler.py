@@ -6,14 +6,17 @@
 
 from __future__ import annotations
 
-import calendar as cal_mod
 import logging
+import sys
 from datetime import date, timedelta
+from pathlib import Path
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 
-from . import formatter, state
+# content-strategist 패키지 경로 추가
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / ".claude" / "agents"))
+from content_strategist import formatter, state  # noqa: E402
 
 logger = logging.getLogger(__name__)
 
@@ -32,6 +35,7 @@ def is_first_business_day_today() -> bool:
 
 
 def _next_month_str() -> str:
+    import calendar as cal_mod
     today = date.today()
     last_day = cal_mod.monthrange(today.year, today.month)[1]
     next_first = date(today.year, today.month, last_day) + timedelta(days=1)

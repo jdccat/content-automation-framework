@@ -260,6 +260,10 @@ def _render(plan: dict, items: list[dict]) -> str:
     data_json = json.dumps(items, ensure_ascii=False)
     questions_html = _render_questions_html(questions)
 
+    # GitHub repo info for feedback links
+    repo_owner, repo_name = _get_repo_info_sync()
+    run_id = plan.get("run_id", "")
+
     html = _HTML_TEMPLATE
     replacements = {
         "%%YEAR_MONTH%%": year_month,
@@ -271,10 +275,31 @@ def _render(plan: dict, items: list[dict]) -> str:
         "%%QUESTIONS_HTML%%": questions_html,
         "%%QUESTIONS_COUNT%%": str(len(questions)),
         "%%DATA_JSON%%": data_json,
+        "%%REPO_OWNER%%": repo_owner,
+        "%%REPO_NAME%%": repo_name,
+        "%%RUN_ID%%": run_id,
     }
     for placeholder, value in replacements.items():
         html = html.replace(placeholder, value)
     return html
+
+
+def _get_repo_info_sync() -> tuple[str, str]:
+    """git remote에서 owner/repo 추출 (동기)."""
+    import subprocess
+    try:
+        result = subprocess.run(
+            ["git", "remote", "get-url", "origin"],
+            capture_output=True, text=True, timeout=5,
+        )
+        if result.returncode != 0:
+            return ("", "")
+        m = re.search(r"github\.com[:/]([^/]+)/([^/.]+)", result.stdout.strip())
+        if not m:
+            return ("", "")
+        return (m.group(1), m.group(2))
+    except Exception:
+        return ("", "")
 
 
 # ── HTML 템플릿 ──────────────────────────────────────────────────
@@ -353,6 +378,7 @@ h1{font-size:24px;font-weight:800;margin:4px 0}
 .empty{padding:40px 16px;text-align:center;font-size:14px;color:#999}
 .empty-btns{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:16px}
 .empty-btn{padding:6px 12px;border-radius:6px;border:1px solid #E5E7EB;background:#fff;cursor:pointer;font-size:12px;color:#333}
+.feedback-btn{display:inline-block;margin-top:16px;padding:8px 16px;border-radius:6px;background:#7C3AED;color:#fff;font-size:12px;font-weight:600;text-decoration:none;transition:background .15s}.feedback-btn:hover{background:#6D28D9}
 @media(max-width:700px){.stats{grid-template-columns:1fr 1fr}.dist{grid-template-columns:1fr}.d-grid{grid-template-columns:1fr}.cal-head,.cal-row{grid-template-columns:60px 48px 70px 1fr 60px 60px;font-size:11px}}
 </style>
 </head>
@@ -404,6 +430,9 @@ h1{font-size:24px;font-weight:800;margin:4px 0}
 
 <script>
 const D=%%DATA_JSON%%;
+const REPO_OWNER="%%REPO_OWNER%%";
+const REPO_NAME="%%REPO_NAME%%";
+const RUN_ID="%%RUN_ID%%";
 
 let sel=null;
 const cnt=(arr,k)=>{const m={};arr.forEach(r=>{const v=r[k];m[v]=(m[v]||0)+1});return m};
@@ -508,6 +537,13 @@ function renderDetail(){
           <div class="info-card" style="background:#F5F3FF;border:1px solid #DDD6FE;margin:0"><div class="lbl" style="color:#5B21B6">방향</div><div class="txt" style="color:#3B0764">${pdr}</div></div>
           <div class="info-card" style="background:#F0FDF4;border:1px solid #BBF7D0;margin:0"><div class="lbl" style="color:#166534">퍼널</div><div class="txt" style="color:#14532D">${pf}</div></div>
         </div>`;
+    })()}
+    ${(()=>{
+      if(!REPO_OWNER||!REPO_NAME)return "";
+      const t=encodeURIComponent("[피드백] "+r.seo+" — "+r.date);
+      const b=encodeURIComponent("## 콘텐츠 피드백\\n\\n- **키워드**: "+r.seo+"\\n- **발행일**: "+r.date+"\\n- **Run ID**: "+RUN_ID+"\\n- **콘텐츠 인덱스**: "+sel+"\\n\\n### 피드백 유형\\n\\n- [ ] 시드 키워드 변경 (seed-change)\\n- [ ] 메타 정보 변경 (meta-change)\\n- [ ] 기타\\n\\n### 상세 내용\\n\\n여기에 피드백을 작성해 주세요.\\n");
+      const url="https://github.com/"+REPO_OWNER+"/"+REPO_NAME+"/issues/new?title="+t+"&body="+b+"&labels=feedback";
+      return '<a href="'+url+'" target="_blank" class="feedback-btn">피드백 남기기</a>';
     })()}`;
 
   document.querySelectorAll(".cal-row").forEach((row,i)=>{row.classList.toggle("sel",i===sel)});

@@ -1,0 +1,39 @@
+name: content_designer
+version: 1
+
+models:
+  main: claude-sonnet-4-6  # 추론 + 구조 생성
+
+output:
+  dir: output/claude_content_designer
+  filename_pattern: "plan_{seed_summary}_{date}.json"  # 예: plan_erp_외주_업체_선정_20260309.json
+
+quality_gate:
+  h2_structure_min: 3               # seed + 각 sub 모두
+  title_suggestions_count: 2        # seo + ctr 각 1개
+  sub_contents_min: 1               # fan_outs 수와 동일해야 함
+  funnel_reasoning_min_sentences: 2
+  expansion_role_diversity: true    # 전체 sub가 동일 role로 몰리면 경고
+
+guides:
+  funnel: core/agents/planner/funnel_criteria.md
+  geo: core/agents/planner/geo_classification.md
+  direction: core/agents/planner/content_direction.md
+
+published_db: data/wishket_published.json
+
+funnel_values:
+  - awareness
+  - consideration
+  - conversion
+  - unclassified
+
+geo_type_values:
+  - definition
+  - comparison
+  - problem_solving
+
+expansion_role_values:
+  - 심화
+  - 보완
+  - 실행

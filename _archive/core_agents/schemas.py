@@ -5,13 +5,35 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Callable, Literal
 
-from pydantic import BaseModel, Field, computed_field
+from pydantic import BaseModel, Field, computed_field, model_validator
 
 
 # ── 공용 타입 ──────────────────────────────────────────────────
 
 TREND_DIRECTION = Literal["rising", "stable", "declining"]
 DISCOVERY_SOURCE = Literal["google", "naver", "keyword_tool", "internal_data", "archive"]
+CONTENT_ROLE = Literal["hub", "sub"]
+
+
+# ── 시드 질문 (허브-서브 계층 구조) ──────────────────────────────
+
+
+class SeedQuestion(BaseModel):
+    """사용자 입력 시드 질문 — 허브-서브 구조의 기준 단위."""
+
+    seed_id: str  # "sq001"
+    question: str  # 원본 질문
+    intent: list[str] = Field(default_factory=list)  # 질문별 의도
+    content_direction: list[str] = Field(default_factory=list)  # 질문별 방향성
+
+
+class FanOutQuestion(BaseModel):
+    """시드 질문에서 LLM이 생성한 팬아웃 하위 질문."""
+
+    fanout_id: str  # "fo001"
+    seed_id: str  # SeedQuestion 참조
+    question: str  # 팬아웃 질문 텍스트
+    matched_cluster_ids: list[str] = Field(default_factory=list)
 
 
 # ── 리서처 내부 파이프라인 데이터클래스 ────────────────────────────
@@ -27,6 +49,7 @@ class ParsedInput:
     questions: list[str] = field(default_factory=list)
     direction: str = ""
     extracted_seeds: list[str] = field(default_factory=list)
+    seed_questions: list[SeedQuestion] = field(default_factory=list)
 
 
 @dataclass
@@ -57,6 +80,8 @@ class ClusterDraft:
     archive_verdict: str = ""
     matched_archive_representative: str = ""
     is_focus: bool = True
+    matched_seed_ids: list[str] = field(default_factory=list)
+    matched_fanout_ids: list[str] = field(default_factory=list)
 
 
 @dataclass
@@ -88,6 +113,60 @@ class Stage3Output:
     """3단계 GEO 인용 데이터."""
 
     citations: dict[str, list[dict]] = field(default_factory=dict)
+
+
+# ── 리서치 유닛 ──────────────────────────────────────────────────
+
+
+@dataclass
+class ResearchProfile:
+    """리서치 유닛 깊이 설정."""
+
+    volumes: bool = True
+    related_keywords: bool = True
+    paa: bool = True
+    content: bool = True
+    serp_features: bool = True
+    geo: bool = False
+
+
+PROFILE_FULL = ResearchProfile(
+    volumes=True, related_keywords=True, paa=True,
+    content=True, serp_features=True, geo=True,
+)
+PROFILE_DEMAND = ResearchProfile(
+    volumes=True, related_keywords=False, paa=False,
+    content=True, serp_features=True, geo=False,
+)
+PROFILE_UMBRELLA = ResearchProfile(
+    volumes=True, related_keywords=False, paa=True,
+    content=False, serp_features=True, geo=False,
+)
+
+
+@dataclass
+class ResearchUnitOutput:
+    """리서치 유닛 공용 출력."""
+
+    volumes: dict[str, dict] = field(default_factory=dict)
+    related_keywords: dict[str, list[str]] = field(default_factory=dict)
+    paa_questions: dict[str, list[str]] = field(default_factory=dict)
+    google_content_metas: dict[str, list[dict]] = field(default_factory=dict)
+    naver_content_metas: dict[str, list[dict]] = field(default_factory=dict)
+    h2_topics: dict[str, list[str]] = field(default_factory=dict)
+    google_serp_features: dict[str, dict] = field(default_factory=dict)
+    naver_serp_features: dict[str, dict] = field(default_factory=dict)
+    geo_citations: dict[str, list[dict]] = field(default_factory=dict)
+
+
+@dataclass
+class HubResearchData:
+    """Stage 1: 시드 질문별 허브 리서치 데이터."""
+
+    seed_id: str = ""
+    seed_question: str = ""
+    keywords: list[str] = field(default_factory=list)
+    research: ResearchUnitOutput = field(default_factory=ResearchUnitOutput)
 
 
 # ── 리서처 출력: 클러스터 구성 요소 ──────────────────────────────
@@ -160,6 +239,8 @@ class Cluster(BaseModel):
     archive_verdict: str = ""
     matched_archive_representative: str = ""
     is_focus: bool = True
+    matched_seed_ids: list[str] = Field(default_factory=list)
+    matched_fanout_ids: list[str] = Field(default_factory=list)
 
     # 1단계: 확장 데이터
     keywords: list[ClusterKeyword] = Field(default_factory=list)
@@ -335,6 +416,8 @@ class Cluster(BaseModel):
             archive_verdict=cd.archive_verdict,
             matched_archive_representative=cd.matched_archive_representative,
             is_focus=cd.is_focus,
+            matched_seed_ids=cd.matched_seed_ids,
+            matched_fanout_ids=cd.matched_fanout_ids,
             keywords=kw_models,
             total_volume_google=0,
             total_volume_naver=total_naver,
@@ -369,6 +452,9 @@ class ResearchResult(BaseModel):
     source_questions: list[str] = Field(default_factory=list)
     content_direction: str = ""
     extracted_seeds: list[str] = Field(default_factory=list)
+    seed_questions: list[SeedQuestion] = Field(default_factory=list)
+    fan_out_questions: list[FanOutQuestion] = Field(default_factory=list)
+    hub_research: list[HubResearchData] = Field(default_factory=list)
 
 
 # ── 플래너 공용 타입 ──────────────────────────────────────────────
@@ -409,6 +495,9 @@ class PlannerInput(BaseModel):
     questions: list[str]  # 질문 형태 (카테고리 원본, 1개 이상)
     content_direction: list[str]  # ["판단 기준 제시"] — 복수 선택 가능
 
+    # 허브-서브 시드 질문
+    seed_questions: list[SeedQuestion] = Field(default_factory=list)
+
     # 리서처 산출물
     research_result: ResearchResult
 
@@ -418,6 +507,37 @@ class PlannerInput(BaseModel):
     # 실행 컨텍스트
     target_month: str  # "2026-03"
     client_name: str = "wishket"
+
+    @model_validator(mode="after")
+    def _sync_seed_questions(self) -> PlannerInput:
+        """seed_questions ↔ questions 양방향 동기화."""
+        if self.seed_questions and not self.questions:
+            self.questions = [sq.question for sq in self.seed_questions]
+            if not self.intent:
+                seen: list[str] = []
+                for sq in self.seed_questions:
+                    for i in sq.intent:
+                        if i not in seen:
+                            seen.append(i)
+                self.intent = seen
+            if not self.content_direction:
+                seen_d: list[str] = []
+                for sq in self.seed_questions:
+                    for d in sq.content_direction:
+                        if d not in seen_d:
+                            seen_d.append(d)
+                self.content_direction = seen_d
+        elif not self.seed_questions and self.questions:
+            self.seed_questions = [
+                SeedQuestion(
+                    seed_id=f"sq{i + 1:03d}",
+                    question=q,
+                    intent=list(self.intent),
+                    content_direction=list(self.content_direction),
+                )
+                for i, q in enumerate(self.questions)
+            ]
+        return self
 
 
 # ── 플래너 중간 데이터 ───────────────────────────────────────────
@@ -468,6 +588,11 @@ class DerivedQuestion(BaseModel):
     # 5단계: 발행일 배정
     publish_date: str = ""  # "2026-03-02" ISO — Stage 5에서 배정
 
+    # 허브-서브 계층
+    seed_id: str = ""  # SeedQuestion 역참조
+    fanout_id: str = ""  # FanOutQuestion 역참조 (허브면 빈값)
+    role: CONTENT_ROLE = "sub"  # "hub" | "sub"
+
 
 # ── 플래너 출력: 콘텐츠 세부 구조 (6단계) ──────────────────────────
 
@@ -494,6 +619,10 @@ class ContentPiece(BaseModel):
     content_id: str  # "cat1_01"
     question: str
     category: str
+
+    # 허브-서브 계층
+    seed_id: str = ""
+    role: CONTENT_ROLE = "sub"  # "hub" | "sub"
 
     # 태그
     funnel: FUNNEL_STAGE
@@ -524,6 +653,22 @@ class ContentPiece(BaseModel):
     representative_keyword: str = ""
     monthly_volume_naver: int = 0
     volume_trend: TREND_DIRECTION = "stable"
+
+
+# ── 허브-서브 콘텐츠 그룹 ─────────────────────────────────────────
+
+
+class ContentGroup(BaseModel):
+    """시드 질문 기반 허브-서브 콘텐츠 그룹."""
+
+    seed_question: SeedQuestion
+    hub: ContentPiece
+    subs: list[ContentPiece] = Field(default_factory=list)
+
+    @computed_field  # type: ignore[prop-decorator]
+    @property
+    def all_pieces(self) -> list[ContentPiece]:
+        return [self.hub] + self.subs
 
 
 # ── 플래너 출력: 캘린더 (7단계) ───────────────────────────────────
@@ -587,6 +732,10 @@ class ContentPlan(BaseModel):
     intent: list[str] = Field(default_factory=list)            # 검색 의도 (예: ["비교 판단"])
     content_direction: list[str] = Field(default_factory=list) # 콘텐츠 방향성 (예: ["판단 기준 제시"])
 
+    # 허브-서브 계층 구조
+    seed_questions: list[SeedQuestion] = Field(default_factory=list)
+    groups: list[ContentGroup] = Field(default_factory=list)
+
     # 카테고리별 콘텐츠 기획
     categories: list[str] = Field(default_factory=list)  # 사용자 입력 질문 원본
     content_pieces: list[ContentPiece] = Field(default_factory=list)
@@ -607,3 +756,12 @@ class ContentPlan(BaseModel):
 
     # 파생 질문 전체 (추적용)
     all_derived_questions: list[DerivedQuestion] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def _sync_groups_and_pieces(self) -> ContentPlan:
+        """groups → content_pieces 단방향 동기화."""
+        if self.groups and not self.content_pieces:
+            self.content_pieces = [p for g in self.groups for p in g.all_pieces]
+        if self.seed_questions and not self.categories:
+            self.categories = [sq.question for sq in self.seed_questions]
+        return self

@@ -6,7 +6,7 @@ import json
 import re
 from urllib.parse import urlparse
 
-from core.schemas import ParsedInput
+from core.schemas import ParsedInput, SeedQuestion
 
 # ── 불용어 ────────────────────────────────────────────────────────
 
@@ -314,6 +314,71 @@ def _parse_web_fetch_result(text: str) -> dict:
     return result
 
 
+def parse_json_input(data: dict) -> ParsedInput:
+    """JSON 입력 → ParsedInput. 질문별 intent/direction 지원.
+
+    입력:
+        {
+            "questions": [
+                {"question": "...", "intent": "비교 판단", "direction": "판단 기준 제시"},
+                ...
+            ],
+            "target_month": "2026-04"
+        }
+    """
+    questions_raw = data.get("questions", [])
+    if not questions_raw:
+        return ParsedInput(main_keyword="", entry_moment="general")
+
+    questions: list[str] = []
+    seed_questions: list[SeedQuestion] = []
+    all_seeds: list[str] = []
+
+    for i, q_item in enumerate(questions_raw):
+        q_text = q_item.get("question", "").strip()
+        if not q_text:
+            continue
+        q_intent = q_item.get("intent", "")
+        q_direction = q_item.get("direction", "")
+
+        questions.append(q_text)
+        seed_questions.append(SeedQuestion(
+            seed_id=f"sq{i + 1:03d}",
+            question=q_text,
+            intent=[q_intent] if q_intent else [],
+            content_direction=[q_direction] if q_direction else [],
+        ))
+        all_seeds.extend(_extract_keywords_from_question(q_text))
+
+    # 중복 제거 (순서 유지)
+    seeds = list(dict.fromkeys(all_seeds))
+
+    # main_keyword 선정: 2~3 토큰 구 우선, 빈도 기준
+    main_kw = ""
+    if seeds:
+        multi_token = [s for s in seeds if len(s.split()) >= 2]
+        if multi_token:
+            def _freq(seed: str) -> int:
+                return sum(1 for q in questions if seed in q)
+            main_kw = max(multi_token, key=lambda s: (_freq(s), -len(s)))
+        else:
+            main_kw = seeds[0]
+
+    # 레거시 호환: 첫 번째 질문의 intent/direction
+    first_intent = seed_questions[0].intent[0] if seed_questions and seed_questions[0].intent else ""
+    first_direction = seed_questions[0].content_direction[0] if seed_questions and seed_questions[0].content_direction else ""
+
+    return ParsedInput(
+        main_keyword=main_kw,
+        entry_moment=first_intent or "general",
+        intent=first_intent,
+        questions=questions,
+        direction=first_direction,
+        extracted_seeds=seeds,
+        seed_questions=seed_questions,
+    )
+
+
 def parse_input(text: str) -> ParsedInput:
     """자연어 입력 → ParsedInput.
 
@@ -373,6 +438,16 @@ def parse_input(text: str) -> ParsedInput:
             else:
                 main_kw = seeds[0]
 
+        seed_questions = [
+            SeedQuestion(
+                seed_id=f"sq{i + 1:03d}",
+                question=q,
+                intent=[intent] if intent else [],
+                content_direction=[direction] if direction else [],
+            )
+            for i, q in enumerate(questions)
+        ]
+
         return ParsedInput(
             main_keyword=main_kw,
             entry_moment=intent,
@@ -380,6 +455,7 @@ def parse_input(text: str) -> ParsedInput:
             questions=questions,
             direction=direction,
             extracted_seeds=seeds,
+            seed_questions=seed_questions,
         )
 
     # ── 기존 포맷 폴백 ──

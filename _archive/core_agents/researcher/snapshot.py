@@ -9,6 +9,7 @@ from pathlib import Path
 
 from core.schemas import (
     ClusterDraft,
+    HubResearchData,
     ParsedInput,
     RawKeywordPool,
     Stage1Output,
@@ -26,8 +27,26 @@ def _serialize(obj) -> dict:
     """dataclass → JSON-serializable dict.
 
     ClusterDraft.keywords: list[tuple[str,str]] → list[dict] 변환.
+    Pydantic BaseModel 필드는 .model_dump()으로 변환.
     """
-    d = asdict(obj)
+    from pydantic import BaseModel
+
+    def _dict_factory(items):
+        """asdict dict_factory: Pydantic 모델을 dict로 변환."""
+        result = {}
+        for k, v in items:
+            if isinstance(v, BaseModel):
+                result[k] = v.model_dump()
+            elif isinstance(v, list):
+                result[k] = [
+                    x.model_dump() if isinstance(x, BaseModel) else x
+                    for x in v
+                ]
+            else:
+                result[k] = v
+        return result
+
+    d = asdict(obj, dict_factory=_dict_factory)
     if "cluster_drafts" in d:
         for cd in d["cluster_drafts"]:
             cd["keywords"] = [
@@ -227,3 +246,79 @@ def load_stage3(
     """stage3_geo 스냅샷 → Stage3Output."""
     raw = _load_json("stage3_geo", run_date, snapshot_dir)
     return Stage3Output(**raw)
+
+
+# ── 시드별 저장 + manifest ────────────────────────────────────────
+
+
+def save_hub_research_per_seed(
+    hub_data_list: list[HubResearchData],
+    run_date: str,
+    output_dir: str,
+) -> list[Path]:
+    """각 HubResearchData → output_dir/{seed_id}_hub_research.json 저장."""
+    d = Path(output_dir)
+    d.mkdir(parents=True, exist_ok=True)
+    paths: list[Path] = []
+    for hub in hub_data_list:
+        serialized = _serialize(hub)
+        fname = f"{hub.seed_id}_hub_research.json"
+        path = d / fname
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(serialized, f, ensure_ascii=False, indent=2)
+        logger.info("시드별 저장: %s", path)
+        paths.append(path)
+    return paths
+
+
+def save_manifest(
+    hub_data_list: list[HubResearchData],
+    run_date: str,
+    output_dir: str,
+    parsed: ParsedInput | None = None,
+) -> Path:
+    """manifest.json 생성 — 시드별 출력 파일 인덱스."""
+    d = Path(output_dir)
+    d.mkdir(parents=True, exist_ok=True)
+
+    seeds_info: list[dict] = []
+    for hub in hub_data_list:
+        info: dict = {
+            "seed_id": hub.seed_id,
+            "question": hub.seed_question,
+            "output_file": f"{hub.seed_id}_hub_research.json",
+            "keyword_count": len(hub.keywords),
+        }
+        # parsed에서 질문별 intent/direction 추출
+        if parsed:
+            for sq in parsed.seed_questions:
+                if sq.seed_id == hub.seed_id:
+                    info["intent"] = sq.intent[0] if sq.intent else ""
+                    info["direction"] = sq.content_direction[0] if sq.content_direction else ""
+                    break
+            else:
+                info["intent"] = ""
+                info["direction"] = ""
+        else:
+            info["intent"] = ""
+            info["direction"] = ""
+        seeds_info.append(info)
+
+    manifest = {
+        "run_date": run_date,
+        "seed_count": len(hub_data_list),
+        "seeds": seeds_info,
+    }
+
+    path = d / "manifest.json"
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(manifest, f, ensure_ascii=False, indent=2)
+    logger.info("manifest 저장: %s", path)
+    return path
+
+
+def load_manifest(output_dir: str) -> dict:
+    """manifest.json 로드 — 플래너가 시드별 출력 파일 경로 발견용."""
+    path = Path(output_dir) / "manifest.json"
+    with open(path, encoding="utf-8") as f:
+        return json.load(f)

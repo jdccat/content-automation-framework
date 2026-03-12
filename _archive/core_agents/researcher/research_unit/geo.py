@@ -1,4 +1,4 @@
-"""3단계: GEO 인용 수집 — ChatGPT, Perplexity, Claude, Gemini."""
+"""리서치 유닛: GEO 인용 수집 — ChatGPT, Perplexity, Claude, Gemini."""
 
 from __future__ import annotations
 
@@ -18,11 +18,10 @@ logger = logging.getLogger(__name__)
 
 OWN_DOMAIN = "wishket.com"
 
-# 도구 타입 힌트
 SafeToolCall = Callable[..., Awaitable]
 
 
-async def stage3_geo(
+async def collect_geo(
     reps: list[str],
     *,
     safe_tool_call: SafeToolCall,
@@ -30,11 +29,10 @@ async def stage3_geo(
     perplexity_search_fn: Callable,
     geo_claude_fn: Callable,
     geo_gemini_fn: Callable,
-) -> Stage3Output:
-    """대표 키워드별 4개 AI 서비스 GEO 인용 수집."""
-    logger.info("3단계 시작: representatives=%d", len(reps))
+) -> dict[str, list[dict]]:
+    """대표 키워드별 4개 AI 서비스 GEO 인용 수집 → dict 반환."""
     if not reps:
-        return Stage3Output()
+        return {}
 
     tasks = [
         _geo_for_keyword(
@@ -49,10 +47,35 @@ async def stage3_geo(
     ]
     geo_results = await asyncio.gather(*tasks)
 
-    output = Stage3Output()
+    output: dict[str, list[dict]] = {}
     for kw, citations in geo_results:
-        output.citations[kw] = citations
+        output[kw] = citations
     return output
+
+
+async def stage3_geo(
+    reps: list[str],
+    *,
+    safe_tool_call: SafeToolCall,
+    ai_search_fn: Callable,
+    perplexity_search_fn: Callable,
+    geo_claude_fn: Callable,
+    geo_gemini_fn: Callable,
+) -> Stage3Output:
+    """레거시 호환: Stage3Output으로 반환."""
+    logger.info("3단계 시작: representatives=%d", len(reps))
+    if not reps:
+        return Stage3Output()
+
+    citations = await collect_geo(
+        reps,
+        safe_tool_call=safe_tool_call,
+        ai_search_fn=ai_search_fn,
+        perplexity_search_fn=perplexity_search_fn,
+        geo_claude_fn=geo_claude_fn,
+        geo_gemini_fn=geo_gemini_fn,
+    )
+    return Stage3Output(citations=citations)
 
 
 async def _geo_for_keyword(
@@ -99,7 +122,6 @@ async def _geo_for_keyword(
                 if url and url not in seen_urls:
                     seen_urls.add(url)
                     domain = _extract_domain(url)
-                    # context_snippet 우선, fallback title
                     ctx = (
                         detail.get("context_snippet")
                         or detail.get("title", "")
@@ -125,7 +147,6 @@ async def _geo_for_keyword(
                 if isinstance(url, str) and url and url not in seen_urls:
                     seen_urls.add(url)
                     domain = _extract_domain(url)
-                    # 답변 텍스트에서 [N] 인용 주변 문맥 추출
                     ctx = _extract_pplx_context(pplx_answer, idx + 1)
                     citations.append({
                         "url": url,
