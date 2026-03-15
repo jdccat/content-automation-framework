@@ -154,10 +154,11 @@ DECISIONS_EOF
 **5-2. assembler 실행** — 이 Bash 명령으로 최종 JSON을 생성:
 
 ```bash
-.venv/bin/python cli/assembler.py $W output/claude_researcher/seed_{시드요약}_{날짜}.json
+.venv/bin/python cli/assembler.py $W output/claude_researcher/seed_{시드요약}_{날짜}_v{N}.json
 ```
 
-`Assembled: <경로>` 가 출력되면 성공. 에러 시 decisions.json을 수정 후 재실행.
+- 같은 `seed_{시드요약}_{날짜}_v*.json` 패턴이 이미 존재하면 N을 +1 증가, 첫 실행이면 `_v1`
+- `Assembled: <경로>` 가 출력되면 성공. 에러 시 decisions.json을 수정 후 재실행.
 
 **5-3. 검증** — 생성된 파일을 Read로 열어 `"assembled_at"` 필드가 존재하는지 확인하고, 품질 기준 확인.
 

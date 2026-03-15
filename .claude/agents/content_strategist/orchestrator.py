@@ -20,14 +20,16 @@ logger = logging.getLogger(__name__)
 # 타임아웃은 정상 범위의 ~2배로 설정
 
 AGENT_TIMEOUT: dict[str, int] = {
-    "researcher": 1800,       # 30분 (실측 7-20분, 어셈블리 포함)
-    "content-designer": 600,  # 10분 (정상 5-8분)
-    "content-planner": 300,   #  5분 (정상 3-5분)
+    "researcher": 1800,        # 30분 (실측 7-20분, 어셈블리 포함)
+    "content-tagger": 300,     #  5분 (분류+평가)
+    "content-architect": 300,  #  5분 (구조 설계)
+    "content-planner": 300,    #  5분 (정상 3-5분)
 }
 
 AGENT_BUDGET: dict[str, str] = {
     "researcher": "10",
-    "content-designer": "8",
+    "content-tagger": "4",
+    "content-architect": "4",
     "content-planner": "5",
 }
 
@@ -51,7 +53,7 @@ class ContentStrategist:
         channel: str,
         thread_ts: str,
     ) -> None:
-        """세션에 수집된 질문 전체를 순차 실행 (researcher → designer)."""
+        """세션에 수집된 질문 전체를 순차 실행 (researcher → tagger → architect)."""
         session.processing = True
         session.current_phase = "research"
         total = len(session.questions)
@@ -129,7 +131,7 @@ class ContentStrategist:
         channel: str,
         thread_ts: str,
     ) -> None:
-        """질문 1개 → researcher + 검증 + designer + 검증."""
+        """질문 1개 → researcher + 검증 + tagger + 검증 + architect + 검증."""
         try:
             await _post(slack_client, channel, thread_ts,
                         formatter.progress(":mag:", f"[{n}/{total}] 리서치 중... _{question[:40]}_"))
@@ -188,7 +190,7 @@ class ContentStrategist:
                 self.snapshot_mgr.capture_fanout(n, _seed_kw, researcher_output, (r_ok, r_details), _researcher_duration)
                 self.snapshot_mgr.save_manifest(session)
 
-            # ── 포맷 호환성 검증 (researcher → designer) ──
+            # ── 포맷 호환성 검증 (researcher → designer, 기존 호환 유지) ──
             compat_ok, compat_details = validator.check_format_compat(researcher_output, "designer")
             if not compat_ok:
                 await slack_client.chat_postMessage(
@@ -199,40 +201,104 @@ class ContentStrategist:
                 )
                 raise RuntimeError(f"포맷 호환 실패: {', '.join(compat_details)}")
 
-            # ── Content Designer 실행 ──
+            # ── Content Tagger 실행 ──
+            session.current_phase = "tagging"
+            await _post(slack_client, channel, thread_ts,
+                        formatter.progress(":label:", f"[{n}/{total}] 콘텐츠 태깅 중..."))
+
+            tagger_dir = Path("output/claude_content_tagger")
+            tagger_dir.mkdir(parents=True, exist_ok=True)
+            before_t = set(tagger_dir.glob("tagged_*.json"))
+            tagger_input = f"리서처 결과: {researcher_output}"
+            _t1 = time.time()
+            await self._call_claude_agent("content-tagger", tagger_input)
+            _tagger_duration = time.time() - _t1
+            after_t = set(tagger_dir.glob("tagged_*.json"))
+            new_tagged = sorted(after_t - before_t, key=lambda p: p.stat().st_mtime)
+            if not new_tagged:
+                raise RuntimeError("content-tagger 출력 파일 미생성")
+            tagger_output = str(new_tagged[-1])
+
+            # ── Tagger 검증 게이트 ──
+            t_ok, t_details = validator.verify_tagger(tagger_output)
+            await slack_client.chat_postMessage(
+                channel=channel,
+                thread_ts=thread_ts,
+                blocks=formatter.verification_blocks("Tagger", t_ok, t_details),
+                text=f"Tagger 검증 {'통과' if t_ok else '실패'}",
+            )
+
+            if not t_ok:
+                # 1회 재시도
+                await _post(slack_client, channel, thread_ts,
+                            formatter.progress(":arrows_counterclockwise:", f"[{n}/{total}] 태깅 재시도..."))
+                before_t2 = set(tagger_dir.glob("tagged_*.json"))
+                await self._call_claude_agent("content-tagger", tagger_input)
+                after_t2 = set(tagger_dir.glob("tagged_*.json"))
+                new_tagged2 = sorted(after_t2 - before_t2, key=lambda p: p.stat().st_mtime)
+                if not new_tagged2:
+                    raise RuntimeError("content-tagger 재시도 출력 파일 미생성")
+                tagger_output = str(new_tagged2[-1])
+                t_ok2, t_details2 = validator.verify_tagger(tagger_output)
+                if not t_ok2:
+                    raise RuntimeError(f"tagger 재시도 검증 실패: {', '.join(t_details2)}")
+
+            session.tagger_outputs.append(tagger_output)
+
+            # ── Tagger 스냅샷 ──
+            if self.snapshot_mgr:
+                self.snapshot_mgr.capture_tagger(n, researcher_output, tagger_output, (t_ok, t_details), _tagger_duration)
+                self.snapshot_mgr.save_manifest(session)
+
+            # ── 포맷 호환성 검증 (tagger → architect) ──
+            compat_ok2, compat_details2 = validator.check_format_compat(tagger_output, "architect")
+            if not compat_ok2:
+                await slack_client.chat_postMessage(
+                    channel=channel,
+                    thread_ts=thread_ts,
+                    blocks=formatter.verification_blocks("포맷 호환 (architect)", compat_ok2, compat_details2),
+                    text="포맷 호환 검증 실패",
+                )
+                raise RuntimeError(f"architect 포맷 호환 실패: {', '.join(compat_details2)}")
+
+            # ── Content Architect 실행 ──
             session.current_phase = "design"
             await _post(slack_client, channel, thread_ts,
-                        formatter.progress(":art:", f"[{n}/{total}] 콘텐츠 설계 중..."))
+                        formatter.progress(":art:", f"[{n}/{total}] 콘텐츠 구조 설계 중..."))
 
             designer_dir = Path("output/claude_content_designer")
             designer_dir.mkdir(parents=True, exist_ok=True)
             before_d = set(designer_dir.glob("plan_*.json"))
-            designer_input = f"리서처 결과: {researcher_output}"
-            _t1 = time.time()
-            await self._call_claude_agent("content-designer", designer_input)
-            _designer_duration = time.time() - _t1
+            architect_input = f"태그 결과: {tagger_output}\n리서처 결과: {researcher_output}"
+            _t2 = time.time()
+            await self._call_claude_agent("content-architect", architect_input)
+            _architect_duration = time.time() - _t2
             after_d = set(designer_dir.glob("plan_*.json"))
             new_plans = sorted(after_d - before_d, key=lambda p: p.stat().st_mtime)
             if not new_plans:
-                raise RuntimeError("content-designer 출력 파일 미생성")
+                raise RuntimeError("content-architect 출력 파일 미생성")
             designer_output = str(new_plans[-1])
 
-            # ── Designer 검증 게이트 ──
-            d_ok, d_details = validator.verify_designer(designer_output)
+            # ── Architect 검증 게이트 (+ 자동 보정) ──
+            d_ok, d_details = await self._repair_architect_if_needed(
+                designer_output, tagger_output, researcher_output,
+                slack_client, channel, thread_ts,
+                label=f"[{n}/{total}] Architect",
+            )
             await slack_client.chat_postMessage(
                 channel=channel,
                 thread_ts=thread_ts,
-                blocks=formatter.verification_blocks("Designer", d_ok, d_details),
-                text=f"Designer 검증 {'통과' if d_ok else '실패'}",
+                blocks=formatter.verification_blocks("Architect", d_ok, d_details),
+                text=f"Architect 검증 {'통과' if d_ok else '실패'}",
             )
             if not d_ok:
-                raise RuntimeError(f"designer 검증 실패: {', '.join(d_details)}")
+                raise RuntimeError(f"architect 검증 실패: {', '.join(d_details)}")
 
             session.designer_outputs.append(designer_output)
 
-            # ── Designer 스냅샷 ──
+            # ── Architect 스냅샷 ──
             if self.snapshot_mgr:
-                self.snapshot_mgr.capture_designer(n, researcher_output, designer_output, (d_ok, d_details), _designer_duration)
+                self.snapshot_mgr.capture_designer(n, researcher_output, designer_output, (d_ok, d_details), _architect_duration)
                 self.snapshot_mgr.save_manifest(session)
 
             await _post(slack_client, channel, thread_ts,
@@ -242,6 +308,47 @@ class ContentStrategist:
             logger.exception("질문 %d 처리 실패", n)
             await _post(slack_client, channel, thread_ts,
                         formatter.progress(":x:", f"[{n}/{total}] 처리 실패: `{exc}`"))
+
+    # ── Architect 보정 헬퍼 ──────────────────────────────────────
+
+    async def _repair_architect_if_needed(
+        self,
+        designer_output: str,
+        tagger_output: str,
+        researcher_output: str,
+        slack_client,
+        channel: str,
+        thread_ts: str,
+        label: str,
+    ) -> tuple[bool, list[str]]:
+        """architect 검증 + 보정 가능 에러 자동 재호출. (ok, details) 반환."""
+        d_ok, d_details = validator.verify_designer(designer_output)
+        if d_ok:
+            return d_ok, d_details
+
+        repairable, non_repairable = validator.classify_errors(d_details)
+        if non_repairable:
+            return False, d_details  # 보정 불가 에러 포함 → 그대로 반환
+
+        await _post(
+            slack_client, channel, thread_ts,
+            formatter.progress(":wrench:", f"{label} 누락 필드 {len(repairable)}개 보정 중..."),
+        )
+
+        repair_prompt = validator.build_repair_prompt(
+            designer_output, researcher_output, repairable,
+            tagger_path=tagger_output,
+        )
+        await self._call_claude_agent("content-architect", repair_prompt)
+
+        d_ok2, d_details2 = validator.verify_designer(designer_output)
+        await slack_client.chat_postMessage(
+            channel=channel,
+            thread_ts=thread_ts,
+            blocks=formatter.verification_blocks(f"{label} 보정", d_ok2, d_details2),
+            text=f"{label} 보정 검증 {'통과' if d_ok2 else '실패'}",
+        )
+        return d_ok2, d_details2
 
     # ── Phase 4: 플래닝 ──────────────────────────────────────────
 
@@ -361,7 +468,7 @@ class ContentStrategist:
         feedback_type: str,
         new_input: str = "",
     ) -> None:
-        """부분 재실행: seed_change → researcher부터, meta_change → designer부터."""
+        """부분 재실행: seed_change → researcher부터, meta_change → tagger부터."""
         session.processing = True
         try:
             if feedback_type == "seed_change":
@@ -395,15 +502,40 @@ class ContentStrategist:
                 else:
                     session.researcher_outputs.append(researcher_output)
 
-                # designer 재호출
+                # tagger 재호출
+                tagger_dir = Path("output/claude_content_tagger")
+                tagger_dir.mkdir(parents=True, exist_ok=True)
+                before_t = set(tagger_dir.glob("tagged_*.json"))
+                await self._call_claude_agent("content-tagger", f"리서처 결과: {researcher_output}")
+                after_t = set(tagger_dir.glob("tagged_*.json"))
+                new_tagged = sorted(after_t - before_t, key=lambda p: p.stat().st_mtime)
+                if not new_tagged:
+                    raise RuntimeError("content-tagger 재실행 출력 파일 미생성")
+                tagger_output = str(new_tagged[-1])
+
+                if question_index < len(session.tagger_outputs):
+                    session.tagger_outputs[question_index] = tagger_output
+                else:
+                    session.tagger_outputs.append(tagger_output)
+
+                # architect 재호출
                 designer_dir = Path("output/claude_content_designer")
                 before_d = set(designer_dir.glob("plan_*.json"))
-                await self._call_claude_agent("content-designer", f"리서처 결과: {researcher_output}")
+                await self._call_claude_agent("content-architect", f"태그 결과: {tagger_output}\n리서처 결과: {researcher_output}")
                 after_d = set(designer_dir.glob("plan_*.json"))
                 new_plans = sorted(after_d - before_d, key=lambda p: p.stat().st_mtime)
                 if not new_plans:
-                    raise RuntimeError("content-designer 재실행 출력 파일 미생성")
+                    raise RuntimeError("content-architect 재실행 출력 파일 미생성")
                 designer_output = str(new_plans[-1])
+
+                # architect 보정
+                d_ok, d_details = await self._repair_architect_if_needed(
+                    designer_output, tagger_output, researcher_output,
+                    slack_client, channel, thread_ts,
+                    label=f"시드 변경 Architect",
+                )
+                if not d_ok:
+                    raise RuntimeError(f"architect 검증 실패: {', '.join(d_details)}")
 
                 if question_index < len(session.designer_outputs):
                     session.designer_outputs[question_index] = designer_output
@@ -415,17 +547,42 @@ class ContentStrategist:
                             formatter.progress(":arrows_counterclockwise:",
                                               f"메타 변경 재실행 (질문 {question_index + 1})"))
 
-                # 기존 researcher 결과 유지, designer만 재호출
+                # 기존 researcher 결과 유지, tagger → architect 재호출
                 researcher_output = session.researcher_outputs[question_index]
+
+                # tagger 재호출
+                tagger_dir = Path("output/claude_content_tagger")
+                tagger_dir.mkdir(parents=True, exist_ok=True)
+                before_t = set(tagger_dir.glob("tagged_*.json"))
+                tagger_input = f"리서처 결과: {researcher_output}\n변경 지시: {new_input}"
+                await self._call_claude_agent("content-tagger", tagger_input)
+                after_t = set(tagger_dir.glob("tagged_*.json"))
+                new_tagged = sorted(after_t - before_t, key=lambda p: p.stat().st_mtime)
+                if not new_tagged:
+                    raise RuntimeError("content-tagger 재실행 출력 파일 미생성")
+                tagger_output = str(new_tagged[-1])
+
+                session.tagger_outputs[question_index] = tagger_output
+
+                # architect 재호출
                 designer_dir = Path("output/claude_content_designer")
                 before_d = set(designer_dir.glob("plan_*.json"))
-                designer_input = f"리서처 결과: {researcher_output}\n변경 지시: {new_input}"
-                await self._call_claude_agent("content-designer", designer_input)
+                await self._call_claude_agent("content-architect", f"태그 결과: {tagger_output}\n리서처 결과: {researcher_output}")
                 after_d = set(designer_dir.glob("plan_*.json"))
                 new_plans = sorted(after_d - before_d, key=lambda p: p.stat().st_mtime)
                 if not new_plans:
-                    raise RuntimeError("content-designer 재실행 출력 파일 미생성")
+                    raise RuntimeError("content-architect 재실행 출력 파일 미생성")
                 designer_output = str(new_plans[-1])
+
+                # architect 보정
+                d_ok, d_details = await self._repair_architect_if_needed(
+                    designer_output, tagger_output, researcher_output,
+                    slack_client, channel, thread_ts,
+                    label=f"메타 변경 Architect",
+                )
+                if not d_ok:
+                    raise RuntimeError(f"architect 검증 실패: {', '.join(d_details)}")
+
                 session.designer_outputs[question_index] = designer_output
 
             # planner 재실행 (전체 designer_outputs)
@@ -528,9 +685,10 @@ class ContentStrategist:
         """claude CLI로 서브에이전트 호출. stdout 반환.
 
         에이전트별 타임아웃/예산 리밋 적용:
-          researcher     — 1200s / $10
-          content-designer — 600s / $8
-          content-planner  — 300s / $5
+          researcher       — 1800s / $10
+          content-tagger   —  300s / $4
+          content-architect—  300s / $4
+          content-planner  —  300s / $5
         """
         import shutil
         claude_bin = shutil.which("claude") or "/opt/homebrew/bin/claude"

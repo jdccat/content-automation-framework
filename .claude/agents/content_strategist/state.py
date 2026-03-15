@@ -24,12 +24,13 @@ class PipelineSession:
     questions: list[str] = field(default_factory=list)
     question_tags: list[dict] = field(default_factory=list)       # [{question, intent, direction}]
     researcher_outputs: list[str] = field(default_factory=list)   # seed_*.json 경로
+    tagger_outputs: list[str] = field(default_factory=list)       # tagged_*.json 경로
     designer_outputs: list[str] = field(default_factory=list)     # plan_*.json 경로
     schedule_output: str = ""
     dashboard_path: str = ""
     dashboard_url: str = ""
     processing: bool = False
-    current_phase: str = "input"    # input → research → design → gate → planning → feedback
+    current_phase: str = "input"    # input → research → tagging → design → gate → planning → feedback
     feedback_pending: dict[int, str] = field(default_factory=dict)  # idx → 피드백 유형
     created_at: str = field(default_factory=lambda: datetime.now().isoformat())
 

@@ -138,6 +138,45 @@ class SnapshotManager:
 
         return self.capture(name, snap)
 
+    def capture_tagger(
+        self,
+        step: int,
+        researcher_path: str,
+        tagger_path: str,
+        validation: tuple[bool, list[str]],
+        duration: float,
+    ) -> Path:
+        """tagger 완료 후 — 분류/평가 요약 스냅샷."""
+        data = _load_json_safe(tagger_path)
+        seed = data.get("seed_content", {})
+
+        snap = {
+            "phase": "tagger",
+            "step": step,
+            "question_index": step - 1,
+            "duration_seconds": round(duration, 1),
+            "input": {"researcher_path": researcher_path},
+            "output": {
+                "file_path": tagger_path,
+                "seed_funnel": seed.get("funnel"),
+                "seed_geo_type": seed.get("geo_type"),
+                "sub_count": len(data.get("sub_contents", [])),
+                "fields_present": {
+                    "funnel_reasoning": bool(seed.get("funnel_reasoning")),
+                    "geo_reasoning": bool(seed.get("geo_reasoning")),
+                    "editorial_summary": bool(seed.get("editorial_summary")),
+                },
+            },
+            "validation": {
+                "passed": validation[0],
+                "checks": validation[1],
+                "errors": [] if validation[0] else validation[1],
+            },
+        }
+
+        name = f"q{step:03d}_tagger"
+        return self.capture_with_copy(name, snap, tagger_path)
+
     def capture_designer(
         self,
         step: int,
@@ -276,6 +315,7 @@ class SnapshotManager:
             "questions": getattr(session, "questions", []),
             "question_tags": getattr(session, "question_tags", []),
             "researcher_outputs": getattr(session, "researcher_outputs", []),
+            "tagger_outputs": getattr(session, "tagger_outputs", []),
             "designer_outputs": getattr(session, "designer_outputs", []),
             "schedule_output": getattr(session, "schedule_output", ""),
             "dashboard_path": getattr(session, "dashboard_path", ""),

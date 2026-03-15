@@ -305,15 +305,15 @@ def action_plan_blocks(
 ) -> list[dict]:
     """Phase 0 액션 플랜 요약. 질문 목록 + 예상 단계 + 도구."""
     q_lines = "\n".join(f"  {i}. {q}" for i, q in enumerate(questions, 1))
-    total_steps = len(questions) * 2 + 1  # researcher + designer per Q + planner
+    total_steps = len(questions) * 3 + 1  # researcher + tagger + architect per Q + planner
 
     text = (
         f":clipboard: *액션 플랜*\n"
         f"*의도*: {intent} | *방향성*: {direction} | *발행 월*: {month}\n\n"
         f"*질문 ({len(questions)}개)*:\n{q_lines}\n\n"
         f"*예상 단계*: {total_steps}단계 "
-        f"(리서치 {len(questions)} + 설계 {len(questions)} + 플래닝 1)\n"
-        f"*도구*: researcher, content-designer, content-planner"
+        f"(리서치 {len(questions)} + 태깅 {len(questions)} + 구조설계 {len(questions)} + 플래닝 1)\n"
+        f"*도구*: researcher, content-tagger, content-architect, content-planner"
     )
 
     return [
@@ -353,13 +353,13 @@ def feedback_content_card(item: dict, index: int) -> list[dict]:
     keyword = item.get("keyword", "")
     funnel = FUNNEL_KO.get(item.get("funnel", ""), "-")
     geo_type = item.get("geo_type", "")
-    title_seo = item.get("title_seo", "")
+    title = item.get("title", item.get("title_seo", ""))
     publish_date = item.get("publish_date", "")
 
     text = (
         f"*{keyword}*\n"
         f"퍼널: {funnel} | GEO: {geo_type} | 발행일: {publish_date}\n"
-        f"_{title_seo}_"
+        f"_{title}_"
     )
 
     return [
@@ -429,7 +429,7 @@ def feedback_meta_modal(item: dict, private_metadata: str) -> dict:
     keyword = item.get("keyword", "")
     funnel = item.get("funnel", "")
     geo_type = item.get("geo_type", "")
-    title_seo = item.get("title_seo", "")
+    title = item.get("title", item.get("title_seo", ""))
 
     return {
         "type": "modal",
@@ -445,7 +445,7 @@ def feedback_meta_modal(item: dict, private_metadata: str) -> dict:
                     "text": (
                         f"*키워드*: {keyword}\n"
                         f"*퍼널*: {funnel} | *GEO*: {geo_type}\n"
-                        f"*제목*: {title_seo}"
+                        f"*제목*: {title}"
                     ),
                 },
             },

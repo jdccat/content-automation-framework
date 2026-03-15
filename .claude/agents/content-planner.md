@@ -41,27 +41,41 @@ Read로 다음 파일을 **모두** 읽습니다:
 2. **가이드 2개**:
    - `guides/publishing_schedule.md` — 발행 규칙
    - `guides/funnel_criteria.md` — 퍼널 정의 (우선순위 산출 시 참조)
-3. **대시보드 패턴 참조**: `core/dashboard.py` (HTML 템플릿 패턴 참고용)
+3. **대시보드 패턴 참조**: `_archive/core_dashboard.py` (HTML 템플릿 패턴 참고용)
 
 #### 데이터 평탄화
 
-각 JSON에서 `seed_content` + `sub_contents`를 **flat list**로 풀어냅니다:
+각 JSON에서 `seed_content` + `sub_contents`를 **flat list**로 풀어냅니다. designer 출력은 flat 스키마이므로 각 콘텐츠의 필드에 직접 접근합니다.
+
+**skip 시드 처리:**
+
+```
+seed_content.content_status == "skip"이면:
+- flat list에서 제외 (스케줄 후보 아님)
+- skip_seeds[] 배열에 별도 수집 (클러스터 뷰 표시용)
+- sub_contents는 정상 포함 (skip 시드의 서브도 new/update임)
+```
 
 | 필드 | 소스 |
 |------|------|
 | `cluster` | 해당 JSON의 `seed_content.keyword` (모든 시드/서브에 동일 태그) |
 | `intent` | 해당 JSON의 top-level `intent` (클러스터 내 동일) |
 | `content_direction` | 해당 JSON의 top-level `content_direction` (클러스터 내 동일) |
-| `role` | `"hub"` 또는 `"sub"` |
-| `expansion_role` | sub만: `"심화"` / `"보완"` / `"실행"`. hub는 `null` |
-| `funnel` | 각 콘텐츠의 `funnel` |
-| `geo_type` | 각 콘텐츠의 `geo_type` |
-| `keyword` | 각 콘텐츠의 `keyword` |
-| `title_seo` | `title_suggestions[strategy="seo"].title` |
-| `title_ctr` | `title_suggestions[strategy="ctr"].title` |
-| `h2_structure` | 그대로 복사 |
+| `role` | `seed_content.role` 또는 `sub_contents[].role` |
+| `expansion_role` | sub만: `sub_contents[].expansion_role`. hub는 `null` |
+| `funnel` | `seed_content.funnel` / `sub_contents[].funnel` |
+| `geo_type` | `seed_content.geo_type` / `sub_contents[].geo_type` |
+| `keyword` | `seed_content.keyword` / `sub_contents[].keyword` |
+| `content_status` | `seed_content.content_status` / `sub_contents[].content_status` (`"new"` \| `"update"`, skip은 flat list 미포함) |
+| `existing_content` | update일 때 `{url, title, publish_date, h2_sections, gap_analysis}` 객체, 그 외 `null` |
+| `title` | `title_suggestions[0].title` (최고 확률 타이틀) |
+| `title_suggestions` | `title_suggestions` 배열 전체 (확률 내림차순) |
+| `editorial_summary` | `seed_content.editorial_summary` / `sub_contents[].editorial_summary` — **architect 원문 그대로 복사 (재생성 금지)** |
+| `content_approach` | `seed_content.content_approach` / `sub_contents[].content_approach` — **그대로 복사** |
+| `input_question` | 해당 JSON의 top-level `input_question` — **그대로 복사** |
+| `h2_structure` | 그대로 복사 (data_candidates 배열 포함) |
 | `cta_suggestion` | 그대로 복사 |
-| `publishing_purpose` | 그대로 복사 |
+| `publishing_purpose` | **architect 원문 그대로 복사 (재생성 금지)** |
 | `volume_monthly_total` | `reference_data.volume_monthly_total` |
 | `trend_direction` | `reference_data.trend_direction` |
 | `has_ai_overview` | `reference_data.has_ai_overview` (없으면 `false`) |
@@ -70,8 +84,10 @@ Read로 다음 파일을 **모두** 읽습니다:
 | `geo_citation_count` | `reference_data.geo_citation_count` (없으면 `0`) |
 | `competition_h2_depth` | `reference_data.competition_h2_depth` (없으면 `{"competitors_crawled": 0, "avg_h2_count": 0, "deep_competitors": 0}`) |
 | `existing_wishket_urls` | `reference_data.existing_wishket_urls` (없으면 `[]`) |
-| `internal_link_hint` | sub만: `internal_link_hint`. hub는 `null` |
-| `seed_h2_link` | sub만: `seed_h2_link`. hub는 `null` |
+| `internal_link_hint` | sub만: `sub_contents[].internal_link_hint`. hub는 `null` |
+| `seed_h2_link` | sub만: `sub_contents[].seed_h2_link`. hub는 `null` |
+
+> **핵심 원칙**: `editorial_summary`, `publishing_purpose`, `content_approach`는 모두 architect가 생성한 전략적 판단 결과물. planner는 이 세 필드를 **변환·요약·재생성하지 않고 원문 그대로** schedule JSON에 전달한다. 특히 `publishing_purpose`는 기존에도 schedule에 포함되어 있으나 planner가 재작성하는 경우가 있으므로, "architect 출력의 원문을 그대로 복사" 규칙을 명시적으로 기술한다.
 
 ---
 
@@ -292,7 +308,8 @@ mkdir -p docs
 
 #### 4-2. 스케줄 JSON 저장
 
-파일: `output/claude_content_scheduler/schedule_{target_month}_{YYYYMMDD}.json`
+파일: `output/claude_content_scheduler/schedule_{target_month}_{YYYYMMDD}_v{N}.json`
+- 같은 `schedule_{target_month}_{날짜}_v*.json` 패턴이 이미 존재하면 N을 +1 증가, 첫 실행이면 `_v1`
 
 ```json
 {
@@ -300,6 +317,11 @@ mkdir -p docs
   "intent": ["비교 판단"],
   "content_direction": ["판단 기준 제시"],
   "categories": ["ERP 외주 업체 선정", "앱 개발 견적", "외주 개발 문제"],
+  "input_questions": [
+    {"question": "ERP 외주 개발 업체를 고를 때 가장 중요하게 봐야 할 기준은?", "cluster": "ERP 외주 업체 선정"},
+    {"question": "앱 개발 견적이 업체마다 다른 이유는?", "cluster": "앱 개발 견적 비교"},
+    {"question": "외주 개발 프로젝트 문제는 어떻게 해결할 수 있나?", "cluster": "외주 개발 문제 해결"}
+  ],
   "schedule": [
     {
       "publish_date": "2026-04-01",
@@ -310,9 +332,20 @@ mkdir -p docs
       "expansion_role": null,
       "funnel": "consideration",
       "geo_type": "comparison",
-      "title_seo": "ERP 외주 개발 업체 선정 기준 5가지",
-      "title_ctr": "ERP 외주 맡기기 전 반드시 확인할 것들",
-      "h2_structure": [],
+      "content_status": "new",
+      "existing_content": null,
+      "editorial_summary": "네이버·구글 SERP에서 ERP 외주 업체 비교 콘텐츠가 얕고, GEO 인용도 일반론 수준. 위시켓 자체 데이터(계약 규모·업체 평점)를 결합해 검증 프레임워크를 제시하면 경쟁 콘텐츠 대비 차별화 가능.",
+      "content_approach": "data_driven",
+      "input_question": "ERP 외주 개발 업체를 고를 때 가장 중요하게 봐야 할 기준은 무엇인가요?",
+      "title": "ERP 외주 개발 업체, 어떻게 골라야 할까? 핵심 기준 5가지",
+      "title_suggestions": [
+        {"title": "ERP 외주 개발 업체, 어떻게 골라야 할까? 핵심 기준 5가지", "estimated_ctr": 42},
+        {"title": "ERP 외주 업체 선정 기준 5가지 : 현장 경험에서 정리한 체크리스트", "estimated_ctr": 33},
+        {"title": "ERP 외주 개발, 어떤 업체에 맡겨야 할까?", "estimated_ctr": 25}
+      ],
+      "h2_structure": [
+        {"heading": "...", "description": "...", "geo_pattern": "...", "data_candidates": ["계약.금액"]}
+      ],
       "cta_suggestion": "...",
       "publishing_purpose": "...",
       "priority_score": 7.4,
@@ -344,6 +377,14 @@ mkdir -p docs
     }
   ],
   "waitlist": [],
+  "skip_seeds": [
+    {
+      "cluster": "클러스터명",
+      "keyword": "시드 키워드",
+      "skip_reason": "사유 문자열",
+      "existing_content": {"url": "...", "title": "...", "publish_date": "...", "gap_analysis": "..."}
+    }
+  ],
   "metadata": {
     "timestamp": "2026-03-09T...",
     "total_candidates": 18,
@@ -364,18 +405,23 @@ mkdir -p docs
 
 #### 4-3. HTML 대시보드 생성
 
-`core/dashboard.py`의 HTML 패턴을 참조하여 직접 HTML 문자열을 생성합니다 (import하지 않음).
+`_archive/core_dashboard.py`의 HTML 패턴을 참조하여 직접 HTML 문자열을 생성합니다 (import하지 않음).
 
-파일: `docs/{target_month}_wishket_{YYYYMMDD}.html`
+파일: `docs/{target_month}_wishket_{YYYYMMDD}_v{N}.html`
+- 같은 `{target_month}_wishket_{날짜}_v*.html` 패턴이 이미 존재하면 N을 +1 증가, 첫 실행이면 `_v1`
 
 ##### 대시보드 구조
 
 **헤더**: 클라이언트명 + 대상 월 + back-to-index 링크
 
-**통계 카드** (3칸):
-- 총 콘텐츠 수 (예약 + 대기)
-- 전략 방향
-- 주요 검색 의도 + GEO 요약
+**통계 카드** (2칸, `grid-template-columns: 1fr 2fr`):
+- **예약 콘텐츠**: `scheduled_count`건. stat-sub에 "대기 N건 · skip N건"
+- **사용자 질문 + 클러스터**: `input_questions` 배열을 순서대로 표시. 각 질문 옆에 클러스터 뱃지(`.badge` 스타일, 회색 배경) 인라인 표시
+  ```
+  1. ERP 외주 개발 업체를 고를 때 가장 중요하게 봐야 할 기준은?  [ERP 외주 업체 선정]
+  2. 앱 개발 견적이 업체마다 다른 이유는?                         [앱 개발 견적 비교]
+  3. 외주 개발 프로젝트 문제는 어떻게 해결할 수 있나?              [외주 개발 문제 해결]
+  ```
 
 **분포 박스** (3칸):
 - 퍼널 분포
@@ -384,9 +430,11 @@ mkdir -p docs
 
 **탭 3개**:
 
-1. **발행 캘린더**: 날짜 · 퍼널 · GEO · 제목 · 검색량 · 우선순위 바 + **`priority_highlight` 뱃지**
-   - 우선순위 바 오른쪽에 `priority_highlight` 뱃지 표시 (`.b-hi-*` 클래스)
-   - 예: `6.6 [경쟁 기회]`
+1. **발행 캘린더**: 날짜 · 퍼널·GEO · 제목 · **유형** · **클러스터**
+   - **검색량·우선순위 열 삭제**
+   - **유형 열**: `content_status`=update → "업데이트" 뱃지(`.b-update`), `content_approach`=data_driven → "데이터 중심 콘텐츠" 뱃지(`.b-approach-data`)
+   - **클러스터 열**: 해당 콘텐츠의 `cluster` 값을 회색 뱃지로 표시
+   - **제목 클릭 → 콘텐츠 상세 이동**: 각 행 제목에 `onclick="goToDetail(idx)"` 핸들러. 클릭 시 상세 탭 활성화 → 해당 카드 표시
 
 2. **클러스터 뷰**: 클러스터(질문)별 hub→sub 트리 + **컷라인 비교**
    - hub: 보라 뱃지
@@ -407,23 +455,27 @@ mkdir -p docs
      ○ 실패 원인 (보완)      4.3  [경쟁 심화]
      ```
 
-3. **콘텐츠 상세**: 개별 콘텐츠 상세 뷰 + **선정 근거 영역**
-   - 기존 대시보드 패턴 + expansion_role, seed_h2_link, internal_link_hint
-   - **선정 근거 영역** (H2 구조 아래에 배치):
-     - **요약 행**: `priority_summary` 텍스트 + 점수 뱃지 + `priority_highlight` 뱃지
-     - **[상세 보기 ▼] 토글 버튼**: 클릭 시 아래 차원별 분석 펼침/접힘
-     - **차원별 분석** (펼침 상태): `priority_dimensions` 6개를 렌더링
-       - 각 행: 차원명(한글) · 점수 바(0~10, 색상: ≥7 초록, ≥5 주황, <5 빨강) · 점수 숫자 · detail 텍스트
-       - weighted contribution 순(score×weight 내림차순)으로 정렬하여 가장 영향 큰 차원이 위에
-       - 행 레이아웃 예시:
-         ```
-         경쟁 기회    ████████████████████░░  9/10  H2 평균 2개 / 경쟁자 3곳
-         콘텐츠 역할  ████████████░░░░░░░░░░  6/10  서브 콘텐츠
-         확장 유형    ██████████████████░░░░  9/10  심화 (판단 기준 제시)
-         AI 검색     ████████████░░░░░░░░░░  6/10  PAA 있음, 인용 14건
-         퍼널 적합도  ██████████████████░░░░  9/10  고려 (비교 판단)
-         검색 트렌드  ██████████░░░░░░░░░░░░  5/10  20회/월, 안정
-         ```
+3. **콘텐츠 상세**: 한 번에 하나의 카드만 표시하는 개별 카드 네비게이션 방식
+   - 상단 네비게이션 바: ← 이전 / 번호 도트(1~12) / 다음 → 버튼
+   - 각 detail-card에 `id="detail-{idx}"` 부여 (캘린더 제목 클릭 대상)
+   - 캘린더에서 제목 클릭 시 `goToDetail(idx)` → 상세 탭 활성화 + 해당 카드 표시
+   - 초기 상태: "캘린더에서 콘텐츠를 선택하세요" 안내 문구 표시
+   - **카드 구조 순서:**
+     1. **메타** — 날짜 + 요일 + 클러스터 (`.d-meta`)
+     2. **제목** — SEO 제목 (`.d-title`, 20px, 800)
+     3. **뱃지** — role + expansion_role + content_status(update) + content_approach(data_driven → "데이터 중심 콘텐츠") + funnel + geo
+     4. **업데이트 대상** — `existing_content`가 non-null일 때만 표시 (`.ic-update` 카드, 최상위 배치)
+     5. **"발행 목적"** — `publishing_purpose` — **architect 원문** (`.detail-section-text`)
+     6. **"선정 이유"** — `editorial_summary` — **architect 원문** (`.detail-section-text`)
+     7. **H2 구조** — heading + description + **data_candidates 태그** (geo_pattern 태그 미표시)
+        - 각 H2: heading 다음 줄에 description 회색 표시 (`.h2-desc`)
+        - `data_candidates` 항목마다 노란 `.data-tag` 뱃지
+     8. **내부 링크** (sub일 때) — seed_h2_link, internal_link_hint
+     9. **"CTA 컨셉"** — 박스 없이 일반 텍스트 (`.detail-section-text`)
+     10. **"연관된 기존 위시켓 콘텐츠"** — `existing_wishket_urls`가 non-empty일 때만 표시 (카드 최하단)
+   - 모든 섹션 텍스트는 동일 스타일 (`.detail-section-text`: 13px, #374151, line-height 1.6)
+   - **우선순위 점수/하이라이트/상세 보기/priority_summary 미표시** (캘린더에서도 동일)
+   - 각 섹션 사이에 16px 여백 (`detail-section{margin-bottom:16px}`)
 
 ##### 뱃지 CSS
 
@@ -459,9 +511,69 @@ mkdir -p docs
 
 뱃지 클래스 매핑: `priority_highlight` 값에서 공백을 제거하여 클래스명 생성. 예: "경쟁 기회" → `.b-hi-경쟁기회`
 
+##### 전략 근거 · 기발행 참조 · H2 설명 · data_candidates CSS 추가
+
+```css
+.b-approach-data{background:#DBEAFE;color:#1D4ED8;border:1px solid #93C5FD}
+.purpose-box{background:#F9FAFB;border:1px solid #E5E7EB;border-radius:8px;padding:14px}
+.purpose-text{font-size:12px;color:#374151;line-height:1.6;margin-bottom:8px;border-left:3px solid #7C3AED;padding-left:10px}
+.editorial-text{font-size:12px;color:#6B7280;line-height:1.6;font-style:italic}
+.data-tag{display:inline-flex;padding:1px 6px;border-radius:4px;font-size:9px;font-weight:600;background:#FEF3C7;color:#92400E;border:1px solid #FDE68A;margin-left:4px}
+.h2-desc{font-size:11px;color:#9CA3AF;margin-top:2px;padding-left:10px}
+.ic-reference{background:#F5F3FF;border:1px solid #DDD6FE;border-radius:8px;padding:12px;margin-top:8px}
+.ic-reference .lbl{font-size:10px;font-weight:700;color:#5B21B6;letter-spacing:.8px;margin-bottom:4px}
+.ic-reference a{color:#7C3AED;text-decoration:underline;font-size:12px}
+```
+
+##### content_status · skip 시드 CSS 추가
+
+```css
+.b-update{background:#EFF6FF;color:#2563EB;border:1px solid #BFDBFE}
+.skip-card{background:#FFF7ED;border:1px solid #FED7AA;border-radius:10px;padding:14px;margin-bottom:12px}
+.skip-card .lbl{font-size:10px;font-weight:700;color:#C2410C;letter-spacing:.8px}
+.ic-update{background:#EFF6FF;border:1px solid #BFDBFE;border-radius:8px;padding:12px;margin-top:8px}
+```
+
+##### JS 데이터 구조 변경
+
+D 배열의 각 항목에 추가:
+
+```js
+content_status: "new" | "update",  // schedule[].content_status
+content_approach: "standard" | "data_driven",  // schedule[].content_approach
+editorial_summary: "...",          // schedule[].editorial_summary (architect 원문)
+input_question: "...",             // schedule[].input_question
+existing_url: "..." | null,        // update일 때 existing_content.url
+existing_title: "..." | null,      // update일 때 existing_content.title
+existing_date: "..." | null,       // update일 때 existing_content.publish_date
+gap: "..." | "",                   // update일 때 existing_content.gap_analysis
+existing_wishket_urls: [],         // schedule[].existing_wishket_urls
+```
+
+skip 시드용 신규 배열:
+
+```js
+const SKIP = [
+  { cluster: "...", keyword: "...", skip_reason: "...", url: "...", title: "...", date: "..." }
+];
+```
+
+##### 대시보드 표시 규칙
+
+1. **클러스터 뷰**: skip 시드가 있는 클러스터 상단에 skip 카드 인라인 표시
+   - 주황 배경 카드(`.skip-card`): `skip_reason` + 기존 글 링크 + `publish_date`
+   - 해당 클러스터의 scheduled/waitlist 항목 위에 위치
+
+2. **캘린더 탭 + 콘텐츠 상세**: content_status 뱃지
+   - `new`: 표시 없음 (기본)
+   - `update`: 파란 뱃지(`.b-update`) "업데이트"
+
+3. **콘텐츠 상세 탭**: update 항목에 기존 글 정보 카드
+   - 기존 URL 링크 + `gap_analysis` 표시 (`.ic-update` 카드)
+
 #### 4-4. 인덱스 업데이트
 
-`docs/index.html`을 업데이트합니다. 기존 `core/dashboard.py`의 `generate_index()` 패턴을 참조:
+`docs/index.html`을 업데이트합니다. 기존 `_archive/core_dashboard.py`의 `generate_index()` 패턴을 참조:
 
 - `docs/` 내 `YYYY-MM_*_YYYYMMDD.html` 파일 목록을 스캔
 - 월별 그룹핑, 최신 버전 강조
@@ -483,11 +595,16 @@ mkdir -p docs
 | expansion_role | string/null | "심화" / "보완" / "실행" / null(hub) |
 | funnel | string | "awareness" / "consideration" / "conversion" |
 | geo_type | string | "definition" / "comparison" / "problem_solving" |
-| title_seo | string | SEO 타이틀 |
-| title_ctr | string | CTR 타이틀 |
-| h2_structure | array | [{heading, description, geo_pattern}] |
+| content_status | string | `"new"` \| `"update"` (skip은 schedule에 미포함) |
+| existing_content | object/null | update일 때 `{url, title, publish_date, h2_sections, gap_analysis}`, 그 외 `null` |
+| title | string | 최고 확률 타이틀 (`title_suggestions[0].title`) |
+| title_suggestions | array | `[{title, estimated_ctr}]` 확률 내림차순 |
+| editorial_summary | string | 편집 전략 요약 2~3문장 (architect 원문 그대로) |
+| content_approach | string | `"standard"` \| `"data_driven"` (architect 원문 그대로) |
+| input_question | string | 사용자 원본 질문 |
+| h2_structure | array | [{heading, description, geo_pattern, data_candidates}] |
 | cta_suggestion | string | CTA 텍스트 |
-| publishing_purpose | string | 발행 목적 |
+| publishing_purpose | string | 발행 목적 (architect 원문 그대로) |
 | priority_score | float | 10점 만점, 소수 1자리 |
 | priority_highlight | string | 핵심 태그 1개 ("경쟁 기회", "퍼널 적합" 등) |
 | priority_summary | string | 자연어 선정 근거 요약 1문장 |
@@ -523,6 +640,8 @@ mkdir -p docs
 | 모든 콘텐츠 같은 퍼널 | 퍼널 교차 불가. 경고 없이 그대로 배치. |
 | volume_monthly_total 모두 0 | volume_trend 차원 = 5.0 (중립) 적용. |
 | hub 없는 JSON (sub_contents만) | hub-before-subs 규칙 건너뜀. 우선순위순 배치. |
+| 모든 시드가 skip | flat list = sub만. hub-before-subs 규칙 건너뜀. |
+| skip 시드 클러스터의 sub가 0개 | `skip_seeds`에만 기록, schedule 기여 없음. |
 
 ## 품질 기준
 
@@ -539,3 +658,17 @@ mkdir -p docs
 - [ ] `metadata` 집계가 schedule + waitlist 합산과 일치
 - [ ] 대시보드 HTML에 3탭(캘린더/클러스터/상세) 모두 포함
 - [ ] `docs/index.html`이 새 대시보드를 포함하여 업데이트됨
+- [ ] skip 시드는 `schedule[]`에 미포함
+- [ ] `schedule[]` 각 항목에 `content_status` 포함 (`"new"` 또는 `"update"`)
+- [ ] update 항목에 `existing_content` 객체 (`null` 아님)
+- [ ] `skip_seeds[]` 배열 존재 (빈 배열 허용)
+- [ ] `title` 필드 비어있지 않음
+- [ ] `schedule[]` 각 항목에 `editorial_summary` (20자+), `content_approach`, `input_question` 포함
+- [ ] `h2_structure[].data_candidates` 배열 존재 (빈 배열 허용)
+- [ ] `input_questions` top-level 배열 존재 (question + cluster 쌍)
+- [ ] 대시보드 상단에 사용자 질문 표시, 전략 방향/검색 의도 카드 없음
+- [ ] 대시보드 캘린더에 검색량·우선순위 열 없음, 유형·클러스터 열 존재
+- [ ] 대시보드 콘텐츠 상세가 개별 카드 네비게이션 (이전/다음 + 번호 도트)
+- [ ] 대시보드 콘텐츠 상세 순서: 업데이트 대상(최상위) → 발행 목적(publishing_purpose) → 선정 이유(editorial_summary) → H2(geo 태그 없음) → 내부 링크 → CTA 컨셉(박스 없음) → 연관된 기존 위시켓 콘텐츠(최하단)
+- [ ] 대시보드 콘텐츠 상세에 우선순위 점수/하이라이트/상세 보기 미표시
+- [ ] CTA 라벨이 "CTA 컨셉"
