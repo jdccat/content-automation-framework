@@ -4,53 +4,187 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>앱 개발 견적이 차이 나는 이유와 비교 기준 4가지</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
-  body { font-family: 'Pretendard', 'Apple SD Gothic Neo', sans-serif; font-size: 16px; line-height: 1.8; color: #1A1A1A; max-width: 760px; margin: 0 auto; padding: 80px 20px 40px 20px; }
-  h1 { font-size: 28px; font-weight: 700; margin: 0 0 24px 0; }
-  h2 { font-size: 22px; font-weight: 700; margin: 48px 0 16px 0; border-bottom: 2px solid #E2E8F0; padding-bottom: 8px; }
-  h3 { font-size: 18px; font-weight: 600; margin: 32px 0 12px 0; }
-  p { margin: 0 0 16px 0; }
-  a { color: #2563EB; }
-  ul { margin: 0 0 16px 0; padding-left: 24px; }
-  ol { margin: 0 0 16px 0; padding-left: 24px; }
-  li { margin-bottom: 6px; }
-  hr { border: none; border-top: 1px solid #E2E8F0; margin: 40px 0; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  /* Table base styles */
-  table { border-collapse: collapse; }
+  body {
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+    font-size: 17px;
+    line-height: 1.85;
+    color: #1a1a1a;
+    background: #f7f8fa;
+    -webkit-font-smoothing: antialiased;
+  }
 
-  /* ── GEO Table ── */
-  .tbl-wrap { overflow-x:auto;-webkit-overflow-scrolling:touch;margin:1.5rem 0;border:1px solid #DFDFE5;border-radius:8px;background:#fff; }
-  table.geo { width:100%;border-collapse:collapse;border-spacing:0;font-size:14px;line-height:1.6;table-layout:fixed; }
-  table.geo caption { position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap; }
-  table.geo thead th { padding:12px 18px;font-size:12.5px;font-weight:700;letter-spacing:0.01em;text-align:left;border-bottom:1px solid #D1D1D9;background:#F6F6F9;vertical-align:bottom; }
-  table.geo thead th:first-child { color:#82828E;border-right:1px solid #D1D1D9; }
-  table.geo thead th:not(:first-child) { color:#1A1A23; }
-  table.geo tbody th[scope="row"] { padding:14px 18px;font-size:14px;font-weight:600;color:#1A1A23;text-align:left;border-bottom:1px solid #ECECF0;border-right:1px solid #ECECF0;background:#fff;vertical-align:top;word-break:keep-all; }
-  table.geo tbody td { padding:14px 18px;color:#3A3A47;border-bottom:1px solid #ECECF0;vertical-align:top;word-break:keep-all; }
-  table.geo tbody tr:nth-child(even) td, table.geo tbody tr:nth-child(even) th[scope="row"] { background:#F9F9FB; }
-  table.geo tbody tr:hover td, table.geo tbody tr:hover th[scope="row"] { background:#F0F0F5; }
-  table.geo tfoot td { padding:9px 18px;font-size:12px;color:#9CA3AF;border-top:1px solid #ECECF0;background:#F9F9FB; }
-  table.geo tfoot time { font-weight:500; }
-  @media (max-width:640px) { table.geo { table-layout:auto; } table.geo thead th,table.geo tbody th[scope="row"],table.geo tbody td { padding:11px 14px;font-size:13px; } table.geo tfoot td { padding:8px 14px; } }
-
-  /* Toolbar */
-  #toolbar { position: fixed; top: 0; left: 0; right: 0; background: #1E293B; color: #fff; padding: 10px 20px; display: flex; align-items: center; gap: 16px; z-index: 9999; font-size: 14px; }
-  #toolbar button { background: #3B82F6; color: #fff; border: none; padding: 6px 16px; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: 600; }
-  #toolbar button:hover { background: #2563EB; }
-
-  /* Edit status badge */
+  /* ── Toolbar (편집용) ── */
+  #toolbar {
+    position: fixed; top: 0; left: 0; right: 0;
+    background: #1E293B; color: #fff;
+    padding: 10px 20px;
+    display: flex; align-items: center; gap: 16px;
+    z-index: 9999; font-size: 14px;
+  }
+  #toolbar button {
+    background: #26B2E2; color: #fff; border: none;
+    padding: 6px 16px; border-radius: 6px; cursor: pointer;
+    font-size: 13px; font-weight: 600;
+  }
+  #toolbar button:hover { background: #1A9FC7; }
   #edit-status { color: #94A3B8; font-size: 12px; }
   #edit-status.modified { color: #FBBF24; }
 
-  /* Image guide box */
-  .image-guide { background: #F0F7FF; border: 1px solid #3B82F6; border-radius: 8px; padding: 16px; margin: 16px 0; }
+  /* ── Layout ── */
+  .page-wrap {
+    max-width: 720px;
+    margin: 80px auto 80px;
+    padding: 0 20px;
+  }
 
+  /* ── Header ── */
+  .article-header { margin-bottom: 32px; }
+  .article-category {
+    font-size: 12px; font-weight: 600; color: #26B2E2;
+    letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 12px;
+  }
+  h1 {
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 800; line-height: 1.35;
+    letter-spacing: -0.5px; color: #0d0d0d;
+    margin: 0 0 16px 0;
+  }
+  .article-meta { font-size: 13px; color: #999; }
 
-  /* Contenteditable focus/hover */
-  [contenteditable="true"]:focus { outline: 2px solid #3B82F6; outline-offset: 2px; border-radius: 4px; }
+  /* ── Typography ── */
+  h2 {
+    font-size: 21px; font-weight: 700; color: #0d0d0d;
+    margin: 48px 0 16px 0; padding-bottom: 10px;
+    border-bottom: 2px solid #e8e8e8;
+    letter-spacing: -0.3px;
+  }
+  h3 {
+    font-size: 17px; font-weight: 700; color: #1a1a1a;
+    margin: 28px 0 10px 0;
+  }
+  p { margin: 0 0 14px 0; }
+  a { color: #26B2E2; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  strong { font-weight: 700; }
+
+  /* ── Lists ── */
+  ul, ol { margin: 0 0 16px 0; padding-left: 22px; }
+  li { margin-bottom: 6px; line-height: 1.75; }
+  li::marker { color: #999; }
+
+  hr { border: none; border-top: 1px solid #e8e8e8; margin: 40px 0; }
+
+  /* ── GEO Table ── */
+  .tbl-wrap {
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    margin: 1.5rem 0; border: 1px solid #e0e0e5;
+    border-radius: 10px; background: #fff;
+  }
+  table.geo {
+    width: 100%; border-collapse: collapse; border-spacing: 0;
+    font-size: 14.5px; line-height: 1.65; table-layout: fixed;
+  }
+  table.geo caption {
+    position: absolute; width: 1px; height: 1px;
+    overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap;
+  }
+  table.geo thead th {
+    padding: 12px 18px; font-size: 12.5px; font-weight: 700;
+    letter-spacing: 0.01em; text-align: left;
+    border-bottom: 1px solid #d1d1d9; background: #f6f6f9; vertical-align: bottom;
+  }
+  table.geo thead th:first-child { color: #82828e; border-right: 1px solid #d1d1d9; }
+  table.geo thead th:not(:first-child) { color: #1a1a23; }
+  table.geo tbody th[scope="row"] {
+    padding: 14px 18px; font-size: 14px; font-weight: 600; color: #1a1a23;
+    text-align: left; border-bottom: 1px solid #ececf0; border-right: 1px solid #ececf0;
+    background: #fff; vertical-align: top; word-break: keep-all;
+  }
+  table.geo tbody td {
+    padding: 14px 18px; color: #3a3a47;
+    border-bottom: 1px solid #ececf0; vertical-align: top; word-break: keep-all;
+  }
+  table.geo tbody tr:nth-child(even) td,
+  table.geo tbody tr:nth-child(even) th[scope="row"] { background: #f9f9fb; }
+  table.geo tbody tr:hover td,
+  table.geo tbody tr:hover th[scope="row"] { background: #f0f0f5; }
+  table.geo tfoot td {
+    padding: 9px 18px; font-size: 12px; color: #9ca3af;
+    border-top: 1px solid #ececf0; background: #f9f9fb;
+  }
+
+  /* ── TLDR (핵심 요약) ── */
+  .summary-box {
+    background: #E8F7FC;
+    border-left: 4px solid #26B2E2;
+    border-radius: 0 10px 10px 0;
+    padding: 20px 24px;
+    margin-bottom: 32px;
+  }
+  .summary-box p:first-child {
+    font-size: 13px; font-weight: 700; color: #26B2E2;
+    margin-bottom: 8px; letter-spacing: 0.3px;
+  }
+  .summary-box p:not(:first-child) {
+    font-size: 15.5px; color: #0A5C78; line-height: 1.75;
+  }
+
+  /* ── FAQ ── */
+  .faq-list {
+    display: flex; flex-direction: column; gap: 0;
+    margin: 20px 0 24px; border: 1px solid #e8e8e8;
+    border-radius: 10px; overflow: hidden;
+  }
+  .faq-item { border-bottom: 1px solid #ebebeb; background: #fff; }
+  .faq-item:last-child { border-bottom: none; }
+  .faq-q {
+    font-size: 15px; font-weight: 700; color: #0d0d0d;
+    padding: 18px 20px 8px; display: flex; gap: 10px;
+  }
+  .faq-q .q-mark { color: #26B2E2; font-weight: 800; font-size: 16px; flex-shrink: 0; }
+  .faq-a {
+    font-size: 14.5px; color: #444; line-height: 1.75;
+    padding: 0 20px 18px 44px;
+  }
+
+  /* ── Related ── */
+  .related-section { margin: 32px 0; }
+  .related-section h3 { font-size: 16px; font-weight: 700; margin-bottom: 12px; }
+  .related-section ul { list-style: none; padding: 0; }
+  .related-section li {
+    padding: 10px 0; border-bottom: 1px solid #f0f0f0;
+  }
+  .related-section li:last-child { border-bottom: none; }
+  .related-section a { font-size: 15px; font-weight: 500; }
+
+  /* ── Image guide box ── */
+  .image-guide, table.guide-box {
+    background: #E8F7FC; border: 1px solid #7DD3E8;
+    border-radius: 10px; padding: 16px; margin: 16px 0;
+  }
+
+  /* ── CMS meta area ── */
+  .cms-meta-area { background: #f9fafb; border-radius: 10px; padding: 20px; margin-top: 40px; }
+
+  /* ── Contenteditable ── */
+  [contenteditable="true"]:focus { outline: 2px solid #26B2E2; outline-offset: 2px; border-radius: 4px; }
   [contenteditable="true"]:hover { outline: 1px dashed #CBD5E1; outline-offset: 2px; border-radius: 4px; }
-  [contenteditable="true"]:focus:hover { outline: 2px solid #3B82F6; outline-offset: 2px; }
+  [contenteditable="true"]:focus:hover { outline: 2px solid #26B2E2; outline-offset: 2px; }
+
+  /* ── Responsive ── */
+  @media (max-width: 640px) {
+    .page-wrap { padding: 0 16px; margin-top: 60px; }
+    h1 { font-size: 22px; }
+    h2 { font-size: 19px; }
+    table.geo { table-layout: auto; }
+    table.geo thead th, table.geo tbody th[scope="row"], table.geo tbody td {
+      padding: 11px 14px; font-size: 13px;
+    }
+  }
 </style>
 </head>
 <body>
@@ -61,122 +195,185 @@
   <span id="edit-status">저장됨</span>
 </div>
 
-<h1 contenteditable="true">앱 개발 견적이 차이 나는 이유와 비교 기준 4가지</h1>
-<time datetime="2026-04-03" style="display:block;color:#6B7280;font-size:14px;margin:-16px 0 24px 0;">2026-04-03</time>
+<div class="page-wrap">
 
-<table class="guide-box" style="width:100%;border:1px solid #D1D5DB;border-collapse:collapse;margin:20px 0;">
+  <div class="article-header">
+    <h1 contenteditable="true">앱 개발 견적이 차이 나는 이유와 비교 기준 4가지</h1>
+    <div class="article-meta"><time datetime="2026-04-03">2026-04-03</time></div>
+  </div>
+
+  <table class="guide-box" style="width:100%;border:1px solid #D1D5DB;border-collapse:collapse;margin:20px 0;">
 <tr><td style="background:#F9FAFB;padding:16px 20px;border:1px solid #D1D5DB;">
 <p style="margin:0 0 10px 0;font-weight:700;font-size:16px;">🖼 썸네일 제작 가이드</p>
 <p style="margin:0 0 4px 0;"><b>스타일:</b> 단색 배경 + 텍스트</p>
-<p style="margin:0 0 4px 0;"><b>배경색:</b> #1A3E6E</p>
+<p style="margin:0 0 4px 0;"><b>배경색:</b> #1A4A8A</p>
 <p style="margin:0 0 4px 0;"><b>제목 텍스트:</b></p>
-<p style="margin:0 0 4px 0;">　1줄: 앱 개발 견적이 차이 나는 이유</p>
-<p style="margin:0 0 4px 0;">　2줄: 비교 기준 4가지</p>
+<p style="margin:0 0 4px 0;">　1줄: 앱 개발 견적이</p>
+<p style="margin:0 0 4px 0;">　2줄: 차이 나는 이유와 비교 기준 4가지</p>
 <p style="margin:0 0 4px 0;"><b>장식 요소:</b> geometric_blocks</p>
 <p style="margin:0;"><b>로고:</b> wishket 로고 좌상단</p>
 </td></tr>
 </table>
 
-<div id="cms-content" contenteditable="true" style="outline:none;">
+  <div id="cms-content" contenteditable="true" style="outline:none;">
 
-<table style="width:100%;border:none;border-collapse:collapse;margin:24px 0;">
-<tr><td style="background:#EFF6FF;border-left:4px solid #3B82F6;border-top:none;border-right:none;border-bottom:none;padding:16px 20px;">
-<p style="font-weight:700;margin:0 0 8px 0;">💡 핵심 요약</p>
-<p style="margin:0;">앱 개발 견적이 업체마다 크게 다른 이유는 실력 차이가 아니라 포함 범위·기술 스택·팀 구성·유지보수 포함 여부가 서로 다른 견적서를 가격 하나로 비교하기 때문입니다. 위시켓에 등록된 안드로이드 앱 신규 개발 990건 기준 예산 중위값은 2,250만 원이지만, 기획·QA· 배포가 빠진 분리형 견적은 후속 발주까지 합산하면 총비용이 포함형보다 높아지는 경우가 많습니다. 견적서를 비교할 때는 개발 범위 명세 수준, 기술 스택 명시 여부, 유지보수 조건, 산출물 소유권 4가지를 가격보다 먼저 확인해야 합니다.</p>
-</td></tr>
-</table>
+  <div class="summary-box">
+<p>💡 핵심 요약</p>
+<p>앱 개발 견적이 업체마다 크게 다른 핵심 이유는 동일한 앱을 전혀 다른 범위로 이해하기 때문입니다. 위시켓 기준 앱 신규 개발 예산은 하위 25%가 800만 원, 중위값이 2,000만 원, 상위 25%가 4,000만 원으로 5배 이상 차이가 납니다. 개발 범위 명세 수준, 기술 스택 명시 여부, 유지보수 조건, 소스 코드 소유권 4가지를 확인해야 같은 기준으로 비교할 수 있습니다.</p>
+</div>
 
-<p>포함 범위가 다른 견적서를 가격만 놓고 비교하면, 서로 다른 물건의 가격표를 나란히 보고 있는 것과 같습니다. 견적서 3장을 받았는데 가격이 전부 다르다면, 가장 싼 곳을 고르기 전에 세 견적이 같은 항목을 다루고 있는지부터 확인해야 하죠.</p>
-<p>위시켓에 등록된 안드로이드 앱 개발 프로젝트 1,314건을 보면 하위 25% 예산은 600만 원, 상위 25%는 4,000만 원으로 6.7배 편차가 납니다. 업체 실력 차이라기보다 포함 범위와 기술 선택에서 비롯된 구조적 차이거든요. 이 글을 다 읽고 나면 견적서에 적힌 숫자보다 그 숫자 안에 뭐가 포함돼 있는지를 먼저 읽게 됩니다.</p>
+  <p>업체 세 곳에 앱 개발 견적을 요청했는데 숫자가 너무 달랐습니다. 1,500만 원, 3,200만 원, 5,800만 원. 같은 앱을 만들어달라고 했는데 4배 가까운 차이예요. 이걸 어떻게 비교해야 할지 기준 자체가 없어지는 순간이었습니다.</p>
+<p>가장 저렴한 곳을 선택하자니 불안하고, 가장 비싼 곳이 꼭 더 좋다는 보장도 없죠. 처음 외주 개발을 의뢰하는 클라이언트라면 대부분 여기서 막힙니다. 문제는 견적서를 비교하는 '기준'이 없다는 겁니다.</p>
+<p>2025~2026년 위시켓에 등록된 앱 신규 개발 프로젝트 약 1,050건을 보면, 클라이언트 예산의 중위값은 2,000만 원인데 하위 25%는 800만 원, 상위 25%는 4,000만 원입니다. 5배가 넘는 범위예요. 이 편차가 생기는 이유, 알고 나면 어떤 기준으로 비교해야 하는지도 보입니다.</p>
+<hr/>
 <h2 id="앱-개발-견적-왜-업체마다-이렇게-다를까">앱 개발 견적, 왜 업체마다 이렇게 다를까?</h2>
-<p>인트로에서 본 6.7배 편차, 비정상처럼 느껴질 수 있지만 원인을 뜯어보면 오히려 당연한 결과입니다. 같은 기능 정의서를 줘도 A사는 기획부터 QA, 배포까지 전부 포함하고 B사는 화면 개발만 넣은 채 나머지를 별도로 빼거든요. 원인을 4가지로 나눠 보겠습니다.</p>
-<h3>견적 차이를 만드는 4가지 원인</h3>
-<div class="tbl-wrap"><table class="geo"><caption>앱 개발 견적, 왜 업체마다 이렇게 다를까? — 원인 · 저가 견적의 전형 · 고가 견적의 전형</caption><colgroup><col style="width:14%"/><col style="width:27%"/><col style="width:27%"/><col style="width:32%"/></colgroup><thead><tr><th scope="col">원인</th><th scope="col">저가 견적의 전형</th><th scope="col">고가 견적의 전형</th><th scope="col">독자 확인 포인트</th></tr></thead><tbody><tr><th scope="row">포함 범위</th><td>화면 개발만 포함, API 연동·QA·배포는 별도</td><td>기획서·UX 디자인·프론트+백엔드·QA·배포 전부 포함</td><td>기능 목록이 같아도 어디까지 포함인지 확인</td></tr><tr><th scope="row">기술 스택·플랫폼</th><td>크로스플랫폼 단일 코드베이스</td><td>네이티브(Swift+Kotlin) 각각 개발</td><td>iOS·안드로이드 동시 출시 여부, 기술 명시 여부</td></tr><tr><th scope="row">팀 구성</th><td>주니어 중심, 소규모 팀</td><td>시니어 포함, PM·디자이너 별도 배치</td><td>투입 인력의 경력 수준과 인원 수 명시 여부</td></tr><tr><th scope="row">유지보수 포함 여부</th><td>출시 후 유지보수 별도 계약</td><td>6개월~1년 무상 유지보수 포함</td><td>무상 A/S 기간과 유상 전환 단가 명시 여부</td></tr></tbody><tfoot><tr><td colspan="4"><time datetime="2026-04">2026년 4월</time> 기준 · 실제 조건에 따라 달라질 수 있습니다</td></tr></tfoot></table></div>
-<p>기술 스택 선택이 견적에 미치는 영향은 수치로 확인할 수 있습니다. 위시켓에 등록된 프로젝트 기준 iOS+안드로이드 앱 단독 개발 529건의 예산 중위값은 1,300만 원이에요. 여기에 웹까지 동시 개발하는 584건은 중위값이 3,000만 원으로 약 2.3배 뛰죠. 어떤 플랫폼 조합을 개발하느냐에 따라 견적이 이만큼 달라지니, 스펙 정의 단계에서 플랫폼 범위를 확정하는 게 먼저입니다.</p>
-<p>팀 구성도 무시하기 어려운 변수예요. 위시켓 상주 인력 데이터를 참고하면 풀스택 개발자 기준 주니어 월 350만 원, 시니어 월 700만 원 수준인데, 이건 상주 계약 기준이라 외주 프로젝트 견적에 직접 대입할 수 있는 수치는 아닙니다. 다만 팀 레벨에 따른 단가 격차가 크다는 감각은 잡을 수 있죠. 견적서에 투입 인력의 경력과 인원 수가 빠져 있다면, 단가 비교 자체가 불가능하다는 점을 기억해 두세요.</p>
-<p>유지보수는 조금 다른 각도에서 봐야 합니다. 통상 앱 연간 유지보수 비용은 초기 개발비의 15~20% 수준으로 언급되는데, 2,000만 원짜리 앱이면 매년 300~400만 원이 추가로 발생하는 셈이죠. 앱의 실제 운영 기간이 3~5년이라는 점을 생각하면, 초기 견적만 보는 건 전체 비용의 일부만 보는 거예요.</p>
-<table class="guide-box" style="width:100%;border:1px solid #4A90E2;border-collapse:collapse;margin:20px 0;">
-<tr><td style="background:#F0F7FF;padding:16px 20px;border:1px solid #4A90E2;">
+<p>앱 개발 견적이 업체마다 크게 다른 가장 큰 이유는, 업체가 "같은 앱"을 전혀 다른 범위로 이해하기 때문입니다. 클라이언트가 "매칭 앱 만들어주세요"라고 하면, 한 업체는 가입·매칭·메시지 기능만 최소 범위로 보고, 다른 업체는 알림·리뷰·관리자 대시보드·서버 인프라까지 포함해서 견적을 냅니다. 범위가 다르니 당연히 숫자가 달라질 수밖에 없어요.</p>
+<p>비슷해 보이는 매칭 서비스 앱 3건인데 3배 넘는 차이가 납니다.</p>
+<div style="display:flex;flex-direction:column;gap:14px;margin:20px 0 24px;">
+<div style="border:1px solid #e8e8e8;border-radius:10px;padding:18px 20px;background:#fff;">
+<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;">
+<span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;background:#e8f5e9;color:#2e7d32;">저가 사례</span>
+<span style="font-size:15.5px;font-weight:700;color:#0d0d0d;line-height:1.4;">Flutter 기반 여행 동행 매칭 플랫폼 앱 개발</span>
+</div>
+<div style="font-size:20px;font-weight:800;color:#26B2E2;margin-bottom:4px;">1,000만 원</div>
+<div style="font-size:12.5px;color:#999;margin-bottom:10px;">Android·iOS · 60일 · 크로스플랫폼</div>
+<div style="font-size:14.5px;color:#444;line-height:1.7;">Flutter로 iOS·Android를 동시 개발. 매칭·채팅 핵심 기능 중심으로 범위를 좁혀 비용 절감.</div>
+</div>
+<div style="border:1px solid #e8e8e8;border-radius:10px;padding:18px 20px;background:#fff;">
+<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;">
+<span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;background:#e3f2fd;color:#1565c0;">중가 사례</span>
+<span style="font-size:15.5px;font-weight:700;color:#0d0d0d;line-height:1.4;">AI 디지털 휴먼 활용 요가 코칭 서비스 개발</span>
+</div>
+<div style="font-size:20px;font-weight:800;color:#26B2E2;margin-bottom:4px;">2,000만 원</div>
+<div style="font-size:12.5px;color:#999;margin-bottom:10px;">웹·Android·iOS · 60일 · 앱+웹 병행</div>
+<div style="font-size:14.5px;color:#444;line-height:1.7;">모바일 앱에 웹 관리자 화면 추가. AI 연동 공수가 더해지며 비용 상승.</div>
+</div>
+<div style="border:1px solid #e8e8e8;border-radius:10px;padding:18px 20px;background:#fff;">
+<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;">
+<span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;background:#fce4ec;color:#c62828;">고가 사례</span>
+<span style="font-size:15.5px;font-weight:700;color:#0d0d0d;line-height:1.4;">과외 매칭 서비스 플랫폼 구축</span>
+</div>
+<div style="font-size:20px;font-weight:800;color:#26B2E2;margin-bottom:4px;">3,300만 원</div>
+<div style="font-size:12.5px;color:#999;margin-bottom:10px;">Android·iOS · 90일 · 기획 포함</div>
+<div style="font-size:14.5px;color:#444;line-height:1.7;">선생님·학생 양방향 가입·매칭·결제·리뷰 전체 구성. 양면 플랫폼 구조가 단면 앱 대비 공수 2~3배.</div>
+</div>
+</div>
+<p>플랫폼 구조(단면 vs 양면), 기술 방식(크로스플랫폼 vs 웹+앱 병행), 포함 범위(개발만 vs 기획 포함)가 다른 겁니다. 이게 견적 차이의 실체예요.</p>
+<p>범위 외에도 견적을 가르는 요인은 더 있습니다.</p>
+<div class="tbl-wrap"><table class="geo"><caption>앱 개발 견적, 왜 업체마다 이렇게 다를까? — 요인 · 내용 · 견적에 미치는 영향</caption><colgroup><col style="width:22%"/><col style="width:39%"/><col style="width:39%"/></colgroup><thead><tr><th scope="col">요인</th><th scope="col">내용</th><th scope="col">견적에 미치는 영향</th></tr></thead><tbody><tr><th scope="row"><strong>기술 스택</strong></th><td>iOS 전용, Android 전용, 크로스플랫폼(Flutter, React Native)</td><td>크로스플랫폼은 초기 비용 절감, 네이티브는 성능·확장성 우위</td></tr><tr><th scope="row"><strong>팀 구성</strong></th><td>기획자·디자이너·개발자가 모두 포함된 팀인지, 개발만인지</td><td>기획·디자인 포함 여부에 따라 견적 2배 이상 차이 가능</td></tr><tr><th scope="row"><strong>유지보수 포함 여부</strong></th><td>런칭 이후 버그 수정·업데이트 비용이 포함됐는지</td><td>포함 시 초기 견적이 높지만 총비용은 낮을 수 있음</td></tr><tr><th scope="row"><strong>개발사 위치·규모</strong></th><td>서울 대형 에이전시 vs 지방 소규모 팀 vs 프리랜서 팀</td><td>오버헤드(간접비)가 다르고 단가 기준이 다름</td></tr></tbody><tfoot><tr><td colspan="3"><time datetime="2026-04">2026년 4월</time> 기준 · 실제 조건에 따라 달라질 수 있습니다</td></tr></tfoot></table></div>
+<div style="background:#E8F7FC;border:1px solid #7DD3E8;border-radius:10px;padding:18px 20px;margin:20px 0 24px;">
+<div style="font-size:13px;font-weight:700;color:#0C7A9E;margin-bottom:10px;display:flex;align-items:center;gap:6px;">💡 크로스플랫폼이란?</div>
+<div style="font-size:14.5px;color:#0A5C78;line-height:1.75;">Flutter, React Native처럼 코드 하나로 iOS와 Android 앱을 동시에 만드는 방식입니다. 네이티브 앱 대비 초기 개발 비용은 낮지만, 기기 고유 기능(카메라, 블루투스 등)을 다룰 때 제약이 생길 수 있습니다.</div>
+</div>
+<p>이 요인들이 복합적으로 작용하면, 사실상 "다른 제품"에 대한 견적을 비교하는 셈이 됩니다. 숫자만 놓고 비교하니 의미가 없죠.</p>
+<hr/>
+<table class="guide-box" style="width:100%;border:1px solid #7DD3E8;border-collapse:collapse;margin:20px 0;">
+<tr><td style="background:#E8F7FC;padding:16px 20px;border:1px solid #7DD3E8;">
 <p style="margin:0 0 8px 0;font-weight:700;">📷 이미지 — [H2: 앱 개발 견적, 왜 업체마다 이렇게 다를까?] 뒤</p>
-<p style="margin:0 0 4px 0;"><b>유형:</b> 프로세스 도해</p>
-<p style="margin:0 0 8px 0;"><b>레이아웃:</b> 좌→우 4단계 카드 플로우</p>
-<table style="width:100%;border-collapse:collapse;margin:8px 0;">
-<tr style="background:#E0ECFF;"><th style="border:1px solid #CBD5E1;padding:6px 8px;text-align:left;font-size:13px;">단계</th><th style="border:1px solid #CBD5E1;padding:6px 8px;text-align:left;font-size:13px;">라벨</th><th style="border:1px solid #CBD5E1;padding:6px 8px;text-align:left;font-size:13px;">설명</th><th style="border:1px solid #CBD5E1;padding:6px 8px;text-align:left;font-size:13px;">비고</th></tr>
-<tr><td style="border:1px solid #CBD5E1;padding:6px 8px;font-size:13px;">1</td><td style="border:1px solid #CBD5E1;padding:6px 8px;font-size:13px;">포함 범위</td><td style="border:1px solid #CBD5E1;padding:6px 8px;font-size:13px;">기획·디자인·QA·배포 포함 여부</td><td style="border:1px solid #CBD5E1;padding:6px 8px;font-size:13px;">견적 차이의 핵심 원인</td></tr>
-<tr><td style="border:1px solid #CBD5E1;padding:6px 8px;font-size:13px;">2</td><td style="border:1px solid #CBD5E1;padding:6px 8px;font-size:13px;">기술 스택</td><td style="border:1px solid #CBD5E1;padding:6px 8px;font-size:13px;">Flutter·네이티브·크로스플랫폼</td><td style="border:1px solid #CBD5E1;padding:6px 8px;font-size:13px;">유지보수 비용 직결</td></tr>
-<tr><td style="border:1px solid #CBD5E1;padding:6px 8px;font-size:13px;">3</td><td style="border:1px solid #CBD5E1;padding:6px 8px;font-size:13px;">팀 구성</td><td style="border:1px solid #CBD5E1;padding:6px 8px;font-size:13px;">주니어·시니어 비율, 투입 인원 수</td><td style="border:1px solid #CBD5E1;padding:6px 8px;font-size:13px;">단가×기간=총비용</td></tr>
-<tr><td style="border:1px solid #CBD5E1;padding:6px 8px;font-size:13px;">4</td><td style="border:1px solid #CBD5E1;padding:6px 8px;font-size:13px;">유지보수</td><td style="border:1px solid #CBD5E1;padding:6px 8px;font-size:13px;">무상 A/S 기간, 유상 전환 단가</td><td style="border:1px solid #CBD5E1;padding:6px 8px;font-size:13px;">2~3년 총비용에 영향</td></tr>
-</table>
-<p style="margin:8px 0 0 0;"><b>색상:</b> 위시켓 블루 기반, 단계별 색상 그라데이션  |  <b>alt:</b> 앱 개발 견적 차이를 만드는 4가지 원인 프로세스 다이어그램</p>
+<p style="margin:0 0 4px 0;"><b>유형:</b> 인포그래픽</p>
+<p style="margin:0 0 4px 0;"><b>설명:</b> 앱 개발 견적 차이를 만드는 4가지 요인(기술 스택, 팀 구성, 유지보수 포함 여부, 개발사 규모)을 아이콘과 함께 나열한 인포그래픽. 각 요인별 비용 영향도를 한눈에 비교할 수 있도록 구성.</p>
+<p style="margin:0;"><b>alt:</b> 앱 개발 견적 차이를 만드는 4가지 요인 인포그래픽</p>
 </td></tr>
 </table>
 <h2 id="가격-말고-포함-범위를-비교해야-하는-이유">가격 말고 '포함 범위'를 비교해야 하는 이유</h2>
-<p>기능 정의서를 동일하게 보냈는데 A사 견적은 1,800만 원, B사 견적은 800만 원이 나왔다고 해보겠습니다. 절반도 안 되니 당연히 B사가 끌리죠.</p>
-<p>그런데 견적서를 뜯어보면 상황이 달라집니다. A사(1,800만 원)는 기획서 작성, 와이어프레임, UI 디자인, 프론트+백엔드 개발, QA 테스트, 앱스토어 배포, 1개월 무상 A/S까지 전부 포함한 금액이거든요. B사(800만 원)는 화면 개발과 기본 API 연동만 포함돼 있습니다. QA는 클라이언트가 직접 해야 하고, 배포도 별도예요.</p>
-<p>B사를 선택한 뒤 빠진 항목을 따로 발주하면 어떻게 될까요. 기획·디자인에 200~300만 원, QA에 100~200만 원, 배포 세팅에 50~100만 원이 붙으면서 실제 총비용이 1,200~1,500만 원 수준까지 올라가는 경우가 흔합니다. 800만 원이라 싸 보였을 뿐이죠.</p>
-<h3>실제 총비용으로 다시 계산하면</h3>
-<div class="tbl-wrap"><table class="geo"><caption>가격 말고 '포함 범위'를 비교해야 하는 이유 — 항목 · A사 (포함형) · B사 (분리형)</caption><colgroup><col style="width:14%"/><col style="width:27%"/><col style="width:27%"/><col style="width:32%"/></colgroup><thead><tr><th scope="col">항목</th><th scope="col">A사 (포함형)</th><th scope="col">B사 (분리형)</th><th scope="col">B사 별도 발주 비용 예상</th></tr></thead><tbody><tr><th scope="row">기획서·와이어프레임</th><td>포함</td><td>미포함</td><td>100~200만 원</td></tr><tr><th scope="row">UI 디자인</th><td>포함</td><td>미포함</td><td>150~250만 원</td></tr><tr><th scope="row">프론트+백엔드 개발</th><td>포함</td><td>포함 (800만 원)</td><td>-</td></tr><tr><th scope="row">QA 테스트</th><td>포함</td><td>미포함 (직접 진행)</td><td>100~150만 원</td></tr><tr><th scope="row">앱스토어 배포</th><td>포함</td><td>미포함</td><td>50~100만 원</td></tr><tr><th scope="row">1개월 무상 A/S</th><td>포함</td><td>미포함</td><td>별도 협의</td></tr><tr><th scope="row"><strong>총비용</strong></th><td><strong>1,800만 원</strong></td><td>-</td><td><strong>1,200~1,500만 원</strong></td></tr></tbody><tfoot><tr><td colspan="4"><time datetime="2026-04">2026년 4월</time> 기준 · 실제 조건에 따라 달라질 수 있습니다</td></tr></tfoot></table></div>
-<p>위시켓에 등록된 안드로이드 앱 신규 개발 프로젝트 990건 기준 예산 중위값은 2,250만 원입니다. 기획부터 배포까지 포함된 풀 스코프 프로젝트들의 중위값이니, 포함 범위를 제대로 따졌을 때 앱 신규 개발 예산이 어느 수준인지 감을 잡는 데 참고가 되죠.</p>
-<p>가격을 비교하기 전에 포함 범위부터 맞춰야 합니다. 범위가 다른 견적은 비교 대상 자체가 아니거든요.</p><p>→ <a href="https://wishket.com/project/similar-case-search/?utm_source=blog_webflow&amp;utm_medium=inline_cta&amp;utm_campaign=260403_app-development-quote-comparison-criteria">비슷한 앱 개발 프로젝트의 실제 견적 사례를 확인해 보세요</a></p>
+<p>1,500만 원짜리 견적이 실제로 더 비쌀 수 있습니다. 포함 범위를 보면 이상하지 않습니다.</p>
+<p>A 업체가 1,500만 원에 앱을 만들어준다고 했습니다. 그런데 이 견적에는 기획, 디자인, QA(품질 검증)가 포함되지 않았어요. 개발만 하겠다는 겁니다. 기획서는 클라이언트가 직접 써야 하고, 디자인은 별도로 외주를 주거나 인하우스에서 해야 하고, QA도 클라이언트 측에서 진행해야 합니다. 이 비용을 다 더하면 어떻게 될까요.</p>
+<p>B 업체의 3,200만 원짜리 견적은 기획·디자인·개발·QA를 모두 포함했습니다. 숫자만 보면 두 배가 넘지만, 실제 총비용을 계산하면 A 업체가 더 비쌀 수도 있어요.</p>
+<p>McKinsey·옥스퍼드 공동 연구에 따르면 대규모 IT 프로젝트의 45%가 예산을 초과하는데, 초기 견적에서 범위가 불명확하게 정의된 것이 주요 원인 중 하나입니다(<a href="https://www.mckinsey.com/capabilities/mckinsey-digital/our-insights/delivering-large-scale-it-projects-on-time-on-budget-and-on-value">McKinsey+Oxford 대규모 IT 프로젝트 연구</a>). 위시켓에서 수백 건의 앱 프로젝트를 들여다봐도 이 패턴이 반복됩니다. 처음 싸게 시작했다가 중간에 "이건 별도 항목"이라는 말에 추가 견적이 붙는 구조예요.</p>
+<div class="tbl-wrap"><table class="geo"><caption>가격 말고 '포함 범위'를 비교해야 하는 이유 — 항목 · 포함 여부 확인 · 없으면 추가 비용 발생</caption><colgroup><col style="width:22%"/><col style="width:39%"/><col style="width:39%"/></colgroup><thead><tr><th scope="col">항목</th><th scope="col">포함 여부 확인</th><th scope="col">없으면 추가 비용 발생</th></tr></thead><tbody><tr><th scope="row">기획 (요구사항 정의, 기능 명세서)</th><td>✓</td><td>별도 기획사 또는 인하우스 작업 필요</td></tr><tr><th scope="row">UI/UX 디자인</th><td>✓</td><td>디자이너 별도 계약 필요</td></tr><tr><th scope="row">개발 (프론트엔드 + 백엔드)</th><td>✓</td><td>—</td></tr><tr><th scope="row">QA / 테스트</th><td>✓</td><td>런칭 후 버그 폭탄 위험</td></tr><tr><th scope="row">런칭 지원 (스토어 등록)</th><td>✓</td><td>클라이언트가 직접 해야 함</td></tr><tr><th scope="row">유지보수 (런칭 후 N개월)</th><td>✓</td><td>추후 별도 계약 필요</td></tr><tr><th scope="row">서버 구축 및 운영 비용</th><td>✓</td><td>클라우드 비용 별도 발생</td></tr></tbody><tfoot><tr><td colspan="3"><time datetime="2026-04">2026년 4월</time> 기준 · 실제 조건에 따라 달라질 수 있습니다</td></tr></tfoot></table></div>
+<p>견적서에 이 항목들이 명확히 표기되지 않았다면, 계약 전에 반드시 확인하세요. "포함입니까, 불포함입니까"라는 질문을 주저하지 마세요. 이 질문 하나가 나중에 수백만 원짜리 분쟁을 막습니다.</p>
+<hr/>
+<table class="guide-box" style="width:100%;border:1px solid #7DD3E8;border-collapse:collapse;margin:20px 0;">
+<tr><td style="background:#E8F7FC;padding:16px 20px;border:1px solid #7DD3E8;">
+<p style="margin:0 0 8px 0;font-weight:700;">📷 이미지 — [H2: 가격 말고 '포함 범위'를 비교해야 하는 이유] 뒤</p>
+<p style="margin:0 0 4px 0;"><b>유형:</b> 프로세스 도해</p>
+<p style="margin:0 0 4px 0;"><b>설명:</b> 기획·디자인·개발·QA·런칭·유지보수 6단계 체크 항목이 포함/불포함될 때 총비용이 어떻게 달라지는지를 비교 도식으로 표현. 저가 견적의 숨은 비용 구조를 시각화.</p>
+<p style="margin:0;"><b>alt:</b> 앱 개발 견적 포함 항목별 총비용 비교 도식</p>
+</td></tr>
+</table><div style="background:#E8F7FC;border:1px solid #7DD3E8;border-radius:10px;padding:18px 22px;margin:24px 0 28px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+<p style="font-size:15px;color:#0A5C78;line-height:1.65;margin:0;flex:1;">견적서 항목을 혼자 검토하기 어렵다면, 위시켓 매니저가 기능 목록 정리부터 함께합니다.</p>
+<a href="https://wishket.com/project/free-consulting/?utm_source=blog_webflow&amp;utm_medium=inline_cta&amp;utm_campaign=260403_app-development-quote-comparison-criteria" style="background:#26B2E2;color:#fff;font-size:14px;font-weight:700;padding:10px 18px;border-radius:8px;white-space:nowrap;text-decoration:none;">매니저 상담받기</a>
+</div>
 <h2 id="견적서-비교-시-꼭-확인할-판단-기준-4가지">견적서 비교 시 꼭 확인할 판단 기준 4가지</h2>
-<p>견적서 3장을 받으면 자연스럽게 가격부터 보게 됩니다. 하지만 가격은 4가지 기준을 확인한 뒤에야 의미 있는 숫자가 되죠. 기준 없이 가격만 비교하는 건 건평이 다른 아파트의 분양가를 비교하는 것과 같거든요. 아래 4가지를 먼저 체크해 보세요.</p>
-<div class="tbl-wrap"><table class="geo"><caption>견적서 비교 시 꼭 확인할 판단 기준 4가지 — 판단 기준 · 확인해야 할 질문 · 위험 신호</caption><colgroup><col style="width:14%"/><col style="width:27%"/><col style="width:27%"/><col style="width:32%"/></colgroup><thead><tr><th scope="col">판단 기준</th><th scope="col">확인해야 할 질문</th><th scope="col">위험 신호</th><th scope="col">신뢰 신호</th></tr></thead><tbody><tr><th scope="row">개발 범위 명세 수준</th><td>화면 수, 기능 단위, API 항목, 예외 처리 범위가 구체적으로 명시돼 있는가</td><td>로그인·게시판·결제 수준의 기능 나열만 존재</td><td>화면별 기능 상세, 3rd-party 연동, 예외 케이스까지 문서화</td></tr><tr><th scope="row">기술 스택 명시 여부</th><td>어떤 기술로 개발하는지, 선택 이유가 적혀 있는가</td><td>기술 언급 없이 앱 개발로만 표기</td><td>기술 스택 + 선택 근거 설명</td></tr><tr><th scope="row">유지보수 조건</th><td>무상 A/S 범위, 유상 전환 단가가 명시돼 있는가</td><td>유지보수 조건 언급 없음</td><td>무상 기간·범위·유상 단가까지 구분 명시</td></tr><tr><th scope="row">산출물 소유권</th><td>소스코드·디자인 원본이 클라이언트에게 이전되는가</td><td>소유권 언급 없음, 운영만 위탁</td><td>계약서에 소유권 이전 조항 포함</td></tr></tbody><tfoot><tr><td colspan="4"><time datetime="2026-04">2026년 4월</time> 기준 · 실제 조건에 따라 달라질 수 있습니다</td></tr></tfoot></table></div>
-<p>견적서에 기능이 4~5줄로만 나열돼 있다면 그건 명세가 아닙니다. 화면 수, 기능 단위, API 연동 항목, 예외 처리 범위, 3rd-party 서비스 포함 여부까지 적혀 있어야 비교 가능한 견적이에요. 명세가 없으면 개발 도중에 추가 비용이 발생할 가능성이 높거든요. 솔직히 이 항목만 봐도 업체의 프로젝트 관리 역량이 드러납니다.</p>
-<p>기술 스택도 반드시 확인해야 하는 항목이죠. Flutter인지 React Native인지 네이티브인지에 따라 유지보수 비용과 향후 확장성이 완전히 달라집니다. 특정 기술에 종속된 코드가 되면 나중에 업체를 바꿀 때 리빌드 비용이 발생하거든요. 견적서를 받으면 어떤 기술을 왜 선택했는지 꼭 물어보세요.</p>
-<p>유지보수 조건은 초기 견적에 가려져 놓치기 쉬운 항목입니다. 무상 A/S 범위가 어디까지인지, 유상 전환 시 단가는 얼마인지 명시되지 않은 견적은 출시 후 첫 버그 수정부터 추가 청구가 나올 수 있거든요. 통상 앱 유지보수 비용은 연간 개발비의 15~20% 수준이니까, 2,000만 원짜리 앱이면 매년 300~400만 원이 추가로 발생하는 셈이죠. 2~3년 총비용으로 따지면 유지보수 조건이 포함된 견적이 오히려 유리한 경우가 많습니다.</p>
-<p>마지막으로 산출물 소유권. 개발이 끝난 뒤 소스코드, 디자인 원본, 서버 환경 설정이 클라이언트에게 넘어오는지 반드시 확인해야 합니다. 일부 업체는 소스코드를 넘기지 않고 운영 서비스만 제공하는 구조를 취하거든요. 이 경우 업체와의 관계가 끊기면 서비스 유지 자체가 위험해집니다. IT 외주 계약에서 소스코드 저작권은 명시하지 않으면 개발사에 귀속될 수 있어요. 계약서에 산출물 소유권 이전 조항이 있는지, 오픈소스 라이선스 목록을 인도 시 받을 수 있는지 꼭 확인하세요.</p>
-<table class="guide-box" style="width:100%;border:1px solid #4A90E2;border-collapse:collapse;margin:20px 0;">
-<tr><td style="background:#F0F7FF;padding:16px 20px;border:1px solid #4A90E2;">
-<p style="margin:0 0 8px 0;font-weight:700;">📷 이미지 — [H2: 견적서 비교 시 꼭 확인할 판단 기준 4가지] 뒤</p>
-<p style="margin:0 0 4px 0;"><b>유형:</b> 인포그래픽</p>
-<p style="margin:0 0 4px 0;"><b>설명:</b> 견적서 비교 시 확인할 4가지 판단 기준을 카드형으로 배치한 인포그래픽. 각 카드에 기준명(개발 범위 명세 수준·기술 스택·유지보수 조건·산출물 소유권), 위험 신호(적색), 신뢰 신호(녹색)를 아이콘과 함께 표시. 위시켓 블루 계열 배경에 깔끔한 코퍼레이트 스타일.</p>
-<p style="margin:0 0 4px 0;"><b>프롬프트:</b> app development quote comparison checklist infographic, 4 criteria cards: scope specification, tech stack, maintenance terms, IP ownership, red warning signs and green trust signs with icons, blue corporate style, clean and minimal</p>
-<p style="margin:0;"><b>alt:</b> 앱 개발 견적서 비교 시 확인할 4가지 판단 기준 체크리스트 인포그래픽</p>
-</td></tr>
-</table>
+<p>숫자만 비교하면 결국 가장 저렴한 곳 또는 가장 인상 좋은 곳을 선택하게 됩니다. 다음 4가지를 점검하면 비슷해 보이는 견적서들이 실제로는 전혀 다른 내용임을 알 수 있습니다.</p>
+<h3>1. 개발 범위 명세 수준</h3>
+<p>"앱 개발 일체"처럼 뭉뚱그려 써있는 견적서는 경계해야 합니다. 어떤 화면을 어떤 기능으로 만드는지, 기능 목록이 구체적으로 나열된 견적서가 분쟁 가능성이 낮습니다.</p>
+<p>참고로, 국내 공공 소프트웨어 사업에서는 기능점수(FP) 방식으로 범위를 산정합니다. 2024년 기준 FP당 단가는 605,784원이에요(<a href="https://byline.network/2024/05/13-363/">SW사업 대가산정 가이드 2024</a>). 민간 외주에서는 강제되지 않지만, 견적 항목이 구체적으로 분해되어 있어야 비교가 가능하다는 원칙은 같습니다.</p>
+<div style="background:#f0fdf4;border:1px solid #86efac;border-radius:10px;padding:18px 20px;margin:20px 0 24px;">
+<div style="font-size:13px;font-weight:700;color:#166534;margin-bottom:10px;display:flex;align-items:center;gap:6px;">✅ 개발 범위 명세 체크리스트</div>
+<div style="font-size:14.5px;color:#14532d;line-height:1.75;"><ul><li>화면(스크린) 목록이 명시되어 있는가?</li><li>각 기능의 구현 방식이 구체적으로 기술되어 있는가?</li><li>"추가 기능 개발 시 별도 협의" 단서 조항이 과도하게 많지 않은가?</li><li>API 연동 대상(결제, 지도, 소셜 로그인 등)이 나열되어 있는가?</li></ul></div>
+</div>
+<h3>2. 기술 스택 명시 여부</h3>
+<p>어떤 기술로 개발하는지 적혀있지 않은 견적서는 리스크가 있습니다. iOS/Android 각각인지, 크로스플랫폼(Flutter, React Native)인지에 따라 향후 유지보수 비용과 확장 가능성이 달라집니다. 기술 스택과 그 선택 이유를 설명할 수 있는 업체가 신뢰할 수 있는 곳입니다.</p>
+<h3>3. 유지보수 조건</h3>
+<p>앱은 런칭으로 끝나지 않습니다. OS 업데이트, 기기 호환성 이슈, 사용자 요청 수정이 계속 발생합니다. 런칭 후 1~3개월 무상 유지보수가 관행처럼 통용되지만, 계약서에 명시되지 않으면 아무 의미가 없어요. "당연히 해줄 거 아닌가요"라는 구두 약속은 분쟁 시 효력이 없습니다.</p>
+<h3>4. 산출물 소유권</h3>
+<p>개발 완료 후 소스 코드의 소유권이 클라이언트에게 있는지 확인하세요. 명시하지 않는 계약은 나중에 업체를 바꾸거나 내부 개발팀을 꾸릴 때 심각한 문제가 됩니다.</p>
+<div style="background:#f5f3ff;border:1px solid #c4b5fd;border-radius:10px;padding:18px 20px;margin:20px 0 24px;">
+<div style="font-size:13px;font-weight:700;color:#5b21b6;margin-bottom:10px;display:flex;align-items:center;gap:6px;">💬 Q. 소스 코드 소유권, 왜 중요한가요?</div>
+<div style="font-size:14.5px;color:#3b0764;line-height:1.75;">소스 코드가 없으면 기존 업체 외에는 유지보수나 기능 추가가 불가능합니다. 사실상 그 업체에 영구적으로 종속되는 구조예요. 계약서에 "소스 코드 전체를 클라이언트에게 납품한다"는 문구가 있는지 반드시 확인하세요.</div>
+</div>
+<hr/>
 <h2 id="같은-조건으로-비교하고-싶다면">같은 조건으로 비교하고 싶다면?</h2>
-<p>여기까지 읽었다면 견적서를 볼 때 가격보다 포함 범위와 조건을 먼저 확인해야 한다는 감각이 잡혔을 겁니다. 이제 남은 건 실행이에요.</p>
-<p>업체마다 견적 형식이 달라서 같은 조건으로 비교하는 표를 직접 만들려면 각 업체에 추가 질문을 보내고 답변을 취합해야 하거든요. 솔직히 이 과정이 번거롭다 보니 중간에 포기하는 경우를 많이 봐왔습니다.</p>
-<p>해결 방법은 두 가지입니다.</p>
-<p>첫째, 이 글의 4가지 기준(범위 명세 수준, 기술 스택, 유지보수 조건, 소유권)을 질문 목록으로 정리해서 업체에 동시에 보내는 겁니다. 같은 양식으로 답변을 받으면 비교가 훨씬 수월해지죠.</p>
-<p>둘째, 하나의 프로젝트 설명을 등록하면 여러 업체가 동일 조건으로 제안하는 구조를 활용하는 방법이 있습니다. <a href="https://wishket.com/project/free-consulting/?utm_source=blog_webflow&amp;utm_medium=inline_cta&amp;utm_campaign=260403_app-development-quote-comparison-criteria">위시켓</a>에서는 프로젝트를 등록하면 전담 매니저가 요구사항 정리와 견적 조건 표준화를 지원하고, 이 글에서 다룬 4가지 기준을 한 화면에서 비교할 수 있는 구조로 연결됩니다. 위시켓 기준 앱 개발 프로젝트에 평균 19개 업체가 제안하니, 같은 조건에서 여러 선택지를 비교할 수 있죠.</p>
-<p>플랫폼을 쓰지 않더라도 이 글의 4가지 기준을 질문 목록으로 정리해 업체에 재견적을 요청해 보세요. 그것만으로도 비교 범위가 크게 좁아질 거예요.</p>
+<p>앱 개발 견적을 요청할 때부터 모든 업체에 같은 질문을 보내야 제대로 비교할 수 있습니다. 업체마다 다른 기준으로 견적을 내는 상황에서 숫자만 받아 비교하는 건, 처음부터 불가능한 비교를 하려는 거예요.</p>
+<p>아래 5가지를 견적 요청서에 항상 포함하세요.</p>
+<ol>
+<li>기획, 디자인, 개발, QA, 런칭 지원 — 각각 포함/불포함 여부를 명시해 주세요.</li>
+<li>iOS, Android, 크로스플랫폼 중 어떤 방식으로 개발하며, 그 이유는 무엇인가요?</li>
+<li>런칭 후 유지보수 기간과 조건은 어떻게 되나요?</li>
+<li>개발 완료 시 소스 코드 전체를 납품받을 수 있나요?</li>
+<li>견적에 포함된 서버/인프라 비용 범위는 어디까지인가요?</li>
+</ol>
+<p>이 답변이 없거나 "상황에 따라 달라집니다"로만 답하는 업체는 한 번 더 물어볼 필요가 있습니다. 불명확한 견적서는 계약 이후 분쟁의 씨앗이 됩니다.</p>
+<p>견적서를 받았는데 항목이 충분히 구체적이지 않다면, 재견적을 요청하는 게 정상입니다. "더 자세하게 나눠서 다시 보내주실 수 있나요?"라는 요청을 불편해할 업체라면, 나중에 문제가 생겼을 때 소통도 어렵습니다.</p>
+<p><a href="https://www.wishket.com/project/create/?utm_source=blog_webflow&amp;utm_medium=inline_cta&amp;utm_campaign=260403_app-development-quote-comparison-criteria">위시켓</a>에서는 프로젝트를 등록하면 검증된 개발사들이 동일한 요구사항 기반으로 제안서를 보내오고, 위시켓 매니저가 견적의 타당성을 함께 검토해 줍니다. 비교 기준이 없어서 막막하다면, 처음부터 이런 구조를 활용하는 것도 실질적인 선택지입니다.</p>
+<p>앱 개발 견적은 숫자가 아니라 '무엇이 포함되어 있는가'로 비교해야 합니다. 판단 기준이 생기면, 같은 견적서도 전혀 다르게 읽힙니다.</p>
 
-<table style="width:100%;border:2px solid #3B82F6;border-collapse:collapse;margin:24px 0;">
-<tr><td style="background:#F8FAFC;padding:28px 24px;text-align:center;border:2px solid #3B82F6;">
-<p style="font-size:20px;font-weight:700;margin:0 0 8px 0;color:#111;">검증된 개발사의 견적, 한 번에 비교해 보세요</p>
-<p style="color:#64748B;margin:0 0 20px 0;font-size:15px;">위시켓에서 같은 조건으로 여러 업체의 제안을 받아보세요</p>
-<p style="margin:0;"><a href="https://wishket.com/project/free-consulting/?utm_source=blog_webflow&amp;utm_medium=cta_banner&amp;utm_campaign=260403_app-development-quote-comparison-criteria" style="background:#3B82F6;color:#ffffff;padding:12px 28px;text-decoration:none;font-weight:600;font-size:16px;display:inline-block;">무료 상담 신청하기</a></p>
-</td></tr>
-</table>
-
-<h3>함께 읽으면 좋은 콘텐츠</h3>
-<ul>
-  <li><a href="https://blog.wishket.com/blog/43936">여러 앱개발 견적서, 객관적으로 비교하는 방법 (9단계)</a></li>
-  <li><a href="https://blog.wishket.com/blog/how-to-choose-software-development-company">개발 업체, 어떻게 골라야 할까? 현장에서 검증한 5가지 기준</a></li>
-  <li><a href="https://blog.wishket.com/blog/outsourcing-development-risks-solutions">외주 개발, 어떤 리스크가 있을까? 자주 발생하는 4가지 문제와 해결법</a></li>
-</ul>
-
+  <div style="background:linear-gradient(135deg,#1A8CB4 0%,#26B2E2 100%);border-radius:14px;padding:32px 30px;color:#fff;margin:40px 0 0;">
+<div style="font-size:12px;font-weight:600;letter-spacing:0.8px;opacity:0.75;margin-bottom:10px;text-transform:uppercase;">다음 단계</div>
+<h3 style="font-size:20px;font-weight:800;line-height:1.45;margin-bottom:20px;color:#fff;letter-spacing:-0.3px;">견적서를 이미 받으셨나요,
+아직 준비 중이신가요?</h3>
+<div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;"><div style="background:rgba(255,255,255,0.12);border-radius:8px;padding:14px 16px;font-size:14.5px;line-height:1.65;"><span style="font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;">이미 견적서가 있다면</span>받은 견적서의 항목이 같은 기준인지 확인하는 것이 먼저입니다. 위시켓 매니저가 견적 범위 검토와 조건 조율을 도와드립니다.</div>
+<div style="background:rgba(255,255,255,0.12);border-radius:8px;padding:14px 16px;font-size:14.5px;line-height:1.65;"><span style="font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;">아직 견적을 받지 않았다면</span>기능 목록을 먼저 정리한 뒤 등록하세요. 동일 조건으로 비교 가능한 견적을 여러 개발사로부터 받을 수 있습니다.</div></div><a href="https://www.wishket.com/project/create/?utm_source=blog_webflow&amp;utm_medium=cta_banner&amp;utm_campaign=260403_app-development-quote-comparison-criteria" style="display:inline-block;background:#fff;color:#26B2E2;font-size:15px;font-weight:800;padding:13px 28px;border-radius:8px;text-decoration:none;">프로젝트 등록하고 매니저 상담받기</a>
 </div>
 
-<p><b>Q1. 앱 개발 견적이 업체마다 크게 차이 나는 이유는 무엇인가요?</b></p>
-<p>포함 범위가 다른 견적서를 가격만 보고 비교하기 때문입니다. A사는 기획·디자인·QA·배포까지 포함하고, B사는 화면 개발만 넣은 채 나머지를 별도 견적으로 빼는 경우가 흔하거든요. 위시켓 안드로이드 앱 개발 1,314건 기준 하위 25%와 상위 25%의 견적 차이가 6.7배인 것도 이 구조적 차이에서 비롯된 결과입니다.</p>
+  <div class="related-section">
+  <h3>함께 읽으면 좋은 콘텐츠</h3>
+<ul>
+  <li><a href="https://blog.wishket.com/blog/43936">여러 앱개발 견적서, 객관적으로 비교하는 방법(9단계)</a></li>
+  <li><a href="https://blog.wishket.com/blog/41251">앱 개발 비용 얼마나 들까? 기능·범위별 비용 정리</a></li>
+  <li><a href="https://blog.wishket.com/blog/app-development-company">앱 개발 업체 찾는 법 : 어디서, 어떻게 선택해야 할까</a></li>
+</ul>
+  </div>
 
-<p><b>Q2. 견적서에서 가장 먼저 확인해야 할 판단 기준은 무엇인가요?</b></p>
-<p>개발 범위 명세 수준을 가장 먼저 확인해야 합니다. 기능이 4~5줄로만 나열된 견적은 명세가 아니에요. 화면 수, API 연동 항목, 예외 처리 범위, 3rd-party 포함 여부까지 명시된 견적이 비교 가능한 견적이고, 명세가 상세할수록 개발 도중 추가 청구 가능성도 낮아지는 편입니다.</p>
+  </div>
 
-<p><b>Q3. 기술 스택 명시 여부가 견적 비교에서 중요한 이유는 무엇인가요?</b></p>
-<p>기술 선택이 유지보수 비용과 향후 확장성을 결정하기 때문입니다. Flutter인지 네이티브인지에 따라 나중에 업체를 교체할 때 리빌드 비용이 달라지거든요. 위시켓 데이터 기준 iOS·안드로이드 단독 개발 대비 웹까지 동시 개발하면 중위값이 약 2.3배 차이 납니다.</p>
+  <h2>자주 묻는 질문</h2>
+<div class="faq-list">
+<div class="faq-item">
+  <div class="faq-q"><span class="q-mark">Q.</span>앱 개발 견적을 받을 때 몇 군데 업체에 요청하는 게 적당할까요?</div>
+  <div class="faq-a">최소 3곳 이상에 동시에 요청하는 것이 좋습니다. 한두 곳만 비교하면 가격 편차가 &#x27;표준&#x27;인지 &#x27;이상치&#x27;인지 판단하기 어렵거든요. 3~5곳에 동일한 요구사항을 보내고 답변 방식과 질문 수를 함께 보면, 업체의 이해도와 소통 방식도 미리 가늠할 수 있습니다.</div>
+</div>
+<div class="faq-item">
+  <div class="faq-q"><span class="q-mark">Q.</span>크로스플랫폼 앱이 네이티브 앱보다 항상 저렴한가요?</div>
+  <div class="faq-a">초기 개발 비용은 크로스플랫폼이 더 낮지만, 장기적으로는 반드시 저렴하지 않습니다. 기기 고유 기능(카메라, 결제, 블루투스)을 다룰 때 네이티브 모듈 추가 비용이 발생하고, 크로스플랫폼 프레임워크 버전 업데이트에 따른 유지보수 공수도 커질 수 있습니다. 기능 복잡도가 낮고 출시 속도가 중요하다면 크로스플랫폼이 유리하고, 기기 의존 기능이 많다면 네이티브를 검토하는 게 낫습니다.</div>
+</div>
+<div class="faq-item">
+  <div class="faq-q"><span class="q-mark">Q.</span>견적서에 유지보수 조건이 없을 때 계약 후 추가하는 방법은 무엇인가요?</div>
+  <div class="faq-a">계약서 작성 시 &#x27;별지 유지보수 계약&#x27;을 동시에 체결하는 방식이 가장 확실합니다. 런칭 후 무상 유지보수 기간, 유상 전환 시 월 단가, 대응 범위(버그 수정 vs 기능 추가 구분)를 항목별로 명시해야 합니다. 계약 후에 추가하려면 업체 협조 없이는 어렵기 때문에, 견적 협상 단계에서 미리 요청하는 것이 현실적입니다.</div>
+</div>
+<div class="faq-item">
+  <div class="faq-q"><span class="q-mark">Q.</span>소스 코드를 납품받지 못하는 계약이 실제로 존재하나요?</div>
+  <div class="faq-a">드물지 않습니다. 일부 업체는 소스 코드를 자사 서버에 보관하고 월 유지보수 비용을 청구하는 SaaS형 계약을 제안합니다. 표면적으로는 유지보수 비용이 낮아 보이지만, 업체를 바꾸거나 서비스를 이전할 때 코드를 가져올 수 없어 사실상 재개발이 필요해집니다. 계약서에 &#x27;소스 코드 일체를 클라이언트에게 납품한다&#x27;는 문구를 반드시 확인하세요.</div>
+</div>
+</div>
 
-<p><b>Q4. 유지보수 조건이 포함된 견적이 총비용 기준으로 더 유리할 수 있나요?</b></p>
-<p>앱 운영 기간이 3~5년이라는 점을 고려하면 대체로 그렇습니다. 통상 연간 유지보수 비용은 초기 개발비의 15~20% 수준으로, 2,000만 원짜리 앱이면 매년 300~400만 원이 추가로 발생하는 셈이죠. 초기 금액이 높아 보여도 유지보수 조건이 포함된 견적이 2~3년 총비용 기준으로는 더 유리한 선택이 되는 경우가 많습니다.</p>
-
-<hr style="border:none; border-top:1px solid #E2E8F0; margin:40px 0;">
-<h3 style="font-size:18px; font-weight:600; margin:0 0 16px 0;">CMS 입력 필드</h3>
-<table style="width:100%;border-collapse:collapse;margin:16px 0;">
+  <div class="cms-meta-area">
+    <h3 style="font-size:16px; font-weight:700; margin:0 0 16px 0; color:#666;">CMS 입력 필드</h3>
+    <table style="width:100%;border-collapse:collapse;margin:16px 0;">
 <tr>
   <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">써머리</td>
-  <td style="border:1px solid #E2E8F0;padding:8px 12px;">앱 개발 견적, 가격보다 포함 범위를 먼저 따져봐야 합니다</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">앱 개발 견적, 숫자보다 &#x27;포함 범위&#x27;가 먼저입니다.</td>
 </tr>
 <tr>
   <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">slug</td>
@@ -196,20 +393,21 @@
 </tr>
 <tr>
   <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">메타 디스크립션</td>
-  <td style="border:1px solid #E2E8F0;padding:8px 12px;">앱 개발 견적이 업체마다 크게 차이 나는 이유는 포함 범위·기술 스택·팀 구성·유지보수 포함 여부가 서로 다르기 때문입니다. 위시켓 안드로이드 앱 신규 개발 990건 데이터를 바탕으로 견적 차이의 구조적 원인과 실제 비교에 쓸 수 있는 판단 기준 4가지를 정리했습니다.</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">앱 개발 견적 비교, 가격이 아닌 포함 범위로 판단해야 합니다. 위시켓 앱 신규 개발 프로젝트 1,050건 데이터 기준 판단 기준 4가지와 업체 비교 방법을 정리했습니다.</td>
 </tr>
 <tr>
   <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">Author</td>
-  <td style="border:1px solid #E2E8F0;padding:8px 12px;">박민재 / 운영팀 리드 — 위시켓 운영팀 리드 박민재입니다. 기업과 IT 전문가의 최적 매칭을 설계합니다.</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">조가은 / 콘텐츠 마케터 — 위시켓 마케터 조가은입니다. 기업의 쉽고 안전한 IT 의사결정을 돕는 콘텐츠를 만듭니다.</td>
 </tr>
 <tr>
   <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">TLDR</td>
-  <td style="border:1px solid #E2E8F0;padding:8px 12px;">앱 개발 견적이 업체마다 크게 다른 이유는 실력 차이가 아니라 포함 범위·기술 스택·팀 구성·유지보수 포함 여부가 서로 다른 견적서를 가격 하나로 비교하기 때문입니다. 위시켓에 등록된 안드로이드 앱 신규 개발 990건 기준 예산 중위값은 2,250만 원이지만, 기획·QA· 배포가 빠진 분리형 견적은 후속 발주까지 합산하면 총비용이 포함형보다 높아지는 경우가 많습니다. 견적서를 비교할 때는 개발 범위 명세 수준, 기술 스택 명시 여부, 유지보수 조건, 산출물 소유권 4가지를 가격보다 먼저 확인해야 합니다.</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">앱 개발 견적이 업체마다 크게 다른 핵심 이유는 동일한 앱을 전혀 다른 범위로 이해하기 때문입니다. 위시켓 기준 앱 신규 개발 예산은 하위 25%가 800만 원, 중위값이 2,000만 원, 상위 25%가 4,000만 원으로 5배 이상 차이가 납니다. 개발 범위 명세 수준, 기술 스택 명시 여부, 유지보수 조건, 소스 코드 소유권 4가지를 확인해야 같은 기준으로 비교할 수 있습니다.</td>
 </tr>
 </table>
+  </div>
 
-<h3 style="font-size:18px;font-weight:600;margin:32px 0 12px 0;">Embed 코드 (붙여넣기용)</h3>
-<div style="margin:16px 0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:14px;font-weight:600;color:#374151;">앱 개발 견적, 왜 업체마다 이렇게 다를까? — 원인 · 저가 견적의 전형 · 고가 견적의 전형</span><button onclick="copyCodeBlock(this)" style="background:#3B82F6;color:#fff;border:none;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">복사</button></div><pre style="background:#1E293B;color:#E2E8F0;padding:12px;border-radius:8px;overflow-x:auto;font-size:11px;line-height:1.4;white-space:pre-wrap;max-height:200px;overflow-y:auto;">&lt;style&gt;
+  <h3 style="font-size:18px;font-weight:600;margin:32px 0 12px 0;">Embed 코드 (붙여넣기용)</h3>
+<div style="margin:16px 0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:14px;font-weight:600;color:#374151;">앱 개발 견적, 왜 업체마다 이렇게 다를까? — 요인 · 내용 · 견적에 미치는 영향</span><button onclick="copyCodeBlock(this)" style="background:#26B2E2;color:#fff;border:none;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">복사</button></div><pre style="background:#1E293B;color:#E2E8F0;padding:12px;border-radius:8px;overflow-x:auto;font-size:11px;line-height:1.4;white-space:pre-wrap;max-height:200px;overflow-y:auto;">&lt;style&gt;
 .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:1.5rem 0;border:1px solid #DFDFE5;border-radius:8px;background:#fff}
 table.geo{width:100%;border-collapse:collapse;border-spacing:0;font-size:14px;line-height:1.6;table-layout:fixed}
 table.geo caption{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
@@ -224,8 +422,8 @@ table.geo tfoot td{padding:9px 18px;font-size:12px;color:#9CA3AF;border-top:1px 
 table.geo tfoot time{font-weight:500}
 @media(max-width:640px){table.geo{table-layout:auto}table.geo thead th,table.geo tbody th[scope=row],table.geo tbody td{padding:11px 14px;font-size:13px}table.geo tfoot td{padding:8px 14px}}
 &lt;/style&gt;
-&lt;div class=&quot;tbl-wrap&quot;&gt;&lt;table class=&quot;geo&quot;&gt;&lt;caption&gt;앱 개발 견적, 왜 업체마다 이렇게 다를까? — 원인 · 저가 견적의 전형 · 고가 견적의 전형&lt;/caption&gt;&lt;colgroup&gt;&lt;col style=&quot;width:14%&quot;/&gt;&lt;col style=&quot;width:27%&quot;/&gt;&lt;col style=&quot;width:27%&quot;/&gt;&lt;col style=&quot;width:32%&quot;/&gt;&lt;/colgroup&gt;&lt;thead&gt;&lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;원인&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;저가 견적의 전형&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;고가 견적의 전형&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;독자 확인 포인트&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;포함 범위&lt;/th&gt;&lt;td&gt;화면 개발만 포함, API 연동·QA·배포는 별도&lt;/td&gt;&lt;td&gt;기획서·UX 디자인·프론트+백엔드·QA·배포 전부 포함&lt;/td&gt;&lt;td&gt;기능 목록이 같아도 어디까지 포함인지 확인&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;기술 스택·플랫폼&lt;/th&gt;&lt;td&gt;크로스플랫폼 단일 코드베이스&lt;/td&gt;&lt;td&gt;네이티브(Swift+Kotlin) 각각 개발&lt;/td&gt;&lt;td&gt;iOS·안드로이드 동시 출시 여부, 기술 명시 여부&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;팀 구성&lt;/th&gt;&lt;td&gt;주니어 중심, 소규모 팀&lt;/td&gt;&lt;td&gt;시니어 포함, PM·디자이너 별도 배치&lt;/td&gt;&lt;td&gt;투입 인력의 경력 수준과 인원 수 명시 여부&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;유지보수 포함 여부&lt;/th&gt;&lt;td&gt;출시 후 유지보수 별도 계약&lt;/td&gt;&lt;td&gt;6개월~1년 무상 유지보수 포함&lt;/td&gt;&lt;td&gt;무상 A/S 기간과 유상 전환 단가 명시 여부&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;tfoot&gt;&lt;tr&gt;&lt;td colspan=&quot;4&quot;&gt;&lt;time datetime=&quot;2026-04&quot;&gt;2026년 4월&lt;/time&gt; 기준 · 실제 조건에 따라 달라질 수 있습니다&lt;/td&gt;&lt;/tr&gt;&lt;/tfoot&gt;&lt;/table&gt;&lt;/div&gt;</pre></div>
-<div style="margin:16px 0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:14px;font-weight:600;color:#374151;">가격 말고 &#x27;포함 범위&#x27;를 비교해야 하는 이유 — 항목 · A사 (포함형) · B사 (분리형)</span><button onclick="copyCodeBlock(this)" style="background:#3B82F6;color:#fff;border:none;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">복사</button></div><pre style="background:#1E293B;color:#E2E8F0;padding:12px;border-radius:8px;overflow-x:auto;font-size:11px;line-height:1.4;white-space:pre-wrap;max-height:200px;overflow-y:auto;">&lt;style&gt;
+&lt;div class=&quot;tbl-wrap&quot;&gt;&lt;table class=&quot;geo&quot;&gt;&lt;caption&gt;앱 개발 견적, 왜 업체마다 이렇게 다를까? — 요인 · 내용 · 견적에 미치는 영향&lt;/caption&gt;&lt;colgroup&gt;&lt;col style=&quot;width:22%&quot;/&gt;&lt;col style=&quot;width:39%&quot;/&gt;&lt;col style=&quot;width:39%&quot;/&gt;&lt;/colgroup&gt;&lt;thead&gt;&lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;요인&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;내용&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;견적에 미치는 영향&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;&lt;strong&gt;기술 스택&lt;/strong&gt;&lt;/th&gt;&lt;td&gt;iOS 전용, Android 전용, 크로스플랫폼(Flutter, React Native)&lt;/td&gt;&lt;td&gt;크로스플랫폼은 초기 비용 절감, 네이티브는 성능·확장성 우위&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;&lt;strong&gt;팀 구성&lt;/strong&gt;&lt;/th&gt;&lt;td&gt;기획자·디자이너·개발자가 모두 포함된 팀인지, 개발만인지&lt;/td&gt;&lt;td&gt;기획·디자인 포함 여부에 따라 견적 2배 이상 차이 가능&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;&lt;strong&gt;유지보수 포함 여부&lt;/strong&gt;&lt;/th&gt;&lt;td&gt;런칭 이후 버그 수정·업데이트 비용이 포함됐는지&lt;/td&gt;&lt;td&gt;포함 시 초기 견적이 높지만 총비용은 낮을 수 있음&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;&lt;strong&gt;개발사 위치·규모&lt;/strong&gt;&lt;/th&gt;&lt;td&gt;서울 대형 에이전시 vs 지방 소규모 팀 vs 프리랜서 팀&lt;/td&gt;&lt;td&gt;오버헤드(간접비)가 다르고 단가 기준이 다름&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;tfoot&gt;&lt;tr&gt;&lt;td colspan=&quot;3&quot;&gt;&lt;time datetime=&quot;2026-04&quot;&gt;2026년 4월&lt;/time&gt; 기준 · 실제 조건에 따라 달라질 수 있습니다&lt;/td&gt;&lt;/tr&gt;&lt;/tfoot&gt;&lt;/table&gt;&lt;/div&gt;</pre></div>
+<div style="margin:16px 0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:14px;font-weight:600;color:#374151;">가격 말고 &#x27;포함 범위&#x27;를 비교해야 하는 이유 — 항목 · 포함 여부 확인 · 없으면 추가 비용 발생</span><button onclick="copyCodeBlock(this)" style="background:#26B2E2;color:#fff;border:none;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">복사</button></div><pre style="background:#1E293B;color:#E2E8F0;padding:12px;border-radius:8px;overflow-x:auto;font-size:11px;line-height:1.4;white-space:pre-wrap;max-height:200px;overflow-y:auto;">&lt;style&gt;
 .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:1.5rem 0;border:1px solid #DFDFE5;border-radius:8px;background:#fff}
 table.geo{width:100%;border-collapse:collapse;border-spacing:0;font-size:14px;line-height:1.6;table-layout:fixed}
 table.geo caption{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
@@ -240,44 +438,28 @@ table.geo tfoot td{padding:9px 18px;font-size:12px;color:#9CA3AF;border-top:1px 
 table.geo tfoot time{font-weight:500}
 @media(max-width:640px){table.geo{table-layout:auto}table.geo thead th,table.geo tbody th[scope=row],table.geo tbody td{padding:11px 14px;font-size:13px}table.geo tfoot td{padding:8px 14px}}
 &lt;/style&gt;
-&lt;div class=&quot;tbl-wrap&quot;&gt;&lt;table class=&quot;geo&quot;&gt;&lt;caption&gt;가격 말고 &#x27;포함 범위&#x27;를 비교해야 하는 이유 — 항목 · A사 (포함형) · B사 (분리형)&lt;/caption&gt;&lt;colgroup&gt;&lt;col style=&quot;width:14%&quot;/&gt;&lt;col style=&quot;width:27%&quot;/&gt;&lt;col style=&quot;width:27%&quot;/&gt;&lt;col style=&quot;width:32%&quot;/&gt;&lt;/colgroup&gt;&lt;thead&gt;&lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;항목&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;A사 (포함형)&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;B사 (분리형)&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;B사 별도 발주 비용 예상&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;기획서·와이어프레임&lt;/th&gt;&lt;td&gt;포함&lt;/td&gt;&lt;td&gt;미포함&lt;/td&gt;&lt;td&gt;100~200만 원&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;UI 디자인&lt;/th&gt;&lt;td&gt;포함&lt;/td&gt;&lt;td&gt;미포함&lt;/td&gt;&lt;td&gt;150~250만 원&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;프론트+백엔드 개발&lt;/th&gt;&lt;td&gt;포함&lt;/td&gt;&lt;td&gt;포함 (800만 원)&lt;/td&gt;&lt;td&gt;-&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;QA 테스트&lt;/th&gt;&lt;td&gt;포함&lt;/td&gt;&lt;td&gt;미포함 (직접 진행)&lt;/td&gt;&lt;td&gt;100~150만 원&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;앱스토어 배포&lt;/th&gt;&lt;td&gt;포함&lt;/td&gt;&lt;td&gt;미포함&lt;/td&gt;&lt;td&gt;50~100만 원&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;1개월 무상 A/S&lt;/th&gt;&lt;td&gt;포함&lt;/td&gt;&lt;td&gt;미포함&lt;/td&gt;&lt;td&gt;별도 협의&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;&lt;strong&gt;총비용&lt;/strong&gt;&lt;/th&gt;&lt;td&gt;&lt;strong&gt;1,800만 원&lt;/strong&gt;&lt;/td&gt;&lt;td&gt;-&lt;/td&gt;&lt;td&gt;&lt;strong&gt;1,200~1,500만 원&lt;/strong&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;tfoot&gt;&lt;tr&gt;&lt;td colspan=&quot;4&quot;&gt;&lt;time datetime=&quot;2026-04&quot;&gt;2026년 4월&lt;/time&gt; 기준 · 실제 조건에 따라 달라질 수 있습니다&lt;/td&gt;&lt;/tr&gt;&lt;/tfoot&gt;&lt;/table&gt;&lt;/div&gt;</pre></div>
-<div style="margin:16px 0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:14px;font-weight:600;color:#374151;">견적서 비교 시 꼭 확인할 판단 기준 4가지 — 판단 기준 · 확인해야 할 질문 · 위험 신호</span><button onclick="copyCodeBlock(this)" style="background:#3B82F6;color:#fff;border:none;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">복사</button></div><pre style="background:#1E293B;color:#E2E8F0;padding:12px;border-radius:8px;overflow-x:auto;font-size:11px;line-height:1.4;white-space:pre-wrap;max-height:200px;overflow-y:auto;">&lt;style&gt;
-.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:1.5rem 0;border:1px solid #DFDFE5;border-radius:8px;background:#fff}
-table.geo{width:100%;border-collapse:collapse;border-spacing:0;font-size:14px;line-height:1.6;table-layout:fixed}
-table.geo caption{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
-table.geo thead th{padding:12px 18px;font-size:12.5px;font-weight:700;letter-spacing:.01em;text-align:left;border-bottom:1px solid #D1D1D9;background:#F6F6F9;vertical-align:bottom}
-table.geo thead th:first-child{color:#82828E;border-right:1px solid #D1D1D9}
-table.geo thead th:not(:first-child){color:#1A1A23}
-table.geo tbody th[scope=row]{padding:14px 18px;font-size:14px;font-weight:600;color:#1A1A23;text-align:left;border-bottom:1px solid #ECECF0;border-right:1px solid #ECECF0;background:#fff;vertical-align:top;word-break:keep-all}
-table.geo tbody td{padding:14px 18px;color:#3A3A47;border-bottom:1px solid #ECECF0;vertical-align:top;word-break:keep-all}
-table.geo tbody tr:nth-child(even) td,table.geo tbody tr:nth-child(even) th[scope=row]{background:#F9F9FB}
-table.geo tbody tr:hover td,table.geo tbody tr:hover th[scope=row]{background:#F0F0F5}
-table.geo tfoot td{padding:9px 18px;font-size:12px;color:#9CA3AF;border-top:1px solid #ECECF0;background:#F9F9FB}
-table.geo tfoot time{font-weight:500}
-@media(max-width:640px){table.geo{table-layout:auto}table.geo thead th,table.geo tbody th[scope=row],table.geo tbody td{padding:11px 14px;font-size:13px}table.geo tfoot td{padding:8px 14px}}
-&lt;/style&gt;
-&lt;div class=&quot;tbl-wrap&quot;&gt;&lt;table class=&quot;geo&quot;&gt;&lt;caption&gt;견적서 비교 시 꼭 확인할 판단 기준 4가지 — 판단 기준 · 확인해야 할 질문 · 위험 신호&lt;/caption&gt;&lt;colgroup&gt;&lt;col style=&quot;width:14%&quot;/&gt;&lt;col style=&quot;width:27%&quot;/&gt;&lt;col style=&quot;width:27%&quot;/&gt;&lt;col style=&quot;width:32%&quot;/&gt;&lt;/colgroup&gt;&lt;thead&gt;&lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;판단 기준&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;확인해야 할 질문&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;위험 신호&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;신뢰 신호&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;개발 범위 명세 수준&lt;/th&gt;&lt;td&gt;화면 수, 기능 단위, API 항목, 예외 처리 범위가 구체적으로 명시돼 있는가&lt;/td&gt;&lt;td&gt;로그인·게시판·결제 수준의 기능 나열만 존재&lt;/td&gt;&lt;td&gt;화면별 기능 상세, 3rd-party 연동, 예외 케이스까지 문서화&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;기술 스택 명시 여부&lt;/th&gt;&lt;td&gt;어떤 기술로 개발하는지, 선택 이유가 적혀 있는가&lt;/td&gt;&lt;td&gt;기술 언급 없이 앱 개발로만 표기&lt;/td&gt;&lt;td&gt;기술 스택 + 선택 근거 설명&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;유지보수 조건&lt;/th&gt;&lt;td&gt;무상 A/S 범위, 유상 전환 단가가 명시돼 있는가&lt;/td&gt;&lt;td&gt;유지보수 조건 언급 없음&lt;/td&gt;&lt;td&gt;무상 기간·범위·유상 단가까지 구분 명시&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;산출물 소유권&lt;/th&gt;&lt;td&gt;소스코드·디자인 원본이 클라이언트에게 이전되는가&lt;/td&gt;&lt;td&gt;소유권 언급 없음, 운영만 위탁&lt;/td&gt;&lt;td&gt;계약서에 소유권 이전 조항 포함&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;tfoot&gt;&lt;tr&gt;&lt;td colspan=&quot;4&quot;&gt;&lt;time datetime=&quot;2026-04&quot;&gt;2026년 4월&lt;/time&gt; 기준 · 실제 조건에 따라 달라질 수 있습니다&lt;/td&gt;&lt;/tr&gt;&lt;/tfoot&gt;&lt;/table&gt;&lt;/div&gt;</pre></div>
-<div style="margin:16px 0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:14px;font-weight:600;color:#374151;">CTA 배너</span><button onclick="copyCodeBlock(this)" style="background:#3B82F6;color:#fff;border:none;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">복사</button></div><pre style="background:#1E293B;color:#E2E8F0;padding:12px;border-radius:8px;overflow-x:auto;font-size:11px;line-height:1.4;white-space:pre-wrap;max-height:200px;overflow-y:auto;">&lt;table style=&quot;width:100%;border:2px solid #3B82F6;border-collapse:collapse;margin:24px 0;&quot;&gt;
-&lt;tr&gt;&lt;td style=&quot;background:#F8FAFC;padding:28px 24px;text-align:center;border:2px solid #3B82F6;&quot;&gt;
-&lt;p style=&quot;font-size:20px;font-weight:700;margin:0 0 8px 0;color:#111;&quot;&gt;검증된 개발사의 견적, 한 번에 비교해 보세요&lt;/p&gt;
-&lt;p style=&quot;color:#64748B;margin:0 0 20px 0;font-size:15px;&quot;&gt;위시켓에서 같은 조건으로 여러 업체의 제안을 받아보세요&lt;/p&gt;
-&lt;p style=&quot;margin:0;&quot;&gt;&lt;a href=&quot;https://wishket.com/project/free-consulting/?utm_source=blog_webflow&amp;amp;utm_medium=cta_banner&amp;amp;utm_campaign=260403_app-development-quote-comparison-criteria&quot; style=&quot;background:#3B82F6;color:#ffffff;padding:12px 28px;text-decoration:none;font-weight:600;font-size:16px;display:inline-block;&quot;&gt;무료 상담 신청하기&lt;/a&gt;&lt;/p&gt;
-&lt;/td&gt;&lt;/tr&gt;
-&lt;/table&gt;</pre></div>
+&lt;div class=&quot;tbl-wrap&quot;&gt;&lt;table class=&quot;geo&quot;&gt;&lt;caption&gt;가격 말고 &#x27;포함 범위&#x27;를 비교해야 하는 이유 — 항목 · 포함 여부 확인 · 없으면 추가 비용 발생&lt;/caption&gt;&lt;colgroup&gt;&lt;col style=&quot;width:22%&quot;/&gt;&lt;col style=&quot;width:39%&quot;/&gt;&lt;col style=&quot;width:39%&quot;/&gt;&lt;/colgroup&gt;&lt;thead&gt;&lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;항목&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;포함 여부 확인&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;없으면 추가 비용 발생&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;기획 (요구사항 정의, 기능 명세서)&lt;/th&gt;&lt;td&gt;✓&lt;/td&gt;&lt;td&gt;별도 기획사 또는 인하우스 작업 필요&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;UI/UX 디자인&lt;/th&gt;&lt;td&gt;✓&lt;/td&gt;&lt;td&gt;디자이너 별도 계약 필요&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;개발 (프론트엔드 + 백엔드)&lt;/th&gt;&lt;td&gt;✓&lt;/td&gt;&lt;td&gt;—&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;QA / 테스트&lt;/th&gt;&lt;td&gt;✓&lt;/td&gt;&lt;td&gt;런칭 후 버그 폭탄 위험&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;런칭 지원 (스토어 등록)&lt;/th&gt;&lt;td&gt;✓&lt;/td&gt;&lt;td&gt;클라이언트가 직접 해야 함&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;유지보수 (런칭 후 N개월)&lt;/th&gt;&lt;td&gt;✓&lt;/td&gt;&lt;td&gt;추후 별도 계약 필요&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;서버 구축 및 운영 비용&lt;/th&gt;&lt;td&gt;✓&lt;/td&gt;&lt;td&gt;클라우드 비용 별도 발생&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;tfoot&gt;&lt;tr&gt;&lt;td colspan=&quot;3&quot;&gt;&lt;time datetime=&quot;2026-04&quot;&gt;2026년 4월&lt;/time&gt; 기준 · 실제 조건에 따라 달라질 수 있습니다&lt;/td&gt;&lt;/tr&gt;&lt;/tfoot&gt;&lt;/table&gt;&lt;/div&gt;</pre></div>
+<div style="margin:16px 0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:14px;font-weight:600;color:#374151;">CTA 배너</span><button onclick="copyCodeBlock(this)" style="background:#26B2E2;color:#fff;border:none;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">복사</button></div><pre style="background:#1E293B;color:#E2E8F0;padding:12px;border-radius:8px;overflow-x:auto;font-size:11px;line-height:1.4;white-space:pre-wrap;max-height:200px;overflow-y:auto;">&lt;div style=&quot;background:linear-gradient(135deg,#1A8CB4 0%,#26B2E2 100%);border-radius:14px;padding:32px 30px;color:#fff;margin:40px 0 0;&quot;&gt;
+&lt;div style=&quot;font-size:12px;font-weight:600;letter-spacing:0.8px;opacity:0.75;margin-bottom:10px;text-transform:uppercase;&quot;&gt;다음 단계&lt;/div&gt;
+&lt;h3 style=&quot;font-size:20px;font-weight:800;line-height:1.45;margin-bottom:20px;color:#fff;letter-spacing:-0.3px;&quot;&gt;견적서를 이미 받으셨나요,
+아직 준비 중이신가요?&lt;/h3&gt;
+&lt;div style=&quot;display:flex;flex-direction:column;gap:12px;margin-bottom:24px;&quot;&gt;&lt;div style=&quot;background:rgba(255,255,255,0.12);border-radius:8px;padding:14px 16px;font-size:14.5px;line-height:1.65;&quot;&gt;&lt;span style=&quot;font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;&quot;&gt;이미 견적서가 있다면&lt;/span&gt;받은 견적서의 항목이 같은 기준인지 확인하는 것이 먼저입니다. 위시켓 매니저가 견적 범위 검토와 조건 조율을 도와드립니다.&lt;/div&gt;
+&lt;div style=&quot;background:rgba(255,255,255,0.12);border-radius:8px;padding:14px 16px;font-size:14.5px;line-height:1.65;&quot;&gt;&lt;span style=&quot;font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;&quot;&gt;아직 견적을 받지 않았다면&lt;/span&gt;기능 목록을 먼저 정리한 뒤 등록하세요. 동일 조건으로 비교 가능한 견적을 여러 개발사로부터 받을 수 있습니다.&lt;/div&gt;&lt;/div&gt;&lt;a href=&quot;https://www.wishket.com/project/create/?utm_source=blog_webflow&amp;amp;utm_medium=cta_banner&amp;amp;utm_campaign=260403_app-development-quote-comparison-criteria&quot; style=&quot;display:inline-block;background:#fff;color:#26B2E2;font-size:15px;font-weight:800;padding:13px 28px;border-radius:8px;text-decoration:none;&quot;&gt;프로젝트 등록하고 매니저 상담받기&lt;/a&gt;
+&lt;/div&gt;</pre></div>
 
 
-<h3 style="font-size:18px;font-weight:600;margin:32px 0 12px 0;">JSON-LD (Custom Code에 붙여넣기)</h3>
+  <h3 style="font-size:18px;font-weight:600;margin:32px 0 12px 0;">JSON-LD (Custom Code에 붙여넣기)</h3>
 <pre style="background:#1E293B;color:#E2E8F0;padding:16px;border-radius:8px;overflow-x:auto;font-size:12px;line-height:1.5;white-space:pre-wrap;">&lt;script type="application/ld+json"&gt;
 {
   &quot;@context&quot;: &quot;https://schema.org&quot;,
   &quot;@type&quot;: &quot;BlogPosting&quot;,
   &quot;headline&quot;: &quot;앱 개발 견적이 차이 나는 이유와 비교 기준 4가지&quot;,
-  &quot;description&quot;: &quot;앱 개발 견적이 업체마다 크게 차이 나는 이유는 포함 범위·기술 스택·팀 구성·유지보수 포함 여부가 서로 다르기 때문입니다. 위시켓 안드로이드 앱 신규 개발 990건 데이터를 바탕으로 견적 차이의 구조적 원인과 실제 비교에 쓸 수 있는 판단 기준 4가지를 정리했습니다.&quot;,
+  &quot;description&quot;: &quot;앱 개발 견적 비교, 가격이 아닌 포함 범위로 판단해야 합니다. 위시켓 앱 신규 개발 프로젝트 1,050건 데이터 기준 판단 기준 4가지와 업체 비교 방법을 정리했습니다.&quot;,
   &quot;datePublished&quot;: &quot;2026-04-03&quot;,
   &quot;dateModified&quot;: &quot;2026-04-03&quot;,
   &quot;author&quot;: {
     &quot;@type&quot;: &quot;Person&quot;,
-    &quot;name&quot;: &quot;박민재&quot;
+    &quot;name&quot;: &quot;조가은&quot;
   },
   &quot;publisher&quot;: {
     &quot;@type&quot;: &quot;Organization&quot;,
@@ -320,39 +502,41 @@ table.geo tfoot time{font-weight:500}
   &quot;mainEntity&quot;: [
     {
       &quot;@type&quot;: &quot;Question&quot;,
-      &quot;name&quot;: &quot;앱 개발 견적이 업체마다 크게 차이 나는 이유는 무엇인가요?&quot;,
+      &quot;name&quot;: &quot;앱 개발 견적을 받을 때 몇 군데 업체에 요청하는 게 적당할까요?&quot;,
       &quot;acceptedAnswer&quot;: {
         &quot;@type&quot;: &quot;Answer&quot;,
-        &quot;text&quot;: &quot;포함 범위가 다른 견적서를 가격만 보고 비교하기 때문입니다. A사는 기획·디자인·QA·배포까지 포함하고, B사는 화면 개발만 넣은 채 나머지를 별도 견적으로 빼는 경우가 흔하거든요. 위시켓 안드로이드 앱 개발 1,314건 기준 하위 25%와 상위 25%의 견적 차이가 6.7배인 것도 이 구조적 차이에서 비롯된 결과입니다.&quot;
+        &quot;text&quot;: &quot;최소 3곳 이상에 동시에 요청하는 것이 좋습니다. 한두 곳만 비교하면 가격 편차가 &#x27;표준&#x27;인지 &#x27;이상치&#x27;인지 판단하기 어렵거든요. 3~5곳에 동일한 요구사항을 보내고 답변 방식과 질문 수를 함께 보면, 업체의 이해도와 소통 방식도 미리 가늠할 수 있습니다.&quot;
       }
     },
     {
       &quot;@type&quot;: &quot;Question&quot;,
-      &quot;name&quot;: &quot;견적서에서 가장 먼저 확인해야 할 판단 기준은 무엇인가요?&quot;,
+      &quot;name&quot;: &quot;크로스플랫폼 앱이 네이티브 앱보다 항상 저렴한가요?&quot;,
       &quot;acceptedAnswer&quot;: {
         &quot;@type&quot;: &quot;Answer&quot;,
-        &quot;text&quot;: &quot;개발 범위 명세 수준을 가장 먼저 확인해야 합니다. 기능이 4~5줄로만 나열된 견적은 명세가 아니에요. 화면 수, API 연동 항목, 예외 처리 범위, 3rd-party 포함 여부까지 명시된 견적이 비교 가능한 견적이고, 명세가 상세할수록 개발 도중 추가 청구 가능성도 낮아지는 편입니다.&quot;
+        &quot;text&quot;: &quot;초기 개발 비용은 크로스플랫폼이 더 낮지만, 장기적으로는 반드시 저렴하지 않습니다. 기기 고유 기능(카메라, 결제, 블루투스)을 다룰 때 네이티브 모듈 추가 비용이 발생하고, 크로스플랫폼 프레임워크 버전 업데이트에 따른 유지보수 공수도 커질 수 있습니다. 기능 복잡도가 낮고 출시 속도가 중요하다면 크로스플랫폼이 유리하고, 기기 의존 기능이 많다면 네이티브를 검토하는 게 낫습니다.&quot;
       }
     },
     {
       &quot;@type&quot;: &quot;Question&quot;,
-      &quot;name&quot;: &quot;기술 스택 명시 여부가 견적 비교에서 중요한 이유는 무엇인가요?&quot;,
+      &quot;name&quot;: &quot;견적서에 유지보수 조건이 없을 때 계약 후 추가하는 방법은 무엇인가요?&quot;,
       &quot;acceptedAnswer&quot;: {
         &quot;@type&quot;: &quot;Answer&quot;,
-        &quot;text&quot;: &quot;기술 선택이 유지보수 비용과 향후 확장성을 결정하기 때문입니다. Flutter인지 네이티브인지에 따라 나중에 업체를 교체할 때 리빌드 비용이 달라지거든요. 위시켓 데이터 기준 iOS·안드로이드 단독 개발 대비 웹까지 동시 개발하면 중위값이 약 2.3배 차이 납니다.&quot;
+        &quot;text&quot;: &quot;계약서 작성 시 &#x27;별지 유지보수 계약&#x27;을 동시에 체결하는 방식이 가장 확실합니다. 런칭 후 무상 유지보수 기간, 유상 전환 시 월 단가, 대응 범위(버그 수정 vs 기능 추가 구분)를 항목별로 명시해야 합니다. 계약 후에 추가하려면 업체 협조 없이는 어렵기 때문에, 견적 협상 단계에서 미리 요청하는 것이 현실적입니다.&quot;
       }
     },
     {
       &quot;@type&quot;: &quot;Question&quot;,
-      &quot;name&quot;: &quot;유지보수 조건이 포함된 견적이 총비용 기준으로 더 유리할 수 있나요?&quot;,
+      &quot;name&quot;: &quot;소스 코드를 납품받지 못하는 계약이 실제로 존재하나요?&quot;,
       &quot;acceptedAnswer&quot;: {
         &quot;@type&quot;: &quot;Answer&quot;,
-        &quot;text&quot;: &quot;앱 운영 기간이 3~5년이라는 점을 고려하면 대체로 그렇습니다. 통상 연간 유지보수 비용은 초기 개발비의 15~20% 수준으로, 2,000만 원짜리 앱이면 매년 300~400만 원이 추가로 발생하는 셈이죠. 초기 금액이 높아 보여도 유지보수 조건이 포함된 견적이 2~3년 총비용 기준으로는 더 유리한 선택이 되는 경우가 많습니다.&quot;
+        &quot;text&quot;: &quot;드물지 않습니다. 일부 업체는 소스 코드를 자사 서버에 보관하고 월 유지보수 비용을 청구하는 SaaS형 계약을 제안합니다. 표면적으로는 유지보수 비용이 낮아 보이지만, 업체를 바꾸거나 서비스를 이전할 때 코드를 가져올 수 없어 사실상 재개발이 필요해집니다. 계약서에 &#x27;소스 코드 일체를 클라이언트에게 납품한다&#x27;는 문구를 반드시 확인하세요.&quot;
       }
     }
   ]
 }
 &lt;/script&gt;</pre>
+
+</div>
 
 <script>
 // contenteditable 변경 감지 + localStorage 자동저장
@@ -361,16 +545,12 @@ var status = document.getElementById('edit-status');
 var saveTimer;
 var STORAGE_KEY = 'wishket_draft_' + document.title.replace(/[^a-zA-Z0-9가-힣]/g, '_').substring(0, 60);
 
-// 페이지 로드 시 저장본 자동 복원 (팝업 없이)
 window.addEventListener('load', function() {
   var saved = localStorage.getItem(STORAGE_KEY);
-  if (saved) {
-    content.innerHTML = saved;
-  }
+  if (saved) { content.innerHTML = saved; }
   attachLinkHandlers();
 });
 
-// 변경 감지 (3초 디바운스 자동저장)
 content.addEventListener('input', function() {
   status.textContent = '편집 중 (미저장)';
   status.className = 'modified';
@@ -382,7 +562,6 @@ content.addEventListener('input', function() {
   }, 3000);
 });
 
-// contenteditable 내 링크: Cmd/Ctrl+클릭 새 탭 열기
 function attachLinkHandlers() {
   document.querySelectorAll('[contenteditable] a').forEach(function(a) {
     a.addEventListener('click', function(e) {
@@ -394,11 +573,9 @@ function attachLinkHandlers() {
   });
 }
 
-// 본문 복사 (image-guide 박스 제외)
 function copyContent() {
   var clone = content.cloneNode(true);
-  // image-guide 테이블 제거
-  clone.querySelectorAll('.image-guide, table.image-guide').forEach(function(el) { el.remove(); });
+  clone.querySelectorAll('.image-guide, table.image-guide, table.guide-box').forEach(function(el) { el.remove(); });
   var text = clone.innerText;
   if (navigator.clipboard) {
     navigator.clipboard.writeText(text).then(function() {
@@ -419,11 +596,9 @@ function copyContent() {
   }
 }
 
-// 표/JSON-LD 코드 블록 복사
 function copyCodeBlock(btn) {
   var pre = btn.parentElement.nextElementSibling;
   if (!pre) return;
-  // pre 안의 텍스트는 HTML-escaped 상태 → 원본 텍스트 그대로 복사
   var text = pre.textContent;
   navigator.clipboard.writeText(text).then(function() {
     btn.textContent = '복사됨!';
@@ -431,7 +606,6 @@ function copyCodeBlock(btn) {
   });
 }
 
-// 페이지 이탈 경고
 window.addEventListener('beforeunload', function(e) {
   if (status.className === 'modified') {
     e.preventDefault();
