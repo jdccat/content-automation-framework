@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ERP 외주 업체, 비개발자가 고르는 3가지 기준</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+    font-size: 17px;
+    line-height: 2.0;
+    color: #1a1a1a;
+    background: #fff;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Toolbar (편집용) ── */
+  #toolbar {
+    position: fixed; top: 0; left: 0; right: 0;
+    background: #1E293B; color: #fff;
+    padding: 10px 20px;
+    display: flex; align-items: center; gap: 16px;
+    z-index: 9999; font-size: 14px;
+  }
+  #toolbar button {
+    background: #2477F3; color: #fff; border: none;
+    padding: 6px 16px; border-radius: 6px; cursor: pointer;
+    font-size: 13px; font-weight: 600;
+  }
+  #toolbar button:hover { background: #1B5FD1; }
+  #edit-status { color: #94A3B8; font-size: 12px; }
+  #edit-status.modified { color: #FBBF24; }
+
+  /* ── Layout ── */
+  .page-wrap {
+    max-width: 720px;
+    margin: 80px auto 80px;
+    padding: 0 20px;
+  }
+
+  /* ── Header ── */
+  .article-header { margin-bottom: 32px; }
+  .article-category {
+    font-size: 12px; font-weight: 600; color: #2477F3;
+    letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 12px;
+  }
+  h1 {
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 800; line-height: 1.35;
+    letter-spacing: -0.5px; color: #0d0d0d;
+    margin: 0 0 16px 0;
+  }
+  .article-meta { font-size: 13px; color: #999; }
+
+  /* ── Typography ── */
+  h2 {
+    font-size: 21px; font-weight: 700; color: #2477F3;
+    margin: 48px 0 16px 0; padding-bottom: 10px;
+    border-bottom: 2px solid #E5E7EB;
+    letter-spacing: -0.3px;
+  }
+  h3 {
+    font-size: 17px; font-weight: 700; color: #1a1a1a;
+    margin: 28px 0 10px 0;
+  }
+  p { margin: 0 0 30px 0; }
+  a { color: #2477F3; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  strong { font-weight: 700; }
+
+  /* ── Lists ── */
+  ul, ol { margin: 0 0 30px 0; padding-left: 22px; }
+  li { margin-bottom: 6px; line-height: 2.5; }
+  li::marker { color: #999; }
+
+  hr { border: none; border-top: 1px solid #e8e8e8; margin: 40px 0; }
+
+  /* ── GEO Table ── */
+  .tbl-wrap {
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    margin: 30px 0; border: 1px solid #e0e0e5;
+    border-radius: 12px; background: #fff;
+  }
+  table.geo {
+    width: 100%; border-collapse: collapse; border-spacing: 0;
+    font-size: 14.5px; line-height: 1.65; table-layout: fixed;
+  }
+  table.geo caption {
+    position: absolute; width: 1px; height: 1px;
+    overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap;
+  }
+  table.geo thead th {
+    padding: 12px 18px; font-size: 12.5px; font-weight: 700;
+    letter-spacing: 0.01em; text-align: left;
+    border-bottom: 1px solid #d1d1d9; background: #f6f6f9; vertical-align: bottom;
+  }
+  table.geo thead th:first-child { color: #82828e; border-right: 1px solid #d1d1d9; }
+  table.geo thead th:not(:first-child) { color: #1a1a23; }
+  table.geo tbody th[scope="row"] {
+    padding: 14px 18px; font-size: 14px; font-weight: 600; color: #1a1a23;
+    text-align: left; border-bottom: 1px solid #ececf0; border-right: 1px solid #ececf0;
+    background: #fff; vertical-align: top; word-break: keep-all;
+  }
+  table.geo tbody td {
+    padding: 14px 18px; color: #3a3a47;
+    border-bottom: 1px solid #ececf0; vertical-align: top; word-break: keep-all;
+  }
+  table.geo tbody tr:nth-child(even) td,
+  table.geo tbody tr:nth-child(even) th[scope="row"] { background: #f9f9fb; }
+  table.geo tbody tr:hover td,
+  table.geo tbody tr:hover th[scope="row"] { background: #f0f0f5; }
+  table.geo tfoot td {
+    padding: 9px 18px; font-size: 12px; color: #9ca3af;
+    border-top: 1px solid #ececf0; background: #f9f9fb;
+  }
+
+  /* ── TLDR (핵심 요약) ── */
+  .summary-box {
+    background: #F5F5F5;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 30px;
+  }
+  .summary-box p:first-child {
+    font-size: 13px; font-weight: 700; color: #1A1A1A;
+    margin-bottom: 8px; letter-spacing: 0.3px;
+  }
+  .summary-box p:not(:first-child) {
+    font-size: 15.5px; color: #1A1A1A; line-height: 1.75;
+  }
+  .summary-box p:last-child { margin-bottom: 0; }
+
+  /* ── FAQ ── */
+  .faq-list {
+    display: flex; flex-direction: column; gap: 0;
+    margin: 20px 0 24px; border: 1px solid #E5E7EB;
+    border-radius: 14px; overflow: hidden;
+  }
+  .faq-item { border-bottom: 1px solid #ebebeb; background: #fff; }
+  .faq-item:last-child { border-bottom: none; }
+  .faq-q {
+    font-size: 15px; font-weight: 700; color: #0d0d0d;
+    padding: 18px 20px 8px; display: flex; gap: 10px;
+  }
+  .faq-q .q-mark { color: #2477F3; font-weight: 800; font-size: 16px; flex-shrink: 0; }
+  .faq-a {
+    font-size: 14.5px; color: #444; line-height: 1.75;
+    padding: 0 20px 18px 44px;
+  }
+
+  /* ── Related ── */
+  .related-section { margin: 32px 0; }
+  .related-section h3 { font-size: 16px; font-weight: 700; margin-bottom: 12px; }
+  .related-section ul { list-style: none; padding: 0; }
+  .related-section li {
+    padding: 10px 0; border-bottom: 1px solid #f0f0f0;
+  }
+  .related-section li:last-child { border-bottom: none; }
+  .related-section a { font-size: 15px; font-weight: 500; }
+
+  /* ── Image guide box ── */
+  .image-guide, table.guide-box {
+    background: #FAFAFA; border: 2px solid #E5E7EB;
+    border-radius: 12px; padding: 16px 24px; margin: 30px -20px;
+  }
+
+  /* ── CMS meta area ── */
+  .cms-meta-area { background: #f9fafb; border-radius: 12px; padding: 20px; margin-top: 40px; }
+
+  /* ── Contenteditable ── */
+  [contenteditable="true"]:focus { outline: 2px solid #2477F3; outline-offset: 2px; border-radius: 4px; }
+  [contenteditable="true"]:hover { outline: 1px dashed #CBD5E1; outline-offset: 2px; border-radius: 4px; }
+  [contenteditable="true"]:focus:hover { outline: 2px solid #2477F3; outline-offset: 2px; }
+
+  /* ── Responsive ── */
+  @media (max-width: 640px) {
+    .page-wrap { padding: 0 16px; margin-top: 60px; }
+    h1 { font-size: 22px; }
+    h2 { font-size: 19px; }
+    table.geo { table-layout: auto; }
+    table.geo thead th, table.geo tbody th[scope="row"], table.geo tbody td {
+      padding: 11px 14px; font-size: 13px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- toolbar -->
+<div id="toolbar">
+  <button id="copy-btn" onclick="copyContent()">본문 복사</button>
+  <span id="edit-status">저장됨</span>
+</div>
+
+<div class="page-wrap">
+
+  <div class="article-header">
+    <h1 contenteditable="true">ERP 외주 업체, 비개발자가 고르는 3가지 기준</h1>
+    <div class="article-meta"><time datetime="2026-04-06">2026-04-06</time></div>
+  </div>
+
+  <div id="cms-content" contenteditable="true" style="outline:none;">
+
+  <div class="summary-box">
+<p>💡 핵심 요약</p>
+<p>ERP 외주 프로젝트 실패의 원인은 기술력보다 요구사항 불명확과 커뮤니케이션 실패에서 많이 발생합니다. 비개발자가 실제로 확인할 수 있는 기준은 세 가지입니다. 우리 업종과 비슷한 ERP를 만들어본 경험이 있는지, 미팅에서 안 되는 것을 솔직하게 말하는 업체인지, 계약서에 하자보수·지재권·대금 조건이 명확히 적혀 있는지를 보는 거죠. 위시켓 등록 프로젝트 기준 ERP 예산은 1,000만 원대부터 6,000만 원 이상까지 범위가 넓어, 업체를 비교하기 전에 프로젝트 범위를 먼저 정의해야 같은 조건으로 견적을 비교할 수 있습니다.</p>
+</div>
+
+  <p>ERP 외주 업체 3곳에서 제안서를 받았는데, 어떤 업체가 나은지 비교가 안 됩니다. 포트폴리오를 열어봐도 비슷해 보이고, 가격이 다른 이유도 잘 모르겠고, 기술력을 따지자니 우리 팀에 개발자가 없습니다.</p>
+<p>이 막막함의 원인은 업체가 많아서가 아닙니다. <strong>비교 기준 자체가 없기 때문이죠.</strong> 기준 없이 비교하면 결국 가격이 낮은 곳을 고르거나 지인 추천에 기대게 되는데, ERP는 회사 핵심 업무가 달린 시스템이라 그렇게 고르기엔 리스크가 너무 큽니다.</p>
+<h2 id="erp-외주-업체를-고를-때-어떤-기준으로-봐야-하나요">ERP 외주 업체를 고를 때 어떤 기준으로 봐야 하나요?</h2>
+<p>ERP 외주 프로젝트에서 가장 흔한 실패 원인은 기술력 부족이 아닙니다. 프로젝트 범위가 정의되지 않은 채로 시작되거나, 할 수 없는 것을 "할 수 있다"고 해놓고 진행하다가 중간에 틀어지는 경우가 훨씬 많습니다. <a href="https://www.cio.com/article/3995214/">CIO 코리아</a>에 따르면, ERP 구현이 실패하는 프로그램은 대부분 킥오프 전에 이미 균열이 시작됩니다. 범위를 정의하지 않고 바로 제안 요청에 뛰어드니 업체마다 제안서의 기준이 달라지고, 선정 과정 자체가 몇 달씩 지연되는 거죠.</p>
+<p>비개발자가 기술력을 직접 검증하는 건 현실적으로 어렵습니다. 기술 스택을 물어봐도 답을 이해할 수 없고, 코드를 봐달라고 할 수도 없으니까요. 대신 비개발자도 확인할 수 있는 축이 세 가지 있습니다.</p>
+<div class="tbl-wrap"><table class="geo"><caption>ERP 외주 업체를 고를 때 어떤 기준으로 봐야 하나요? — 기준 · 확인 방법 · 왜 중요한가</caption><colgroup><col style="width:22%"/><col style="width:39%"/><col style="width:39%"/></colgroup><thead><tr><th scope="col">기준</th><th scope="col">확인 방법</th><th scope="col">왜 중요한가</th></tr></thead><tbody><tr><th scope="row"><strong>업종 경험</strong></th><td>우리 업종과 비슷한 ERP를 만들어본 적 있는지</td><td>ERP는 업종마다 업무 흐름이 다르고, 경험 없는 업체는 요구사항을 처음부터 학습해야 해서 일정과 비용이 늘어남</td></tr><tr><th scope="row"><strong>커뮤니케이션 태도</strong></th><td>모르는 것을 솔직하게 말하고 대안을 제시하는지</td><td>"다 됩니다"라고만 하는 업체는 진행 중 문제가 터졌을 때 책임 소재가 불분명해짐</td></tr><tr><th scope="row"><strong>계약 구조</strong></th><td>하자보수 기간, 지재권 귀속, 대금 지급 조건이 명확한지</td><td>이 세 항목이 빠져 있으면 납품 후 업체 종속이나 분쟁으로 이어질 수 있음</td></tr></tbody><tfoot><tr><td colspan="3">2025~2026년 위시켓 등록 프로젝트 기준 · 클라이언트 희망 예산이며 실제 계약 금액과 다를 수 있습니다</td></tr></tfoot></table></div>
+<p>같은 'ERP 개발'이라도 프로젝트 범위에 따라 예산이 완전히 달라집니다. 2025~2026년 위시켓에 등록된 ERP 신규 개발 프로젝트 데이터를 보면, 기존 ERP에 특정 기능을 연동하는 수준은 1,000만 원대, 제조/재고/매출 통합 구축은 4,000만 원대, 다국어/멀티법인 복합 시스템은 6,000만 원 이상인 사례가 있습니다. 이 금액은 클라이언트가 제시한 희망 예산이지 최종 계약 금액은 아니지만, 우리 프로젝트가 어디쯤인지 가늠하는 기준점은 됩니다.</p>
+<div style="display:flex;flex-direction:column;gap:14px;margin:30px 0;">
+<div style="border:1px solid #E5E7EB;border-radius:14px;padding:18px 20px;background:#fff;">
+<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;">
+<span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;background:#e8f5e9;color:#2e7d32;">저가 사례</span>
+<span style="font-size:15.5px;font-weight:700;color:#0d0d0d;line-height:1.4;">스마트스토어-ERP 연동 재고관리 자동화 개발</span>
+</div>
+<div style="font-size:20px;font-weight:800;color:#2477F3;margin-bottom:4px;">1,000만 원</div>
+<div style="font-size:12.5px;color:#999;margin-bottom:10px;">웹 · 30일 · 기존 ERP에 특정 기능 연동·자동화 추가</div>
+<div style="font-size:14.5px;color:#444;line-height:2.0;">스마트스토어와 기존 ERP 간 재고 데이터를 자동 동기화하는 범위. 기능이 좁아 저비용 가능.</div>
+</div>
+<div style="border:1px solid #E5E7EB;border-radius:14px;padding:18px 20px;background:#fff;">
+<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;">
+<span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;background:#e3f2fd;color:#1565c0;">중가 사례</span>
+<span style="font-size:15.5px;font-weight:700;color:#0d0d0d;line-height:1.4;">사내 생산/재고/매출 통합 관리 ERP 시스템 구축</span>
+</div>
+<div style="font-size:20px;font-weight:800;color:#2477F3;margin-bottom:4px;">4,000만 원</div>
+<div style="font-size:12.5px;color:#999;margin-bottom:10px;">웹 · 90일 · 제조·재고·매출 통합 신규 구축</div>
+<div style="font-size:14.5px;color:#444;line-height:2.0;">생산, 재고, 매출을 하나로 묶는 중소기업형 ERP. 모듈 수가 늘면서 공수가 크게 증가.</div>
+</div>
+<div style="border:1px solid #E5E7EB;border-radius:14px;padding:18px 20px;background:#fff;">
+<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;">
+<span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;background:#fce4ec;color:#c62828;">고가 사례</span>
+<span style="font-size:15.5px;font-weight:700;color:#0d0d0d;line-height:1.4;">한·일 법인 통합 관리 다국어 ERP 시스템 구축</span>
+</div>
+<div style="font-size:20px;font-weight:800;color:#2477F3;margin-bottom:4px;">6,000만 원</div>
+<div style="font-size:12.5px;color:#999;margin-bottom:10px;">웹·앱 · 120일 · 다국어·멀티법인 복합 시스템</div>
+<div style="font-size:14.5px;color:#444;line-height:2.0;">한국·일본 법인을 하나의 시스템으로 관리. 다국어, 다중 통화, 복수 법인 구조가 비용을 끌어올림.</div>
+</div>
+</div>
+<p>1,000만 원짜리와 6,000만 원짜리가 같은 'ERP'지만 완전히 다른 프로젝트입니다. 업체를 비교하기 전에 우리 프로젝트가 어느 범주에 해당하는지 먼저 정의해야, 견적을 받아도 같은 기준으로 비교할 수 있습니다.</p>
+<h2 id="포트폴리오만으로는-판단이-안-되는데-미팅에서-어떻게-확인하나요">포트폴리오만으로는 판단이 안 되는데, 미팅에서 어떻게 확인하나요?</h2>
+<p>포트폴리오는 영업 자료입니다. 잘 만든 사례만 골라서 넣고, 실제 개발을 누가 했는지는 알 수 없어요. 포트폴리오에 "제조업 ERP 구축 경험 있음"이라고 적혀 있어도, 그 프로젝트를 진행한 개발자가 지금도 그 회사에 있는지는 별개의 문제이거든요.</p>
+<p>미팅 자리에서 비개발자가 직접 확인할 수 있는 신호는 크게 세 가지입니다.</p>
+<p><strong>첫 번째, 역제안의 구체성.</strong> 우리 요구사항을 설명한 뒤 업체가 어떤 반응을 보이는지 보세요. "다 가능합니다"로 끝나는 업체와 "이 부분은 이렇게 하면 비용이 줄어듭니다, 대신 이건 추가로 필요합니다"처럼 구체적으로 역제안하는 업체는 진행 과정에서의 커뮤니케이션 품질이 완전히 다릅니다.</p>
+<p><strong>두 번째, 실제 개발 담당자의 미팅 참석 여부.</strong> 영업 담당자나 PM만 나오는 미팅에서는 기술적 질문에 "확인해보겠습니다"가 반복됩니다. 개발을 담당할 사람이 미팅에 함께 나오는 업체가, 나중에 "미팅에서 말한 것과 다른데요"라는 상황을 줄여줍니다.</p>
+<p><strong>세 번째, 안 된다고 말할 수 있는지.</strong> 솔직히 이 기준 하나로 절반은 걸러집니다. "이 기능은 일정 안에 어렵습니다", "이 방식은 추가 비용이 필요합니다"처럼 제약을 솔직하게 말하는 업체가 진행 중 분쟁이 적어요. 모든 게 된다고만 하는 업체는, 안 되는 시점이 왔을 때 그제야 말합니다.</p>
+<div style="background:#F0F6FF;border-left:3px solid #2E6BAA;border-radius:0 14px 14px 0;padding:18px 20px;margin:30px 0;">
+<div style="font-size:13px;font-weight:700;color:#1A1A1A;margin-bottom:10px;display:flex;align-items:center;gap:6px;">📌 위시켓 매니저 Tip</div>
+<div style="font-size:14.5px;color:#1A1A1A;line-height:2.0;"><span style="font-weight:700;color:#1A1A1A;">미팅 전:</span> "우리 업종과 비슷한 ERP를 만든 경험에서 가장 어려웠던 점이 뭐였나요?"를 질문 목록에 넣어두세요. 답변이 구체적인 업체와 두루뭉술한 업체의 차이가 바로 드러납니다.<br/><span style="font-weight:700;color:#1A1A1A;">미팅 후:</span> 업체별로 역제안 내용, 참석자, "안 된다"고 말한 항목을 메모해두면 나중에 비교 자료로 쓸 수 있습니다.</div>
+</div>
+<h2 id="계약서에서-반드시-확인해야-할-항목은">계약서에서 반드시 확인해야 할 항목은?</h2>
+<p>업체를 좁혔으면 계약 단계입니다. 비개발자가 ERP 외주 계약서에서 꼭 확인해야 할 항목은 세 가지입니다. 이 항목들이 빠져 있거나 애매하게 적혀 있으면, 납품 후 문제가 생겼을 때 해결할 근거가 없어집니다.</p>
+<ul>
+<li><strong>하자보수 기간과 범위</strong>: "납품 후 N개월간 개발사 귀책 결함에 한해 무상 수정"이라는 문구가 있어야 합니다. 기간과 귀책 조건이 빠져 있으면 어디까지가 무상인지 기준이 없어지거든요. 참고로 하자보수와 유지보수는 다릅니다. 유지보수(기능 추가, 운영 지원)는 런칭 후 별도 유상 계약이 일반적이에요</li>
+<li><strong>소스코드를 포함한 지재권 일체 양도</strong>: 이 조항이 빠지면 개발이 끝나도 소스코드를 못 받거나, 다른 업체로 전환할 때 추가 비용이 발생할 수 있습니다. "소스코드 납품"이 아니라 "지재권 일체 양도"라는 표현이 들어가야 합니다</li>
+<li><strong>대금 지급 조건</strong>: 착수금, 중간금, 잔금 비율과 각 단계의 기준이 명확해야 합니다. "개발 완료 후 잔금 지급"이라고만 적혀 있으면, "완료"의 정의를 두고 분쟁이 생길 수 있거든요</li>
+</ul>
+<p>한 가지 더 짚어둘 게 있습니다. 계약서가 있어도 진행 중 구두로 합의한 내용이 문서화되지 않으면 소용없어요. "이 기능도 추가해주기로 했잖아요"라는 말이 텍스트로 남아 있지 않으면 계약서 밖의 약속이 되어버립니다. 주요 변경 사항은 메일이나 메시지로 반드시 확인을 남기세요.</p><div style="background:linear-gradient(135deg,#5E9ADE 0%,#7BB2E8 100%);border-radius:14px;padding:20px 24px;margin:30px 0;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+<p style="font-size:15px;color:#fff;line-height:1.65;margin:0;flex:1;">계약서 항목 검토가 어렵다면 위시켓 매니저가 함께 확인해드립니다.</p>
+<a href="https://wishket.com/project/free-consulting/?utm_source=blog_webflow&amp;utm_medium=inline_cta&amp;utm_campaign=260406_erp-outsourcing-vendor-selection-guide" style="display:inline-block;background:#fff;color:#2477F3;font-size:14px;font-weight:700;padding:10px 18px;border-radius:10px;white-space:nowrap;text-decoration:none;">무료 상담</a>
+</div>
+<h2 id="업체-비교부터-계약까지-도움을-받을-수-있나요">업체 비교부터 계약까지, 도움을 받을 수 있나요?</h2>
+<p>여기까지 읽고 나면 기준은 생겼는데, 막상 혼자 진행하려면 부담이 남습니다. 업체 미팅에서 기술적인 질문이 나왔을 때 답하기 어렵고, 계약서를 펼쳐봐도 조항이 적절한지 판단하기 쉽지 않으니까요.</p>
+<p>위시켓에 프로젝트를 등록하면 매니저가 적정 금액과 기간을 무료로 상담합니다. 업체 미팅에도 매니저가 직접 참여해서 협의 사항을 함께 체크하고, 계약은 법무법인이 검토한 표준계약서(하자보수, 지재권, 대금보호 조항 포함)를 제공합니다. 계약서를 처음 보는 담당자도 항목별 근거를 갖출 수 있는 구조예요.</p>
+<p>다만 한 가지는 분명히 해야 합니다. <strong>선정과 계약을 도와주는 것과, 프로젝트를 대신 관리해주는 것은 다릅니다.</strong> 개발이 시작된 후에는 중간 결과물을 확인하고 피드백하는 역할이 여전히 담당자의 몫이에요. 업체를 잘 골랐다고 해서 이후를 방치하면 결과물이 기대와 달라지는 건 마찬가지입니다.</p>
+<p><a href="https://wishket.com/project/free-consulting/?utm_source=blog_webflow&amp;utm_medium=inline_cta&amp;utm_campaign=260406_erp-outsourcing-vendor-selection-guide">위시켓</a> 기준으로 보면, ERP 외주 업체 선정에서 가장 중요한 건 기술력을 따지는 게 아닙니다. 비개발자가 직접 확인할 수 있는 신호, 업종 경험과 커뮤니케이션 태도, 그리고 계약 구조를 기준으로 보는 것이 현실적인 출발점입니다.</p>
+
+  <div style="background:linear-gradient(135deg,#5E9ADE 0%,#7BB2E8 100%);border-radius:16px;padding:32px 30px;color:#fff;margin:40px 0 0;">
+<div style="font-size:12px;font-weight:600;letter-spacing:0.8px;opacity:0.75;margin-bottom:10px;text-transform:uppercase;">다음 단계</div>
+<h3 style="font-size:20px;font-weight:800;line-height:1.45;margin-bottom:20px;color:#fff;letter-spacing:-0.3px;">업체 비교를 시작했나요,
+아직 탐색 중인가요?</h3>
+<div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;"><div style="background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px;font-size:14.5px;line-height:1.65;"><span style="font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;">이미 업체 미팅을 마쳤다면</span>받은 견적과 미팅 메모를 위시켓 매니저와 함께 검토해보세요. 업종 경험과 계약 구조를 기준으로 비교 결과를 정리하는 데 도움을 드립니다.
+</div>
+<div style="background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px;font-size:14.5px;line-height:1.65;"><span style="font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;">아직 업체를 찾는 중이라면</span>프로젝트 범위를 먼저 등록하면 매니저가 적정 금액과 기간을 무료로 상담하고, ERP 경험이 있는 파트너를 추천해드립니다.
+</div></div><div style="text-align:center;"><a href="https://wishket.com/project/free-consulting/?utm_source=blog_webflow&amp;utm_medium=cta_banner&amp;utm_campaign=260406_erp-outsourcing-vendor-selection-guide" style="display:inline-block;background:#fff;color:#2477F3;font-size:15px;font-weight:800;padding:13px 28px;border-radius:10px;text-decoration:none;">매니저에게 상담받기</a></div>
+</div>
+
+  <div class="related-section">
+  <h3>함께 읽으면 좋은 콘텐츠</h3>
+<ul>
+  <li><a href="https://blog.wishket.com/blog/how-to-choose-software-development-company">개발 업체, 어떻게 골라야 할까? 현장에서 검증한 5가지 기준</a></li>
+  <li><a href="https://blog.wishket.com/blog/outsourcing-development-risks-solutions">외주 개발, 어떤 리스크가 있을까? 자주 발생하는 4가지 문제와 해결법</a></li>
+  <li><a href="https://blog.wishket.com/blog/where-to-find-development-company">개발 업체, 어디서 찾을까? 방법별 장단점과 선택 기준</a></li>
+</ul>
+  </div>
+
+  </div>
+
+  <h2>자주 묻는 질문</h2>
+<div class="faq-list">
+<div class="faq-item">
+  <div class="faq-q"><span class="q-mark">Q.</span>업종 경험이 있다는 업체의 말을 어디까지 믿어야 하나요?</div>
+  <div class="faq-a">포트폴리오에 적힌 경험은 영업 목적으로 편집된 자료라 그대로 믿기 어렵습니다. 미팅에서 &quot;우리 업종과 비슷한 프로젝트에서 가장 어려웠던 점이 뭐였나요?&quot;라고 직접 물어보세요. 구체적인 문제와 해결 방식을 말하는 업체와 두루뭉술하게 답하는 업체 사이에서 경험의 깊이 차이가 드러납니다. 참여했던 개발자가 현재도 재직 중인지 확인하는 것도 방법입니다. 담당 개발자가 이직했다면 경험이 팀에 남아 있지 않을 수 있습니다.
+</div>
+</div>
+<div class="faq-item">
+  <div class="faq-q"><span class="q-mark">Q.</span>하자보수 기간은 통상 얼마나 요구하는 것이 적절한가요?</div>
+  <div class="faq-a">업계 통상 기준은 납품 후 3~6개월 무상 하자보수입니다. ERP처럼 모듈 수가 많고 사용자가 실제 업무에서 직접 발견하는 버그가 많은 시스템은 6개월이 더 합리적입니다. 중요한 것은 기간만큼이나 귀책 조건입니다. &quot;개발사 귀책 결함에 한해&quot;라는 표현 없이 기간만 명시된 계약서는 사용자 설정 오류나 인프라 문제까지 무상 범위로 오해될 수 있어 분쟁의 여지가 있습니다. 기간과 귀책 조건이 모두 기재된 조항인지 확인하세요.
+</div>
+</div>
+<div class="faq-item">
+  <div class="faq-q"><span class="q-mark">Q.</span>착수금 비율이 높으면 계약하지 말아야 하나요?</div>
+  <div class="faq-a">착수금이 무조건 높으면 나쁜 것은 아니지만, 착수금 50% 이상인 계약은 개발사가 초기에 대부분 회수하는 구조라 납기 지연 시 협상력이 약해집니다. 통상 착수금 20~30%, 중간금 40~50%(마일스톤 도달 시), 잔금 20~30%(검수 완료 후) 구조가 클라이언트 리스크를 분산하는 표준에 가깝습니다. &quot;개발 완료 후 잔금&quot;처럼 완료 기준이 모호하면 검수 범위를 두고 분쟁이 생기기 쉬우므로, 마일스톤별 기준을 구체적으로 명시하는 것이 중요합니다.
+</div>
+</div>
+<div class="faq-item">
+  <div class="faq-q"><span class="q-mark">Q.</span>계약이 끝난 뒤 소스코드를 못 받는 경우도 있나요?</div>
+  <div class="faq-a">계약서에 지재권 귀속 조항이 없거나 &quot;소스코드 납품&quot;으로만 적혀 있으면 실제로 발생합니다. 납품 후 업체가 소스코드 제공을 거부하거나, 다른 업체로 전환할 때 추가 비용을 요구하는 사례가 있습니다. 계약서에는 &quot;소스코드를 포함한 산출물 일체의 지재권은 클라이언트에 귀속된다&quot;는 표현이 명시되어야 합니다. 서버·도메인 계정도 반드시 클라이언트 회사 명의로 개설해두세요. 개발사 명의로 만들면 관계 종료 시 통제권 회수가 어려워집니다.
+</div>
+</div>
+</div>
+
+  <div class="cms-meta-area">
+    <h3 style="font-size:16px; font-weight:700; margin:0 0 16px 0; color:#666;">CMS 입력 필드</h3>
+    <table style="width:100%;border-collapse:collapse;margin:16px 0;">
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">써머리</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">비개발자가 쓸 수 있는 ERP 외주 업체 선정 기준 3가지</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">slug</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">erp-outsourcing-vendor-selection-guide</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">날짜</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">2026-04-06</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">카테고리</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">IT 아웃소싱</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">태그</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">ERP</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">메타 디스크립션</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">ERP 외주 업체 선정 기준, 비개발자도 실제로 쓸 수 있는 3가지가 있습니다. 위시켓 데이터 기준 ERP 프로젝트 예산은 1,000만~6,000만 원 이상으로 범위가 넓어, 업체를 비교하기 전에 프로젝트 범위를 먼저 정의하는 것이 출발점입니다.
+</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">Author</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">박민재 / 운영팀 리드 — 위시켓 운영팀 리드 박민재입니다. 기업과 IT 전문가의 최적 매칭을 설계합니다.</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">TLDR</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">ERP 외주 프로젝트 실패의 원인은 기술력보다 요구사항 불명확과 커뮤니케이션 실패에서 많이 발생합니다. 비개발자가 실제로 확인할 수 있는 기준은 세 가지입니다. 우리 업종과 비슷한 ERP를 만들어본 경험이 있는지, 미팅에서 안 되는 것을 솔직하게 말하는 업체인지, 계약서에 하자보수·지재권·대금 조건이 명확히 적혀 있는지를 보는 거죠. 위시켓 등록 프로젝트 기준 ERP 예산은 1,000만 원대부터 6,000만 원 이상까지 범위가 넓어, 업체를 비교하기 전에 프로젝트 범위를 먼저 정의해야 같은 조건으로 견적을 비교할 수 있습니다.
+</td>
+</tr>
+</table>
+  </div>
+
+  <table class="guide-box" style="width:100%;border:1px solid #D1D5DB;border-collapse:collapse;margin:20px 0;">
+<tr><td style="background:#F9FAFB;padding:16px 20px;border:1px solid #D1D5DB;">
+<p style="margin:0 0 10px 0;font-weight:700;font-size:16px;">🖼 썸네일 제작 가이드</p>
+<p style="margin:0 0 4px 0;"><b>스타일:</b> 단색 배경 + 텍스트</p>
+<p style="margin:0 0 4px 0;"><b>배경색:</b> #1A3A5C</p>
+<p style="margin:0 0 4px 0;"><b>제목 텍스트:</b></p>
+<p style="margin:0 0 4px 0;">　1줄: ERP 외주 업체</p>
+<p style="margin:0 0 4px 0;">　2줄: 비개발자 선정 기준 3가지</p>
+<p style="margin:0 0 4px 0;"><b>장식 요소:</b> geometric_blocks</p>
+<p style="margin:0;"><b>로고:</b> wishket 로고 좌상단</p>
+</td></tr>
+</table>
+
+  <h3 style="font-size:18px;font-weight:600;margin:32px 0 12px 0;">Embed 코드 (붙여넣기용)</h3>
+<div style="margin:16px 0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:14px;font-weight:600;color:#374151;">ERP 외주 업체를 고를 때 어떤 기준으로 봐야 하나요? — 기준 · 확인 방법 · 왜 중요한가</span><button onclick="copyCodeBlock(this)" style="background:#2477F3;color:#fff;border:none;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">복사</button></div><pre style="background:#1E293B;color:#E2E8F0;padding:12px;border-radius:8px;overflow-x:auto;font-size:11px;line-height:1.4;white-space:pre-wrap;max-height:200px;overflow-y:auto;">&lt;style&gt;
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:1.5rem 0;border:1px solid #E5E7EB;border-radius:12px;background:#fff}
+table.geo{width:100%;border-collapse:collapse;border-spacing:0;font-size:14px;line-height:1.6;table-layout:fixed}
+table.geo caption{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+table.geo thead th{padding:12px 18px;font-size:12.5px;font-weight:700;letter-spacing:.01em;text-align:left;border-bottom:1px solid #D1D1D9;background:#F6F6F9;vertical-align:bottom}
+table.geo thead th:first-child{color:#82828E;border-right:1px solid #D1D1D9}
+table.geo thead th:not(:first-child){color:#1A1A23}
+table.geo tbody th[scope=row]{padding:14px 18px;font-size:14px;font-weight:600;color:#1A1A23;text-align:left;border-bottom:1px solid #ECECF0;border-right:1px solid #ECECF0;background:#fff;vertical-align:top;word-break:keep-all}
+table.geo tbody td{padding:14px 18px;color:#3A3A47;border-bottom:1px solid #ECECF0;vertical-align:top;word-break:keep-all}
+table.geo tbody tr:nth-child(even) td,table.geo tbody tr:nth-child(even) th[scope=row]{background:#F9F9FB}
+table.geo tbody tr:hover td,table.geo tbody tr:hover th[scope=row]{background:#F0F0F5}
+table.geo tfoot td{padding:9px 18px;font-size:12px;color:#9CA3AF;border-top:1px solid #ECECF0;background:#F9F9FB}
+table.geo tfoot time{font-weight:500}
+@media(max-width:640px){table.geo{table-layout:auto}table.geo thead th,table.geo tbody th[scope=row],table.geo tbody td{padding:11px 14px;font-size:13px}table.geo tfoot td{padding:8px 14px}}
+&lt;/style&gt;
+&lt;div class=&quot;tbl-wrap&quot;&gt;&lt;table class=&quot;geo&quot;&gt;&lt;caption&gt;ERP 외주 업체를 고를 때 어떤 기준으로 봐야 하나요? — 기준 · 확인 방법 · 왜 중요한가&lt;/caption&gt;&lt;colgroup&gt;&lt;col style=&quot;width:22%&quot;/&gt;&lt;col style=&quot;width:39%&quot;/&gt;&lt;col style=&quot;width:39%&quot;/&gt;&lt;/colgroup&gt;&lt;thead&gt;&lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;기준&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;확인 방법&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;왜 중요한가&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;&lt;strong&gt;업종 경험&lt;/strong&gt;&lt;/th&gt;&lt;td&gt;우리 업종과 비슷한 ERP를 만들어본 적 있는지&lt;/td&gt;&lt;td&gt;ERP는 업종마다 업무 흐름이 다르고, 경험 없는 업체는 요구사항을 처음부터 학습해야 해서 일정과 비용이 늘어남&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;&lt;strong&gt;커뮤니케이션 태도&lt;/strong&gt;&lt;/th&gt;&lt;td&gt;모르는 것을 솔직하게 말하고 대안을 제시하는지&lt;/td&gt;&lt;td&gt;&quot;다 됩니다&quot;라고만 하는 업체는 진행 중 문제가 터졌을 때 책임 소재가 불분명해짐&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;&lt;strong&gt;계약 구조&lt;/strong&gt;&lt;/th&gt;&lt;td&gt;하자보수 기간, 지재권 귀속, 대금 지급 조건이 명확한지&lt;/td&gt;&lt;td&gt;이 세 항목이 빠져 있으면 납품 후 업체 종속이나 분쟁으로 이어질 수 있음&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;tfoot&gt;&lt;tr&gt;&lt;td colspan=&quot;3&quot;&gt;2025~2026년 위시켓 등록 프로젝트 기준 · 클라이언트 희망 예산이며 실제 계약 금액과 다를 수 있습니다&lt;/td&gt;&lt;/tr&gt;&lt;/tfoot&gt;&lt;/table&gt;&lt;/div&gt;</pre></div>
+<div style="margin:16px 0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:14px;font-weight:600;color:#374151;">CTA 배너</span><button onclick="copyCodeBlock(this)" style="background:#2477F3;color:#fff;border:none;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">복사</button></div><pre style="background:#1E293B;color:#E2E8F0;padding:12px;border-radius:8px;overflow-x:auto;font-size:11px;line-height:1.4;white-space:pre-wrap;max-height:200px;overflow-y:auto;">&lt;div style=&quot;background:linear-gradient(135deg,#5E9ADE 0%,#7BB2E8 100%);border-radius:16px;padding:32px 30px;color:#fff;margin:40px 0 0;&quot;&gt;
+&lt;div style=&quot;font-size:12px;font-weight:600;letter-spacing:0.8px;opacity:0.75;margin-bottom:10px;text-transform:uppercase;&quot;&gt;다음 단계&lt;/div&gt;
+&lt;h3 style=&quot;font-size:20px;font-weight:800;line-height:1.45;margin-bottom:20px;color:#fff;letter-spacing:-0.3px;&quot;&gt;업체 비교를 시작했나요,
+아직 탐색 중인가요?&lt;/h3&gt;
+&lt;div style=&quot;display:flex;flex-direction:column;gap:12px;margin-bottom:24px;&quot;&gt;&lt;div style=&quot;background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px;font-size:14.5px;line-height:1.65;&quot;&gt;&lt;span style=&quot;font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;&quot;&gt;이미 업체 미팅을 마쳤다면&lt;/span&gt;받은 견적과 미팅 메모를 위시켓 매니저와 함께 검토해보세요. 업종 경험과 계약 구조를 기준으로 비교 결과를 정리하는 데 도움을 드립니다.
+&lt;/div&gt;
+&lt;div style=&quot;background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px;font-size:14.5px;line-height:1.65;&quot;&gt;&lt;span style=&quot;font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;&quot;&gt;아직 업체를 찾는 중이라면&lt;/span&gt;프로젝트 범위를 먼저 등록하면 매니저가 적정 금액과 기간을 무료로 상담하고, ERP 경험이 있는 파트너를 추천해드립니다.
+&lt;/div&gt;&lt;/div&gt;&lt;div style=&quot;text-align:center;&quot;&gt;&lt;a href=&quot;https://wishket.com/project/free-consulting/?utm_source=blog_webflow&amp;amp;utm_medium=cta_banner&amp;amp;utm_campaign=260406_erp-outsourcing-vendor-selection-guide&quot; style=&quot;display:inline-block;background:#fff;color:#2477F3;font-size:15px;font-weight:800;padding:13px 28px;border-radius:10px;text-decoration:none;&quot;&gt;매니저에게 상담받기&lt;/a&gt;&lt;/div&gt;
+&lt;/div&gt;</pre></div>
+
+
+  <h3 style="font-size:18px;font-weight:600;margin:32px 0 12px 0;">JSON-LD (Custom Code에 붙여넣기)</h3>
+<pre style="background:#1E293B;color:#E2E8F0;padding:16px;border-radius:8px;overflow-x:auto;font-size:12px;line-height:1.5;white-space:pre-wrap;">&lt;script type="application/ld+json"&gt;
+{
+  &quot;@context&quot;: &quot;https://schema.org&quot;,
+  &quot;@type&quot;: &quot;BlogPosting&quot;,
+  &quot;headline&quot;: &quot;ERP 외주 업체, 비개발자가 고르는 3가지 기준&quot;,
+  &quot;description&quot;: &quot;ERP 외주 업체 선정 기준, 비개발자도 실제로 쓸 수 있는 3가지가 있습니다. 위시켓 데이터 기준 ERP 프로젝트 예산은 1,000만~6,000만 원 이상으로 범위가 넓어, 업체를 비교하기 전에 프로젝트 범위를 먼저 정의하는 것이 출발점입니다.\n&quot;,
+  &quot;datePublished&quot;: &quot;2026-04-06&quot;,
+  &quot;dateModified&quot;: &quot;2026-04-06&quot;,
+  &quot;author&quot;: {
+    &quot;@type&quot;: &quot;Person&quot;,
+    &quot;name&quot;: &quot;박민재&quot;
+  },
+  &quot;publisher&quot;: {
+    &quot;@type&quot;: &quot;Organization&quot;,
+    &quot;name&quot;: &quot;위시켓&quot;,
+    &quot;url&quot;: &quot;https://www.wishket.com&quot;
+  },
+  &quot;mainEntityOfPage&quot;: {
+    &quot;@type&quot;: &quot;WebPage&quot;
+  },
+  &quot;keywords&quot;: &quot;ERP&quot;,
+  &quot;articleSection&quot;: &quot;IT 아웃소싱&quot;,
+  &quot;hasPart&quot;: [
+    {
+      &quot;@type&quot;: &quot;WebPageElement&quot;,
+      &quot;name&quot;: &quot;ERP 외주 업체를 고를 때 어떤 기준으로 봐야 하나요?&quot;,
+      &quot;url&quot;: &quot;#erp-외주-업체를-고를-때-어떤-기준으로-봐야-하나요&quot;
+    },
+    {
+      &quot;@type&quot;: &quot;WebPageElement&quot;,
+      &quot;name&quot;: &quot;포트폴리오만으로는 판단이 안 되는데, 미팅에서 어떻게 확인하나요?&quot;,
+      &quot;url&quot;: &quot;#포트폴리오만으로는-판단이-안-되는데-미팅에서-어떻게-확인하나요&quot;
+    },
+    {
+      &quot;@type&quot;: &quot;WebPageElement&quot;,
+      &quot;name&quot;: &quot;계약서에서 반드시 확인해야 할 항목은?&quot;,
+      &quot;url&quot;: &quot;#계약서에서-반드시-확인해야-할-항목은&quot;
+    },
+    {
+      &quot;@type&quot;: &quot;WebPageElement&quot;,
+      &quot;name&quot;: &quot;업체 비교부터 계약까지, 도움을 받을 수 있나요?&quot;,
+      &quot;url&quot;: &quot;#업체-비교부터-계약까지-도움을-받을-수-있나요&quot;
+    }
+  ]
+}
+&lt;/script&gt;
+&lt;script type="application/ld+json"&gt;
+{
+  &quot;@context&quot;: &quot;https://schema.org&quot;,
+  &quot;@type&quot;: &quot;FAQPage&quot;,
+  &quot;mainEntity&quot;: [
+    {
+      &quot;@type&quot;: &quot;Question&quot;,
+      &quot;name&quot;: &quot;업종 경험이 있다는 업체의 말을 어디까지 믿어야 하나요?&quot;,
+      &quot;acceptedAnswer&quot;: {
+        &quot;@type&quot;: &quot;Answer&quot;,
+        &quot;text&quot;: &quot;포트폴리오에 적힌 경험은 영업 목적으로 편집된 자료라 그대로 믿기 어렵습니다. 미팅에서 \&quot;우리 업종과 비슷한 프로젝트에서 가장 어려웠던 점이 뭐였나요?\&quot;라고 직접 물어보세요. 구체적인 문제와 해결 방식을 말하는 업체와 두루뭉술하게 답하는 업체 사이에서 경험의 깊이 차이가 드러납니다. 참여했던 개발자가 현재도 재직 중인지 확인하는 것도 방법입니다. 담당 개발자가 이직했다면 경험이 팀에 남아 있지 않을 수 있습니다.\n&quot;
+      }
+    },
+    {
+      &quot;@type&quot;: &quot;Question&quot;,
+      &quot;name&quot;: &quot;하자보수 기간은 통상 얼마나 요구하는 것이 적절한가요?&quot;,
+      &quot;acceptedAnswer&quot;: {
+        &quot;@type&quot;: &quot;Answer&quot;,
+        &quot;text&quot;: &quot;업계 통상 기준은 납품 후 3~6개월 무상 하자보수입니다. ERP처럼 모듈 수가 많고 사용자가 실제 업무에서 직접 발견하는 버그가 많은 시스템은 6개월이 더 합리적입니다. 중요한 것은 기간만큼이나 귀책 조건입니다. \&quot;개발사 귀책 결함에 한해\&quot;라는 표현 없이 기간만 명시된 계약서는 사용자 설정 오류나 인프라 문제까지 무상 범위로 오해될 수 있어 분쟁의 여지가 있습니다. 기간과 귀책 조건이 모두 기재된 조항인지 확인하세요.\n&quot;
+      }
+    },
+    {
+      &quot;@type&quot;: &quot;Question&quot;,
+      &quot;name&quot;: &quot;착수금 비율이 높으면 계약하지 말아야 하나요?&quot;,
+      &quot;acceptedAnswer&quot;: {
+        &quot;@type&quot;: &quot;Answer&quot;,
+        &quot;text&quot;: &quot;착수금이 무조건 높으면 나쁜 것은 아니지만, 착수금 50% 이상인 계약은 개발사가 초기에 대부분 회수하는 구조라 납기 지연 시 협상력이 약해집니다. 통상 착수금 20~30%, 중간금 40~50%(마일스톤 도달 시), 잔금 20~30%(검수 완료 후) 구조가 클라이언트 리스크를 분산하는 표준에 가깝습니다. \&quot;개발 완료 후 잔금\&quot;처럼 완료 기준이 모호하면 검수 범위를 두고 분쟁이 생기기 쉬우므로, 마일스톤별 기준을 구체적으로 명시하는 것이 중요합니다.\n&quot;
+      }
+    },
+    {
+      &quot;@type&quot;: &quot;Question&quot;,
+      &quot;name&quot;: &quot;계약이 끝난 뒤 소스코드를 못 받는 경우도 있나요?&quot;,
+      &quot;acceptedAnswer&quot;: {
+        &quot;@type&quot;: &quot;Answer&quot;,
+        &quot;text&quot;: &quot;계약서에 지재권 귀속 조항이 없거나 \&quot;소스코드 납품\&quot;으로만 적혀 있으면 실제로 발생합니다. 납품 후 업체가 소스코드 제공을 거부하거나, 다른 업체로 전환할 때 추가 비용을 요구하는 사례가 있습니다. 계약서에는 \&quot;소스코드를 포함한 산출물 일체의 지재권은 클라이언트에 귀속된다\&quot;는 표현이 명시되어야 합니다. 서버·도메인 계정도 반드시 클라이언트 회사 명의로 개설해두세요. 개발사 명의로 만들면 관계 종료 시 통제권 회수가 어려워집니다.\n&quot;
+      }
+    }
+  ]
+}
+&lt;/script&gt;</pre>
+
+</div>
+
+<script>
+// contenteditable 변경 감지 + localStorage 자동저장
+var content = document.getElementById('cms-content');
+var status = document.getElementById('edit-status');
+var saveTimer;
+var STORAGE_KEY = 'wishket_draft_' + document.title.replace(/[^a-zA-Z0-9가-힣]/g, '_').substring(0, 60);
+var VERSION_KEY = STORAGE_KEY + '_ver';
+var CURRENT_VERSION = '2026-04-06';
+
+window.addEventListener('load', function() {
+  var saved = localStorage.getItem(STORAGE_KEY);
+  var savedVer = localStorage.getItem(VERSION_KEY);
+  if (saved && savedVer === CURRENT_VERSION) { content.innerHTML = saved; }
+  else { localStorage.removeItem(STORAGE_KEY); }
+  attachLinkHandlers();
+});
+
+content.addEventListener('input', function() {
+  status.textContent = '편집 중 (미저장)';
+  status.className = 'modified';
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(function() {
+    localStorage.setItem(STORAGE_KEY, content.innerHTML);
+    localStorage.setItem(VERSION_KEY, CURRENT_VERSION);
+    status.textContent = '자동저장됨';
+    status.className = '';
+  }, 3000);
+});
+
+function attachLinkHandlers() {
+  document.querySelectorAll('[contenteditable] a').forEach(function(a) {
+    a.addEventListener('click', function(e) {
+      if (e.metaKey || e.ctrlKey) { window.open(a.href, '_blank'); }
+    });
+    if (a.title.indexOf('Cmd+클릭') === -1) {
+      a.title = (a.title || '') + ' (Cmd+클릭으로 열기)';
+    }
+  });
+}
+
+function copyContent() {
+  var clone = content.cloneNode(true);
+  clone.querySelectorAll('.image-guide, table.image-guide, table.guide-box').forEach(function(el) { el.remove(); });
+  var text = clone.innerText;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(function() {
+      var btn = document.getElementById('copy-btn');
+      btn.textContent = '복사됨!';
+      setTimeout(function() { btn.textContent = '본문 복사'; }, 2000);
+    });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    var btn = document.getElementById('copy-btn');
+    btn.textContent = '복사됨!';
+    setTimeout(function() { btn.textContent = '본문 복사'; }, 2000);
+  }
+}
+
+function copyCodeBlock(btn) {
+  var pre = btn.parentElement.nextElementSibling;
+  if (!pre) return;
+  var text = pre.textContent;
+  navigator.clipboard.writeText(text).then(function() {
+    btn.textContent = '복사됨!';
+    setTimeout(function() { btn.textContent = '복사'; }, 2000);
+  });
+}
+
+window.addEventListener('beforeunload', function(e) {
+  if (status.className === 'modified') {
+    e.preventDefault();
+    e.returnValue = '';
+  }
+});
+</script>
+
+</body>
+</html>

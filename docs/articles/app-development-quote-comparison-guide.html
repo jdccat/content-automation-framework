@@ -11,9 +11,9 @@
   body {
     font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
     font-size: 17px;
-    line-height: 1.85;
+    line-height: 2.0;
     color: #1a1a1a;
-    background: #f7f8fa;
+    background: #fff;
     -webkit-font-smoothing: antialiased;
   }
 
@@ -26,11 +26,11 @@
     z-index: 9999; font-size: 14px;
   }
   #toolbar button {
-    background: #26B2E2; color: #fff; border: none;
+    background: #2477F3; color: #fff; border: none;
     padding: 6px 16px; border-radius: 6px; cursor: pointer;
     font-size: 13px; font-weight: 600;
   }
-  #toolbar button:hover { background: #1A9FC7; }
+  #toolbar button:hover { background: #1B5FD1; }
   #edit-status { color: #94A3B8; font-size: 12px; }
   #edit-status.modified { color: #FBBF24; }
 
@@ -44,7 +44,7 @@
   /* ── Header ── */
   .article-header { margin-bottom: 32px; }
   .article-category {
-    font-size: 12px; font-weight: 600; color: #26B2E2;
+    font-size: 12px; font-weight: 600; color: #2477F3;
     letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 12px;
   }
   h1 {
@@ -57,23 +57,23 @@
 
   /* ── Typography ── */
   h2 {
-    font-size: 21px; font-weight: 700; color: #0d0d0d;
+    font-size: 21px; font-weight: 700; color: #2477F3;
     margin: 48px 0 16px 0; padding-bottom: 10px;
-    border-bottom: 2px solid #e8e8e8;
+    border-bottom: 2px solid #E5E7EB;
     letter-spacing: -0.3px;
   }
   h3 {
     font-size: 17px; font-weight: 700; color: #1a1a1a;
     margin: 28px 0 10px 0;
   }
-  p { margin: 0 0 14px 0; }
-  a { color: #26B2E2; text-decoration: none; }
+  p { margin: 0 0 30px 0; }
+  a { color: #2477F3; text-decoration: none; }
   a:hover { text-decoration: underline; }
   strong { font-weight: 700; }
 
   /* ── Lists ── */
-  ul, ol { margin: 0 0 16px 0; padding-left: 22px; }
-  li { margin-bottom: 6px; line-height: 1.75; }
+  ul, ol { margin: 0 0 30px 0; padding-left: 22px; }
+  li { margin-bottom: 6px; line-height: 2.5; }
   li::marker { color: #999; }
 
   hr { border: none; border-top: 1px solid #e8e8e8; margin: 40px 0; }
@@ -81,8 +81,8 @@
   /* ── GEO Table ── */
   .tbl-wrap {
     overflow-x: auto; -webkit-overflow-scrolling: touch;
-    margin: 1.5rem 0; border: 1px solid #e0e0e5;
-    border-radius: 10px; background: #fff;
+    margin: 30px 0; border: 1px solid #e0e0e5;
+    border-radius: 12px; background: #fff;
   }
   table.geo {
     width: 100%; border-collapse: collapse; border-spacing: 0;
@@ -119,25 +119,25 @@
 
   /* ── TLDR (핵심 요약) ── */
   .summary-box {
-    background: #E8F7FC;
-    border-left: 4px solid #26B2E2;
-    border-radius: 0 10px 10px 0;
+    background: #F5F5F5;
+    border-radius: 12px;
     padding: 20px 24px;
-    margin-bottom: 32px;
+    margin-bottom: 30px;
   }
   .summary-box p:first-child {
-    font-size: 13px; font-weight: 700; color: #26B2E2;
+    font-size: 13px; font-weight: 700; color: #1A1A1A;
     margin-bottom: 8px; letter-spacing: 0.3px;
   }
   .summary-box p:not(:first-child) {
-    font-size: 15.5px; color: #0A5C78; line-height: 1.75;
+    font-size: 15.5px; color: #1A1A1A; line-height: 1.75;
   }
+  .summary-box p:last-child { margin-bottom: 0; }
 
   /* ── FAQ ── */
   .faq-list {
     display: flex; flex-direction: column; gap: 0;
-    margin: 20px 0 24px; border: 1px solid #e8e8e8;
-    border-radius: 10px; overflow: hidden;
+    margin: 20px 0 24px; border: 1px solid #E5E7EB;
+    border-radius: 14px; overflow: hidden;
   }
   .faq-item { border-bottom: 1px solid #ebebeb; background: #fff; }
   .faq-item:last-child { border-bottom: none; }
@@ -145,7 +145,7 @@
     font-size: 15px; font-weight: 700; color: #0d0d0d;
     padding: 18px 20px 8px; display: flex; gap: 10px;
   }
-  .faq-q .q-mark { color: #26B2E2; font-weight: 800; font-size: 16px; flex-shrink: 0; }
+  .faq-q .q-mark { color: #2477F3; font-weight: 800; font-size: 16px; flex-shrink: 0; }
   .faq-a {
     font-size: 14.5px; color: #444; line-height: 1.75;
     padding: 0 20px 18px 44px;
@@ -163,17 +163,17 @@
 
   /* ── Image guide box ── */
   .image-guide, table.guide-box {
-    background: #E8F7FC; border: 1px solid #7DD3E8;
-    border-radius: 10px; padding: 16px; margin: 16px 0;
+    background: #FAFAFA; border: 2px solid #E5E7EB;
+    border-radius: 12px; padding: 16px 24px; margin: 30px -20px;
   }
 
   /* ── CMS meta area ── */
-  .cms-meta-area { background: #f9fafb; border-radius: 10px; padding: 20px; margin-top: 40px; }
+  .cms-meta-area { background: #f9fafb; border-radius: 12px; padding: 20px; margin-top: 40px; }
 
   /* ── Contenteditable ── */
-  [contenteditable="true"]:focus { outline: 2px solid #26B2E2; outline-offset: 2px; border-radius: 4px; }
+  [contenteditable="true"]:focus { outline: 2px solid #2477F3; outline-offset: 2px; border-radius: 4px; }
   [contenteditable="true"]:hover { outline: 1px dashed #CBD5E1; outline-offset: 2px; border-radius: 4px; }
-  [contenteditable="true"]:focus:hover { outline: 2px solid #26B2E2; outline-offset: 2px; }
+  [contenteditable="true"]:focus:hover { outline: 2px solid #2477F3; outline-offset: 2px; }
 
   /* ── Responsive ── */
   @media (max-width: 640px) {
@@ -199,27 +199,14 @@
 
   <div class="article-header">
     <h1 contenteditable="true">앱 개발 견적, 업체마다 다른 이유와 비교 기준</h1>
-    <div class="article-meta"><time datetime="2026-04-05">2026-04-05</time></div>
+    <div class="article-meta"><time datetime="2026-04-06">2026-04-06</time></div>
   </div>
-
-  <table class="guide-box" style="width:100%;border:1px solid #D1D5DB;border-collapse:collapse;margin:20px 0;">
-<tr><td style="background:#F9FAFB;padding:16px 20px;border:1px solid #D1D5DB;">
-<p style="margin:0 0 10px 0;font-weight:700;font-size:16px;">🖼 썸네일 제작 가이드</p>
-<p style="margin:0 0 4px 0;"><b>스타일:</b> 단색 배경 + 텍스트</p>
-<p style="margin:0 0 4px 0;"><b>배경색:</b> #1A3A5C</p>
-<p style="margin:0 0 4px 0;"><b>제목 텍스트:</b></p>
-<p style="margin:0 0 4px 0;">　1줄: 앱 개발 견적</p>
-<p style="margin:0 0 4px 0;">　2줄: 비교 기준 가이드</p>
-<p style="margin:0 0 4px 0;"><b>장식 요소:</b> geometric_blocks</p>
-<p style="margin:0;"><b>로고:</b> wishket 로고 좌상단</p>
-</td></tr>
-</table>
 
   <div id="cms-content" contenteditable="true" style="outline:none;">
 
   <div class="summary-box">
 <p>💡 핵심 요약</p>
-<p>앱 개발 견적이 업체마다 2~3배 차이 나는 이유는 기획·디자인·서버 등 포함 범위가 다르기 때문입니다. 위시켓 데이터 기준 앱 개발 예산의 중앙값은 2,000만 원이지만, 포함 범위에 따라 하위 25%는 800만 원, 상위 25%는 4,000만 원까지 벌어집니다. 모든 업체에 동일한 요구사항 문서를 전달해 같은 조건의 견적을 먼저 만들어야 비교와 판단이 가능합니다.</p>
+<p>앱 개발 견적이 업체마다 2~3배씩 차이 나는 건 포함 범위가 다르기 때문입니다. 기획·디자인·서버 포함 여부에 따라 같은 앱이라도 전혀 다른 프로젝트가 되거든요. 금액을 비교하기 전에 주요 화면 목록과 핵심 기능을 정리해 모든 업체에 동일하게 전달하면, 같은 조건의 견적을 받을 수 있고 판단이 따라옵니다.</p>
 </div>
 
   <p>견적서를 세 장 받아놨는데 금액이 2~3배씩 차이 납니다. 같은 앱을 설명했는데 A업체는 1,500만 원, B업체는 4,000만 원이에요. 어느 쪽이 맞는 건지, 어디서부터 비교해야 하는 건지 기준 자체가 없어지는 순간입니다.</p>
@@ -227,16 +214,8 @@
 <h2 id="왜-업체마다-견적이-이렇게-다를까">왜 업체마다 견적이 이렇게 다를까?</h2>
 <p>앱 개발 견적이 업체마다 다른 가장 큰 이유는 각 업체가 견적에 포함하는 범위가 다르기 때문입니다. 같은 "쇼핑몰 앱"이라고 설명해도, 어떤 업체는 기획부터 디자인, 서버 구축, 관리자 페이지까지 넣고, 어떤 업체는 개발만 넣어요.</p>
 <p>이건 업체가 불성실해서가 아닙니다. 기획서 없이 구두로 "이런 앱 만들어주세요"라고 요청하면, 업체마다 머릿속에 그리는 그림이 달라지는 거예요. A업체는 화면 15개짜리 앱을 상상하고, B업체는 화면 30개짜리 앱을 상상합니다. 당연히 견적이 다를 수밖에 없죠.</p>
-<div class="tbl-wrap"><table class="geo"><caption>왜 업체마다 견적이 이렇게 다를까? — 변수 · 포함하면 · 미포함하면</caption><colgroup><col style="width:22%"/><col style="width:39%"/><col style="width:39%"/></colgroup><thead><tr><th scope="col">변수</th><th scope="col">포함하면</th><th scope="col">미포함하면</th></tr></thead><tbody><tr><th scope="row">기획</th><td>화면 설계·기능 정의 포함</td><td>클라이언트가 직접 정리하거나 별도 의뢰</td></tr><tr><th scope="row">UI/UX 디자인</th><td>디자인 시안 제작 포함</td><td>개발만 진행, 디자인은 별도</td></tr><tr><th scope="row">서버 구축</th><td>백엔드·DB 세팅 포함</td><td>클라이언트가 별도 준비</td></tr><tr><th scope="row">관리자 페이지</th><td>콘텐츠·회원 관리 화면 포함</td><td>직접 DB 관리하거나 추후 개발</td></tr><tr><th scope="row">QA(테스트)</th><td>체계적 테스트 포함</td><td>기능 단위 확인만</td></tr></tbody><tfoot><tr><td colspan="3"><time datetime="2026-04">2026년 4월</time> 기준 · 실제 조건에 따라 달라질 수 있습니다</td></tr></tfoot></table></div>
+<div class="tbl-wrap"><table class="geo"><caption>왜 업체마다 견적이 이렇게 다를까? — 변수 · 포함하면 · 미포함하면</caption><colgroup><col style="width:22%"/><col style="width:39%"/><col style="width:39%"/></colgroup><thead><tr><th scope="col">변수</th><th scope="col">포함하면</th><th scope="col">미포함하면</th></tr></thead><tbody><tr><th scope="row">기획</th><td>화면 설계·기능 정의 포함</td><td>클라이언트가 직접 정리하거나 별도 의뢰</td></tr><tr><th scope="row">UI/UX 디자인</th><td>디자인 시안 제작 포함</td><td>개발만 진행, 디자인은 별도</td></tr><tr><th scope="row">서버 구축</th><td>백엔드·DB 세팅 포함</td><td>클라이언트가 별도 준비</td></tr><tr><th scope="row">관리자 페이지</th><td>콘텐츠·회원 관리 화면 포함</td><td>직접 DB 관리하거나 추후 개발</td></tr><tr><th scope="row">QA(테스트)</th><td>체계적 테스트 포함</td><td>기능 단위 확인만</td></tr></tbody></table></div>
 <p>이 항목 중 어디까지 포함됐느냐에 따라, 같은 앱이라도 완전히 다른 프로젝트가 됩니다. 금액을 비교하기 전에 각 견적서에 무엇이 들어 있는지부터 확인하는 것이 첫 단계예요.</p>
-<table class="guide-box" style="width:100%;border:1px solid #7DD3E8;border-collapse:collapse;margin:20px 0;">
-<tr><td style="background:#E8F7FC;padding:16px 20px;border:1px solid #7DD3E8;">
-<p style="margin:0 0 8px 0;font-weight:700;">📷 이미지 — [H2: 왜 업체마다 견적이 이렇게 다를까?] 뒤</p>
-<p style="margin:0 0 4px 0;"><b>유형:</b> 인포그래픽</p>
-<p style="margin:0 0 4px 0;"><b>설명:</b> 기획·UI/UX 디자인·서버 구축·관리자 페이지·QA 5개 항목을 가로축에 배치하고, '포함'과 '미포함' 시 달라지는 비용·책임 주체를 비교 형태로 시각화한다. 표 본문과 연계되어 항목별 범위 차이를 한눈에 전달하는 용도.</p>
-<p style="margin:0;"><b>alt:</b> 앱 개발 견적 포함 항목별 비교 — 기획·디자인·서버·관리자 페이지·QA 포함 여부에 따른 차이</p>
-</td></tr>
-</table>
 <h2 id="비교-가능한-견적을-받으려면">비교 가능한 견적을 받으려면?</h2>
 <p>비교할 수 없는 견적을 놓고 고민하는 것보다, 비교 가능한 견적을 처음부터 받는 게 훨씬 빠릅니다. 방법은 간단해요. 업체에 요청할 때 조건을 먼저 맞춰서 전달하면 됩니다.</p>
 <p>기획서가 없어도 괜찮습니다. 아래 항목만 정리해서 모든 업체에 동일하게 보내면, 최소한 같은 기준에서 산정한 견적을 받을 수 있어요.</p>
@@ -248,79 +227,73 @@
 <li><strong>디자인 포함 여부</strong>: 디자인 시안을 업체에서 만들어야 하는지, 이미 있는지</li>
 </ul>
 <p>이걸 A4 한 장 분량으로 적어서 보내면 충분합니다. 중요한 건 모든 업체에 같은 문서를 보내는 거예요. 업체마다 다른 설명을 들으면, 아무리 조건을 맞추려 해도 다시 제각각인 견적이 돌아옵니다.</p>
-<div style="background:#fff9ec;border:1px solid #ffd966;border-radius:10px;padding:18px 20px;margin:20px 0 24px;">
-<div style="font-size:13px;font-weight:700;color:#7a5c00;margin-bottom:10px;display:flex;align-items:center;gap:6px;">📌 위시켓 매니저 Tip</div>
-<div style="font-size:14.5px;color:#4a3a00;line-height:1.75;"><span style="font-weight:700;color:#7a5c00;">요구사항 정리가 어렵다면:</span> 위시켓에 프로젝트를 등록하면 매니저가 요구사항 정리부터 도와줍니다. 어떤 기능이 필요한지, 어떤 항목을 견적에 포함해야 하는지 함께 정리한 뒤 파트너에게 전달하기 때문에, 비교 가능한 견적을 받을 수 있는 구조가 처음부터 만들어집니다.</div>
-</div><div style="background:#E8F7FC;border:1px solid #7DD3E8;border-radius:10px;padding:18px 22px;margin:24px 0 28px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
-<p style="font-size:15px;color:#0A5C78;line-height:1.65;margin:0;flex:1;">요구사항 정리가 막막하다면, 위시켓 매니저가 기능 목록 작성부터 함께합니다.</p>
-<a href="https://project.wishket.com/project/free-consulting?utm_source=blog_webflow&amp;utm_medium=inline_cta&amp;utm_campaign=260405_app-development-quote-comparison-guide" style="background:#26B2E2;color:#fff;font-size:14px;font-weight:700;padding:10px 18px;border-radius:8px;white-space:nowrap;text-decoration:none;">매니저에게 물어보기</a>
+<div style="background:#F0F6FF;border-left:3px solid #2E6BAA;border-radius:0 14px 14px 0;padding:18px 20px;margin:30px 0;">
+<div style="font-size:13px;font-weight:700;color:#1A1A1A;margin-bottom:10px;display:flex;align-items:center;gap:6px;">📌 위시켓 매니저 Tip</div>
+<div style="font-size:14.5px;color:#1A1A1A;line-height:2.0;"><span style="font-weight:700;color:#1A1A1A;">요구사항 정리가 어렵다면:</span> 위시켓에 프로젝트를 등록하면 매니저가 요구사항 정리부터 도와줍니다. 어떤 기능이 필요한지, 어떤 항목을 견적에 포함해야 하는지 함께 정리한 뒤 파트너에게 전달하기 때문에, 비교 가능한 견적을 받을 수 있는 구조가 처음부터 만들어집니다.</div>
+</div><div style="background:linear-gradient(135deg,#5E9ADE 0%,#7BB2E8 100%);border-radius:14px;padding:20px 24px;margin:30px 0;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+<p style="font-size:15px;color:#fff;line-height:1.65;margin:0;flex:1;">요구사항 정리가 막막하다면 위시켓 매니저가 함께합니다.</p>
+<a href="https://wishket.com/project/free-consulting/?utm_source=blog_webflow&amp;utm_medium=inline_cta&amp;utm_campaign=260406_app-development-quote-comparison-guide" style="display:inline-block;background:#fff;color:#2477F3;font-size:14px;font-weight:700;padding:10px 18px;border-radius:10px;white-space:nowrap;text-decoration:none;">무료 상담</a>
 </div>
 <h2 id="비슷한-규모의-앱은-보통-얼마에-만드나요">비슷한 규모의 앱은 보통 얼마에 만드나요?</h2>
 <p>조건을 맞춰 견적을 받았다면, 이제 그 금액이 합리적인지 기준점이 필요합니다. 앱 개발 비용은 포함 범위와 기능 복잡도에 따라 크게 달라지기 때문에 단일 평균값은 의미가 없어요.</p>
 <p>2025~2026년 위시켓에 등록된 앱 신규 개발 프로젝트 1,000건 이상의 데이터를 보면, 발주자가 제시한 예산의 절반은 2,000만 원 이하입니다. 하위 25%는 800만 원, 상위 25%는 4,000만 원이에요. 같은 "앱 개발"인데 예산이 5배 가까이 벌어지는 건, 포함 범위가 그만큼 다르다는 뜻이기도 합니다.</p>
 <p>주의할 점이 하나 있어요. 이 수치는 업체 견적이 아니라 발주자가 생각한 예산입니다. "내 견적이 비싼지 싼지"의 직접 근거로 쓰기보다는, 비슷한 포함 범위의 프로젝트가 어느 예산대에 몰려 있는지 확인하는 기준점으로 활용하세요.</p>
 <p>포함 범위에 따라 예산이 어떻게 달라지는지, 위시켓에 등록된 프로젝트를 보면 감이 옵니다.</p>
-<div style="display:flex;flex-direction:column;gap:14px;margin:20px 0 24px;">
-<div style="border:1px solid #e8e8e8;border-radius:10px;padding:18px 20px;background:#fff;">
+<div style="display:flex;flex-direction:column;gap:14px;margin:30px 0;">
+<div style="border:1px solid #E5E7EB;border-radius:14px;padding:18px 20px;background:#fff;">
 <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;">
 <span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;background:#e8f5e9;color:#2e7d32;">저가 사례</span>
 <span style="font-size:15.5px;font-weight:700;color:#0d0d0d;line-height:1.4;">예약 플랫폼 앱 및 업체용 웹 UI 디자인</span>
 </div>
-<div style="font-size:20px;font-weight:800;color:#26B2E2;margin-bottom:4px;">500만 원</div>
+<div style="font-size:20px;font-weight:800;color:#2477F3;margin-bottom:4px;">500만 원</div>
 <div style="font-size:12.5px;color:#999;margin-bottom:10px;">웹·Android·iOS · 40일 · 디자인 중심</div>
-<div style="font-size:14.5px;color:#444;line-height:1.7;">기획 없이 디자인 시안 기반으로 개발. 범위가 디자인에 한정되어 저비용 가능.</div>
+<div style="font-size:14.5px;color:#444;line-height:2.0;">기획 없이 디자인 시안 기반으로 개발. 범위가 디자인에 한정되어 저비용 가능.</div>
 </div>
-<div style="border:1px solid #e8e8e8;border-radius:10px;padding:18px 20px;background:#fff;">
+<div style="border:1px solid #E5E7EB;border-radius:14px;padding:18px 20px;background:#fff;">
 <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;">
 <span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;background:#e3f2fd;color:#1565c0;">중가 사례</span>
 <span style="font-size:15.5px;font-weight:700;color:#0d0d0d;line-height:1.4;">Flutter 기반 여행 동행 매칭 플랫폼 앱 개발</span>
 </div>
-<div style="font-size:20px;font-weight:800;color:#26B2E2;margin-bottom:4px;">1,000만 원</div>
+<div style="font-size:20px;font-weight:800;color:#2477F3;margin-bottom:4px;">1,000만 원</div>
 <div style="font-size:12.5px;color:#999;margin-bottom:10px;">Android·iOS · 60일 · 기획+개발 포함</div>
-<div style="font-size:14.5px;color:#444;line-height:1.7;">크로스플랫폼으로 Android·iOS 동시 개발. 매칭·기획이 포함되면서 비용 상승.</div>
+<div style="font-size:14.5px;color:#444;line-height:2.0;">크로스플랫폼으로 Android·iOS 동시 개발. 매칭·기획이 포함되면서 비용 상승.</div>
 </div>
-<div style="border:1px solid #e8e8e8;border-radius:10px;padding:18px 20px;background:#fff;">
+<div style="border:1px solid #E5E7EB;border-radius:14px;padding:18px 20px;background:#fff;">
 <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;">
 <span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;background:#fce4ec;color:#c62828;">고가 사례</span>
 <span style="font-size:15.5px;font-weight:700;color:#0d0d0d;line-height:1.4;">과외 매칭 서비스 플랫폼 구축</span>
 </div>
-<div style="font-size:20px;font-weight:800;color:#26B2E2;margin-bottom:4px;">3,300만 원</div>
+<div style="font-size:20px;font-weight:800;color:#2477F3;margin-bottom:4px;">3,300만 원</div>
 <div style="font-size:12.5px;color:#999;margin-bottom:10px;">Android·iOS · 90일 · 기획+개발+서버 포함</div>
-<div style="font-size:14.5px;color:#444;line-height:1.7;">매칭·채팅·결제·관리자 페이지까지 포함한 풀 구축. 기능 범위가 넓어 비용 3배 이상 차이.</div>
+<div style="font-size:14.5px;color:#444;line-height:2.0;">매칭·채팅·결제·관리자 페이지까지 포함한 풀 구축. 기능 범위가 넓어 비용 3배 이상 차이.</div>
 </div>
 </div>
 <p>디자인만 의뢰한 프로젝트와 기획부터 서버까지 포함한 프로젝트가 6배 이상 차이 납니다. 이게 업체 실력 차이가 아니라 포함 범위 차이라는 걸 알면, 내 프로젝트와 비슷한 범위의 사례를 찾아서 대조하면 됩니다.</p>
-<table class="guide-box" style="width:100%;border:1px solid #7DD3E8;border-collapse:collapse;margin:20px 0;">
-<tr><td style="background:#E8F7FC;padding:16px 20px;border:1px solid #7DD3E8;">
-<p style="margin:0 0 8px 0;font-weight:700;">📷 이미지 — [H2: 비슷한 규모의 앱은 보통 얼마에 만드나요?] 뒤</p>
-<p style="margin:0 0 4px 0;"><b>유형:</b> 인포그래픽</p>
-<p style="margin:0 0 4px 0;"><b>설명:</b> 위시켓 등록 앱 개발 프로젝트 예산 분포를 박스플롯 또는 분위수 막대 형태로 시각화한다. 하위 25%(800만 원), 중앙값(2,000만 원), 상위 25%(4,000만 원) 기준점을 명시하고, 본문에 등장하는 3가지 사례(500만·1,000만·3,300만 원)를 해당 구간에 점으로 표시한다.</p>
-<p style="margin:0;"><b>alt:</b> 위시켓 앱 개발 프로젝트 예산 분포 — 하위 25% 800만 원, 중앙값 2,000만 원, 상위 25% 4,000만 원</p>
-</td></tr>
-</table>
 <h2 id="견적이-예산을-넘으면-어떻게-조정할까">견적이 예산을 넘으면 어떻게 조정할까?</h2>
 <p>기준점과 비교해봤더니 견적이 예산을 넘깁니다. 이때 선택지는 크게 두 가지예요.</p>
 <p><strong>첫 번째, MVP 방식으로 범위를 좁힌다.</strong> MVP는 핵심 기능만 먼저 만들어 출시하고, 나머지는 시장 반응을 보면서 추가하는 방식입니다. 쇼핑몰 앱이라면 결제와 상품 목록만 먼저 만들고, 리뷰·위시리스트·포인트 시스템은 2차로 미루는 거예요. 초기 비용을 줄이면서 서비스를 먼저 시작할 수 있다는 게 장점이지만, 2차 개발 예산을 따로 확보해야 한다는 점은 잊으면 안 됩니다.</p>
 <p><strong>두 번째, 예산 자체를 조정한다.</strong> 견적이 높게 나온 이유가 포함 범위가 넓어서라면, 항목을 빼서 견적을 낮추는 것보다 예산을 현실에 맞추는 게 나을 수 있어요. 기획·서버·QA를 빼면 견적은 줄어들지만, 런칭 후에 그 비용이 따로 발생하거든요. 총비용은 오히려 더 늘어나는 경우를 자주 봅니다.</p>
 <p>어느 기능을 빼도 되는지 판단이 어렵다면, 유사한 프로젝트를 많이 봐온 사람의 의견이 도움이 됩니다. 위시켓 매니저는 유사 프로젝트 경험을 바탕으로 1차에 꼭 필요한 기능과 2차로 미뤄도 되는 기능을 구체적으로 안내합니다. 프로젝트 등록 후 무료 상담에서 현실적인 MVP 범위를 함께 잡을 수 있어요.</p>
-<table class="guide-box" style="width:100%;border:1px solid #7DD3E8;border-collapse:collapse;margin:20px 0;">
-<tr><td style="background:#E8F7FC;padding:16px 20px;border:1px solid #7DD3E8;">
-<p style="margin:0 0 8px 0;font-weight:700;">📷 이미지 — [H2: 견적이 예산을 넘으면 어떻게 조정할까?] 뒤</p>
-<p style="margin:0 0 4px 0;"><b>유형:</b> 프로세스 도해</p>
-<p style="margin:0 0 4px 0;"><b>설명:</b> 견적이 예산을 초과했을 때의 두 가지 선택 경로를 분기 다이어그램으로 표현한다. 왼쪽은 MVP 방식(핵심 기능 먼저 → 시장 반응 확인 → 2차 개발), 오른쪽은 예산 조정(포함 범위 재검토 → 총비용 시뮬레이션)으로 각 경로의 장단점을 한 줄씩 부기한다.</p>
-<p style="margin:0;"><b>alt:</b> 앱 개발 견적 초과 시 대응 경로 — MVP 방식 vs 예산 조정 분기 다이어그램</p>
+<table class="guide-box" style="width:calc(100% + 40px);margin-left:-20px;border:2px solid #E5E7EB;border-collapse:collapse;margin-top:30px;margin-bottom:30px;">
+<tr><td style="padding:16px 24px;border:none;font-size:13.5px;background:#FAFAFA;">
+<p style="margin:0 0 8px 0;font-weight:700;">📷 이미지 제안</p>
+<ul style="margin:0;padding-left:18px;list-style:disc;">
+<li style="margin-bottom:4px;"><b>유형:</b> 프로세스 도해</li>
+<li style="margin-bottom:4px;"><b>설명:</b> 견적이 예산을 초과했을 때의 두 가지 선택 경로를 분기 다이어그램으로 표현한다. 왼쪽은 MVP 방식(핵심 기능 먼저 → 시장 반응 확인 → 2차 개발, 2차 예산 별도 확보 필요), 오른쪽은 예산 조정(포함 범위 재검토 → 총비용 시뮬레이션)으로 각 경로의 장단점을 한 줄씩 부기한다.</li>
+<li style="margin-bottom:0;"><b>alt:</b> 앱 개발 견적 초과 시 대응 경로 — MVP 방식 vs 예산 조정 분기 다이어그램</li>
+</ul>
 </td></tr>
 </table>
 <h2 id="같은-조건에서-비교하면-판단은-따라옵니다">같은 조건에서 비교하면 판단은 따라옵니다</h2>
 <p>앱 개발 견적이 업체마다 다른 건 당연한 일입니다. 포함 범위가 다르고, 같은 설명을 다르게 해석하니까요. 중요한 건 그 차이에 당황하는 게 아니라, 비교 가능한 조건을 먼저 만드는 겁니다.</p>
-<p>요구사항을 정리해서 동일하게 전달하고, 포함 범위를 맞춘 뒤에 금액을 비교하세요. 그래야 "왜 이 업체가 더 비싼지"가 보이고, 예산을 조정할지 범위를 좁힐지 판단을 내릴 수 있습니다. 혼자서 이 과정이 어렵다면 <a href="https://www.wishket.com/project/create/?utm_source=blog_webflow&amp;utm_medium=inline_cta&amp;utm_campaign=260405_app-development-quote-comparison-guide">위시켓</a>에 프로젝트를 등록해 보세요. 매니저가 요구사항 정리부터 견적 비교, 계약까지 함께 진행하기 때문에 비교 가능한 구조 안에서 판단할 수 있습니다.</p>
+<p>요구사항을 정리해서 동일하게 전달하고, 포함 범위를 맞춘 뒤에 금액을 비교하세요. 그래야 "왜 이 업체가 더 비싼지"가 보이고, 예산을 조정할지 범위를 좁힐지 판단을 내릴 수 있습니다. 혼자서 이 과정이 어렵다면 <a href="https://www.wishket.com/project/create/?utm_source=blog_webflow&amp;utm_medium=inline_cta&amp;utm_campaign=260406_app-development-quote-comparison-guide">위시켓</a>에 프로젝트를 등록해 보세요. 매니저가 요구사항 정리부터 견적 비교, 계약까지 함께 진행하기 때문에 비교 가능한 구조 안에서 판단할 수 있습니다.</p>
 
-  <div style="background:linear-gradient(135deg,#1A8CB4 0%,#26B2E2 100%);border-radius:14px;padding:32px 30px;color:#fff;margin:40px 0 0;">
+  <div style="background:linear-gradient(135deg,#5E9ADE 0%,#7BB2E8 100%);border-radius:16px;padding:32px 30px;color:#fff;margin:40px 0 0;">
 <div style="font-size:12px;font-weight:600;letter-spacing:0.8px;opacity:0.75;margin-bottom:10px;text-transform:uppercase;">다음 단계</div>
 <h3 style="font-size:20px;font-weight:800;line-height:1.45;margin-bottom:20px;color:#fff;letter-spacing:-0.3px;">견적서를 이미 받으셨나요,
 아직 준비 중이신가요?</h3>
-<div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;"><div style="background:rgba(255,255,255,0.12);border-radius:8px;padding:14px 16px;font-size:14.5px;line-height:1.65;"><span style="font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;">이미 견적서가 있다면</span>받은 견적서의 항목이 같은 기준인지 확인하는 것이 먼저입니다. 위시켓 매니저가 견적 범위 검토와 조건 조율을 도와드립니다.</div>
-<div style="background:rgba(255,255,255,0.12);border-radius:8px;padding:14px 16px;font-size:14.5px;line-height:1.65;"><span style="font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;">아직 견적을 받지 않았다면</span>기능 목록을 먼저 정리한 뒤 등록하세요. 동일 조건으로 비교 가능한 견적을 여러 개발사로부터 받을 수 있습니다.</div></div><a href="https://www.wishket.com/project/create/?utm_source=blog_webflow&amp;utm_medium=cta_banner&amp;utm_campaign=260405_app-development-quote-comparison-guide" style="display:inline-block;background:#fff;color:#26B2E2;font-size:15px;font-weight:800;padding:13px 28px;border-radius:8px;text-decoration:none;">프로젝트 등록하고 매니저 상담받기</a>
+<div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;"><div style="background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px;font-size:14.5px;line-height:1.65;"><span style="font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;">이미 견적서가 있다면</span>받은 견적의 포함 항목이 같은 기준인지 확인하는 것이 먼저입니다. 위시켓 매니저가 견적 범위 검토와 조건 조율을 도와드립니다.</div>
+<div style="background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px;font-size:14.5px;line-height:1.65;"><span style="font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;">아직 견적을 받지 않았다면</span>기능 목록을 먼저 정리한 뒤 등록하세요. 동일 조건으로 비교 가능한 견적을 여러 개발사로부터 받을 수 있습니다.</div></div><div style="text-align:center;"><a href="https://www.wishket.com/project/create/?utm_source=blog_webflow&amp;utm_medium=cta_banner&amp;utm_campaign=260406_app-development-quote-comparison-guide" style="display:inline-block;background:#fff;color:#2477F3;font-size:15px;font-weight:800;padding:13px 28px;border-radius:10px;text-decoration:none;">프로젝트 등록하고 매니저 상담받기</a></div>
 </div>
 
   <div class="related-section">
@@ -337,20 +310,20 @@
   <h2>자주 묻는 질문</h2>
 <div class="faq-list">
 <div class="faq-item">
-  <div class="faq-q"><span class="q-mark">Q.</span></div>
-  <div class="faq-a"></div>
+  <div class="faq-q"><span class="q-mark">Q.</span>포함 범위를 맞췄는데도 업체마다 개발비 차이가 크다면 어디를 봐야 하나요?</div>
+  <div class="faq-a">포함 항목을 맞춰도 개발비가 다르다면 투입 인력 구성과 기간을 확인하세요. 시니어 2명이 60일을 잡는 견적과 주니어 3명이 90일을 잡는 견적은 금액뿐 아니라 결과물 품질과 리스크도 다릅니다. 업체에 &#x27;투입 인원 역할별 구성과 예상 기간&#x27;을 서면으로 요청하면 차이의 이유가 구체적으로 보입니다. 시니어 개발자 1인 월 인건비는 500만~800만 원 수준으로, 이 기준으로 단가 합리성을 대략 가늠할 수 있습니다.</div>
 </div>
 <div class="faq-item">
-  <div class="faq-q"><span class="q-mark">Q.</span></div>
-  <div class="faq-a"></div>
+  <div class="faq-q"><span class="q-mark">Q.</span>기획이 없는 상태에서 견적을 요청해도 정확한 금액을 받을 수 있나요?</div>
+  <div class="faq-a">기획서 없이도 견적은 나오지만, 업체마다 다른 가정으로 산정하기 때문에 비교 자체가 성립하지 않습니다. 화면 수와 핵심 기능 목록을 A4 한 장으로 정리해 동일하게 전달하는 것이 최소 조건입니다. 와이어프레임 수준의 화면 설계가 있으면 견적 정확도가 올라가고 계약 후 범위 분쟁이 생길 가능성도 줄어듭니다. 요구사항 정리가 어렵다면 위시켓 매니저와 함께 목록을 잡는 것이 현실적인 방법입니다.</div>
 </div>
 <div class="faq-item">
-  <div class="faq-q"><span class="q-mark">Q.</span></div>
-  <div class="faq-a"></div>
+  <div class="faq-q"><span class="q-mark">Q.</span>MVP로 범위를 좁히면 나중에 2차 개발 비용이 더 늘어나지 않나요?</div>
+  <div class="faq-a">처음 설계가 잘 돼 있으면 추가 비용이 최소화되지만, 확장을 고려하지 않고 만들면 코드 재작업이 생겨 1.5~2배 비용이 드는 사례도 있습니다. MVP를 진행할 때는 2차에 붙일 기능을 업체와 미리 공유하고 설계 단계부터 반영해달라고 요청하는 것이 핵심입니다. 1차 견적에 &#x27;확장성 고려&#x27; 요청을 명시하면 추가 비용 없이 대응 가능한 경우가 많습니다.</div>
 </div>
 <div class="faq-item">
-  <div class="faq-q"><span class="q-mark">Q.</span></div>
-  <div class="faq-a"></div>
+  <div class="faq-q"><span class="q-mark">Q.</span>Android·iOS 동시 개발과 한 플랫폼만 개발할 때 비용 차이가 얼마나 나나요?</div>
+  <div class="faq-a">네이티브 개발로 두 플랫폼을 동시에 진행하면 비용이 1.5~1.8배 수준으로 올라갑니다. Flutter나 React Native 같은 크로스플랫폼 방식을 쓰면 단일 코드베이스로 양쪽을 커버해 단일 플랫폼 대비 1.2~1.4배 수준에서 해결되는 경우가 많습니다. 다만 카메라·블루투스 같은 하드웨어 기능을 집중 활용하는 앱이라면 네이티브가 적합할 수 있어, 서비스 성격에 따라 선택이 달라집니다.</div>
 </div>
 </div>
 
@@ -359,7 +332,7 @@
     <table style="width:100%;border-collapse:collapse;margin:16px 0;">
 <tr>
   <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">써머리</td>
-  <td style="border:1px solid #E2E8F0;padding:8px 12px;">금액 전에 포함 범위를 맞춰야 견적 비교가 됩니다</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">견적 금액 전에 포함 범위를 먼저 맞춰야 비교가 됩니다</td>
 </tr>
 <tr>
   <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">slug</td>
@@ -367,7 +340,7 @@
 </tr>
 <tr>
   <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">날짜</td>
-  <td style="border:1px solid #E2E8F0;padding:8px 12px;">2026-04-05</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">2026-04-06</td>
 </tr>
 <tr>
   <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">카테고리</td>
@@ -379,7 +352,7 @@
 </tr>
 <tr>
   <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">메타 디스크립션</td>
-  <td style="border:1px solid #E2E8F0;padding:8px 12px;">앱 개발 견적이 업체마다 2~5배 차이 나는 건 포함 범위가 다르기 때문입니다. 기획·디자인·서버 포함 여부를 먼저 맞추면 비교 가능한 견적을 받을 수 있고, 위시켓 데이터 기준 예산 중앙값은 2,000만 원입니다.</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">앱 개발 견적이 업체마다 2~3배 차이 나는 건 기획·디자인·서버 포함 범위가 다르기 때문입니다. 위시켓 데이터 1,054건 기준 예산 중앙값은 2,000만 원, 하위 25%는 800만 원입니다.</td>
 </tr>
 <tr>
   <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">Author</td>
@@ -387,14 +360,27 @@
 </tr>
 <tr>
   <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">TLDR</td>
-  <td style="border:1px solid #E2E8F0;padding:8px 12px;">앱 개발 견적이 업체마다 2~3배 차이 나는 이유는 기획·디자인·서버 등 포함 범위가 다르기 때문입니다. 위시켓 데이터 기준 앱 개발 예산의 중앙값은 2,000만 원이지만, 포함 범위에 따라 하위 25%는 800만 원, 상위 25%는 4,000만 원까지 벌어집니다. 모든 업체에 동일한 요구사항 문서를 전달해 같은 조건의 견적을 먼저 만들어야 비교와 판단이 가능합니다.</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">앱 개발 견적이 업체마다 2~3배씩 차이 나는 건 포함 범위가 다르기 때문입니다. 기획·디자인·서버 포함 여부에 따라 같은 앱이라도 전혀 다른 프로젝트가 되거든요. 금액을 비교하기 전에 주요 화면 목록과 핵심 기능을 정리해 모든 업체에 동일하게 전달하면, 같은 조건의 견적을 받을 수 있고 판단이 따라옵니다.</td>
 </tr>
 </table>
   </div>
 
+  <table class="guide-box" style="width:100%;border:1px solid #D1D5DB;border-collapse:collapse;margin:20px 0;">
+<tr><td style="background:#F9FAFB;padding:16px 20px;border:1px solid #D1D5DB;">
+<p style="margin:0 0 10px 0;font-weight:700;font-size:16px;">🖼 썸네일 제작 가이드</p>
+<p style="margin:0 0 4px 0;"><b>스타일:</b> 단색 배경 + 텍스트</p>
+<p style="margin:0 0 4px 0;"><b>배경색:</b> #1A3A5C</p>
+<p style="margin:0 0 4px 0;"><b>제목 텍스트:</b></p>
+<p style="margin:0 0 4px 0;">　1줄: 앱 개발 견적</p>
+<p style="margin:0 0 4px 0;">　2줄: 비교 기준 가이드</p>
+<p style="margin:0 0 4px 0;"><b>장식 요소:</b> geometric_blocks</p>
+<p style="margin:0;"><b>로고:</b> wishket 로고 좌상단</p>
+</td></tr>
+</table>
+
   <h3 style="font-size:18px;font-weight:600;margin:32px 0 12px 0;">Embed 코드 (붙여넣기용)</h3>
-<div style="margin:16px 0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:14px;font-weight:600;color:#374151;">왜 업체마다 견적이 이렇게 다를까? — 변수 · 포함하면 · 미포함하면</span><button onclick="copyCodeBlock(this)" style="background:#26B2E2;color:#fff;border:none;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">복사</button></div><pre style="background:#1E293B;color:#E2E8F0;padding:12px;border-radius:8px;overflow-x:auto;font-size:11px;line-height:1.4;white-space:pre-wrap;max-height:200px;overflow-y:auto;">&lt;style&gt;
-.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:1.5rem 0;border:1px solid #DFDFE5;border-radius:8px;background:#fff}
+<div style="margin:16px 0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:14px;font-weight:600;color:#374151;">왜 업체마다 견적이 이렇게 다를까? — 변수 · 포함하면 · 미포함하면</span><button onclick="copyCodeBlock(this)" style="background:#2477F3;color:#fff;border:none;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">복사</button></div><pre style="background:#1E293B;color:#E2E8F0;padding:12px;border-radius:8px;overflow-x:auto;font-size:11px;line-height:1.4;white-space:pre-wrap;max-height:200px;overflow-y:auto;">&lt;style&gt;
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:1.5rem 0;border:1px solid #E5E7EB;border-radius:12px;background:#fff}
 table.geo{width:100%;border-collapse:collapse;border-spacing:0;font-size:14px;line-height:1.6;table-layout:fixed}
 table.geo caption{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
 table.geo thead th{padding:12px 18px;font-size:12.5px;font-weight:700;letter-spacing:.01em;text-align:left;border-bottom:1px solid #D1D1D9;background:#F6F6F9;vertical-align:bottom}
@@ -408,13 +394,13 @@ table.geo tfoot td{padding:9px 18px;font-size:12px;color:#9CA3AF;border-top:1px 
 table.geo tfoot time{font-weight:500}
 @media(max-width:640px){table.geo{table-layout:auto}table.geo thead th,table.geo tbody th[scope=row],table.geo tbody td{padding:11px 14px;font-size:13px}table.geo tfoot td{padding:8px 14px}}
 &lt;/style&gt;
-&lt;div class=&quot;tbl-wrap&quot;&gt;&lt;table class=&quot;geo&quot;&gt;&lt;caption&gt;왜 업체마다 견적이 이렇게 다를까? — 변수 · 포함하면 · 미포함하면&lt;/caption&gt;&lt;colgroup&gt;&lt;col style=&quot;width:22%&quot;/&gt;&lt;col style=&quot;width:39%&quot;/&gt;&lt;col style=&quot;width:39%&quot;/&gt;&lt;/colgroup&gt;&lt;thead&gt;&lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;변수&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;포함하면&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;미포함하면&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;기획&lt;/th&gt;&lt;td&gt;화면 설계·기능 정의 포함&lt;/td&gt;&lt;td&gt;클라이언트가 직접 정리하거나 별도 의뢰&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;UI/UX 디자인&lt;/th&gt;&lt;td&gt;디자인 시안 제작 포함&lt;/td&gt;&lt;td&gt;개발만 진행, 디자인은 별도&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;서버 구축&lt;/th&gt;&lt;td&gt;백엔드·DB 세팅 포함&lt;/td&gt;&lt;td&gt;클라이언트가 별도 준비&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;관리자 페이지&lt;/th&gt;&lt;td&gt;콘텐츠·회원 관리 화면 포함&lt;/td&gt;&lt;td&gt;직접 DB 관리하거나 추후 개발&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;QA(테스트)&lt;/th&gt;&lt;td&gt;체계적 테스트 포함&lt;/td&gt;&lt;td&gt;기능 단위 확인만&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;tfoot&gt;&lt;tr&gt;&lt;td colspan=&quot;3&quot;&gt;&lt;time datetime=&quot;2026-04&quot;&gt;2026년 4월&lt;/time&gt; 기준 · 실제 조건에 따라 달라질 수 있습니다&lt;/td&gt;&lt;/tr&gt;&lt;/tfoot&gt;&lt;/table&gt;&lt;/div&gt;</pre></div>
-<div style="margin:16px 0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:14px;font-weight:600;color:#374151;">CTA 배너</span><button onclick="copyCodeBlock(this)" style="background:#26B2E2;color:#fff;border:none;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">복사</button></div><pre style="background:#1E293B;color:#E2E8F0;padding:12px;border-radius:8px;overflow-x:auto;font-size:11px;line-height:1.4;white-space:pre-wrap;max-height:200px;overflow-y:auto;">&lt;div style=&quot;background:linear-gradient(135deg,#1A8CB4 0%,#26B2E2 100%);border-radius:14px;padding:32px 30px;color:#fff;margin:40px 0 0;&quot;&gt;
+&lt;div class=&quot;tbl-wrap&quot;&gt;&lt;table class=&quot;geo&quot;&gt;&lt;caption&gt;왜 업체마다 견적이 이렇게 다를까? — 변수 · 포함하면 · 미포함하면&lt;/caption&gt;&lt;colgroup&gt;&lt;col style=&quot;width:22%&quot;/&gt;&lt;col style=&quot;width:39%&quot;/&gt;&lt;col style=&quot;width:39%&quot;/&gt;&lt;/colgroup&gt;&lt;thead&gt;&lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;변수&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;포함하면&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;미포함하면&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;기획&lt;/th&gt;&lt;td&gt;화면 설계·기능 정의 포함&lt;/td&gt;&lt;td&gt;클라이언트가 직접 정리하거나 별도 의뢰&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;UI/UX 디자인&lt;/th&gt;&lt;td&gt;디자인 시안 제작 포함&lt;/td&gt;&lt;td&gt;개발만 진행, 디자인은 별도&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;서버 구축&lt;/th&gt;&lt;td&gt;백엔드·DB 세팅 포함&lt;/td&gt;&lt;td&gt;클라이언트가 별도 준비&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;관리자 페이지&lt;/th&gt;&lt;td&gt;콘텐츠·회원 관리 화면 포함&lt;/td&gt;&lt;td&gt;직접 DB 관리하거나 추후 개발&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;QA(테스트)&lt;/th&gt;&lt;td&gt;체계적 테스트 포함&lt;/td&gt;&lt;td&gt;기능 단위 확인만&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;</pre></div>
+<div style="margin:16px 0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:14px;font-weight:600;color:#374151;">CTA 배너</span><button onclick="copyCodeBlock(this)" style="background:#2477F3;color:#fff;border:none;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">복사</button></div><pre style="background:#1E293B;color:#E2E8F0;padding:12px;border-radius:8px;overflow-x:auto;font-size:11px;line-height:1.4;white-space:pre-wrap;max-height:200px;overflow-y:auto;">&lt;div style=&quot;background:linear-gradient(135deg,#5E9ADE 0%,#7BB2E8 100%);border-radius:16px;padding:32px 30px;color:#fff;margin:40px 0 0;&quot;&gt;
 &lt;div style=&quot;font-size:12px;font-weight:600;letter-spacing:0.8px;opacity:0.75;margin-bottom:10px;text-transform:uppercase;&quot;&gt;다음 단계&lt;/div&gt;
 &lt;h3 style=&quot;font-size:20px;font-weight:800;line-height:1.45;margin-bottom:20px;color:#fff;letter-spacing:-0.3px;&quot;&gt;견적서를 이미 받으셨나요,
 아직 준비 중이신가요?&lt;/h3&gt;
-&lt;div style=&quot;display:flex;flex-direction:column;gap:12px;margin-bottom:24px;&quot;&gt;&lt;div style=&quot;background:rgba(255,255,255,0.12);border-radius:8px;padding:14px 16px;font-size:14.5px;line-height:1.65;&quot;&gt;&lt;span style=&quot;font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;&quot;&gt;이미 견적서가 있다면&lt;/span&gt;받은 견적서의 항목이 같은 기준인지 확인하는 것이 먼저입니다. 위시켓 매니저가 견적 범위 검토와 조건 조율을 도와드립니다.&lt;/div&gt;
-&lt;div style=&quot;background:rgba(255,255,255,0.12);border-radius:8px;padding:14px 16px;font-size:14.5px;line-height:1.65;&quot;&gt;&lt;span style=&quot;font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;&quot;&gt;아직 견적을 받지 않았다면&lt;/span&gt;기능 목록을 먼저 정리한 뒤 등록하세요. 동일 조건으로 비교 가능한 견적을 여러 개발사로부터 받을 수 있습니다.&lt;/div&gt;&lt;/div&gt;&lt;a href=&quot;https://www.wishket.com/project/create/?utm_source=blog_webflow&amp;amp;utm_medium=cta_banner&amp;amp;utm_campaign=260405_app-development-quote-comparison-guide&quot; style=&quot;display:inline-block;background:#fff;color:#26B2E2;font-size:15px;font-weight:800;padding:13px 28px;border-radius:8px;text-decoration:none;&quot;&gt;프로젝트 등록하고 매니저 상담받기&lt;/a&gt;
+&lt;div style=&quot;display:flex;flex-direction:column;gap:12px;margin-bottom:24px;&quot;&gt;&lt;div style=&quot;background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px;font-size:14.5px;line-height:1.65;&quot;&gt;&lt;span style=&quot;font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;&quot;&gt;이미 견적서가 있다면&lt;/span&gt;받은 견적의 포함 항목이 같은 기준인지 확인하는 것이 먼저입니다. 위시켓 매니저가 견적 범위 검토와 조건 조율을 도와드립니다.&lt;/div&gt;
+&lt;div style=&quot;background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px;font-size:14.5px;line-height:1.65;&quot;&gt;&lt;span style=&quot;font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;&quot;&gt;아직 견적을 받지 않았다면&lt;/span&gt;기능 목록을 먼저 정리한 뒤 등록하세요. 동일 조건으로 비교 가능한 견적을 여러 개발사로부터 받을 수 있습니다.&lt;/div&gt;&lt;/div&gt;&lt;div style=&quot;text-align:center;&quot;&gt;&lt;a href=&quot;https://www.wishket.com/project/create/?utm_source=blog_webflow&amp;amp;utm_medium=cta_banner&amp;amp;utm_campaign=260406_app-development-quote-comparison-guide&quot; style=&quot;display:inline-block;background:#fff;color:#2477F3;font-size:15px;font-weight:800;padding:13px 28px;border-radius:10px;text-decoration:none;&quot;&gt;프로젝트 등록하고 매니저 상담받기&lt;/a&gt;&lt;/div&gt;
 &lt;/div&gt;</pre></div>
 
 
@@ -424,9 +410,9 @@ table.geo tfoot time{font-weight:500}
   &quot;@context&quot;: &quot;https://schema.org&quot;,
   &quot;@type&quot;: &quot;BlogPosting&quot;,
   &quot;headline&quot;: &quot;앱 개발 견적, 업체마다 다른 이유와 비교 기준&quot;,
-  &quot;description&quot;: &quot;앱 개발 견적이 업체마다 2~5배 차이 나는 건 포함 범위가 다르기 때문입니다. 기획·디자인·서버 포함 여부를 먼저 맞추면 비교 가능한 견적을 받을 수 있고, 위시켓 데이터 기준 예산 중앙값은 2,000만 원입니다.&quot;,
-  &quot;datePublished&quot;: &quot;2026-04-05&quot;,
-  &quot;dateModified&quot;: &quot;2026-04-05&quot;,
+  &quot;description&quot;: &quot;앱 개발 견적이 업체마다 2~3배 차이 나는 건 기획·디자인·서버 포함 범위가 다르기 때문입니다. 위시켓 데이터 1,054건 기준 예산 중앙값은 2,000만 원, 하위 25%는 800만 원입니다.&quot;,
+  &quot;datePublished&quot;: &quot;2026-04-06&quot;,
+  &quot;dateModified&quot;: &quot;2026-04-06&quot;,
   &quot;author&quot;: {
     &quot;@type&quot;: &quot;Person&quot;,
     &quot;name&quot;: &quot;조가은&quot;
@@ -477,34 +463,34 @@ table.geo tfoot time{font-weight:500}
   &quot;mainEntity&quot;: [
     {
       &quot;@type&quot;: &quot;Question&quot;,
-      &quot;name&quot;: &quot;&quot;,
+      &quot;name&quot;: &quot;포함 범위를 맞췄는데도 업체마다 개발비 차이가 크다면 어디를 봐야 하나요?&quot;,
       &quot;acceptedAnswer&quot;: {
         &quot;@type&quot;: &quot;Answer&quot;,
-        &quot;text&quot;: &quot;&quot;
+        &quot;text&quot;: &quot;포함 항목을 맞춰도 개발비가 다르다면 투입 인력 구성과 기간을 확인하세요. 시니어 2명이 60일을 잡는 견적과 주니어 3명이 90일을 잡는 견적은 금액뿐 아니라 결과물 품질과 리스크도 다릅니다. 업체에 &#x27;투입 인원 역할별 구성과 예상 기간&#x27;을 서면으로 요청하면 차이의 이유가 구체적으로 보입니다. 시니어 개발자 1인 월 인건비는 500만~800만 원 수준으로, 이 기준으로 단가 합리성을 대략 가늠할 수 있습니다.&quot;
       }
     },
     {
       &quot;@type&quot;: &quot;Question&quot;,
-      &quot;name&quot;: &quot;&quot;,
+      &quot;name&quot;: &quot;기획이 없는 상태에서 견적을 요청해도 정확한 금액을 받을 수 있나요?&quot;,
       &quot;acceptedAnswer&quot;: {
         &quot;@type&quot;: &quot;Answer&quot;,
-        &quot;text&quot;: &quot;&quot;
+        &quot;text&quot;: &quot;기획서 없이도 견적은 나오지만, 업체마다 다른 가정으로 산정하기 때문에 비교 자체가 성립하지 않습니다. 화면 수와 핵심 기능 목록을 A4 한 장으로 정리해 동일하게 전달하는 것이 최소 조건입니다. 와이어프레임 수준의 화면 설계가 있으면 견적 정확도가 올라가고 계약 후 범위 분쟁이 생길 가능성도 줄어듭니다. 요구사항 정리가 어렵다면 위시켓 매니저와 함께 목록을 잡는 것이 현실적인 방법입니다.&quot;
       }
     },
     {
       &quot;@type&quot;: &quot;Question&quot;,
-      &quot;name&quot;: &quot;&quot;,
+      &quot;name&quot;: &quot;MVP로 범위를 좁히면 나중에 2차 개발 비용이 더 늘어나지 않나요?&quot;,
       &quot;acceptedAnswer&quot;: {
         &quot;@type&quot;: &quot;Answer&quot;,
-        &quot;text&quot;: &quot;&quot;
+        &quot;text&quot;: &quot;처음 설계가 잘 돼 있으면 추가 비용이 최소화되지만, 확장을 고려하지 않고 만들면 코드 재작업이 생겨 1.5~2배 비용이 드는 사례도 있습니다. MVP를 진행할 때는 2차에 붙일 기능을 업체와 미리 공유하고 설계 단계부터 반영해달라고 요청하는 것이 핵심입니다. 1차 견적에 &#x27;확장성 고려&#x27; 요청을 명시하면 추가 비용 없이 대응 가능한 경우가 많습니다.&quot;
       }
     },
     {
       &quot;@type&quot;: &quot;Question&quot;,
-      &quot;name&quot;: &quot;&quot;,
+      &quot;name&quot;: &quot;Android·iOS 동시 개발과 한 플랫폼만 개발할 때 비용 차이가 얼마나 나나요?&quot;,
       &quot;acceptedAnswer&quot;: {
         &quot;@type&quot;: &quot;Answer&quot;,
-        &quot;text&quot;: &quot;&quot;
+        &quot;text&quot;: &quot;네이티브 개발로 두 플랫폼을 동시에 진행하면 비용이 1.5~1.8배 수준으로 올라갑니다. Flutter나 React Native 같은 크로스플랫폼 방식을 쓰면 단일 코드베이스로 양쪽을 커버해 단일 플랫폼 대비 1.2~1.4배 수준에서 해결되는 경우가 많습니다. 다만 카메라·블루투스 같은 하드웨어 기능을 집중 활용하는 앱이라면 네이티브가 적합할 수 있어, 서비스 성격에 따라 선택이 달라집니다.&quot;
       }
     }
   ]
@@ -519,10 +505,14 @@ var content = document.getElementById('cms-content');
 var status = document.getElementById('edit-status');
 var saveTimer;
 var STORAGE_KEY = 'wishket_draft_' + document.title.replace(/[^a-zA-Z0-9가-힣]/g, '_').substring(0, 60);
+var VERSION_KEY = STORAGE_KEY + '_ver';
+var CURRENT_VERSION = '2026-04-06';
 
 window.addEventListener('load', function() {
   var saved = localStorage.getItem(STORAGE_KEY);
-  if (saved) { content.innerHTML = saved; }
+  var savedVer = localStorage.getItem(VERSION_KEY);
+  if (saved && savedVer === CURRENT_VERSION) { content.innerHTML = saved; }
+  else { localStorage.removeItem(STORAGE_KEY); }
   attachLinkHandlers();
 });
 
@@ -532,6 +522,7 @@ content.addEventListener('input', function() {
   clearTimeout(saveTimer);
   saveTimer = setTimeout(function() {
     localStorage.setItem(STORAGE_KEY, content.innerHTML);
+    localStorage.setItem(VERSION_KEY, CURRENT_VERSION);
     status.textContent = '자동저장됨';
     status.className = '';
   }, 3000);
