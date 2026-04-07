@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>웹사이트 외주 4가지 방식, 내 상황에 맞는 선택법</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+    font-size: 17px;
+    line-height: 2.0;
+    color: #1a1a1a;
+    background: #fff;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Toolbar (편집용) ── */
+  #toolbar {
+    position: fixed; top: 0; left: 0; right: 0;
+    background: #1E293B; color: #fff;
+    padding: 10px 20px;
+    display: flex; align-items: center; gap: 16px;
+    z-index: 9999; font-size: 14px;
+  }
+  #toolbar button {
+    background: #2477F3; color: #fff; border: none;
+    padding: 6px 16px; border-radius: 6px; cursor: pointer;
+    font-size: 13px; font-weight: 600;
+  }
+  #toolbar button:hover { background: #1B5FD1; }
+  #edit-status { color: #94A3B8; font-size: 12px; }
+  #edit-status.modified { color: #FBBF24; }
+
+  /* ── Layout ── */
+  .page-wrap {
+    max-width: 720px;
+    margin: 80px auto 80px;
+    padding: 0 20px;
+  }
+
+  /* ── Header ── */
+  .article-header { margin-bottom: 32px; }
+  .article-category {
+    font-size: 12px; font-weight: 600; color: #2477F3;
+    letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 12px;
+  }
+  h1 {
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 800; line-height: 1.35;
+    letter-spacing: -0.5px; color: #0d0d0d;
+    margin: 0 0 16px 0;
+  }
+  .article-meta { font-size: 13px; color: #999; }
+
+  /* ── Typography ── */
+  h2 {
+    font-size: 21px; font-weight: 700; color: #2477F3;
+    margin: 48px 0 16px 0; padding-bottom: 10px;
+    border-bottom: 2px solid #E5E7EB;
+    letter-spacing: -0.3px;
+  }
+  h3 {
+    font-size: 17px; font-weight: 700; color: #2477F3;
+    margin: 28px 0 10px 0;
+  }
+  p { margin: 0 0 30px 0; }
+  a { color: #2477F3; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  strong { font-weight: 700; }
+
+  /* ── Lists ── */
+  ul, ol { margin: 0 0 30px 0; padding-left: 22px; }
+  li { margin-bottom: 6px; line-height: 2.5; }
+  li::marker { color: #999; }
+
+  hr { border: none; border-top: 1px solid #e8e8e8; margin: 40px 0; }
+
+  /* ── GEO Table ── */
+  .tbl-wrap {
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    margin: 30px 0; border: 1px solid #e0e0e5;
+    border-radius: 12px; background: #fff;
+  }
+  table.geo {
+    width: 100%; border-collapse: collapse; border-spacing: 0;
+    font-size: 14.5px; line-height: 1.65; table-layout: fixed;
+  }
+  table.geo caption {
+    position: absolute; width: 1px; height: 1px;
+    overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap;
+  }
+  table.geo thead th {
+    padding: 12px 18px; font-size: 12.5px; font-weight: 700;
+    letter-spacing: 0.01em; text-align: left;
+    border-bottom: 1px solid #d1d1d9; background: #f6f6f9; vertical-align: bottom;
+  }
+  table.geo thead th:first-child { color: #82828e; border-right: 1px solid #d1d1d9; }
+  table.geo thead th:not(:first-child) { color: #1a1a23; }
+  table.geo tbody th[scope="row"] {
+    padding: 14px 18px; font-size: 14px; font-weight: 600; color: #1a1a23;
+    text-align: left; border-bottom: 1px solid #ececf0; border-right: 1px solid #ececf0;
+    background: #fff; vertical-align: top; word-break: keep-all;
+  }
+  table.geo tbody td {
+    padding: 14px 18px; color: #3a3a47;
+    border-bottom: 1px solid #ececf0; vertical-align: top; word-break: keep-all;
+  }
+  table.geo tbody tr:nth-child(even) td,
+  table.geo tbody tr:nth-child(even) th[scope="row"] { background: #f9f9fb; }
+  table.geo tbody tr:hover td,
+  table.geo tbody tr:hover th[scope="row"] { background: #f0f0f5; }
+  table.geo tfoot td {
+    padding: 9px 18px; font-size: 12px; color: #9ca3af;
+    border-top: 1px solid #ececf0; background: #f9f9fb;
+  }
+
+  /* ── TLDR (핵심 요약) ── */
+  .summary-box {
+    background: #F5F5F5;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 30px;
+  }
+  .summary-box p:first-child {
+    font-size: 13px; font-weight: 700; color: #1A1A1A;
+    margin-bottom: 8px; letter-spacing: 0.3px;
+  }
+  .summary-box p:not(:first-child) {
+    font-size: 15.5px; color: #1A1A1A; line-height: 1.75;
+  }
+  .summary-box p:last-child { margin-bottom: 0; }
+
+  /* ── FAQ ── */
+  .faq-list {
+    display: flex; flex-direction: column; gap: 0;
+    margin: 20px 0 24px; border: 1px solid #E5E7EB;
+    border-radius: 14px; overflow: hidden;
+  }
+  .faq-item { border-bottom: 1px solid #ebebeb; background: #fff; }
+  .faq-item:last-child { border-bottom: none; }
+  .faq-q {
+    font-size: 15px; font-weight: 700; color: #0d0d0d;
+    padding: 18px 20px 8px; display: flex; gap: 10px;
+  }
+  .faq-q .q-mark { color: #2477F3; font-weight: 800; font-size: 16px; flex-shrink: 0; }
+  .faq-a {
+    font-size: 14.5px; color: #444; line-height: 1.75;
+    padding: 0 20px 18px 44px;
+  }
+
+  /* ── Related ── */
+  .related-section { margin: 32px 0; }
+  .related-section h3 { font-size: 16px; font-weight: 700; margin-bottom: 12px; }
+  .related-section ul { list-style: none; padding: 0; }
+  .related-section li {
+    padding: 10px 0; border-bottom: 1px solid #f0f0f0;
+  }
+  .related-section li:last-child { border-bottom: none; }
+  .related-section a { font-size: 15px; font-weight: 500; }
+
+  /* ── Image guide box ── */
+  .image-guide, table.guide-box {
+    background: #FAFAFA; border: 2px solid #E5E7EB;
+    border-radius: 12px; padding: 16px 24px; margin: 30px -20px;
+  }
+
+  /* ── CMS meta area ── */
+  .cms-meta-area { background: #f9fafb; border-radius: 12px; padding: 20px; margin-top: 40px; }
+
+  /* ── Contenteditable ── */
+  [contenteditable="true"]:focus { outline: 2px solid #2477F3; outline-offset: 2px; border-radius: 4px; }
+  [contenteditable="true"]:hover { outline: 1px dashed #CBD5E1; outline-offset: 2px; border-radius: 4px; }
+  [contenteditable="true"]:focus:hover { outline: 2px solid #2477F3; outline-offset: 2px; }
+
+  /* ── Responsive ── */
+  @media (max-width: 640px) {
+    .page-wrap { padding: 0 16px; margin-top: 60px; }
+    h1 { font-size: 22px; }
+    h2 { font-size: 19px; }
+    table.geo { table-layout: auto; }
+    table.geo thead th, table.geo tbody th[scope="row"], table.geo tbody td {
+      padding: 11px 14px; font-size: 13px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- toolbar -->
+<div id="toolbar">
+  <button id="copy-btn" onclick="copyContent()">본문 복사</button>
+  <span id="edit-status">저장됨</span>
+</div>
+
+<div class="page-wrap">
+
+  <div class="article-header">
+    <h1 contenteditable="true">웹사이트 외주 4가지 방식, 내 상황에 맞는 선택법</h1>
+    <div class="article-meta"><time datetime="2026-04-07">2026-04-07</time></div>
+  </div>
+
+  <div id="cms-content" contenteditable="true" style="outline:none;">
+
+  <div class="summary-box">
+<p>💡 핵심 요약</p>
+<p>웹사이트 외주 방식은 프리랜서 직접 고용, 개발사 계약, 플랫폼 경유, 노코드 툴 기반 구축까지 크게 네 가지로 나뉩니다. 방식마다 비용 규모가 다를 뿐 아니라 클라이언트가 직접 챙겨야 하는 역할의 양이 달라지기 때문에, 예산·기획 준비 정도·관리 여력 세 가지를 먼저 따져봐야 고를 수 있습니다. 방식 선택은 출발점일 뿐이고, 이후 요구사항 정리·파트너 탐색·계약·진행 관리까지 단계가 남아 있다는 점도 알고 시작하는 게 좋습니다.</p>
+</div>
+
+  <p>웹사이트를 만들어야 한다는 결론은 냈는데, 검색해보면 프리랜서, 에이전시, 노코드, 플랫폼 같은 단어가 한꺼번에 쏟아집니다. 어디서부터 비교해야 할지 기준이 없으니, 결국 가격이 낮은 쪽으로 손이 갑니다.</p>
+<p>그런데 방식마다 가격만 다른 게 아닙니다. 내가 직접 챙겨야 하는 역할의 양이 다르고, 문제가 생겼을 때 기댈 수 있는 구조가 다릅니다. 이 차이를 모르고 고르면 개발비보다 훨씬 큰 시간과 에너지를 잃게 됩니다.</p>
+<h2 id="웹사이트-외주에는-어떤-방식들이-있나요">웹사이트 외주에는 어떤 방식들이 있나요?</h2>
+<p>웹사이트 외주 방식은 크게 '누구에게 맡기느냐'와 '어떻게 연결하느냐' 두 축으로 나뉩니다. 여기에 노코드 툴 기반 구축까지 포함하면 선택지는 네 가지로 정리됩니다.</p>
+<div class="tbl-wrap"><table class="geo"><caption>웹사이트 외주에는 어떤 방식들이 있나요? — 방식 · 특징 · 클라이언트 관리 부담</caption><colgroup><col style="width:14%"/><col style="width:27%"/><col style="width:27%"/><col style="width:32%"/></colgroup><thead><tr><th scope="col">방식</th><th scope="col">특징</th><th scope="col">클라이언트 관리 부담</th><th scope="col">비용 규모</th></tr></thead><tbody><tr><th scope="row">프리랜서 직접 고용</th><td>개발자 1인에게 직접 의뢰. SNS나 지인 소개로 연결</td><td>높음 — 일정, 품질, 커뮤니케이션 전부 직접 관리</td><td>개발비 자체는 낮을 수 있음</td></tr><tr><th scope="row">개발사(에이전시) 계약</th><td>기획, 디자인, 개발팀이 함께 움직이는 구조</td><td>중간 — 팀 내 분업이 있지만 최종 검수는 클라이언트 몫</td><td>팀 구성비 포함, 상대적으로 높음</td></tr><tr><th scope="row">플랫폼 경유</th><td>위시켓 같은 IT 아웃소싱 플랫폼에서 매니저와 함께 진행</td><td>중간~낮음 — 견적 비교, 계약, 대금보호를 플랫폼이 지원</td><td>개발비 + 플랫폼 구조 비용</td></tr><tr><th scope="row">노코드 툴 기반 구축</th><td>워드프레스, Webflow 등 빌더 도구로 제작. 직접 하거나 전문 파트너에게 외주</td><td>도구에 따라 다름 — 직접 하면 높고, 외주하면 중간</td><td>가장 낮은 편</td></tr></tbody></table></div>
+<p>여기서 자주 혼동하는 부분이 있습니다. 프리랜서를 직접 찾아서 고용하는 것과 플랫폼을 통해 연결되는 것은 같은 프리랜서라도 계약 구조와 관리 지원이 완전히 다릅니다. 직접 고용하면 계약서 작성부터 대금 지급까지 전부 내가 챙겨야 하지만, 플랫폼 경유라면 표준계약서와 대금보호 같은 안전장치가 따라옵니다.</p>
+<p>노코드 방식도 마찬가지입니다. 반드시 직접 만드는 것만을 뜻하지 않습니다. 워드프레스나 Webflow 전문 프리랜서에게 외주를 주는 것도 하나의 방식입니다. 다만 이 경우 초기 비용은 낮지만 이후 커스터마이징이나 기능 확장에서 벽을 만날 수 있으니, 향후 계획까지 함께 따져보셔야 합니다.</p>
+<h2 id="어떤-상황에-어떤-방식이-맞나요">어떤 상황에 어떤 방식이 맞나요?</h2>
+<p>웹사이트 외주 방식을 고를 때 비용부터 보는 경우가 많은데, 비용보다 먼저 확인해야 할 것이 세 가지 있습니다. 예산 규모, 기획이 얼마나 정리되어 있는지, 그리고 내가 관리에 얼마나 시간을 쓸 수 있는지입니다.</p>
+<h3>예산이 500만 원 이하이고 기능이 단순한 경우</h3>
+<p>노코드 툴 기반이나 프리랜서 방식이 현실적입니다. 다만 프리랜서 방식은 일정과 품질을 내가 직접 확인해야 합니다. 관리할 여력이 없다면 노코드 전문 파트너에게 맡기는 편이 낫습니다.</p>
+<h3>예산이 1,000만 원 이상이고 기획이 어느 정도 잡혀 있는 경우</h3>
+<p>개발사 방식이 효율적입니다. 기획, 디자인, 개발이 팀으로 움직이니 분업이 가능합니다. 단, 에이전시라고 해서 품질이 보장되지는 않습니다. 내부 하도급 구조가 있는 곳도 있고, 영업 담당자와 실제 개발자가 다른 경우도 흔합니다. 포트폴리오와 유사 프로젝트 경험을 반드시 확인하세요.</p>
+<h3>예산은 어느 정도 있지만 관리에 시간을 쓰기 어려운 경우</h3>
+<p>플랫폼 경유 방식이 중간 선택지가 됩니다. 매니저가 견적 상담부터 계약까지 함께하기 때문에 혼자 모든 걸 챙기지 않아도 됩니다.</p>
+<p>위시켓에 등록된 웹사이트 신규 개발 프로젝트를 보면, 같은 웹사이트라도 프로젝트 성격에 따라 예산 범위가 크게 달라집니다. 2025년 기준 140건의 데이터에서, 하위 25%는 300만 원, 절반이 725만 원 이하, 상위 25%는 1,500만 원 이상이었습니다.</p>
+<div style="display:flex;flex-direction:column;gap:14px;margin:30px 0;">
+<div style="border:1px solid #E5E7EB;border-radius:14px;padding:18px 20px;background:#fff;">
+<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;">
+<span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;background:#e8f5e9;color:#2e7d32;">저가 사례</span>
+<span style="font-size:15.5px;font-weight:700;color:#0d0d0d;line-height:1.4;">웹빌더 기반 교육 정보 제공 웹사이트 개발</span>
+</div>
+<div style="font-size:20px;font-weight:800;color:#2477F3;margin-bottom:4px;">300만 원</div>
+<div style="font-size:12.5px;color:#999;margin-bottom:10px;">웹 · 14일 · 신규개발</div>
+<div style="font-size:14.5px;color:#444;line-height:2.0;">웹빌더 도구를 활용한 정보 제공 사이트. 기능이 단순하고 기간이 짧아 저비용 가능.</div>
+</div>
+<div style="border:1px solid #E5E7EB;border-radius:14px;padding:18px 20px;background:#fff;">
+<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;">
+<span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;background:#e3f2fd;color:#1565c0;">중가 사례</span>
+<span style="font-size:15.5px;font-weight:700;color:#0d0d0d;line-height:1.4;">기업 홈페이지 및 포트폴리오 웹사이트 구축</span>
+</div>
+<div style="font-size:20px;font-weight:800;color:#2477F3;margin-bottom:4px;">500만 원</div>
+<div style="font-size:12.5px;color:#999;margin-bottom:10px;">웹 · 30일 · 신규개발</div>
+<div style="font-size:14.5px;color:#444;line-height:2.0;">기업 소개와 포트폴리오 중심. 맞춤 디자인이 들어가면서 비용이 올라감.</div>
+</div>
+<div style="border:1px solid #E5E7EB;border-radius:14px;padding:18px 20px;background:#fff;">
+<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;">
+<span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;background:#fce4ec;color:#c62828;">고가 사례</span>
+<span style="font-size:15.5px;font-weight:700;color:#0d0d0d;line-height:1.4;">화장품 브랜드 공식 이커머스 웹사이트 구축</span>
+</div>
+<div style="font-size:20px;font-weight:800;color:#2477F3;margin-bottom:4px;">2,500만 원</div>
+<div style="font-size:12.5px;color:#999;margin-bottom:10px;">웹 · 60일 · 기획+디자인+개발 포함</div>
+<div style="font-size:14.5px;color:#444;line-height:2.0;">결제, 상품 관리, 회원 시스템까지 포함된 풀 구축. 기능 범위가 비용을 결정.</div>
+</div>
+</div>
+<p>웹빌더 기반 정보 사이트와 이커머스 풀 구축 사이에 8배 이상 차이가 납니다. <strong>방식보다 기능 범위와 기획 포함 여부가 비용을 결정합니다.</strong> 개발비가 낮아 보여도 관리에 쓰는 시간과 리스크를 합산하면 총비용이 역전되는 경우가 적지 않습니다.</p>
+<div style="background:#F0F6FF;border-left:3px solid #2E6BAA;border-radius:0 14px 14px 0;padding:18px 20px;margin:30px 0;">
+<div style="font-size:13px;font-weight:700;color:#1A1A1A;margin-bottom:10px;display:flex;align-items:center;gap:6px;">💡 위시켓 매니저 Tip</div>
+<div style="font-size:14.5px;color:#1A1A1A;line-height:2.0;"><span style="font-weight:700;color:#1A1A1A;">방식을 고르기 전:</span> 화면 목록(어떤 페이지가 필요한가)과 핵심 기능(회원가입, 결제, 게시판 등)을 먼저 나열해보세요. 이 두 가지만 있어도 방식별 비교가 훨씬 쉬워집니다.<br/><span style="font-weight:700;color:#1A1A1A;">견적 비교 시:</span> 3장의 견적서가 같은 범위를 기준으로 작성됐는지 확인하세요. 기획 포함 여부, 디자인 범위, 서버 구성이 다르면 비교 자체가 성립하지 않습니다.</div>
+</div>
+<h2 id="프리랜서의-관리-부담과-개발사의-비용-이-중간-어딘가가-있나요">프리랜서의 관리 부담과 개발사의 비용, 이 중간 어딘가가 있나요?</h2>
+<p>프리랜서는 개발비가 낮을 수 있지만 일정 관리와 품질 확인을 전부 내가 해야 합니다. 개발사는 팀이 있지만 예산이 부담됩니다. 이 사이에서 갈팡질팡하는 분이 많은데, 플랫폼 경유 방식이 그 중간 역할을 합니다.</p>
+<p>위시켓을 예로 들면, 프로젝트를 등록하면 매니저가 배정됩니다. 매니저는 요구사항을 정리하는 단계부터 견적 상담, 파트너 미팅, 계약까지 함께합니다. 법무법인이 검토한 표준계약서가 제공되고, 에스크로 방식의 대금보호 시스템으로 프로젝트가 완료될 때까지 대금을 보관합니다.</p>
+<p>다만 착각하면 안 되는 게 있습니다. <strong>플랫폼이 프로젝트를 대신 관리해주지는 않습니다.</strong> 요구사항을 정리하고, 중간에 결과물을 검수하고, 피드백을 주는 건 어떤 방식을 선택해도 클라이언트 몫입니다. 플랫폼이 해주는 건 계약 구조와 대금 안전장치, 그리고 파트너를 찾는 과정에서의 동반입니다.</p>
+<ul>
+<li><strong>프리랜서 직접 고용</strong>: 계약서 작성, 일정 관리, 대금 지급, 분쟁 대응 전부 내 몫</li>
+<li><strong>플랫폼 경유</strong>: 계약, 대금, 파트너 탐색은 플랫폼이 지원. 요구사항 정리와 검수는 여전히 내 역할</li>
+<li><strong>개발사 직접 계약</strong>: 팀 내 분업 구조가 있어 일정 관리 부담은 줄지만, 좋은 개발사를 가려내는 건 내가 해야 함</li>
+</ul>
+<p>이 차이를 알고 나면 "프리랜서는 불안하고, 개발사는 비싸고"라는 막연한 고민에서 벗어나서, 내가 어떤 역할까지 맡을 수 있는지를 기준으로 선택할 수 있습니다.</p><div style="background:linear-gradient(135deg,#5E9ADE 0%,#7BB2E8 100%);border-radius:14px;padding:20px 24px;margin:30px 0;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+<p style="font-size:15px;color:#fff;line-height:1.65;margin:0;flex:1;">방식이 정해졌다면 매니저와 함께 다음 단계를 정리해보세요.</p>
+<a href="https://wishket.com/project/free-consulting/?utm_source=blog_webflow&amp;utm_medium=inline_cta&amp;utm_campaign=260407_website-outsourcing-method-comparison-guide" style="display:inline-block;background:#fff;color:#2477F3;font-size:14px;font-weight:700;padding:10px 18px;border-radius:10px;white-space:nowrap;text-decoration:none;">상담 요청하기</a>
+</div>
+<h2 id="기획이-없어도-외주를-시작할-수-있나요">기획이 없어도 외주를 시작할 수 있나요?</h2>
+<p>방식까지 골랐는데 여기서 멈추는 경우가 많습니다. 기획이 없기 때문입니다. "일단 업체에 연락하면 같이 정리해주겠지"라고 기대하는 분도 있는데, 현실은 다릅니다.</p>
+<p>기능 요구사항 정리는 방식과 무관하게 클라이언트의 기본 책임입니다. 기획이 없으면 업체마다 서로 다른 범위를 가정하고, 그러면 비교 가능한 견적을 받을 수가 없습니다. 좋은 파트너일수록 요구사항이 불명확한 프로젝트에는 지원하지 않는 경향도 있습니다.</p>
+<p>그렇다고 완성된 기획서가 필요한 건 아닙니다. 이 정도면 충분합니다.</p>
+<ul>
+<li>어떤 페이지가 필요한지 (메인, 소개, 상품 목록, 문의 등)</li>
+<li>핵심 기능이 뭔지 (회원가입, 결제, 예약, 게시판 등)</li>
+<li>참고할 만한 사이트가 있는지</li>
+<li>예산과 일정의 대략적인 범위</li>
+</ul>
+<p>이 네 가지를 정리하면 파트너가 범위를 산정할 수 있고, 견적 비교도 가능해집니다. 어디서 시작해야 할지 모르겠다면 <a href="https://www.wishket.com/project/create/?utm_source=blog_webflow&amp;utm_medium=inline_cta&amp;utm_campaign=260407_website-outsourcing-method-comparison-guide">위시켓</a>에 프로젝트를 등록해보세요. 매니저가 요구사항 정리부터 함께합니다. 프로젝트 등록과 매니저 상담은 무료입니다.</p>
+
+  <div style="background:linear-gradient(135deg,#5E9ADE 0%,#7BB2E8 100%);border-radius:16px;padding:32px 30px;color:#fff;margin:40px 0 0;">
+<div style="font-size:12px;font-weight:600;letter-spacing:0.8px;opacity:0.75;margin-bottom:10px;text-transform:uppercase;">다음 단계</div>
+<h3 style="font-size:20px;font-weight:800;line-height:1.45;margin-bottom:20px;color:#fff;letter-spacing:-0.3px;">어디서 시작해야 할지 모르겠다면</h3>
+<div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;"><div style="background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px;font-size:14.5px;line-height:1.65;"><span style="font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;">기획이 없어서 등록을 망설이고 있다면</span>요구사항을 어떻게 정리해야 하는지 몰라도 괜찮습니다. 위시켓에 프로젝트를 등록하면 매니저가 요구사항 정리부터 함께합니다. 등록과 상담은 무료입니다.</div>
+<div style="background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px;font-size:14.5px;line-height:1.65;"><span style="font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;">방식은 골랐는데 파트너 찾는 방법이 막막하다면</span>방식을 결정한 뒤 어떤 파트너를 어떻게 찾을지가 다음 장벽입니다. 매니저가 견적 상담·미팅·계약까지 전 과정을 함께합니다.</div></div><div style="text-align:center;"><a href="https://wishket.com/project/free-consulting/?utm_source=blog_webflow&amp;utm_medium=cta_banner&amp;utm_campaign=260407_website-outsourcing-method-comparison-guide" style="display:inline-block;background:#fff;color:#2477F3;font-size:15px;font-weight:800;padding:13px 28px;border-radius:10px;text-decoration:none;">매니저와 정리하기</a></div>
+</div>
+
+  <div class="related-section">
+  <h3>함께 읽으면 좋은 콘텐츠</h3>
+<ul>
+  <li><a href="https://blog.wishket.com/blog/where-to-find-development-company">개발 업체, 어디서 찾을까? 방법별 장단점과 선택 기준</a></li>
+  <li><a href="https://blog.wishket.com/blog/outsourcing-development-risks-solutions">외주 개발, 어떤 리스크가 있을까? 자주 발생하는 4가지 문제와 해결법</a></li>
+  <li><a href="https://blog.wishket.com/blog/how-to-choose-software-development-company">개발 업체, 어떻게 골라야 할까? 현장에서 검증한 5가지 기준</a></li>
+</ul>
+  </div>
+
+  </div>
+
+  <h2>자주 묻는 질문</h2>
+<div class="faq-list">
+<div class="faq-item">
+  <div class="faq-q"><span class="q-mark">Q.</span>웹사이트 외주와 내부 개발은 어떻게 다른가요?</div>
+  <div class="faq-a">외주는 개발 인력 없이 프로젝트 단위로 빠르게 시작할 수 있고, 내부 개발은 장기 운영과 기능 확장에 유리합니다. 단, 외주 방식은 요구사항 정리·중간 검수·최종 검수가 클라이언트 역할로 남는다는 점에서 &#x27;맡기면 끝&#x27;이 아닙니다. 소스코드와 지재권 귀속도 계약서에 별도 명시해야 하며, 이를 빠뜨리면 납품 후 분쟁이 생길 수 있습니다. 프로젝트 빈도가 낮거나 예산이 제한적일 때 외주가 현실적인 선택입니다.</div>
+</div>
+<div class="faq-item">
+  <div class="faq-q"><span class="q-mark">Q.</span>웹사이트 외주 개발 시 꼭 주의해야 할 점이 있나요?</div>
+  <div class="faq-a">가장 자주 발생하는 문제는 계약 범위 불명확과 대금 지급 구조입니다. &#x27;웹사이트 제작&#x27;이라는 같은 키워드라도 기획 포함 여부·디자인 범위·기능 수·서버 구성에 따라 완전히 다른 프로젝트가 되기 때문에 업체마다 서로 다른 범위를 가정하고 견적이 나옵니다. 개발비 외에 서버 운영비·호스팅·도메인은 별도로 발생하며, 계약서에 하자보수 기간과 소스코드 귀속 조항이 빠지면 납품 후 추가 비용 요구나 연락 두절 리스크가 커집니다.</div>
+</div>
+<div class="faq-item">
+  <div class="faq-q"><span class="q-mark">Q.</span>웹사이트 외주 개발의 장점과 단점은 무엇인가요?</div>
+  <div class="faq-a">외주의 장점은 개발 인력을 채용하지 않고 프로젝트 단위로 결과물을 확보할 수 있다는 점입니다. 반면 납품 후 유지보수를 이어줄 파트너가 남아 있지 않으면 기능 추가·버그 수정 때마다 새 파트너를 찾아야 하는 전환 비용이 생깁니다. 플랫폼 경유나 개발사 방식은 유지보수 계약을 이어갈 수 있는 구조가 상대적으로 갖춰져 있어, 단발 납품 구조의 프리랜서 직접 고용보다 런칭 이후 파트너 연속성 면에서 유리합니다.</div>
+</div>
+<div class="faq-item">
+  <div class="faq-q"><span class="q-mark">Q.</span>하자보수와 유지보수는 어떻게 다른가요?</div>
+  <div class="faq-a">하자보수는 납품 후 계약 기간 내 개발사 귀책 버그를 무상 수정하는 것이고, 유지보수는 기능 추가·OS 대응·운영 지원 등 별도 유상 계약입니다. 방식과 무관하게 이 둘은 다른 개념이라 계약서에 각각 명시해야 합니다. &#x27;하자보수 기간에 기능을 수정해달라&#x27;고 요청하면 업체 입장에서는 유지보수 범위로 별도 비용을 요구할 수 있습니다. 방식을 선택할 때 납품 후 어떤 파트너가 유지보수를 이어갈 수 있는지도 함께 확인하는 것이 좋습니다.</div>
+</div>
+</div>
+
+  <div class="cms-meta-area">
+    <h3 style="font-size:16px; font-weight:700; margin:0 0 16px 0; color:#666;">CMS 입력 필드</h3>
+    <table style="width:100%;border-collapse:collapse;margin:16px 0;">
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">써머리</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">웹사이트 외주 방식별 특징과 내 상황에 맞는 선택 기준</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">slug</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">website-outsourcing-method-comparison-guide</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">날짜</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">2026-04-07</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">카테고리</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">IT 아웃소싱</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">태그</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">웹 개발</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">메타 디스크립션</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">웹사이트 외주 방식은 프리랜서·개발사·플랫폼·노코드 네 가지로 나뉩니다. 예산과 관리 여력에 따라 선택 기준이 달라지는 이유를 정리했습니다.</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">Author</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">조가은 / 콘텐츠 마케터 — 위시켓 마케터 조가은입니다. 기업의 쉽고 안전한 IT 의사결정을 돕는 콘텐츠를 만듭니다.</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">TLDR</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">웹사이트 외주 방식은 프리랜서 직접 고용, 개발사 계약, 플랫폼 경유, 노코드 툴 기반 구축까지 크게 네 가지로 나뉩니다. 방식마다 비용 규모가 다를 뿐 아니라 클라이언트가 직접 챙겨야 하는 역할의 양이 달라지기 때문에, 예산·기획 준비 정도·관리 여력 세 가지를 먼저 따져봐야 고를 수 있습니다. 방식 선택은 출발점일 뿐이고, 이후 요구사항 정리·파트너 탐색·계약·진행 관리까지 단계가 남아 있다는 점도 알고 시작하는 게 좋습니다.</td>
+</tr>
+</table>
+  </div>
+
+  <table class="guide-box" style="width:100%;border:1px solid #D1D5DB;border-collapse:collapse;margin:20px 0;">
+<tr><td style="background:#F9FAFB;padding:16px 20px;border:1px solid #D1D5DB;">
+<p style="margin:0 0 10px 0;font-weight:700;font-size:16px;">🖼 썸네일 제작 가이드</p>
+<p style="margin:0 0 4px 0;"><b>스타일:</b> 단색 배경 + 텍스트</p>
+<p style="margin:0 0 4px 0;"><b>배경색:</b> #1A3C6E</p>
+<p style="margin:0 0 4px 0;"><b>제목 텍스트:</b></p>
+<p style="margin:0 0 4px 0;">　1줄: 웹사이트 외주</p>
+<p style="margin:0 0 4px 0;">　2줄: 방식별 차이와 선택 기준</p>
+<p style="margin:0 0 4px 0;"><b>장식 요소:</b> comparison_arrows</p>
+<p style="margin:0;"><b>로고:</b> wishket 로고 좌상단</p>
+</td></tr>
+</table>
+
+  <h3 style="font-size:18px;font-weight:600;margin:32px 0 12px 0;">Embed 코드 (붙여넣기용)</h3>
+<div style="margin:16px 0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:14px;font-weight:600;color:#374151;">웹사이트 외주에는 어떤 방식들이 있나요? — 방식 · 특징 · 클라이언트 관리 부담</span><button onclick="copyCodeBlock(this)" style="background:#2477F3;color:#fff;border:none;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">복사</button></div><pre style="background:#1E293B;color:#E2E8F0;padding:12px;border-radius:8px;overflow-x:auto;font-size:11px;line-height:1.4;white-space:pre-wrap;max-height:200px;overflow-y:auto;">&lt;style&gt;
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:1.5rem 0;border:1px solid #E5E7EB;border-radius:12px;background:#fff}
+table.geo{width:100%;border-collapse:collapse;border-spacing:0;font-size:14px;line-height:1.6;table-layout:fixed}
+table.geo caption{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+table.geo thead th{padding:12px 18px;font-size:12.5px;font-weight:700;letter-spacing:.01em;text-align:left;border-bottom:1px solid #D1D1D9;background:#F6F6F9;vertical-align:bottom}
+table.geo thead th:first-child{color:#82828E;border-right:1px solid #D1D1D9}
+table.geo thead th:not(:first-child){color:#1A1A23}
+table.geo tbody th[scope=row]{padding:14px 18px;font-size:14px;font-weight:600;color:#1A1A23;text-align:left;border-bottom:1px solid #ECECF0;border-right:1px solid #ECECF0;background:#fff;vertical-align:top;word-break:keep-all}
+table.geo tbody td{padding:14px 18px;color:#3A3A47;border-bottom:1px solid #ECECF0;vertical-align:top;word-break:keep-all}
+table.geo tbody tr:nth-child(even) td,table.geo tbody tr:nth-child(even) th[scope=row]{background:#F9F9FB}
+table.geo tbody tr:hover td,table.geo tbody tr:hover th[scope=row]{background:#F0F0F5}
+table.geo tfoot td{padding:9px 18px;font-size:12px;color:#9CA3AF;border-top:1px solid #ECECF0;background:#F9F9FB}
+table.geo tfoot time{font-weight:500}
+@media(max-width:640px){table.geo{table-layout:auto}table.geo thead th,table.geo tbody th[scope=row],table.geo tbody td{padding:11px 14px;font-size:13px}table.geo tfoot td{padding:8px 14px}}
+&lt;/style&gt;
+&lt;div class=&quot;tbl-wrap&quot;&gt;&lt;table class=&quot;geo&quot;&gt;&lt;caption&gt;웹사이트 외주에는 어떤 방식들이 있나요? — 방식 · 특징 · 클라이언트 관리 부담&lt;/caption&gt;&lt;colgroup&gt;&lt;col style=&quot;width:14%&quot;/&gt;&lt;col style=&quot;width:27%&quot;/&gt;&lt;col style=&quot;width:27%&quot;/&gt;&lt;col style=&quot;width:32%&quot;/&gt;&lt;/colgroup&gt;&lt;thead&gt;&lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;방식&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;특징&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;클라이언트 관리 부담&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;비용 규모&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;프리랜서 직접 고용&lt;/th&gt;&lt;td&gt;개발자 1인에게 직접 의뢰. SNS나 지인 소개로 연결&lt;/td&gt;&lt;td&gt;높음 — 일정, 품질, 커뮤니케이션 전부 직접 관리&lt;/td&gt;&lt;td&gt;개발비 자체는 낮을 수 있음&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;개발사(에이전시) 계약&lt;/th&gt;&lt;td&gt;기획, 디자인, 개발팀이 함께 움직이는 구조&lt;/td&gt;&lt;td&gt;중간 — 팀 내 분업이 있지만 최종 검수는 클라이언트 몫&lt;/td&gt;&lt;td&gt;팀 구성비 포함, 상대적으로 높음&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;플랫폼 경유&lt;/th&gt;&lt;td&gt;위시켓 같은 IT 아웃소싱 플랫폼에서 매니저와 함께 진행&lt;/td&gt;&lt;td&gt;중간~낮음 — 견적 비교, 계약, 대금보호를 플랫폼이 지원&lt;/td&gt;&lt;td&gt;개발비 + 플랫폼 구조 비용&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;노코드 툴 기반 구축&lt;/th&gt;&lt;td&gt;워드프레스, Webflow 등 빌더 도구로 제작. 직접 하거나 전문 파트너에게 외주&lt;/td&gt;&lt;td&gt;도구에 따라 다름 — 직접 하면 높고, 외주하면 중간&lt;/td&gt;&lt;td&gt;가장 낮은 편&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;</pre></div>
+<div style="margin:16px 0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:14px;font-weight:600;color:#374151;">CTA 배너</span><button onclick="copyCodeBlock(this)" style="background:#2477F3;color:#fff;border:none;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">복사</button></div><pre style="background:#1E293B;color:#E2E8F0;padding:12px;border-radius:8px;overflow-x:auto;font-size:11px;line-height:1.4;white-space:pre-wrap;max-height:200px;overflow-y:auto;">&lt;div style=&quot;background:linear-gradient(135deg,#5E9ADE 0%,#7BB2E8 100%);border-radius:16px;padding:32px 30px;color:#fff;margin:40px 0 0;&quot;&gt;
+&lt;div style=&quot;font-size:12px;font-weight:600;letter-spacing:0.8px;opacity:0.75;margin-bottom:10px;text-transform:uppercase;&quot;&gt;다음 단계&lt;/div&gt;
+&lt;h3 style=&quot;font-size:20px;font-weight:800;line-height:1.45;margin-bottom:20px;color:#fff;letter-spacing:-0.3px;&quot;&gt;어디서 시작해야 할지 모르겠다면&lt;/h3&gt;
+&lt;div style=&quot;display:flex;flex-direction:column;gap:12px;margin-bottom:24px;&quot;&gt;&lt;div style=&quot;background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px;font-size:14.5px;line-height:1.65;&quot;&gt;&lt;span style=&quot;font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;&quot;&gt;기획이 없어서 등록을 망설이고 있다면&lt;/span&gt;요구사항을 어떻게 정리해야 하는지 몰라도 괜찮습니다. 위시켓에 프로젝트를 등록하면 매니저가 요구사항 정리부터 함께합니다. 등록과 상담은 무료입니다.&lt;/div&gt;
+&lt;div style=&quot;background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px;font-size:14.5px;line-height:1.65;&quot;&gt;&lt;span style=&quot;font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;&quot;&gt;방식은 골랐는데 파트너 찾는 방법이 막막하다면&lt;/span&gt;방식을 결정한 뒤 어떤 파트너를 어떻게 찾을지가 다음 장벽입니다. 매니저가 견적 상담·미팅·계약까지 전 과정을 함께합니다.&lt;/div&gt;&lt;/div&gt;&lt;div style=&quot;text-align:center;&quot;&gt;&lt;a href=&quot;https://wishket.com/project/free-consulting/?utm_source=blog_webflow&amp;amp;utm_medium=cta_banner&amp;amp;utm_campaign=260407_website-outsourcing-method-comparison-guide&quot; style=&quot;display:inline-block;background:#fff;color:#2477F3;font-size:15px;font-weight:800;padding:13px 28px;border-radius:10px;text-decoration:none;&quot;&gt;매니저와 정리하기&lt;/a&gt;&lt;/div&gt;
+&lt;/div&gt;</pre></div>
+
+
+  <h3 style="font-size:18px;font-weight:600;margin:32px 0 12px 0;">JSON-LD (Custom Code에 붙여넣기)</h3>
+<pre style="background:#1E293B;color:#E2E8F0;padding:16px;border-radius:8px;overflow-x:auto;font-size:12px;line-height:1.5;white-space:pre-wrap;">&lt;script type="application/ld+json"&gt;
+{
+  &quot;@context&quot;: &quot;https://schema.org&quot;,
+  &quot;@type&quot;: &quot;BlogPosting&quot;,
+  &quot;headline&quot;: &quot;웹사이트 외주 4가지 방식, 내 상황에 맞는 선택법&quot;,
+  &quot;description&quot;: &quot;웹사이트 외주 방식은 프리랜서·개발사·플랫폼·노코드 네 가지로 나뉩니다. 예산과 관리 여력에 따라 선택 기준이 달라지는 이유를 정리했습니다.&quot;,
+  &quot;datePublished&quot;: &quot;2026-04-07&quot;,
+  &quot;dateModified&quot;: &quot;2026-04-07&quot;,
+  &quot;author&quot;: {
+    &quot;@type&quot;: &quot;Person&quot;,
+    &quot;name&quot;: &quot;조가은&quot;
+  },
+  &quot;publisher&quot;: {
+    &quot;@type&quot;: &quot;Organization&quot;,
+    &quot;name&quot;: &quot;위시켓&quot;,
+    &quot;url&quot;: &quot;https://www.wishket.com&quot;
+  },
+  &quot;mainEntityOfPage&quot;: {
+    &quot;@type&quot;: &quot;WebPage&quot;
+  },
+  &quot;keywords&quot;: &quot;웹 개발&quot;,
+  &quot;articleSection&quot;: &quot;IT 아웃소싱&quot;,
+  &quot;hasPart&quot;: [
+    {
+      &quot;@type&quot;: &quot;WebPageElement&quot;,
+      &quot;name&quot;: &quot;웹사이트 외주에는 어떤 방식들이 있나요?&quot;,
+      &quot;url&quot;: &quot;#웹사이트-외주에는-어떤-방식들이-있나요&quot;
+    },
+    {
+      &quot;@type&quot;: &quot;WebPageElement&quot;,
+      &quot;name&quot;: &quot;어떤 상황에 어떤 방식이 맞나요?&quot;,
+      &quot;url&quot;: &quot;#어떤-상황에-어떤-방식이-맞나요&quot;
+    },
+    {
+      &quot;@type&quot;: &quot;WebPageElement&quot;,
+      &quot;name&quot;: &quot;프리랜서의 관리 부담과 개발사의 비용, 이 중간 어딘가가 있나요?&quot;,
+      &quot;url&quot;: &quot;#프리랜서의-관리-부담과-개발사의-비용-이-중간-어딘가가-있나요&quot;
+    },
+    {
+      &quot;@type&quot;: &quot;WebPageElement&quot;,
+      &quot;name&quot;: &quot;기획이 없어도 외주를 시작할 수 있나요?&quot;,
+      &quot;url&quot;: &quot;#기획이-없어도-외주를-시작할-수-있나요&quot;
+    }
+  ]
+}
+&lt;/script&gt;
+&lt;script type="application/ld+json"&gt;
+{
+  &quot;@context&quot;: &quot;https://schema.org&quot;,
+  &quot;@type&quot;: &quot;FAQPage&quot;,
+  &quot;mainEntity&quot;: [
+    {
+      &quot;@type&quot;: &quot;Question&quot;,
+      &quot;name&quot;: &quot;웹사이트 외주와 내부 개발은 어떻게 다른가요?&quot;,
+      &quot;acceptedAnswer&quot;: {
+        &quot;@type&quot;: &quot;Answer&quot;,
+        &quot;text&quot;: &quot;외주는 개발 인력 없이 프로젝트 단위로 빠르게 시작할 수 있고, 내부 개발은 장기 운영과 기능 확장에 유리합니다. 단, 외주 방식은 요구사항 정리·중간 검수·최종 검수가 클라이언트 역할로 남는다는 점에서 &#x27;맡기면 끝&#x27;이 아닙니다. 소스코드와 지재권 귀속도 계약서에 별도 명시해야 하며, 이를 빠뜨리면 납품 후 분쟁이 생길 수 있습니다. 프로젝트 빈도가 낮거나 예산이 제한적일 때 외주가 현실적인 선택입니다.&quot;
+      }
+    },
+    {
+      &quot;@type&quot;: &quot;Question&quot;,
+      &quot;name&quot;: &quot;웹사이트 외주 개발 시 꼭 주의해야 할 점이 있나요?&quot;,
+      &quot;acceptedAnswer&quot;: {
+        &quot;@type&quot;: &quot;Answer&quot;,
+        &quot;text&quot;: &quot;가장 자주 발생하는 문제는 계약 범위 불명확과 대금 지급 구조입니다. &#x27;웹사이트 제작&#x27;이라는 같은 키워드라도 기획 포함 여부·디자인 범위·기능 수·서버 구성에 따라 완전히 다른 프로젝트가 되기 때문에 업체마다 서로 다른 범위를 가정하고 견적이 나옵니다. 개발비 외에 서버 운영비·호스팅·도메인은 별도로 발생하며, 계약서에 하자보수 기간과 소스코드 귀속 조항이 빠지면 납품 후 추가 비용 요구나 연락 두절 리스크가 커집니다.&quot;
+      }
+    },
+    {
+      &quot;@type&quot;: &quot;Question&quot;,
+      &quot;name&quot;: &quot;웹사이트 외주 개발의 장점과 단점은 무엇인가요?&quot;,
+      &quot;acceptedAnswer&quot;: {
+        &quot;@type&quot;: &quot;Answer&quot;,
+        &quot;text&quot;: &quot;외주의 장점은 개발 인력을 채용하지 않고 프로젝트 단위로 결과물을 확보할 수 있다는 점입니다. 반면 납품 후 유지보수를 이어줄 파트너가 남아 있지 않으면 기능 추가·버그 수정 때마다 새 파트너를 찾아야 하는 전환 비용이 생깁니다. 플랫폼 경유나 개발사 방식은 유지보수 계약을 이어갈 수 있는 구조가 상대적으로 갖춰져 있어, 단발 납품 구조의 프리랜서 직접 고용보다 런칭 이후 파트너 연속성 면에서 유리합니다.&quot;
+      }
+    },
+    {
+      &quot;@type&quot;: &quot;Question&quot;,
+      &quot;name&quot;: &quot;하자보수와 유지보수는 어떻게 다른가요?&quot;,
+      &quot;acceptedAnswer&quot;: {
+        &quot;@type&quot;: &quot;Answer&quot;,
+        &quot;text&quot;: &quot;하자보수는 납품 후 계약 기간 내 개발사 귀책 버그를 무상 수정하는 것이고, 유지보수는 기능 추가·OS 대응·운영 지원 등 별도 유상 계약입니다. 방식과 무관하게 이 둘은 다른 개념이라 계약서에 각각 명시해야 합니다. &#x27;하자보수 기간에 기능을 수정해달라&#x27;고 요청하면 업체 입장에서는 유지보수 범위로 별도 비용을 요구할 수 있습니다. 방식을 선택할 때 납품 후 어떤 파트너가 유지보수를 이어갈 수 있는지도 함께 확인하는 것이 좋습니다.&quot;
+      }
+    }
+  ]
+}
+&lt;/script&gt;</pre>
+
+</div>
+
+<script>
+// contenteditable 변경 감지 + localStorage 자동저장
+var content = document.getElementById('cms-content');
+var status = document.getElementById('edit-status');
+var saveTimer;
+var STORAGE_KEY = 'wishket_draft_' + document.title.replace(/[^a-zA-Z0-9가-힣]/g, '_').substring(0, 60);
+var VERSION_KEY = STORAGE_KEY + '_ver';
+var CURRENT_VERSION = '2026-04-07';
+
+window.addEventListener('load', function() {
+  var saved = localStorage.getItem(STORAGE_KEY);
+  var savedVer = localStorage.getItem(VERSION_KEY);
+  if (saved && savedVer === CURRENT_VERSION) { content.innerHTML = saved; }
+  else { localStorage.removeItem(STORAGE_KEY); }
+  attachLinkHandlers();
+});
+
+content.addEventListener('input', function() {
+  status.textContent = '편집 중 (미저장)';
+  status.className = 'modified';
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(function() {
+    localStorage.setItem(STORAGE_KEY, content.innerHTML);
+    localStorage.setItem(VERSION_KEY, CURRENT_VERSION);
+    status.textContent = '자동저장됨';
+    status.className = '';
+  }, 3000);
+});
+
+function attachLinkHandlers() {
+  document.querySelectorAll('[contenteditable] a').forEach(function(a) {
+    a.addEventListener('click', function(e) {
+      if (e.metaKey || e.ctrlKey) { window.open(a.href, '_blank'); }
+    });
+    if (a.title.indexOf('Cmd+클릭') === -1) {
+      a.title = (a.title || '') + ' (Cmd+클릭으로 열기)';
+    }
+  });
+}
+
+function copyContent() {
+  var clone = content.cloneNode(true);
+  clone.querySelectorAll('.image-guide, table.image-guide, table.guide-box').forEach(function(el) { el.remove(); });
+  var text = clone.innerText;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(function() {
+      var btn = document.getElementById('copy-btn');
+      btn.textContent = '복사됨!';
+      setTimeout(function() { btn.textContent = '본문 복사'; }, 2000);
+    });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    var btn = document.getElementById('copy-btn');
+    btn.textContent = '복사됨!';
+    setTimeout(function() { btn.textContent = '본문 복사'; }, 2000);
+  }
+}
+
+function copyCodeBlock(btn) {
+  var pre = btn.parentElement.nextElementSibling;
+  if (!pre) return;
+  var text = pre.textContent;
+  navigator.clipboard.writeText(text).then(function() {
+    btn.textContent = '복사됨!';
+    setTimeout(function() { btn.textContent = '복사'; }, 2000);
+  });
+}
+
+window.addEventListener('beforeunload', function(e) {
+  if (status.className === 'modified') {
+    e.preventDefault();
+    e.returnValue = '';
+  }
+});
+</script>
+
+</body>
+</html>

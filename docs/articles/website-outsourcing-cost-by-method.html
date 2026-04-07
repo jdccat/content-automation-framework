@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>프리랜서·개발사·플랫폼, 같은 웹사이트인데 견적이 3배 차이 나는 이유</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+    font-size: 17px;
+    line-height: 2.0;
+    color: #1a1a1a;
+    background: #fff;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Toolbar (편집용) ── */
+  #toolbar {
+    position: fixed; top: 0; left: 0; right: 0;
+    background: #1E293B; color: #fff;
+    padding: 10px 20px;
+    display: flex; align-items: center; gap: 16px;
+    z-index: 9999; font-size: 14px;
+  }
+  #toolbar button {
+    background: #2477F3; color: #fff; border: none;
+    padding: 6px 16px; border-radius: 6px; cursor: pointer;
+    font-size: 13px; font-weight: 600;
+  }
+  #toolbar button:hover { background: #1B5FD1; }
+  #edit-status { color: #94A3B8; font-size: 12px; }
+  #edit-status.modified { color: #FBBF24; }
+
+  /* ── Layout ── */
+  .page-wrap {
+    max-width: 720px;
+    margin: 80px auto 80px;
+    padding: 0 20px;
+  }
+
+  /* ── Header ── */
+  .article-header { margin-bottom: 32px; }
+  .article-category {
+    font-size: 12px; font-weight: 600; color: #2477F3;
+    letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 12px;
+  }
+  h1 {
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 800; line-height: 1.35;
+    letter-spacing: -0.5px; color: #0d0d0d;
+    margin: 0 0 16px 0;
+  }
+  .article-meta { font-size: 13px; color: #999; }
+
+  /* ── Typography ── */
+  h2 {
+    font-size: 21px; font-weight: 700; color: #2477F3;
+    margin: 48px 0 16px 0; padding-bottom: 10px;
+    border-bottom: 2px solid #E5E7EB;
+    letter-spacing: -0.3px;
+  }
+  h3 {
+    font-size: 17px; font-weight: 700; color: #2477F3;
+    margin: 28px 0 10px 0;
+  }
+  p { margin: 0 0 30px 0; }
+  a { color: #2477F3; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  strong { font-weight: 700; }
+
+  /* ── Lists ── */
+  ul, ol { margin: 0 0 30px 0; padding-left: 22px; }
+  li { margin-bottom: 6px; line-height: 2.5; }
+  li::marker { color: #999; }
+
+  hr { border: none; border-top: 1px solid #e8e8e8; margin: 40px 0; }
+
+  /* ── GEO Table ── */
+  .tbl-wrap {
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    margin: 30px 0; border: 1px solid #e0e0e5;
+    border-radius: 12px; background: #fff;
+  }
+  table.geo {
+    width: 100%; border-collapse: collapse; border-spacing: 0;
+    font-size: 14.5px; line-height: 1.65; table-layout: fixed;
+  }
+  table.geo caption {
+    position: absolute; width: 1px; height: 1px;
+    overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap;
+  }
+  table.geo thead th {
+    padding: 12px 18px; font-size: 12.5px; font-weight: 700;
+    letter-spacing: 0.01em; text-align: left;
+    border-bottom: 1px solid #d1d1d9; background: #f6f6f9; vertical-align: bottom;
+  }
+  table.geo thead th:first-child { color: #82828e; border-right: 1px solid #d1d1d9; }
+  table.geo thead th:not(:first-child) { color: #1a1a23; }
+  table.geo tbody th[scope="row"] {
+    padding: 14px 18px; font-size: 14px; font-weight: 600; color: #1a1a23;
+    text-align: left; border-bottom: 1px solid #ececf0; border-right: 1px solid #ececf0;
+    background: #fff; vertical-align: top; word-break: keep-all;
+  }
+  table.geo tbody td {
+    padding: 14px 18px; color: #3a3a47;
+    border-bottom: 1px solid #ececf0; vertical-align: top; word-break: keep-all;
+  }
+  table.geo tbody tr:nth-child(even) td,
+  table.geo tbody tr:nth-child(even) th[scope="row"] { background: #f9f9fb; }
+  table.geo tbody tr:hover td,
+  table.geo tbody tr:hover th[scope="row"] { background: #f0f0f5; }
+  table.geo tfoot td {
+    padding: 9px 18px; font-size: 12px; color: #9ca3af;
+    border-top: 1px solid #ececf0; background: #f9f9fb;
+  }
+
+  /* ── TLDR (핵심 요약) ── */
+  .summary-box {
+    background: #F5F5F5;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 30px;
+  }
+  .summary-box p:first-child {
+    font-size: 13px; font-weight: 700; color: #1A1A1A;
+    margin-bottom: 8px; letter-spacing: 0.3px;
+  }
+  .summary-box p:not(:first-child) {
+    font-size: 15.5px; color: #1A1A1A; line-height: 1.75;
+  }
+  .summary-box p:last-child { margin-bottom: 0; }
+
+  /* ── FAQ ── */
+  .faq-list {
+    display: flex; flex-direction: column; gap: 0;
+    margin: 20px 0 24px; border: 1px solid #E5E7EB;
+    border-radius: 14px; overflow: hidden;
+  }
+  .faq-item { border-bottom: 1px solid #ebebeb; background: #fff; }
+  .faq-item:last-child { border-bottom: none; }
+  .faq-q {
+    font-size: 15px; font-weight: 700; color: #0d0d0d;
+    padding: 18px 20px 8px; display: flex; gap: 10px;
+  }
+  .faq-q .q-mark { color: #2477F3; font-weight: 800; font-size: 16px; flex-shrink: 0; }
+  .faq-a {
+    font-size: 14.5px; color: #444; line-height: 1.75;
+    padding: 0 20px 18px 44px;
+  }
+
+  /* ── Related ── */
+  .related-section { margin: 32px 0; }
+  .related-section h3 { font-size: 16px; font-weight: 700; margin-bottom: 12px; }
+  .related-section ul { list-style: none; padding: 0; }
+  .related-section li {
+    padding: 10px 0; border-bottom: 1px solid #f0f0f0;
+  }
+  .related-section li:last-child { border-bottom: none; }
+  .related-section a { font-size: 15px; font-weight: 500; }
+
+  /* ── Image guide box ── */
+  .image-guide, table.guide-box {
+    background: #FAFAFA; border: 2px solid #E5E7EB;
+    border-radius: 12px; padding: 16px 24px; margin: 30px -20px;
+  }
+
+  /* ── CMS meta area ── */
+  .cms-meta-area { background: #f9fafb; border-radius: 12px; padding: 20px; margin-top: 40px; }
+
+  /* ── Contenteditable ── */
+  [contenteditable="true"]:focus { outline: 2px solid #2477F3; outline-offset: 2px; border-radius: 4px; }
+  [contenteditable="true"]:hover { outline: 1px dashed #CBD5E1; outline-offset: 2px; border-radius: 4px; }
+  [contenteditable="true"]:focus:hover { outline: 2px solid #2477F3; outline-offset: 2px; }
+
+  /* ── Responsive ── */
+  @media (max-width: 640px) {
+    .page-wrap { padding: 0 16px; margin-top: 60px; }
+    h1 { font-size: 22px; }
+    h2 { font-size: 19px; }
+    table.geo { table-layout: auto; }
+    table.geo thead th, table.geo tbody th[scope="row"], table.geo tbody td {
+      padding: 11px 14px; font-size: 13px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- toolbar -->
+<div id="toolbar">
+  <button id="copy-btn" onclick="copyContent()">본문 복사</button>
+  <span id="edit-status">저장됨</span>
+</div>
+
+<div class="page-wrap">
+
+  <div class="article-header">
+    <h1 contenteditable="true">프리랜서·개발사·플랫폼, 같은 웹사이트인데 견적이 3배 차이 나는 이유</h1>
+    <div class="article-meta"><time datetime="2026-04-07">2026-04-07</time></div>
+  </div>
+
+  <div id="cms-content" contenteditable="true" style="outline:none;">
+
+  <div class="summary-box">
+<p>💡 핵심 요약</p>
+<p>견적이 300만 원에서 2,000만 원까지 벌어지는 건 업체 문제가 아니라, 비교하는 대상이 사실 다른 프로젝트이기 때문입니다. 프리랜서·개발사·플랫폼 경유는 개발비가 쌓이는 구조 자체가 달라서 견적서 숫자만 보면 관리 부담과 런칭 이후 비용을 놓치게 됩니다. 방식을 고를 때는 개발비뿐 아니라 유지보수 파트너가 남아 있는 구조인지까지 포함해서 총비용을 비교하는 게 가장 정확한 판단 방법입니다.</p>
+</div>
+
+  <p>견적을 2~3곳에 받아봤는데, 300만 원부터 2,000만 원까지 숫자가 너무 다릅니다. 같은 웹사이트인데 왜 이런 차이가 나는 건지, 어떤 기준으로 판단해야 하는 건지 감이 안 잡히는 상황이죠.</p>
+<p>결론부터 말하면, 이 차이는 업체가 바가지를 씌우는 게 아닙니다. <strong>비교하고 있는 대상이 사실 같은 프로젝트가 아닐 가능성이 높아요.</strong> 기획 포함 여부, 디자인 범위, 기능 수, 서버 구성. 이 중 하나만 달라져도 견적은 완전히 달라집니다. 방식별 비용 구조가 어떻게 다른지, 어디까지를 비용으로 봐야 하는지 정리해봤습니다.</p>
+<h2 id="방식마다-비용이-얼마나-다른가요">방식마다 비용이 얼마나 다른가요?</h2>
+<p>웹사이트 외주 비용을 비교하려면, 먼저 '같은 웹사이트'라는 전제를 의심해야 합니다. 같은 키워드로 견적을 요청해도 업체마다 가정하는 범위가 다르거든요.</p>
+<p>"회사 홈페이지를 만들어주세요"라고 요청하면, 어떤 곳은 워드프레스 테마를 커스터마이징하는 걸 떠올리고, 어떤 곳은 디자인부터 백엔드까지 처음부터 개발하는 걸 전제합니다. 당연히 견적이 다를 수밖에 없어요. 비교가 가능하려면 프로젝트 성격을 먼저 구분해야 합니다.</p>
+<div class="tbl-wrap"><table class="geo"><caption>방식마다 비용이 얼마나 다른가요? — 프로젝트 성격 · 예산 규모감 · 특징</caption><colgroup><col style="width:22%"/><col style="width:39%"/><col style="width:39%"/></colgroup><thead><tr><th scope="col">프로젝트 성격</th><th scope="col">예산 규모감</th><th scope="col">특징</th></tr></thead><tbody><tr><th scope="row">노코드/웹빌더 기반</th><td>수백만 원대</td><td>워드프레스, Webflow 등 기존 도구 활용. 빠르지만 커스터마이징 한계</td></tr><tr><th scope="row">솔루션 커스터마이징</th><td>수백~천만 원대</td><td>기존 솔루션에 기능 추가. 범위에 따라 편차 큼</td></tr><tr><th scope="row">풀 맞춤 개발</th><td>천만 원대 이상</td><td>디자인+기능+서버 전부 새로 구축. 기간도 길고 관리 공수도 큼</td></tr></tbody><tfoot><tr><td colspan="3">2025년 위시켓 등록 프로젝트 기준 · 클라이언트 희망 예산이며 실제 계약 금액과 다를 수 있습니다 · 노코드·빌더 기반과 풀 맞춤 개발은 성격이 다른 프로젝트로 같은 선상에서 비교하면 예산 기준이 왜곡될 수 있습니다</td></tr></tfoot></table></div>
+<p>2025년 위시켓에 등록된 웹사이트 신규개발 프로젝트 약 140건을 보면, 절반이 725만 원 이하의 예산을 잡고 있습니다. 하위 25%는 300만 원 이하, 상위 25%는 1,500만 원 이상이에요. 같은 '웹사이트 외주'라도 프로젝트 성격에 따라 비용이 수배 차이 나는 건 자연스러운 구조입니다.</p>
+<p>견적이 다르다고 느낀다면, 내 프로젝트가 어느 성격에 가까운지부터 확인하는 게 출발점이에요.</p>
+<h2 id="같은-프로젝트인데-연결-경로에-따라-비용이-왜-다른가요">같은 프로젝트인데 연결 경로에 따라 비용이 왜 다른가요?</h2>
+<p>프로젝트 성격이 같아도, 누구에게 어떻게 맡기느냐에 따라 비용이 쌓이는 방식 자체가 달라집니다. 크게 세 가지 경로로 나뉘어요.</p>
+<p><strong>프리랜서 직접 고용</strong>은 개발 단가 자체가 가장 낮을 수 있습니다. 하지만 기획, 디자인, QA를 별도로 확보해야 하는 경우가 많아요. 개발자 한 명이 이 전부를 커버하는 건 현실적으로 어렵습니다. 결국 클라이언트가 기획을 정리하고, 중간 검수를 하고, 디자인을 따로 맡기는 시간과 비용이 추가돼요.</p>
+<p><strong>개발사(에이전시) 직접 계약</strong>은 팀이 함께 움직이는 구조입니다. 기획자, 디자이너, 개발자가 분업하니까 견적에 팀 구성비가 포함되고, 그만큼 단가가 높아요. 대신 클라이언트가 직접 관리해야 하는 영역은 줄어듭니다. 다만 에이전시라고 품질이 자동으로 보장되지는 않아요. 영업팀과 개발팀이 분리된 구조에서는 미팅 담당자와 실제 개발자가 다를 수 있으니, 포트폴리오와 유사 프로젝트 경험을 꼭 확인해야 합니다.</p>
+<p><strong>플랫폼 경유 방식</strong>은 프리랜서나 개발사를 플랫폼을 통해 연결하는 겁니다. 위시켓의 경우 매니저가 견적 상담부터 계약까지 동반하고, 에스크로 방식의 대금보호 구조가 기본으로 제공됩니다. 클라이언트 수수료는 없고 프로젝트 대금만 결제하는 구조예요.</p>
+<div class="tbl-wrap"><table class="geo"><caption>같은 프로젝트인데 연결 경로에 따라 비용이 왜 다른가요? — 비교 항목 · 프리랜서 직고용 · 개발사 직접 계약</caption><colgroup><col style="width:14%"/><col style="width:27%"/><col style="width:27%"/><col style="width:32%"/></colgroup><thead><tr><th scope="col">비교 항목</th><th scope="col">프리랜서 직고용</th><th scope="col">개발사 직접 계약</th><th scope="col">플랫폼 경유</th></tr></thead><tbody><tr><th scope="row">개발 단가</th><td>낮음</td><td>높음 (팀 구성비 포함)</td><td>파트너에 따라 다름</td></tr><tr><th scope="row">기획·디자인</th><td>별도 확보 필요</td><td>팀에 포함</td><td>파트너에 따라 다름</td></tr><tr><th scope="row">관리 부담</th><td>클라이언트 직접</td><td>상대적으로 낮음</td><td>매니저 지원</td></tr><tr><th scope="row">계약 보호</th><td>직접 협의</td><td>직접 협의</td><td>표준계약서·대금보호</td></tr><tr><th scope="row">견적 비교</th><td>클라이언트가 직접</td><td>클라이언트가 직접</td><td>매니저가 함께 검토</td></tr></tbody></table></div>
+<p><strong>견적서에 찍힌 개발비만 비교하면, 내가 직접 감당해야 하는 시간과 리스크 비용을 빠뜨리게 됩니다.</strong> 경로별로 비용이 어디에 숨어 있는지를 같이 봐야 비로소 비교가 되는 거예요.</p><div style="background:linear-gradient(135deg,#5E9ADE 0%,#7BB2E8 100%);border-radius:14px;padding:20px 24px;margin:30px 0;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+<p style="font-size:15px;color:#fff;line-height:1.65;margin:0;flex:1;">경로별 비용 구성, 매니저와 함께 내 프로젝트에 대입해볼 수 있어요.</p>
+<a href="https://wishket.com/project/free-consulting/?utm_source=blog_webflow&amp;utm_medium=inline_cta&amp;utm_campaign=260407_website-outsourcing-cost-by-method" style="display:inline-block;background:#fff;color:#2477F3;font-size:14px;font-weight:700;padding:10px 18px;border-radius:10px;white-space:nowrap;text-decoration:none;">비교 도움받기</a>
+</div>
+<h2 id="비슷한-프로젝트가-각-경로에서-실제로-얼마에-진행되나요">비슷한 프로젝트가 각 경로에서 실제로 얼마에 진행되나요?</h2>
+<p>위시켓에 등록된 웹사이트 신규개발 프로젝트를 같은 성격끼리 묶어서 보면, 비용 차이의 실체가 드러납니다.</p>
+<div style="display:flex;flex-direction:column;gap:14px;margin:30px 0;">
+<div style="border:1px solid #E5E7EB;border-radius:14px;padding:18px 20px;background:#fff;">
+<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;">
+<span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;background:#e8f5e9;color:#2e7d32;">저가 사례</span>
+<span style="font-size:15.5px;font-weight:700;color:#0d0d0d;line-height:1.4;">웹빌더 기반 교육 정보 제공 웹사이트 개발</span>
+</div>
+<div style="font-size:20px;font-weight:800;color:#2477F3;margin-bottom:4px;">300만 원</div>
+<div style="font-size:12.5px;color:#999;margin-bottom:10px;">웹 · 14일 · 웹빌더 기반</div>
+<div style="font-size:14.5px;color:#444;line-height:2.0;">기존 빌더 도구를 활용한 정보 제공 사이트. 커스터마이징 범위가 좁아 단기·저비용 가능.</div>
+</div>
+<div style="border:1px solid #E5E7EB;border-radius:14px;padding:18px 20px;background:#fff;">
+<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;">
+<span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;background:#e3f2fd;color:#1565c0;">중가 사례</span>
+<span style="font-size:15.5px;font-weight:700;color:#0d0d0d;line-height:1.4;">기업 홈페이지 및 포트폴리오 웹사이트 구축</span>
+</div>
+<div style="font-size:20px;font-weight:800;color:#2477F3;margin-bottom:4px;">500만 원</div>
+<div style="font-size:12.5px;color:#999;margin-bottom:10px;">웹 · 30일 · 신규개발</div>
+<div style="font-size:14.5px;color:#444;line-height:2.0;">회사 소개+포트폴리오 구성. 디자인과 기본 기능을 포함한 표준적인 기업 홈페이지.</div>
+</div>
+<div style="border:1px solid #E5E7EB;border-radius:14px;padding:18px 20px;background:#fff;">
+<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;">
+<span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;background:#fce4ec;color:#c62828;">고가 사례</span>
+<span style="font-size:15.5px;font-weight:700;color:#0d0d0d;line-height:1.4;">반응형 여행 예약 웹사이트 개발</span>
+</div>
+<div style="font-size:20px;font-weight:800;color:#2477F3;margin-bottom:4px;">2,000만 원</div>
+<div style="font-size:12.5px;color:#999;margin-bottom:10px;">웹 · 100일 · 신규개발 풀구축</div>
+<div style="font-size:14.5px;color:#444;line-height:2.0;">예약·결제·회원 관리 기능 포함. 기능 범위와 복잡도가 비용을 끌어올림.</div>
+</div>
+</div>
+<p>300만 원짜리 빌더 기반 사이트와 2,000만 원짜리 예약 플랫폼은 사실상 다른 프로젝트입니다. 견적을 비교할 때는 이런 성격 차이를 먼저 맞춰야 해요.</p>
+<p>이 수치는 2025년 위시켓에 등록된 발주자의 희망 예산이지, 실제 계약 금액은 아닙니다. 범위 조정이 이뤄지면 금액은 달라질 수 있어요. 그래도 <strong>내 프로젝트가 어느 규모에 위치하는지 감을 잡기에는 충분한 기준점</strong>이에요.</p>
+<p>같은 규모의 프로젝트라도 경로에 따라 비용 구성이 달라진다는 점도 기억해야 합니다.</p>
+<ul>
+<li><strong>프리랜서 직고용</strong>: 개발비 자체는 낮지만, 기획 대행이나 디자인을 별도로 맡기면 추가 비용 발생. 관리에 들이는 시간도 비용</li>
+<li><strong>개발사 직접 계약</strong>: 견적에 기획·디자인·QA가 포함되는 대신 전체 금액이 높음</li>
+<li><strong>플랫폼 경유</strong>: 파트너 개발비에 매니저 지원·대금보호 구조가 함께 따라옴</li>
+</ul>
+<p>"어디가 더 싸냐"보다, 같은 범위를 기준으로 놓았을 때 총비용이 어떻게 구성되느냐를 봐야 합니다.</p>
+<h2 id="유지보수까지-포함하면-비용-차이가-달라지나요">유지보수까지 포함하면 비용 차이가 달라지나요?</h2>
+<p>웹사이트는 만들고 끝이 아닙니다. 런칭 이후에도 서버 운영비, 호스팅, 도메인, 기능 추가, 보안 업데이트 같은 비용이 계속 발생하고, 이건 어떤 방식을 선택하든 개발비에 포함되지 않습니다.</p>
+<p>위시켓 데이터 기준, 웹사이트 유지보수 프로젝트의 예산은 건당 300만 원(중위값)입니다. 신규개발(725만 원)보다는 낮지만, 유지보수는 한 번으로 끝나지 않아요. 누적되면 개발비를 넘는 경우도 있습니다.</p>
+<p>그런데 여기서 진짜 차이가 나는 건 금액이 아니에요. <strong>유지보수를 이어줄 파트너가 남아 있느냐</strong>가 더 큰 문제입니다.</p>
+<p>프리랜서에게 직접 맡긴 경우, 납품이 끝나면 다른 프로젝트로 넘어가버리는 경우가 많습니다. 런칭 후 버그가 발견되거나 기능을 추가하고 싶을 때 연락이 안 되면, 새 파트너를 찾는 것부터 다시 시작이에요. 이전 개발자의 코드를 파악하는 데만 시간이 또 들어가니까요.</p>
+<p>개발사나 플랫폼 경유 방식은 이 부분에서 상대적으로 유리합니다. 팀 단위로 움직이는 개발사는 유지보수 계약을 이어갈 수 있는 구조가 갖춰져 있고, 플랫폼을 통해 연결한 경우에도 파트너와의 관계가 플랫폼 안에서 유지돼요.</p>
+<p>한 가지 더. 납품 후 수정 요청에서 분쟁이 생기는 건 대부분 이 두 개념을 구분하지 못해서입니다.</p>
+<ul>
+<li><strong>하자보수</strong>: 파트너 귀책 버그를 무상으로 수정. 계약에 명시된 기간 내에만 적용</li>
+<li><strong>유지보수</strong>: 기능 추가, OS 대응, 보안 업데이트 등. 별도 계약이 필요한 유상 서비스</li>
+</ul>
+<p>"이건 하자보수 아닌가요?"라는 질문이 나오는 순간 이미 계약서에 기준이 없었다는 뜻이에요. 계약 단계에서 하자보수 기간과 범위를 명확히 적어두는 게 중요합니다.</p>
+<p>방식을 고를 때 개발비만 보지 마세요. <strong>런칭 이후에도 파트너가 이어질 수 있는 구조인지까지 포함해서 비교하는 게 총비용을 가장 정확하게 보는 방법</strong>입니다. 위시켓에서는 프로젝트 등록 시 매니저가 이 부분까지 함께 안내하고 있으니, 어디서부터 시작해야 할지 모르겠다면 먼저 등록해보는 것도 방법이에요.</p>
+
+  <div style="background:linear-gradient(135deg,#5E9ADE 0%,#7BB2E8 100%);border-radius:16px;padding:32px 30px;color:#fff;margin:40px 0 0;">
+<div style="font-size:12px;font-weight:600;letter-spacing:0.8px;opacity:0.75;margin-bottom:10px;text-transform:uppercase;">다음 단계</div>
+<h3 style="font-size:20px;font-weight:800;line-height:1.45;margin-bottom:20px;color:#fff;letter-spacing:-0.3px;">개발비부터 유지보수 구조까지, 어디서부터 시작해야 할지 모르겠다면</h3>
+<div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;"><div style="background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px;font-size:14.5px;line-height:1.65;"><span style="font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;">런칭 이후 비용이 얼마나 더 드는지 감이 없다면</span>유지보수·서버·호스팅까지 포함한 총비용 구조를 매니저와 함께 정리할 수 있습니다. 프로젝트 등록과 상담은 무료입니다.</div>
+<div style="background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px;font-size:14.5px;line-height:1.65;"><span style="font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;">방식은 정했는데 파트너를 어떻게 찾아야 할지 막막하다면</span>프로젝트를 등록하면 매니저가 비용 범위와 유지보수 조건까지 확인하며 파트너를 함께 찾아드립니다.</div></div><div style="text-align:center;"><a href="https://www.wishket.com/project/create/?utm_source=blog_webflow&amp;utm_medium=cta_banner&amp;utm_campaign=260407_website-outsourcing-cost-by-method" style="display:inline-block;background:#fff;color:#2477F3;font-size:15px;font-weight:800;padding:13px 28px;border-radius:10px;text-decoration:none;">매니저와 정리하기</a></div>
+</div>
+
+  <div class="related-section">
+  <h3>함께 읽으면 좋은 콘텐츠</h3>
+<ul>
+  <li><a href="https://blog.wishket.com/blog/where-to-find-development-company">개발 업체, 어디서 찾을까? 방법별 장단점과 선택 기준</a></li>
+  <li><a href="https://blog.wishket.com/blog/outsourcing-development-risks-solutions">외주 개발, 어떤 리스크가 있을까? 자주 발생하는 4가지 문제와 해결법</a></li>
+  <li><a href="https://blog.wishket.com/blog/freelancer-platform-comparison">프리랜서 플랫폼 비교 2025｜특징·수수료·상황별 추천</a></li>
+</ul>
+  </div>
+
+  </div>
+
+  <h2>자주 묻는 질문</h2>
+<div class="faq-list">
+<div class="faq-item">
+  <div class="faq-q"><span class="q-mark">Q.</span>솔루션을 커스터마이징하는 방식과 처음부터 개발하는 방식은 비용이 얼마나 차이 나나요?</div>
+  <div class="faq-a">같은 &#x27;웹사이트&#x27;라도 기존 솔루션(워드프레스 테마, 쇼핑몰 솔루션 등)을 커스터마이징하면 수백만 원대, 처음부터 구축하는 풀 맞춤 개발은 천만 원 이상으로 비용 체계 자체가 다릅니다. 차이는 금액만이 아니에요. 솔루션 기반은 납품 후 유지보수를 솔루션 공급사 정책에 따라야 하는 경우가 생기고, 맞춤 개발은 요구사항 변경에 유연하지만 이후 운영 비용도 직접 관리해야 합니다. 방식을 고를 때 초기 비용뿐 아니라 운영·변경 구조까지 함께 보는 게 실질 비교입니다.</div>
+</div>
+<div class="faq-item">
+  <div class="faq-q"><span class="q-mark">Q.</span>프리랜서에게 맡겼을 때 개발비 외에 실제로 어떤 비용이 더 붙나요?</div>
+  <div class="faq-a">프리랜서 방식은 개발 단가 자체는 낮을 수 있지만, 기획·디자인·QA를 별도로 확보하면 각각 수십만 원에서 수백만 원이 추가됩니다. 클라이언트가 직접 일정 확인·검수·커뮤니케이션에 쓰는 시간도 비용으로 환산해야 하죠. 납품 후 파트너가 다른 프로젝트로 넘어가면 유지보수를 새 파트너에게 다시 맡겨야 하고, 기존 코드 파악 비용까지 추가됩니다. 견적서 숫자만 보면 이 비용들이 보이지 않아서 사후에 더 많이 쓰는 경우가 자주 생깁니다.</div>
+</div>
+<div class="faq-item">
+  <div class="faq-q"><span class="q-mark">Q.</span>웹사이트 외주 계약 시 하자보수와 유지보수는 어떻게 다르게 처리해야 하나요?</div>
+  <div class="faq-a">하자보수는 개발사 귀책의 버그를 계약에 명시된 기간 내 무상으로 수정하는 것이고, 유지보수는 기능 추가·OS 대응·보안 업데이트 등 별도 계약이 필요한 유상 서비스입니다. 납품 후 &#x27;이 부분 수정해달라&#x27;는 요청이 왔을 때 어느 쪽에 해당하는지 계약서에 기준이 없으면 분쟁이 생깁니다. 계약 단계에서 하자보수 범위(버그의 정의)와 기간을 명확히 적어두고, 유지보수는 별도 조항이나 계약으로 분리하는 게 분쟁을 막는 가장 확실한 방법입니다.</div>
+</div>
+<div class="faq-item">
+  <div class="faq-q"><span class="q-mark">Q.</span>서버·호스팅·도메인 비용은 어떤 방식을 선택해도 별도로 발생하나요?</div>
+  <div class="faq-a">네, 방식과 무관하게 별도입니다. 서버 운영비·호스팅·도메인은 개발비에 포함되지 않는 것이 일반적이고, 이는 프리랜서·개발사·플랫폼 경유 어느 경로든 동일합니다. 규모에 따라 다르지만 월 수만 원에서 수십만 원이 운영 중에 계속 발생합니다. 웹빌더(워드프레스, Webflow 등) 기반으로 구축한 경우 빌더 플랫폼 자체 구독료도 별도로 붙습니다. 방식을 선택하기 전에 개발비와 운영비를 분리해서 예산을 잡아야 런칭 후 예상치 못한 지출이 생기지 않습니다.</div>
+</div>
+</div>
+
+  <div class="cms-meta-area">
+    <h3 style="font-size:16px; font-weight:700; margin:0 0 16px 0; color:#666;">CMS 입력 필드</h3>
+    <table style="width:100%;border-collapse:collapse;margin:16px 0;">
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">써머리</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">견적이 업체마다 수배 차이 나는 이유와 방식별 총비용 비교 기준</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">slug</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">website-outsourcing-cost-by-method</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">날짜</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">2026-04-07</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">카테고리</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">IT 아웃소싱</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">태그</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">웹 개발</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">메타 디스크립션</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">견적이 업체마다 수배 차이 나는 건 프로젝트 성격과 포함 범위가 다르기 때문입니다. 프리랜서·개발사·플랫폼 경유별 비용 구조와 총비용 비교 기준을 정리했습니다.</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">Author</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">조가은 / 콘텐츠 마케터 — 위시켓 마케터 조가은입니다. 기업의 쉽고 안전한 IT 의사결정을 돕는 콘텐츠를 만듭니다.</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">TLDR</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">견적이 300만 원에서 2,000만 원까지 벌어지는 건 업체 문제가 아니라, 비교하는 대상이 사실 다른 프로젝트이기 때문입니다. 프리랜서·개발사·플랫폼 경유는 개발비가 쌓이는 구조 자체가 달라서 견적서 숫자만 보면 관리 부담과 런칭 이후 비용을 놓치게 됩니다. 방식을 고를 때는 개발비뿐 아니라 유지보수 파트너가 남아 있는 구조인지까지 포함해서 총비용을 비교하는 게 가장 정확한 판단 방법입니다.</td>
+</tr>
+</table>
+  </div>
+
+  <table class="guide-box" style="width:100%;border:1px solid #D1D5DB;border-collapse:collapse;margin:20px 0;">
+<tr><td style="background:#F9FAFB;padding:16px 20px;border:1px solid #D1D5DB;">
+<p style="margin:0 0 10px 0;font-weight:700;font-size:16px;">🖼 썸네일 제작 가이드</p>
+<p style="margin:0 0 4px 0;"><b>스타일:</b> 단색 배경 + 텍스트</p>
+<p style="margin:0 0 4px 0;"><b>배경색:</b> #1A55E3</p>
+<p style="margin:0 0 4px 0;"><b>제목 텍스트:</b></p>
+<p style="margin:0 0 4px 0;">　1줄: 웹사이트 외주 비용</p>
+<p style="margin:0 0 4px 0;">　2줄: 방식마다 얼마나 다를까?</p>
+<p style="margin:0 0 4px 0;"><b>장식 요소:</b> grid_lines</p>
+<p style="margin:0;"><b>로고:</b> wishket 로고 bottom_right</p>
+</td></tr>
+</table>
+
+  <h3 style="font-size:18px;font-weight:600;margin:32px 0 12px 0;">Embed 코드 (붙여넣기용)</h3>
+<div style="margin:16px 0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:14px;font-weight:600;color:#374151;">방식마다 비용이 얼마나 다른가요? — 프로젝트 성격 · 예산 규모감 · 특징</span><button onclick="copyCodeBlock(this)" style="background:#2477F3;color:#fff;border:none;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">복사</button></div><pre style="background:#1E293B;color:#E2E8F0;padding:12px;border-radius:8px;overflow-x:auto;font-size:11px;line-height:1.4;white-space:pre-wrap;max-height:200px;overflow-y:auto;">&lt;style&gt;
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:1.5rem 0;border:1px solid #E5E7EB;border-radius:12px;background:#fff}
+table.geo{width:100%;border-collapse:collapse;border-spacing:0;font-size:14px;line-height:1.6;table-layout:fixed}
+table.geo caption{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+table.geo thead th{padding:12px 18px;font-size:12.5px;font-weight:700;letter-spacing:.01em;text-align:left;border-bottom:1px solid #D1D1D9;background:#F6F6F9;vertical-align:bottom}
+table.geo thead th:first-child{color:#82828E;border-right:1px solid #D1D1D9}
+table.geo thead th:not(:first-child){color:#1A1A23}
+table.geo tbody th[scope=row]{padding:14px 18px;font-size:14px;font-weight:600;color:#1A1A23;text-align:left;border-bottom:1px solid #ECECF0;border-right:1px solid #ECECF0;background:#fff;vertical-align:top;word-break:keep-all}
+table.geo tbody td{padding:14px 18px;color:#3A3A47;border-bottom:1px solid #ECECF0;vertical-align:top;word-break:keep-all}
+table.geo tbody tr:nth-child(even) td,table.geo tbody tr:nth-child(even) th[scope=row]{background:#F9F9FB}
+table.geo tbody tr:hover td,table.geo tbody tr:hover th[scope=row]{background:#F0F0F5}
+table.geo tfoot td{padding:9px 18px;font-size:12px;color:#9CA3AF;border-top:1px solid #ECECF0;background:#F9F9FB}
+table.geo tfoot time{font-weight:500}
+@media(max-width:640px){table.geo{table-layout:auto}table.geo thead th,table.geo tbody th[scope=row],table.geo tbody td{padding:11px 14px;font-size:13px}table.geo tfoot td{padding:8px 14px}}
+&lt;/style&gt;
+&lt;div class=&quot;tbl-wrap&quot;&gt;&lt;table class=&quot;geo&quot;&gt;&lt;caption&gt;방식마다 비용이 얼마나 다른가요? — 프로젝트 성격 · 예산 규모감 · 특징&lt;/caption&gt;&lt;colgroup&gt;&lt;col style=&quot;width:22%&quot;/&gt;&lt;col style=&quot;width:39%&quot;/&gt;&lt;col style=&quot;width:39%&quot;/&gt;&lt;/colgroup&gt;&lt;thead&gt;&lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;프로젝트 성격&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;예산 규모감&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;특징&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;노코드/웹빌더 기반&lt;/th&gt;&lt;td&gt;수백만 원대&lt;/td&gt;&lt;td&gt;워드프레스, Webflow 등 기존 도구 활용. 빠르지만 커스터마이징 한계&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;솔루션 커스터마이징&lt;/th&gt;&lt;td&gt;수백~천만 원대&lt;/td&gt;&lt;td&gt;기존 솔루션에 기능 추가. 범위에 따라 편차 큼&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;풀 맞춤 개발&lt;/th&gt;&lt;td&gt;천만 원대 이상&lt;/td&gt;&lt;td&gt;디자인+기능+서버 전부 새로 구축. 기간도 길고 관리 공수도 큼&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;tfoot&gt;&lt;tr&gt;&lt;td colspan=&quot;3&quot;&gt;2025년 위시켓 등록 프로젝트 기준 · 클라이언트 희망 예산이며 실제 계약 금액과 다를 수 있습니다 · 노코드·빌더 기반과 풀 맞춤 개발은 성격이 다른 프로젝트로 같은 선상에서 비교하면 예산 기준이 왜곡될 수 있습니다&lt;/td&gt;&lt;/tr&gt;&lt;/tfoot&gt;&lt;/table&gt;&lt;/div&gt;</pre></div>
+<div style="margin:16px 0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:14px;font-weight:600;color:#374151;">같은 프로젝트인데 연결 경로에 따라 비용이 왜 다른가요? — 비교 항목 · 프리랜서 직고용 · 개발사 직접 계약</span><button onclick="copyCodeBlock(this)" style="background:#2477F3;color:#fff;border:none;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">복사</button></div><pre style="background:#1E293B;color:#E2E8F0;padding:12px;border-radius:8px;overflow-x:auto;font-size:11px;line-height:1.4;white-space:pre-wrap;max-height:200px;overflow-y:auto;">&lt;style&gt;
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:1.5rem 0;border:1px solid #E5E7EB;border-radius:12px;background:#fff}
+table.geo{width:100%;border-collapse:collapse;border-spacing:0;font-size:14px;line-height:1.6;table-layout:fixed}
+table.geo caption{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+table.geo thead th{padding:12px 18px;font-size:12.5px;font-weight:700;letter-spacing:.01em;text-align:left;border-bottom:1px solid #D1D1D9;background:#F6F6F9;vertical-align:bottom}
+table.geo thead th:first-child{color:#82828E;border-right:1px solid #D1D1D9}
+table.geo thead th:not(:first-child){color:#1A1A23}
+table.geo tbody th[scope=row]{padding:14px 18px;font-size:14px;font-weight:600;color:#1A1A23;text-align:left;border-bottom:1px solid #ECECF0;border-right:1px solid #ECECF0;background:#fff;vertical-align:top;word-break:keep-all}
+table.geo tbody td{padding:14px 18px;color:#3A3A47;border-bottom:1px solid #ECECF0;vertical-align:top;word-break:keep-all}
+table.geo tbody tr:nth-child(even) td,table.geo tbody tr:nth-child(even) th[scope=row]{background:#F9F9FB}
+table.geo tbody tr:hover td,table.geo tbody tr:hover th[scope=row]{background:#F0F0F5}
+table.geo tfoot td{padding:9px 18px;font-size:12px;color:#9CA3AF;border-top:1px solid #ECECF0;background:#F9F9FB}
+table.geo tfoot time{font-weight:500}
+@media(max-width:640px){table.geo{table-layout:auto}table.geo thead th,table.geo tbody th[scope=row],table.geo tbody td{padding:11px 14px;font-size:13px}table.geo tfoot td{padding:8px 14px}}
+&lt;/style&gt;
+&lt;div class=&quot;tbl-wrap&quot;&gt;&lt;table class=&quot;geo&quot;&gt;&lt;caption&gt;같은 프로젝트인데 연결 경로에 따라 비용이 왜 다른가요? — 비교 항목 · 프리랜서 직고용 · 개발사 직접 계약&lt;/caption&gt;&lt;colgroup&gt;&lt;col style=&quot;width:14%&quot;/&gt;&lt;col style=&quot;width:27%&quot;/&gt;&lt;col style=&quot;width:27%&quot;/&gt;&lt;col style=&quot;width:32%&quot;/&gt;&lt;/colgroup&gt;&lt;thead&gt;&lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;비교 항목&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;프리랜서 직고용&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;개발사 직접 계약&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;플랫폼 경유&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;개발 단가&lt;/th&gt;&lt;td&gt;낮음&lt;/td&gt;&lt;td&gt;높음 (팀 구성비 포함)&lt;/td&gt;&lt;td&gt;파트너에 따라 다름&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;기획·디자인&lt;/th&gt;&lt;td&gt;별도 확보 필요&lt;/td&gt;&lt;td&gt;팀에 포함&lt;/td&gt;&lt;td&gt;파트너에 따라 다름&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;관리 부담&lt;/th&gt;&lt;td&gt;클라이언트 직접&lt;/td&gt;&lt;td&gt;상대적으로 낮음&lt;/td&gt;&lt;td&gt;매니저 지원&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;계약 보호&lt;/th&gt;&lt;td&gt;직접 협의&lt;/td&gt;&lt;td&gt;직접 협의&lt;/td&gt;&lt;td&gt;표준계약서·대금보호&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;견적 비교&lt;/th&gt;&lt;td&gt;클라이언트가 직접&lt;/td&gt;&lt;td&gt;클라이언트가 직접&lt;/td&gt;&lt;td&gt;매니저가 함께 검토&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;</pre></div>
+<div style="margin:16px 0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:14px;font-weight:600;color:#374151;">CTA 배너</span><button onclick="copyCodeBlock(this)" style="background:#2477F3;color:#fff;border:none;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">복사</button></div><pre style="background:#1E293B;color:#E2E8F0;padding:12px;border-radius:8px;overflow-x:auto;font-size:11px;line-height:1.4;white-space:pre-wrap;max-height:200px;overflow-y:auto;">&lt;div style=&quot;background:linear-gradient(135deg,#5E9ADE 0%,#7BB2E8 100%);border-radius:16px;padding:32px 30px;color:#fff;margin:40px 0 0;&quot;&gt;
+&lt;div style=&quot;font-size:12px;font-weight:600;letter-spacing:0.8px;opacity:0.75;margin-bottom:10px;text-transform:uppercase;&quot;&gt;다음 단계&lt;/div&gt;
+&lt;h3 style=&quot;font-size:20px;font-weight:800;line-height:1.45;margin-bottom:20px;color:#fff;letter-spacing:-0.3px;&quot;&gt;개발비부터 유지보수 구조까지, 어디서부터 시작해야 할지 모르겠다면&lt;/h3&gt;
+&lt;div style=&quot;display:flex;flex-direction:column;gap:12px;margin-bottom:24px;&quot;&gt;&lt;div style=&quot;background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px;font-size:14.5px;line-height:1.65;&quot;&gt;&lt;span style=&quot;font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;&quot;&gt;런칭 이후 비용이 얼마나 더 드는지 감이 없다면&lt;/span&gt;유지보수·서버·호스팅까지 포함한 총비용 구조를 매니저와 함께 정리할 수 있습니다. 프로젝트 등록과 상담은 무료입니다.&lt;/div&gt;
+&lt;div style=&quot;background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px;font-size:14.5px;line-height:1.65;&quot;&gt;&lt;span style=&quot;font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;&quot;&gt;방식은 정했는데 파트너를 어떻게 찾아야 할지 막막하다면&lt;/span&gt;프로젝트를 등록하면 매니저가 비용 범위와 유지보수 조건까지 확인하며 파트너를 함께 찾아드립니다.&lt;/div&gt;&lt;/div&gt;&lt;div style=&quot;text-align:center;&quot;&gt;&lt;a href=&quot;https://www.wishket.com/project/create/?utm_source=blog_webflow&amp;amp;utm_medium=cta_banner&amp;amp;utm_campaign=260407_website-outsourcing-cost-by-method&quot; style=&quot;display:inline-block;background:#fff;color:#2477F3;font-size:15px;font-weight:800;padding:13px 28px;border-radius:10px;text-decoration:none;&quot;&gt;매니저와 정리하기&lt;/a&gt;&lt;/div&gt;
+&lt;/div&gt;</pre></div>
+
+
+  <h3 style="font-size:18px;font-weight:600;margin:32px 0 12px 0;">JSON-LD (Custom Code에 붙여넣기)</h3>
+<pre style="background:#1E293B;color:#E2E8F0;padding:16px;border-radius:8px;overflow-x:auto;font-size:12px;line-height:1.5;white-space:pre-wrap;">&lt;script type="application/ld+json"&gt;
+{
+  &quot;@context&quot;: &quot;https://schema.org&quot;,
+  &quot;@type&quot;: &quot;BlogPosting&quot;,
+  &quot;headline&quot;: &quot;프리랜서·개발사·플랫폼, 같은 웹사이트인데 견적이 3배 차이 나는 이유&quot;,
+  &quot;description&quot;: &quot;견적이 업체마다 수배 차이 나는 건 프로젝트 성격과 포함 범위가 다르기 때문입니다. 프리랜서·개발사·플랫폼 경유별 비용 구조와 총비용 비교 기준을 정리했습니다.&quot;,
+  &quot;datePublished&quot;: &quot;2026-04-07&quot;,
+  &quot;dateModified&quot;: &quot;2026-04-07&quot;,
+  &quot;author&quot;: {
+    &quot;@type&quot;: &quot;Person&quot;,
+    &quot;name&quot;: &quot;조가은&quot;
+  },
+  &quot;publisher&quot;: {
+    &quot;@type&quot;: &quot;Organization&quot;,
+    &quot;name&quot;: &quot;위시켓&quot;,
+    &quot;url&quot;: &quot;https://www.wishket.com&quot;
+  },
+  &quot;mainEntityOfPage&quot;: {
+    &quot;@type&quot;: &quot;WebPage&quot;
+  },
+  &quot;keywords&quot;: &quot;웹 개발&quot;,
+  &quot;articleSection&quot;: &quot;IT 아웃소싱&quot;,
+  &quot;hasPart&quot;: [
+    {
+      &quot;@type&quot;: &quot;WebPageElement&quot;,
+      &quot;name&quot;: &quot;방식마다 비용이 얼마나 다른가요?&quot;,
+      &quot;url&quot;: &quot;#방식마다-비용이-얼마나-다른가요&quot;
+    },
+    {
+      &quot;@type&quot;: &quot;WebPageElement&quot;,
+      &quot;name&quot;: &quot;같은 프로젝트인데 연결 경로에 따라 비용이 왜 다른가요?&quot;,
+      &quot;url&quot;: &quot;#같은-프로젝트인데-연결-경로에-따라-비용이-왜-다른가요&quot;
+    },
+    {
+      &quot;@type&quot;: &quot;WebPageElement&quot;,
+      &quot;name&quot;: &quot;비슷한 프로젝트가 각 경로에서 실제로 얼마에 진행되나요?&quot;,
+      &quot;url&quot;: &quot;#비슷한-프로젝트가-각-경로에서-실제로-얼마에-진행되나요&quot;
+    },
+    {
+      &quot;@type&quot;: &quot;WebPageElement&quot;,
+      &quot;name&quot;: &quot;유지보수까지 포함하면 비용 차이가 달라지나요?&quot;,
+      &quot;url&quot;: &quot;#유지보수까지-포함하면-비용-차이가-달라지나요&quot;
+    }
+  ]
+}
+&lt;/script&gt;
+&lt;script type="application/ld+json"&gt;
+{
+  &quot;@context&quot;: &quot;https://schema.org&quot;,
+  &quot;@type&quot;: &quot;FAQPage&quot;,
+  &quot;mainEntity&quot;: [
+    {
+      &quot;@type&quot;: &quot;Question&quot;,
+      &quot;name&quot;: &quot;솔루션을 커스터마이징하는 방식과 처음부터 개발하는 방식은 비용이 얼마나 차이 나나요?&quot;,
+      &quot;acceptedAnswer&quot;: {
+        &quot;@type&quot;: &quot;Answer&quot;,
+        &quot;text&quot;: &quot;같은 &#x27;웹사이트&#x27;라도 기존 솔루션(워드프레스 테마, 쇼핑몰 솔루션 등)을 커스터마이징하면 수백만 원대, 처음부터 구축하는 풀 맞춤 개발은 천만 원 이상으로 비용 체계 자체가 다릅니다. 차이는 금액만이 아니에요. 솔루션 기반은 납품 후 유지보수를 솔루션 공급사 정책에 따라야 하는 경우가 생기고, 맞춤 개발은 요구사항 변경에 유연하지만 이후 운영 비용도 직접 관리해야 합니다. 방식을 고를 때 초기 비용뿐 아니라 운영·변경 구조까지 함께 보는 게 실질 비교입니다.&quot;
+      }
+    },
+    {
+      &quot;@type&quot;: &quot;Question&quot;,
+      &quot;name&quot;: &quot;프리랜서에게 맡겼을 때 개발비 외에 실제로 어떤 비용이 더 붙나요?&quot;,
+      &quot;acceptedAnswer&quot;: {
+        &quot;@type&quot;: &quot;Answer&quot;,
+        &quot;text&quot;: &quot;프리랜서 방식은 개발 단가 자체는 낮을 수 있지만, 기획·디자인·QA를 별도로 확보하면 각각 수십만 원에서 수백만 원이 추가됩니다. 클라이언트가 직접 일정 확인·검수·커뮤니케이션에 쓰는 시간도 비용으로 환산해야 하죠. 납품 후 파트너가 다른 프로젝트로 넘어가면 유지보수를 새 파트너에게 다시 맡겨야 하고, 기존 코드 파악 비용까지 추가됩니다. 견적서 숫자만 보면 이 비용들이 보이지 않아서 사후에 더 많이 쓰는 경우가 자주 생깁니다.&quot;
+      }
+    },
+    {
+      &quot;@type&quot;: &quot;Question&quot;,
+      &quot;name&quot;: &quot;웹사이트 외주 계약 시 하자보수와 유지보수는 어떻게 다르게 처리해야 하나요?&quot;,
+      &quot;acceptedAnswer&quot;: {
+        &quot;@type&quot;: &quot;Answer&quot;,
+        &quot;text&quot;: &quot;하자보수는 개발사 귀책의 버그를 계약에 명시된 기간 내 무상으로 수정하는 것이고, 유지보수는 기능 추가·OS 대응·보안 업데이트 등 별도 계약이 필요한 유상 서비스입니다. 납품 후 &#x27;이 부분 수정해달라&#x27;는 요청이 왔을 때 어느 쪽에 해당하는지 계약서에 기준이 없으면 분쟁이 생깁니다. 계약 단계에서 하자보수 범위(버그의 정의)와 기간을 명확히 적어두고, 유지보수는 별도 조항이나 계약으로 분리하는 게 분쟁을 막는 가장 확실한 방법입니다.&quot;
+      }
+    },
+    {
+      &quot;@type&quot;: &quot;Question&quot;,
+      &quot;name&quot;: &quot;서버·호스팅·도메인 비용은 어떤 방식을 선택해도 별도로 발생하나요?&quot;,
+      &quot;acceptedAnswer&quot;: {
+        &quot;@type&quot;: &quot;Answer&quot;,
+        &quot;text&quot;: &quot;네, 방식과 무관하게 별도입니다. 서버 운영비·호스팅·도메인은 개발비에 포함되지 않는 것이 일반적이고, 이는 프리랜서·개발사·플랫폼 경유 어느 경로든 동일합니다. 규모에 따라 다르지만 월 수만 원에서 수십만 원이 운영 중에 계속 발생합니다. 웹빌더(워드프레스, Webflow 등) 기반으로 구축한 경우 빌더 플랫폼 자체 구독료도 별도로 붙습니다. 방식을 선택하기 전에 개발비와 운영비를 분리해서 예산을 잡아야 런칭 후 예상치 못한 지출이 생기지 않습니다.&quot;
+      }
+    }
+  ]
+}
+&lt;/script&gt;</pre>
+
+</div>
+
+<script>
+// contenteditable 변경 감지 + localStorage 자동저장
+var content = document.getElementById('cms-content');
+var status = document.getElementById('edit-status');
+var saveTimer;
+var STORAGE_KEY = 'wishket_draft_' + document.title.replace(/[^a-zA-Z0-9가-힣]/g, '_').substring(0, 60);
+var VERSION_KEY = STORAGE_KEY + '_ver';
+var CURRENT_VERSION = '2026-04-07';
+
+window.addEventListener('load', function() {
+  var saved = localStorage.getItem(STORAGE_KEY);
+  var savedVer = localStorage.getItem(VERSION_KEY);
+  if (saved && savedVer === CURRENT_VERSION) { content.innerHTML = saved; }
+  else { localStorage.removeItem(STORAGE_KEY); }
+  attachLinkHandlers();
+});
+
+content.addEventListener('input', function() {
+  status.textContent = '편집 중 (미저장)';
+  status.className = 'modified';
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(function() {
+    localStorage.setItem(STORAGE_KEY, content.innerHTML);
+    localStorage.setItem(VERSION_KEY, CURRENT_VERSION);
+    status.textContent = '자동저장됨';
+    status.className = '';
+  }, 3000);
+});
+
+function attachLinkHandlers() {
+  document.querySelectorAll('[contenteditable] a').forEach(function(a) {
+    a.addEventListener('click', function(e) {
+      if (e.metaKey || e.ctrlKey) { window.open(a.href, '_blank'); }
+    });
+    if (a.title.indexOf('Cmd+클릭') === -1) {
+      a.title = (a.title || '') + ' (Cmd+클릭으로 열기)';
+    }
+  });
+}
+
+function copyContent() {
+  var clone = content.cloneNode(true);
+  clone.querySelectorAll('.image-guide, table.image-guide, table.guide-box').forEach(function(el) { el.remove(); });
+  var text = clone.innerText;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(function() {
+      var btn = document.getElementById('copy-btn');
+      btn.textContent = '복사됨!';
+      setTimeout(function() { btn.textContent = '본문 복사'; }, 2000);
+    });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    var btn = document.getElementById('copy-btn');
+    btn.textContent = '복사됨!';
+    setTimeout(function() { btn.textContent = '본문 복사'; }, 2000);
+  }
+}
+
+function copyCodeBlock(btn) {
+  var pre = btn.parentElement.nextElementSibling;
+  if (!pre) return;
+  var text = pre.textContent;
+  navigator.clipboard.writeText(text).then(function() {
+    btn.textContent = '복사됨!';
+    setTimeout(function() { btn.textContent = '복사'; }, 2000);
+  });
+}
+
+window.addEventListener('beforeunload', function(e) {
+  if (status.className === 'modified') {
+    e.preventDefault();
+    e.returnValue = '';
+  }
+});
+</script>
+
+</body>
+</html>
