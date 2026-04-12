@@ -9,12 +9,21 @@ from __future__ import annotations
 
 import argparse
 import html as html_mod
+import datetime
 import json
 import re
 import sys
 import unicodedata
 from pathlib import Path
 from typing import Any
+
+
+class _DateEncoder(json.JSONEncoder):
+    """Handle datetime.date/datetime objects in JSON serialization."""
+    def default(self, o: Any) -> Any:
+        if isinstance(o, (datetime.date, datetime.datetime)):
+            return o.isoformat()
+        return super().default(o)
 
 import markdown
 import yaml
@@ -106,10 +115,10 @@ def parse_body(md_body: str) -> tuple[str, str, list[tuple[str, str]]]:
 # ---------------------------------------------------------------------------
 
 BOX_STYLES = {
-    "📌": {"border": "#ffd966", "bg": "#fff9ec", "title_color": "#7a5c00", "text_color": "#4a3a00"},
-    "💡": {"border": "#7DD3E8", "bg": "#E8F7FC", "title_color": "#0C7A9E", "text_color": "#0A5C78"},
-    "✅": {"border": "#86efac", "bg": "#f0fdf4", "title_color": "#166534", "text_color": "#14532d"},
-    "💬": {"border": "#c4b5fd", "bg": "#f5f3ff", "title_color": "#5b21b6", "text_color": "#3b0764"},
+    "📌": {"border": "#2E6BAA", "bg": "#F0F6FF", "title_color": "#1A1A1A", "text_color": "#1A1A1A"},
+    "💡": {"border": "#2E6BAA", "bg": "#F0F6FF", "title_color": "#1A1A1A", "text_color": "#1A1A1A"},
+    "✅": {"border": "#2E6BAA", "bg": "#F0F6FF", "title_color": "#1A1A1A", "text_color": "#1A1A1A"},
+    "💬": {"border": "#2E6BAA", "bg": "#F0F6FF", "title_color": "#1A1A1A", "text_color": "#1A1A1A"},
 }
 
 
@@ -193,24 +202,24 @@ def _render_case_cards(cases: list[dict]) -> str:
         label = CASE_BADGE_LABELS[tier]
 
         cards.append(
-            f'<div style="border:1px solid #e8e8e8;border-radius:10px;padding:18px 20px;background:#fff;">\n'
+            f'<div style="border:1px solid #E5E7EB;border-radius:14px;padding:18px 20px;background:#fff;">\n'
             f'  <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;">\n'
             f'    <span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;'
             f'white-space:nowrap;background:{badge["bg"]};color:{badge["color"]};">{label}</span>\n'
             f'    <span style="font-size:15.5px;font-weight:700;color:#0d0d0d;line-height:1.4;">'
             f'{_esc(case["title"])}</span>\n'
             f'  </div>\n'
-            f'  <div style="font-size:20px;font-weight:800;color:#26B2E2;margin-bottom:4px;">'
+            f'  <div style="font-size:20px;font-weight:800;color:#2477F3;margin-bottom:4px;">'
             f'{_esc(case["price"])}</div>\n'
             f'  <div style="font-size:12.5px;color:#999;margin-bottom:10px;">'
             f'{_esc(case["meta"])}</div>\n'
-            f'  <div style="font-size:14.5px;color:#444;line-height:1.7;">'
+            f'  <div style="font-size:14.5px;color:#444;line-height:2.0;">'
             f'{_esc(case["desc"])}</div>\n'
             f'</div>'
         )
 
     return (
-        '<div style="display:flex;flex-direction:column;gap:14px;margin:20px 0 24px;">\n'
+        '<div style="display:flex;flex-direction:column;gap:14px;margin:30px 0;">\n'
         + "\n".join(cards)
         + "\n</div>"
     )
@@ -222,8 +231,8 @@ def convert_blockquote_boxes(html_content: str) -> str:
     for bq in soup.find_all("blockquote"):
         text = bq.get_text(strip=True)
 
-        # ── Case cards (📋) ──
-        if text.startswith("📋"):
+        # ── Case cards (📋 or **프로젝트 사례**) ──
+        if text.startswith("📋") or text.startswith("프로젝트 사례"):
             paragraphs = bq.find_all("p")
             if not paragraphs:
                 continue
@@ -321,12 +330,12 @@ def convert_blockquote_boxes(html_content: str) -> str:
         )
 
         box_html = (
-            f'<div style="background:{style["bg"]};border:1px solid {style["border"]};'
-            f'border-radius:10px;padding:18px 20px;margin:20px 0 24px;">\n'
+            f'<div style="background:{style["bg"]};border-left:3px solid {style["border"]};'
+            f'border-radius:0 14px 14px 0;padding:18px 20px;margin:30px 0;">\n'
             f'<div style="font-size:13px;font-weight:700;color:{style["title_color"]};'
             f'margin-bottom:10px;display:flex;align-items:center;gap:6px;">'
             f'{emoji} {_esc(title_text)}</div>\n'
-            f'<div style="font-size:14.5px;color:{style["text_color"]};line-height:1.75;">'
+            f'<div style="font-size:14.5px;color:{style["text_color"]};line-height:2.0;">'
             f'{body_html}</div>\n'
             f'</div>'
         )
@@ -465,29 +474,83 @@ def apply_geo_table_style(
             new_tbody.append(new_row)
         new_table.append(new_tbody)
 
-        # Tfoot — data freshness
-        if date:
-            # date = "2026-04-03" → "2026년 4월"
-            try:
-                y, m, _d = date.split("-")
-                date_label = f"{y}년 {int(m)}월"
-                date_attr = f"{y}-{m}"
-            except ValueError:
-                date_label = date
-                date_attr = date
-            new_tfoot = soup.new_tag("tfoot")
-            tfoot_tr = soup.new_tag("tr")
-            tfoot_td = soup.new_tag("td", colspan=str(cols))
-            time_tag = soup.new_tag("time", datetime=date_attr)
-            time_tag.string = date_label
-            tfoot_td.append(time_tag)
-            tfoot_td.append(" 기준 · 실제 조건에 따라 달라질 수 있습니다")
-            tfoot_tr.append(tfoot_td)
-            new_tfoot.append(tfoot_tr)
-            new_table.append(new_tfoot)
+        # Tfoot — now controlled by assembler YAML (table_footnotes)
+        # No automatic tfoot insertion here.
 
         new_wrapper.append(new_table)
         table.replace_with(new_wrapper)
+
+    return str(soup)
+
+
+# ---------------------------------------------------------------------------
+# 4-B. Table Footnotes (assembler-controlled)
+# ---------------------------------------------------------------------------
+
+
+def apply_table_footnotes(html_content: str, footnotes: list[dict]) -> str:
+    """Insert tfoot into tables based on assembler YAML table_footnotes.
+
+    Each footnote dict has:
+      - after_h2: int — which H2 section (1-based) the table belongs to
+      - text: str — footnote text to display
+    """
+    if not footnotes:
+        return html_content
+
+    soup = BeautifulSoup(html_content, "html.parser")
+
+    # Build a map: h2_index -> footnote text
+    fn_map: dict[int, str] = {}
+    for fn in footnotes:
+        h2_idx = fn.get("after_h2")
+        text = fn.get("text", "")
+        if h2_idx and text:
+            fn_map[h2_idx] = text
+
+    if not fn_map:
+        return html_content
+
+    # Find all H2 elements to determine section boundaries
+    h2_tags = soup.find_all("h2")
+
+    for h2_idx, footnote_text in fn_map.items():
+        if h2_idx < 1 or h2_idx > len(h2_tags):
+            continue
+
+        h2_tag = h2_tags[h2_idx - 1]
+
+        # Find the first .tbl-wrap table after this H2 (before the next H2)
+        next_h2 = h2_tags[h2_idx] if h2_idx < len(h2_tags) else None
+        current = h2_tag.find_next("div", class_="tbl-wrap")
+        if not current:
+            continue
+        # Ensure this table is before the next H2
+        if next_h2 and current.find_previous("h2") != h2_tag:
+            continue
+
+        table = current.find("table", class_="geo")
+        if not table:
+            continue
+
+        # Check if tfoot already exists
+        if table.find("tfoot"):
+            continue
+
+        # Count columns
+        first_row = table.find("tr")
+        if not first_row:
+            continue
+        cols = len(first_row.find_all(["th", "td"]))
+
+        # Create tfoot
+        new_tfoot = soup.new_tag("tfoot")
+        tfoot_tr = soup.new_tag("tr")
+        tfoot_td = soup.new_tag("td", colspan=str(cols))
+        tfoot_td.string = footnote_text
+        tfoot_tr.append(tfoot_td)
+        new_tfoot.append(tfoot_tr)
+        table.append(new_tfoot)
 
     return str(soup)
 
@@ -503,12 +566,14 @@ _IMAGE_GUIDE_TYPE_LABELS = {
 }
 
 _IMAGE_GUIDE_TEMPLATE = """
-<table class="guide-box" style="width:100%;border:1px solid #7DD3E8;border-collapse:collapse;margin:20px 0;">
-<tr><td style="background:#E8F7FC;padding:16px 20px;border:1px solid #7DD3E8;">
-<p style="margin:0 0 8px 0;font-weight:700;">📷 이미지 — [H2: {heading}] 뒤</p>
-<p style="margin:0 0 4px 0;"><b>유형:</b> {type_label}</p>
-<p style="margin:0 0 4px 0;"><b>설명:</b> {description}</p>
-<p style="margin:0;"><b>alt:</b> {alt}</p>
+<table class="guide-box" style="width:calc(100% + 40px);margin-left:-20px;border:2px solid #E5E7EB;border-collapse:collapse;margin-top:30px;margin-bottom:30px;">
+<tr><td style="padding:16px 24px;border:none;font-size:13.5px;background:#FAFAFA;">
+<p style="margin:0 0 8px 0;font-weight:700;">📷 이미지 제안</p>
+<ul style="margin:0;padding-left:18px;list-style:disc;">
+<li style="margin-bottom:4px;"><b>유형:</b> {type_label}</li>
+<li style="margin-bottom:4px;"><b>설명:</b> {description}</li>
+<li style="margin-bottom:0;"><b>alt:</b> {alt}</li>
+</ul>
 </td></tr>
 </table>"""
 
@@ -690,7 +755,7 @@ def render_cta_banner(cta: dict, slug: str, date: str) -> str:
             label = _esc(s.get("label", ""))
             desc = _esc(s.get("description", ""))
             items.append(
-                f'<div style="background:rgba(255,255,255,0.12);border-radius:8px;'
+                f'<div style="background:rgba(255,255,255,0.12);border-radius:10px;'
                 f'padding:14px 16px;font-size:14.5px;line-height:1.65;">'
                 f'<span style="font-weight:700;display:block;margin-bottom:4px;'
                 f'font-size:13px;opacity:0.85;">{label}</span>{desc}</div>'
@@ -705,16 +770,17 @@ def render_cta_banner(cta: dict, slug: str, date: str) -> str:
     sub_html = f'<p style="font-size:15px;opacity:0.85;margin:0 0 24px 0;">{sub}</p>' if sub and not scenarios else ""
 
     return (
-        '<div style="background:linear-gradient(135deg,#1A8CB4 0%,#26B2E2 100%);'
-        'border-radius:14px;padding:32px 30px;color:#fff;margin:40px 0 0;">\n'
+        '<div style="background:linear-gradient(135deg,#5E9ADE 0%,#7BB2E8 100%);'
+        'border-radius:16px;padding:32px 30px;color:#fff;margin:40px 0 0;">\n'
         f'<div style="font-size:12px;font-weight:600;letter-spacing:0.8px;'
         f'opacity:0.75;margin-bottom:10px;text-transform:uppercase;">{eyebrow}</div>\n'
         f'<h3 style="font-size:20px;font-weight:800;line-height:1.45;'
         f'margin-bottom:20px;color:#fff;letter-spacing:-0.3px;">{headline}</h3>\n'
         f'{scenarios_html}{sub_html}'
+        f'<div style="text-align:center;">'
         f'<a href="{_esc(full_url)}" style="display:inline-block;background:#fff;'
-        f'color:#26B2E2;font-size:15px;font-weight:800;padding:13px 28px;'
-        f'border-radius:8px;text-decoration:none;">{button_text}</a>\n'
+        f'color:#2477F3;font-size:15px;font-weight:800;padding:13px 28px;'
+        f'border-radius:10px;text-decoration:none;">{button_text}</a></div>\n'
         '</div>'
     )
 
@@ -727,13 +793,13 @@ def render_inline_cta(cta: dict, slug: str, date: str) -> str:
     button_text = _esc(cta.get("button_text", "더 알아보기"))
 
     return (
-        '<div style="background:#E8F7FC;border:1px solid #7DD3E8;border-radius:10px;'
-        'padding:18px 22px;margin:24px 0 28px;display:flex;align-items:center;'
-        'justify-content:space-between;gap:16px;flex-wrap:wrap;">\n'
-        f'<p style="font-size:15px;color:#0A5C78;line-height:1.65;margin:0;flex:1;">{text}</p>\n'
-        f'<a href="{_esc(full_url)}" style="background:#26B2E2;color:#fff;font-size:14px;'
-        f'font-weight:700;padding:10px 18px;border-radius:8px;white-space:nowrap;'
-        f'text-decoration:none;">{button_text}</a>\n'
+        '<div style="background:linear-gradient(135deg,#5E9ADE 0%,#7BB2E8 100%);'
+        'border-radius:14px;padding:20px 24px;margin:30px 0;color:#fff;'
+        'display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">\n'
+        f'<p style="font-size:15px;color:#fff;line-height:1.65;margin:0;flex:1;">{text}</p>\n'
+        f'<a href="{_esc(full_url)}" style="display:inline-block;background:#fff;'
+        f'color:#2477F3;font-size:14px;font-weight:700;padding:10px 18px;'
+        f'border-radius:10px;white-space:nowrap;text-decoration:none;">{button_text}</a>\n'
         '</div>'
     )
 
@@ -742,8 +808,8 @@ def render_faq(faq: list[dict]) -> str:
     """Render FAQ section."""
     items = []
     for item in faq:
-        q = _esc(item.get("q", ""))
-        a = _esc(item.get("a", ""))
+        q = _esc(item.get("question", item.get("q", "")))
+        a = _esc(item.get("answer", item.get("a", "")))
         items.append(
             f'<div class="faq-item">\n'
             f'  <div class="faq-q"><span class="q-mark">Q.</span>{q}</div>\n'
@@ -805,10 +871,10 @@ def render_jsonld(data: dict, title: str, sections: list[tuple[str, str]]) -> st
             "mainEntity": [
                 {
                     "@type": "Question",
-                    "name": item.get("q", ""),
+                    "name": item.get("question", item.get("q", "")),
                     "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": item.get("a", ""),
+                        "text": item.get("answer", item.get("a", "")),
                     },
                 }
                 for item in faq_items
@@ -816,7 +882,7 @@ def render_jsonld(data: dict, title: str, sections: list[tuple[str, str]]) -> st
         }
 
     # Build copyable code block
-    blog_json = json.dumps(blog_posting, ensure_ascii=False, indent=2)
+    blog_json = json.dumps(blog_posting, ensure_ascii=False, indent=2, cls=_DateEncoder)
     script_blog = (
         '&lt;script type="application/ld+json"&gt;\n'
         f"{_esc(blog_json)}\n"
@@ -825,7 +891,7 @@ def render_jsonld(data: dict, title: str, sections: list[tuple[str, str]]) -> st
 
     parts = [script_blog]
     if faq_ld:
-        faq_json = json.dumps(faq_ld, ensure_ascii=False, indent=2)
+        faq_json = json.dumps(faq_ld, ensure_ascii=False, indent=2, cls=_DateEncoder)
         script_faq = (
             '\n&lt;script type="application/ld+json"&gt;\n'
             f"{_esc(faq_json)}\n"
@@ -850,7 +916,7 @@ def _copyable_block(label: str, code: str) -> str:
         f'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">'
         f'<span style="font-size:14px;font-weight:600;color:#374151;">{_esc(label)}</span>'
         f'<button onclick="copyCodeBlock(this)" '
-        f'style="background:#26B2E2;color:#fff;border:none;padding:4px 12px;'
+        f'style="background:#2477F3;color:#fff;border:none;padding:4px 12px;'
         f'border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">'
         f'복사</button></div>'
         f'<pre style="background:#1E293B;color:#E2E8F0;'
@@ -863,7 +929,7 @@ def _copyable_block(label: str, code: str) -> str:
 _GEO_TABLE_CSS = (
     "<style>\n"
     ".tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:1.5rem 0;"
-    "border:1px solid #DFDFE5;border-radius:8px;background:#fff}\n"
+    "border:1px solid #E5E7EB;border-radius:12px;background:#fff}\n"
     "table.geo{width:100%;border-collapse:collapse;border-spacing:0;font-size:14px;"
     "line-height:1.6;table-layout:fixed}\n"
     "table.geo caption{position:absolute;width:1px;height:1px;overflow:hidden;"
@@ -1109,6 +1175,10 @@ def render_article(writer_md_path: Path, assembler_yaml_path: Path) -> str:
     bridge_link = asm.get("bridge_link")
     full_content = insert_bridge_link(full_content, bridge_link)
 
+    # Apply table footnotes (assembler-controlled)
+    table_footnotes = asm.get("table_footnotes", [])
+    full_content = apply_table_footnotes(full_content, table_footnotes)
+
     # Render components
     tldr_html = render_tldr(asm.get("tldr", ""))
     thumbnail_html = render_thumbnail(asm.get("thumbnail", {}))
@@ -1147,17 +1217,12 @@ def render_article(writer_md_path: Path, assembler_yaml_path: Path) -> str:
 
 
 def _derive_output_path(writer_md: Path) -> Path:
-    """Derive output path from writer MD filename."""
-    stem = writer_md.stem.replace("draft_", "assembled_")
-    # Replace date with today
-    from datetime import date
+    """Derive output path from writer MD filename.
 
-    today = date.today().strftime("%Y%m%d")
-    # Try to replace existing date pattern
-    stem = re.sub(r"\d{8}", today, stem)
-    output_dir = PROJECT_ROOT / "output" / "content_assembler"
-    output_dir.mkdir(parents=True, exist_ok=True)
-    return output_dir / f"{stem}.html"
+    Per-run 구조: 입력 파일과 같은 디렉토리에 HTML을 생성한다.
+    """
+    stem = writer_md.stem.replace("draft_", "assembled_")
+    return writer_md.parent / f"{stem}.html"
 
 
 def main() -> None:
