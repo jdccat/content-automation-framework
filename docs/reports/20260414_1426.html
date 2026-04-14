@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>블로그 전략 보고서</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Pretendard:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F6F5F1;--surface:#FFF;--border:#E2E0DB;--border-light:#EDECEA;--text:#1A1A1A;--text-secondary:#555;--text-muted:#999;--text-dim:#BBB;--hub:#1B7F79;--hub-light:#E6F5F4;--hub-bg:#F0FAF9;--sub1:#D94F4F;--sub1-light:#FDF0F0;--sub1-bg:#FEF6F6;--sub2:#C68A1D;--sub2-light:#FFF8EB;--sub2-bg:#FFFBF2;--sub3:#6C5CE7;--sub3-light:#F3F1FE;--sub3-bg:#F8F7FF;--emotion-high:#2ECC71;--emotion-mid:#F39C12;--emotion-low:#E74C3C;--basis-bg:#FAFAF8;--basis-border:#E8E7E3;--try-color:#1B7F79;--block-color:#D94F4F;--accent:#7C3AED;--accent-light:#EDE9FE;--radius:10px;--font:'Pretendard','Noto Sans KR',sans-serif;--font-mono:'JetBrains Mono',monospace;--col-w:260px;--row-label-w:88px}
+*{margin:0;padding:0;box-sizing:border-box}body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.7;-webkit-font-smoothing:antialiased;font-size:13.5px}
+.page-header{padding:48px 48px 0;max-width:1200px;margin:0 auto}.header-top{display:flex;align-items:flex-end;gap:16px;margin-bottom:10px;flex-wrap:wrap}.header-top h1{font-size:26px;font-weight:700;letter-spacing:-.5px;line-height:1.3}.header-badge{font-family:var(--font-mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);background:var(--accent-light);padding:4px 12px;border-radius:100px;margin-bottom:4px;flex-shrink:0}.header-desc{font-size:14px;color:var(--text-secondary);margin-bottom:8px;word-break:keep-all;line-height:1.7}.header-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}.meta-chip{font-family:var(--font-mono);font-size:10px;letter-spacing:.5px;color:var(--text-muted);background:var(--surface);border:1px solid var(--border);padding:3px 10px;border-radius:100px}
+.top-tabs{display:flex;gap:0;border-bottom:2px solid var(--border);max-width:1200px;margin:0 auto;padding:0 48px}.top-tab{padding:14px 24px;font-size:13px;font-weight:600;color:var(--text-muted);background:none;border:none;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .15s;letter-spacing:-.2px}.top-tab.active{color:var(--accent);border-bottom-color:var(--accent)}.top-tab:hover:not(.active){color:var(--text-secondary)}.top-tab .tab-num{font-family:var(--font-mono);font-size:10px;background:var(--border-light);color:var(--text-muted);padding:1px 6px;border-radius:4px;margin-left:6px}.top-tab.active .tab-num{background:var(--accent-light);color:var(--accent)}
+.tab-panel{display:none;max-width:1200px;margin:0 auto;padding:32px 48px 72px}.tab-panel.active{display:block}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px 26px;margin-bottom:18px}.card-title{font-family:var(--font-mono);font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);margin-bottom:12px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.badge{display:inline-flex;align-items:center;padding:2px 9px;border-radius:100px;font-family:var(--font-mono);font-size:10px;font-weight:500;letter-spacing:.3px;white-space:nowrap;margin:1px 2px}.b-purple{background:var(--accent-light);color:var(--accent);border:1px solid rgba(124,58,237,.2)}.b-hub{background:var(--hub-light);color:var(--hub);border:1px solid rgba(27,127,121,.2)}.b-sub1{background:var(--sub1-light);color:var(--sub1);border:1px solid rgba(217,79,79,.2)}.b-sub2{background:var(--sub2-light);color:var(--sub2);border:1px solid rgba(198,138,29,.2)}.b-sub3{background:var(--sub3-light);color:var(--sub3);border:1px solid rgba(108,92,231,.2)}.b-green{background:#E6F5F4;color:#1B7F79;border:1px solid rgba(27,127,121,.2)}.b-amber{background:#FEF3C7;color:#92400E;border:1px solid #FDE68A}.b-red{background:#FEE2E2;color:#DC2626;border:1px solid rgba(220,38,38,.2)}.b-gray{background:var(--border-light);color:var(--text-muted);border:1px solid var(--border)}
+.pill{display:inline-block;padding:3px 10px;border-radius:6px;font-size:11px;background:var(--border-light);color:var(--text-secondary);border:1px solid var(--border);margin:2px}
+table{width:100%;border-collapse:collapse}th{background:var(--basis-bg);text-align:left;padding:11px 16px;font-family:var(--font-mono);font-size:10px;font-weight:600;letter-spacing:.5px;color:var(--text-muted);border-bottom:1px solid var(--border)}td{padding:12px 16px;border-bottom:1px solid var(--border-light);font-size:12.5px;vertical-align:top;line-height:1.75;color:var(--text-secondary)}tr:last-child td{border-bottom:none}tr:hover td{background:rgba(0,0,0,.01)}.td-num{text-align:right;font-family:var(--font-mono);font-weight:600;font-variant-numeric:tabular-nums;color:var(--text)}
+td:first-child{color:var(--text);font-weight:500}
+ul.bullet{list-style:none;padding:0;margin:0}ul.bullet li{position:relative;padding:5px 0 5px 16px;font-size:12.5px;color:var(--text-secondary);line-height:1.75}ul.bullet li::before{content:"";position:absolute;left:0;top:12px;width:5px;height:5px;border-radius:50%;background:var(--border)}
+ul.bullet li strong{color:var(--text);font-weight:600}
+.dist-item{display:flex;align-items:center;margin-bottom:10px;font-size:12px}.dist-label{min-width:120px;color:var(--text-secondary);font-weight:500}.dist-bar-wrap{flex:1;height:6px;background:var(--border-light);border-radius:3px;margin:0 10px;overflow:hidden}.dist-bar-fill{height:100%;border-radius:3px}.dist-count{font-family:var(--font-mono);font-size:11px;font-weight:600;color:var(--text);min-width:36px;text-align:right}
+.correction{background:#F0FDF4;border:1px solid #BBF7D0;border-left:3px solid var(--hub);border-radius:0 6px 6px 0;padding:16px 20px;margin:10px 0;font-size:12.5px;line-height:1.75}.correction .claim{font-family:var(--font-mono);font-size:11px;color:var(--text-dim);margin-bottom:5px;font-style:italic}.correction .fix{color:#166534;font-weight:400}
+.warn-card{background:#FFF7ED;border:1px solid #FED7AA;border-left:3px solid #C2410C;border-radius:0 6px 6px 0;padding:16px 20px;margin:12px 0}.warn-card .lbl{font-family:var(--font-mono);font-size:9px;font-weight:600;letter-spacing:1px;color:#C2410C;margin-bottom:6px}.warn-card .txt{font-size:12px;color:#92400E;line-height:1.75}
+.reasoning-box{background:var(--basis-bg);border:1px solid var(--basis-border);border-left:3px solid var(--text-dim);border-radius:0 6px 6px 0;padding:16px 20px;margin-top:14px}.reasoning-box.rb-hub{border-left-color:var(--hub)}.reasoning-box.rb-sub1{border-left-color:var(--sub1)}.reasoning-box.rb-sub2{border-left-color:var(--sub2)}.reasoning-box.rb-sub3{border-left-color:var(--sub3)}.rb-label{font-family:var(--font-mono);font-size:9px;letter-spacing:1.2px;text-transform:uppercase;color:var(--text-dim);margin-bottom:6px}.rb-text{font-size:12px;color:var(--text-muted);word-break:keep-all;line-height:1.75}
+ul.check-list{list-style:none;padding:0;margin:0}ul.check-list li{position:relative;padding:6px 0 6px 24px;font-size:12.5px;color:var(--text-secondary);line-height:1.7}ul.check-list li::before{content:"";position:absolute;left:0;top:12px;width:10px;height:10px;border-radius:50%;border:2px solid var(--border)}ul.check-list li.ok::before{background:var(--hub);border-color:var(--hub)}ul.check-list li.no::before{background:var(--sub1);border-color:var(--sub1)}
+.hero{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px 30px;margin-bottom:24px;display:grid;grid-template-columns:1fr auto;gap:24px;align-items:start}.hero-body{min-width:0}.hero-title{font-size:16px;font-weight:700;color:var(--text);margin-bottom:8px;letter-spacing:-.3px}.hero-desc{font-size:13px;color:var(--text-muted);line-height:1.75;word-break:keep-all}.hero-stats{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start}.hero-stat{text-align:center;min-width:60px}.hero-stat-value{font-family:var(--font-mono);font-size:22px;font-weight:700;line-height:1.1}.hero-stat-label{font-family:var(--font-mono);font-size:9px;letter-spacing:.8px;text-transform:uppercase;color:var(--text-muted);margin-top:2px}
+.serp-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}.serp-header{padding:16px 20px 12px;border-bottom:1px solid var(--border-light);display:flex;align-items:center;gap:10px}.serp-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0}.serp-header-text{flex:1}.serp-header-title{font-size:13px;font-weight:700;color:var(--text)}.serp-header-sub{font-size:11px;color:var(--text-muted)}.serp-body{padding:16px 20px}.serp-item{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--border-light);font-size:12px;line-height:1.55}.serp-item:last-child{border-bottom:none}.serp-rank{font-family:var(--font-mono);font-size:10px;font-weight:600;color:var(--text-dim);min-width:20px;padding-top:2px}.serp-title{flex:1;color:var(--text-secondary)}.serp-date{font-family:var(--font-mono);font-size:10px;color:var(--text-dim);white-space:nowrap;opacity:.7}.serp-link{font-size:10px;color:var(--text-dim);text-decoration:none;flex-shrink:0;margin-left:4px;opacity:.5;transition:opacity .15s}.serp-link:hover{opacity:1;color:var(--accent)}.serp-insight{background:var(--basis-bg);border-top:1px solid var(--border-light);padding:16px 20px}.serp-insight-title{font-family:var(--font-mono);font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px}
+.serp-item:nth-child(n+6){opacity:.65}
+.ai-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:18px}.ai-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}.ai-card-header{padding:14px 18px 10px;display:flex;align-items:center;gap:8px}.ai-card-logo{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}.ai-card-name{font-size:13px;font-weight:700;color:var(--text)}.ai-card-status{font-family:var(--font-mono);font-size:10px;padding:2px 8px;border-radius:100px;margin-left:auto}.ai-card-body{padding:0 18px 16px}
+.section-title-bar{margin-top:36px}.stb-head{display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap}.stb-color{width:4px;height:48px;border-radius:2px;margin-top:2px;flex-shrink:0}.stb-content{flex:1;min-width:200px}.stb-overline{font-family:var(--font-mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px}.stb-question{font-size:19px;font-weight:700;line-height:1.4;word-break:keep-all;letter-spacing:-.3px}.stb-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.stb-tag{font-family:var(--font-mono);font-size:10px;letter-spacing:.5px;padding:3px 10px;border-radius:100px}
+.section-scroll{overflow-x:auto;margin-top:24px}.section-scroll::-webkit-scrollbar{height:5px}.section-scroll::-webkit-scrollbar-track{background:var(--border-light);border-radius:3px}.section-scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+.map-grid{display:grid;gap:0;min-width:fit-content;margin-bottom:8px}
+.rl{display:flex;align-items:center;justify-content:flex-end;padding-right:14px;font-family:var(--font-mono);font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);min-height:44px;border-right:2px solid var(--border)}.stage-cell{display:flex;align-items:center;justify-content:center;padding:6px 8px;position:relative}.stage-pill{color:#fff;padding:11px 0;border-radius:26px;font-size:13px;font-weight:600;text-align:center;width:100%;position:relative;z-index:2}.stage-id{font-family:var(--font-mono);font-size:10px;opacity:.7;margin-right:3px}.stage-cell:not(:last-child)::after{content:'';position:absolute;right:-4px;top:50%;transform:translateY(-50%);width:0;height:0;border-top:7px solid transparent;border-bottom:7px solid transparent;z-index:3;opacity:.45}
+.c-hub .stage-pill{background:var(--hub)}.c-hub .stage-cell:not(:last-child)::after{border-left:9px solid var(--hub)}.c-sub1 .stage-pill{background:var(--sub1)}.c-sub1 .stage-cell:not(:last-child)::after{border-left:9px solid var(--sub1)}.c-sub1 .rl{border-right-color:rgba(217,79,79,.25)}.c-sub2 .stage-pill{background:var(--sub2)}.c-sub2 .stage-cell:not(:last-child)::after{border-left:9px solid var(--sub2)}.c-sub2 .rl{border-right-color:rgba(198,138,29,.25)}.c-sub3 .stage-pill{background:var(--sub3)}.c-sub3 .stage-cell:not(:last-child)::after{border-left:9px solid var(--sub3)}.c-sub3 .rl{border-right-color:rgba(108,92,231,.25)}
+.emotion-strip{grid-column:2/-1;position:relative;height:130px;margin:0 8px}.emotion-strip.short{height:110px}.emotion-svg{width:100%;height:100%}.emotion-label{font-family:var(--font);font-size:11px;font-weight:600}.emotion-sublabel{font-family:var(--font);font-size:9px;fill:var(--text-muted)}
+.dc{padding:14px 16px;border-right:1px dashed var(--border-light);border-bottom:1px solid var(--border-light);font-size:12.5px;color:var(--text-secondary);word-break:keep-all;line-height:1.75}.dc:last-child{border-right:none}.dc.q{font-weight:600;color:var(--text);font-size:13.5px}
+.dc strong{color:var(--text);font-weight:600}.c-hub .dc.q{background:var(--hub-bg);border-bottom-color:var(--hub-light)}.c-hub .rl.q-label{background:var(--hub-bg)}.c-sub1 .dc.q{background:var(--sub1-bg);border-bottom-color:rgba(217,79,79,.12)}.c-sub1 .rl.q-label{background:var(--sub1-bg)}.c-sub2 .dc.q{background:var(--sub2-bg);border-bottom-color:rgba(198,138,29,.12)}.c-sub2 .rl.q-label{background:var(--sub2-bg)}.c-sub3 .dc.q{background:var(--sub3-bg);border-bottom-color:rgba(108,92,231,.12)}.c-sub3 .rl.q-label{background:var(--sub3-bg)}
+.dc.state-cell{font-size:11.5px;color:var(--text-muted);border-top:1px solid var(--border);line-height:1.7;font-style:italic}.dc.try-cell{font-size:11.5px;line-height:1.7}.try-line,.block-line{display:flex;align-items:flex-start;gap:6px;line-height:1.65}.try-line+.block-line{margin-top:8px}.try-ico{color:var(--try-color);font-size:8px;margin-top:5px;flex-shrink:0}.block-ico{color:var(--block-color);font-size:9px;margin-top:4px;flex-shrink:0;font-weight:700}.dc.basis-cell{background:var(--basis-bg);border-bottom-color:var(--basis-border);font-size:11px;color:var(--text-dim);line-height:1.7;padding:10px 16px}.rl.basis-label{background:var(--basis-bg)}.dc.flow-reason-cell{grid-column:2/-1;background:var(--basis-bg);border:1px solid var(--basis-border);border-left:none;font-size:11.5px;color:var(--text-dim);line-height:1.75;padding:12px 16px}.rl.flow-reason-label{background:var(--basis-bg);border-bottom:1px solid var(--basis-border)}.dc.branch-cell{text-align:center;border-bottom:none;padding:6px 12px}.branch-pill{font-family:var(--font-mono);font-size:10px;padding:3px 10px;border-radius:100px;display:inline-block}.dc.branch-cell.empty{color:var(--text-dim);font-size:11px}
+.hub-sub-connector{margin:32px 0 0}.connector-visual{display:flex;align-items:center;gap:10px;padding:20px 0 0;flex-wrap:wrap}.cv-line{height:2px;width:40px;border-radius:1px}.cv-label{font-family:var(--font-mono);font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:3px 12px;border-radius:100px}.cv-desc{font-size:11px;color:var(--text-muted);margin-left:4px}
+.legend-panel{margin:20px 0 0}.legend-panel details{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}.legend-panel summary{padding:14px 20px;font-family:var(--font-mono);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);cursor:pointer;user-select:none;list-style:none;display:flex;align-items:center;gap:8px}.legend-panel summary::before{content:'&#x25B8;';font-size:10px;transition:transform .2s}.legend-panel details[open] summary::before{transform:rotate(90deg)}.legend-panel summary::-webkit-details-marker{display:none}.lp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1px;background:var(--border-light);border-top:1px solid var(--border-light)}.lp-group{background:var(--surface);padding:16px 20px}.lp-group-title{font-family:var(--font-mono);font-size:9px;letter-spacing:1.2px;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px}.lp-item{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:12px;color:var(--text-secondary)}.lp-swatch{width:14px;height:14px;border-radius:3px;flex-shrink:0}.lp-swatch.circle{border-radius:50%}.lp-desc{color:var(--text-muted);font-size:11px}
+.inner-tabs{display:flex;gap:0;border-bottom:2px solid var(--border);margin:24px 0 0;position:sticky;top:0;z-index:10;background:var(--bg);padding-top:4px}.inner-tab{padding:10px 18px;font-size:12px;font-weight:600;color:var(--text-muted);background:none;border:none;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .15s;white-space:nowrap}.inner-tab.active{border-bottom-color:var(--hub);color:var(--hub)}.inner-tab[data-color="sub1"].active{border-bottom-color:var(--sub1);color:var(--sub1)}.inner-tab[data-color="sub2"].active{border-bottom-color:var(--sub2);color:var(--sub2)}.inner-tab[data-color="sub3"].active{border-bottom-color:var(--sub3);color:var(--sub3)}.inner-tab:hover:not(.active){color:var(--text-secondary)}.inner-panel{display:none}.inner-panel.active{display:block}
+/* SECTION HEADING */
+.sec-heading{display:flex;align-items:center;gap:10px;margin:28px 0 14px}.sec-heading-icon{font-size:16px;line-height:1}.sec-heading-text{font-size:14px;font-weight:700;color:var(--text);letter-spacing:-.2px}.sec-heading:first-child{margin-top:0}
+
+/* LOW VOLUME ROW */
+tr.vol-low td{color:var(--text-dim)}tr.vol-low td:first-child{font-weight:400}
+
+/* DATA ANGLE BOX */
+.angle-box{background:var(--basis-bg);border:1px solid var(--basis-border);border-radius:var(--radius);padding:18px 22px;margin-top:14px}
+.angle-item{margin-bottom:10px;font-size:12.5px;line-height:1.7}.angle-item:last-child{margin-bottom:0}
+.angle-item strong{color:var(--text);font-weight:600}.angle-item span{color:var(--text-muted)}
+
+/* FANOUT CARD */
+.fanout-grid{display:grid;gap:12px}.fanout-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px}
+.fanout-top{display:flex;align-items:flex-start;gap:12px;margin-bottom:8px}.fanout-q{flex:1;font-size:13px;font-weight:600;color:var(--text);line-height:1.5}
+.fanout-reason{font-size:11px;color:var(--text-dim);line-height:1.6}
+
+/* MISCONCEPTION ROW */
+.mis-row{display:flex;align-items:baseline;gap:0;padding:10px 0;border-bottom:1px solid var(--border-light)}
+.mis-row:last-child{border-bottom:none}
+.mis-belief-inline{flex:0 0 32%;font-size:12px;color:var(--text-muted);line-height:1.65;padding-right:12px}
+.mis-arrow-inline{flex-shrink:0;color:var(--text-dim);font-size:14px;margin:0 10px}
+.mis-reality-inline{flex:1;font-size:12.5px;color:var(--text);line-height:1.7;font-weight:500}
+
+/* KP CORRECTION */
+.kp-correction{display:flex;gap:0;margin-bottom:10px;border-radius:8px;overflow:hidden;border:1px solid var(--border-light)}
+.kp-correction:last-child{margin-bottom:0}
+.kp-claim{flex:0 0 40%;background:#FEF2F2;padding:12px 16px;font-size:11.5px;color:#991B1B;line-height:1.65;border-right:1px solid #FECACA}
+.kp-fix{flex:1;background:#F0FDF4;padding:12px 16px;font-size:12px;color:#166534;line-height:1.7}
+
+/* GUARDRAIL CARD */
+.gr-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;margin-bottom:10px}
+.gr-rule{font-size:13px;font-weight:600;color:var(--text);line-height:1.6;margin-bottom:6px}
+.gr-alt{font-size:11.5px;color:var(--text-muted);line-height:1.65;padding-left:14px;border-left:2px solid var(--border-light)}
+
+/* JOURNEY GRID OVERRIDES */
+.dc.try-row{border-bottom:1px dashed var(--border-light)}
+.dc.block-row{font-size:11.5px;color:var(--text-muted)}
+.block-row .block-line{gap:6px}
+
+.page-footer{padding:32px 48px 48px;max-width:1200px;margin:0 auto;font-family:var(--font-mono);font-size:10px;color:var(--text-dim);letter-spacing:.5px;border-top:1px solid var(--border)}
+@media(max-width:900px){.page-header,.top-tabs,.tab-panel{padding-left:24px;padding-right:24px}.two-col{grid-template-columns:1fr}.ai-grid{grid-template-columns:1fr}:root{--col-w:220px;--row-label-w:72px}.inner-tabs{overflow-x:auto}.hero{grid-template-columns:1fr}.hero-stats{margin-top:12px}}
+</style>
+</head>
+<body>
+
+
+<div class="page-header">
+  <div class="header-top">
+    <h1>중소기업웹서비스외주시작 &mdash; 블로그 전략 보고서</h1>
+    <span class="header-badge">Strategy Report</span>
+  </div>
+  <div class="header-desc"><strong>포인트 질문:</strong> 사내에 개발자가 없는 중소기업인데, 사업에 필요한 웹서비스를 외주로 만들려면 어디서부터 시작해야 하나요?</div>
+  <div class="header-meta">
+    <span class="meta-chip">2026-04-14</span>
+    <span class="meta-chip">Hub 1 + Sub 3</span>
+    <span class="meta-chip">위시켓 데이터 12건</span>
+    <span class="meta-chip">Persona: advisor</span>
+  </div>
+</div>
+
+
+<div class="top-tabs">
+  <button class="top-tab active" onclick="switchView('research')">리서치 분석<span class="tab-num">1</span></button>
+  <button class="top-tab" onclick="switchView('context')">방향 &amp; 제한사항<span class="tab-num">2</span></button>
+  <button class="top-tab" onclick="switchView('journey')">콘텐츠 기획 구조<span class="tab-num">3</span></button>
+</div>
+
+
+
+
+<div class="tab-panel active" id="view-research">
+
+<div class="hero">
+  <div class="hero-body">
+    <div class="hero-desc">이 질문을 검색하는 사람들이 어디서 정보를 찾고 있는지, AI는 어떤 답을 주고 있는지, 경쟁 콘텐츠는 무엇을 다루고 무엇을 빠뜨렸는지, 위시켓 데이터에서 어떤 인사이트를 뽑을 수 있는지를 정리합니다.</div>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="hero-stat-value" style="color:var(--hub)">10</div><div class="hero-stat-label">키워드</div></div>
+    <div class="hero-stat"><div class="hero-stat-value" style="color:var(--accent)">6</div><div class="hero-stat-label">PAA</div></div>
+    <div class="hero-stat"><div class="hero-stat-value" style="color:var(--sub1)">13</div><div class="hero-stat-label">SERP 결과</div></div>
+    <div class="hero-stat"><div class="hero-stat-value" style="color:var(--sub2)">12</div><div class="hero-stat-label">위시켓 데이터</div></div>
+  </div>
+</div>
+
+<div class="sec-heading"><span class="sec-heading-icon">&#x1F50D;</span><span class="sec-heading-text">검색 환경</span></div>
+
+<div class="two-col">
+  <div class="card">
+    <div class="card-title">검색량 (월간, 네이버 검색광고)</div>
+    <table><tr><th>키워드</th><th style="text-align:right">월간</th></tr>
+    <tr class="vol-low"><td>개발외주업체</td><td class="td-num">2</td></tr><tr class="vol-low"><td>비개발자웹서비스</td><td class="td-num">2</td></tr><tr class="vol-low"><td>소프트웨어외주</td><td class="td-num">2</td></tr><tr class="vol-low"><td>앱외주개발</td><td class="td-num">2</td></tr><tr class="vol-low"><td>외주개발업체선정</td><td class="td-num">2</td></tr><tr class="vol-low"><td>웹서비스외주</td><td class="td-num">2</td></tr><tr class="vol-low"><td>웹서비스외주개발</td><td class="td-num">2</td></tr><tr class="vol-low"><td>웹서비스외주비용</td><td class="td-num">2</td></tr><tr class="vol-low"><td>중소기업웹서비스외주</td><td class="td-num">2</td></tr><tr class="vol-low"><td>홈페이지외주제작</td><td class="td-num">2</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <div class="card-title">PAA (People Also Ask) &mdash; 6건</div>
+    <ul class="bullet"><li>중소기업 웹서비스 외주란 무엇인가요?</li><li>중소기업 웹서비스 외주를 맡길 때 고려해야 할 사항은 무엇인가요?</li><li>중소기업 웹서비스 외주 비용은 얼마나 드나요?</li><li>중소기업 웹서비스 외주를 맡기면 어떤 장점이 있나요?</li><li>중소기업 웹서비스 외주를 맡기면 어떤 단점이 있나요?</li><li>중소기업 웹서비스 외주를 맡길 때 주의해야 할 점은 무엇인가요?</li></ul>
+    
+    <div style="margin-top:14px">
+      <div class="card-title">Google 자동완성</div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px"><span class="pill">웹서비스 예시</span><span class="pill">웹서비스 회사</span><span class="pill">웹서비스 유형</span><span class="pill">웹서비스 예제</span><span class="pill">웹서비스 사례</span></div>
+    </div>
+    
+  </div>
+</div>
+
+<div class="sec-heading"><span class="sec-heading-icon">&#x1F4CA;</span><span class="sec-heading-text">SERP 분석</span></div>
+
+<div style="display:flex;gap:8px;margin:0 0 14px">
+  <span class="badge b-green">스마트블록 노출</span>
+  <span class="badge b-gray">지식 스니펫 없음</span>
+</div>
+
+<div class="two-col" style="margin-bottom:14px">
+  
+  <div class="serp-card">
+    <div class="serp-header">
+      <div class="serp-icon" style="background:#03C75A">N</div>
+      <div class="serp-header-text"><div class="serp-header-title">네이버 블로그 SERP</div><div class="serp-header-sub">상위 5건</div></div>
+    </div>
+    <div class="serp-body">
+      
+      <div class="serp-item"><div class="serp-rank">1</div><div class="serp-title">초기 스타트업을 위한 웹서비스 환경 가장 저렴하게 맞추는 방법</div><div class="serp-date">2025.01</div><a href="https://blog.naver.com/ateli9r/223714120588" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">2</div><div class="serp-title">스마트공장·스마트서비스 정부지원사업, IT외주개발 한번에...</div><div class="serp-date">2025.12</div><a href="https://blog.naver.com/freemoa1/224104952941" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">3</div><div class="serp-title">외주 실패 차단 솔루션이란?</div><div class="serp-date">2026.03</div><a href="https://blog.naver.com/80686/224216072141" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">4</div><div class="serp-title">웹서비스 개발 실력있는 외주 개발자 찾는 방법</div><div class="serp-date">2022.12</div><a href="https://blog.naver.com/koreamakename/222959624382" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">5</div><div class="serp-title">[스윙투앱 칼럼]앱 제작 외주 개발 vs 프리랜서 vs 노코드...</div><div class="serp-date">2023.09</div><a href="https://blog.naver.com/swing2app/223205169289" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+    </div>
+  </div>
+  
+  <div class="serp-card">
+    <div class="serp-header">
+      <div class="serp-icon" style="background:#4285F4">G</div>
+      <div class="serp-header-text"><div class="serp-header-title">Google SERP</div><div class="serp-header-sub">상위 8건</div></div>
+    </div>
+    <div class="serp-body">
+      
+      <div class="serp-item"><div class="serp-rank">1</div><div class="serp-title">개발 외주 가이드 : 비개발자를 위한 단계별 완전 정리</div><div class="serp-date">wishket.com</div><a href="https://blog.wishket.com/blog/outsourcing-development-complete-guide" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">2</div><div class="serp-title">프로그램 외주 개발, 뭘 만들어야 할지 모르겠다면 - 유형별 가이드 [2026]</div><div class="serp-date">thingsw.com</div><a href="https://thingsw.com/blog/program-outsourcing-guide" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">3</div><div class="serp-title">개발 외주로 프로젝트 성공시키는 노하우를 알아보자</div><div class="serp-date">alchera.ai</div><a href="https://www.alchera.ai/resource/blog/development-outsource" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">4</div><div class="serp-title">SW 외주 개발 절차 5단계 - 문의부터 인수인계까지 [2026]</div><div class="serp-date">thingsw.com</div><a href="https://thingsw.com/blog/sw-outsourcing-guide" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">5</div><div class="serp-title">소프트웨어 외주 개발, 손해 보지 않는 방법 I 이랜서 블로그</div><div class="serp-date">elancer.co.kr</div><a href="https://www.elancer.co.kr/blog/detail/758" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">6</div><div class="serp-title">웹사이트/App 개발 외주를 맡길 때 참고할만한 사항들</div><div class="serp-date">brunch.co.kr</div><a href="https://brunch.co.kr/@dreamit/21" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">7</div><div class="serp-title">외주를 프리랜서 개발자에게 성공적으로 맡기는 방법 - 단계별 가이드</div><div class="serp-date">elancer.co.kr</div><a href="https://www.elancer.co.kr/blog/detail/25" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">8</div><div class="serp-title">IT 앱/웹 개발 외주 진행 전 체크해야 할 사항들</div><div class="serp-date">dpectrum.app</div><a href="https://dpectrum.app/blog/116" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+    </div>
+  </div>
+</div>
+
+
+<div class="card">
+  <div class="two-col">
+    <div>
+      <div class="card-title">경쟁글 공통 관찰</div>
+      <ul class="bullet"><li>경쟁글 다수가 '요구사항 정의(RFP 작성)'를 첫 번째 또는 가장 중요한 단계로 다룸</li><li>경쟁글 대부분이 외주 업체 찾는 경로로 위시켓·크몽·이랜서 3개 플랫폼을 나란히 제시</li><li>프리랜서 vs 개발사 비교(비용 vs 안정성 트레이드오프)가 여러 글에서 공통 섹션으로 등장</li><li>비용 범위(홈페이지 수백만 원 ~ 플랫폼 수천만 원)를 언급하는 글이 다수</li><li>계약 시 작업 범위·소유권·유지보수 조건 명시를 주의사항으로 반복 언급</li><li>정부지원 바우처 활용 가능성을 별도 글(프리모아 블로그)에서 전문적으로 다룸</li></ul>
+    </div>
+    <div>
+      <div class="card-title">경쟁글에서 빠진 각도 (우리 기회)</div>
+      <ul class="bullet"><li>개발자 없는 담당자가 외주 진행 중 어떤 역할을 맡아야 하는지(내부 PM 역할) 구체적으로 다룬 글 부재</li><li>첫 미팅 전 비개발자가 준비해야 할 질문 목록을 체계적으로 정리한 글 부재</li><li>외주 진행 중 소스코드 소유권·인수인계 문서를 어떻게 요구해야 하는지 다룬 글 부재</li><li>MVP 완성 후 추가 개발 vs 유지보수 전환 시점 판단 기준 미다룸</li><li>노코드·SaaS 솔루션으로 대체 가능한 경우와 외주가 필요한 경우의 판단 기준을 비교한 콘텐츠 부재</li></ul>
+    </div>
+  </div>
+</div>
+
+<div class="sec-heading"><span class="sec-heading-icon">&#x1F916;</span><span class="sec-heading-text">AI 검색 응답 분석</span></div>
+
+<div class="ai-grid">
+  
+  <div class="ai-card" style="border-bottom:3px solid #10A37F;opacity:1">
+    <div class="ai-card-header">
+      <div class="ai-card-logo" style="background:#10A37F">C</div>
+      <div class="ai-card-name">ChatGPT</div>
+      <span class="ai-card-status" style="background:#D1FAE5;color:#059669">수집 완료</span>
+    </div>
+    <div class="ai-card-body">
+      <p style="font-size:11.5px;color:var(--text-secondary);line-height:1.5">
+        단계별 번호 나열형 (요구사항 정의 → 예산 설정 → 업체 탐색 → 제안서 비교 → 계약 → 프로젝트 관리 → 테스트/런칭 → 유지보수), 7~8단계 구성
+      </p>
+      <div style="font-size:11px;color:var(--text-muted);margin-top:4px">인용 3건 &middot; 위시켓 <span style="color:var(--hub);font-weight:600">언급됨</span></div>
+    </div>
+  </div>
+  
+  <div class="ai-card" style="border-bottom:3px solid #D4A574;opacity:1">
+    <div class="ai-card-header">
+      <div class="ai-card-logo" style="background:#D4A574">A</div>
+      <div class="ai-card-name">Claude</div>
+      <span class="ai-card-status" style="background:#D1FAE5;color:#059669">수집 완료</span>
+    </div>
+    <div class="ai-card-body">
+      <p style="font-size:11.5px;color:var(--text-secondary);line-height:1.5">
+        단계별 번호 나열형 (요구사항 정의 → 예산 설정 → 업체 탐색 → 제안서 비교 → 계약 → 프로젝트 관리 → 테스트/런칭 → 유지보수), 7~8단계 구성
+      </p>
+      <div style="font-size:11px;color:var(--text-muted);margin-top:4px">인용 5건 &middot; 위시켓 <span style="color:var(--hub);font-weight:600">언급됨</span></div>
+    </div>
+  </div>
+  
+  <div class="ai-card" style="border-bottom:3px solid #4285F4;opacity:1">
+    <div class="ai-card-header">
+      <div class="ai-card-logo" style="background:#4285F4">G</div>
+      <div class="ai-card-name">Gemini</div>
+      <span class="ai-card-status" style="background:#D1FAE5;color:#059669">수집 완료</span>
+    </div>
+    <div class="ai-card-body">
+      <p style="font-size:11.5px;color:var(--text-secondary);line-height:1.5">
+        단계별 번호 나열형 (요구사항 정의 → 예산 설정 → 업체 탐색 → 제안서 비교 → 계약 → 프로젝트 관리 → 테스트/런칭 → 유지보수), 7~8단계 구성
+      </p>
+      <div style="font-size:11px;color:var(--text-muted);margin-top:4px">인용 5건 &middot; 위시켓 <span style="color:var(--hub);font-weight:600">언급됨</span></div>
+    </div>
+  </div>
+  
+</div>
+
+
+
+<div class="card">
+  <div class="card-title">ChatGPT 응답 상세 분석</div>
+  <table><tr><th>방식</th><th>요약</th><th style="text-align:right">빈도</th></tr>
+  <tr><td><span class="badge b-gray"></span></td><td>요구사항 정의서(RFP) 작성이 첫 단계로 제시됨 — 핵심 기능 목록, 레퍼런스 서비스, 예산·일정 포함</td><td class="td-num">3/3</td></tr><tr><td><span class="badge b-gray"></span></td><td>MVP(최소 기능 제품) 관점으로 핵심 기능과 나중에 추가할 기능을 분리할 것을 권장</td><td class="td-num">3/3</td></tr><tr><td><span class="badge b-gray">예산 범위 언급</span></td><td>단순 홍보 웹사이트 300~1,000만 원, 복잡한 플랫폼 3,000만 원~1억 이상</td><td class="td-num">3/3</td></tr><tr><td><span class="badge b-gray"></span></td><td>유지보수 비용(서버, 도메인, 월정액 유지보수)이 개발 이후에도 지속 발생함을 주의사항으로 언급</td><td class="td-num">3/3</td></tr><tr><td><span class="badge b-gray">외주 경로 3가지 제시</span></td><td>매칭 플랫폼(위시켓, 크몽, 이랜서), 개발사 직접 탐색, 지인 추천</td><td class="td-num">3/3</td></tr><tr><td><span class="badge b-gray"></span></td><td>위시켓이 국내 최대 IT 아웃소싱 플랫폼으로 매 회차 언급됨 (에스크로·전담 매니저 언급)</td><td class="td-num">3/3</td></tr><tr><td><span class="badge b-gray">프리랜서(개인) vs 외주 개발사(SI) 비교 제시</span></td><td>비용 vs 안정성 트레이드오프</td><td class="td-num">3/3</td></tr><tr><td><span class="badge b-gray"></span></td><td>계약 체결 시 작업 범위(SOW)·일정·소유권·유지보수 조건을 명확히 정의해야 한다고 강조</td><td class="td-num">3/3</td></tr><tr><td><span class="badge b-gray"></span></td><td>개발 과정에서 정기 미팅과 피드백 제공 필요성 언급</td><td class="td-num">3/3</td></tr>
+  </table>
+  
+  <div style="margin-top:16px"><div class="two-col"><div>
+    <div class="card-title">인용 소스 (3건)</div>
+    
+    <div class="serp-item"><div class="serp-rank">1</div><div class="serp-title">divit.co.kr</div><a href="https://www.divit.co.kr/" target="_blank" class="serp-link">&#x2197;</a></div>
+    
+    <div class="serp-item"><div class="serp-rank">2</div><div class="serp-title">dpectrum.app</div><a href="https://dpectrum.app/blog/131" target="_blank" class="serp-link">&#x2197;</a></div>
+    
+    <div class="serp-item"><div class="serp-rank">3</div><div class="serp-title">bizbegin.me</div><a href="https://bizbegin.me/blog/?bmode=view&idx=18733676" target="_blank" class="serp-link">&#x2197;</a></div>
+    
+  </div><div>
+    <div class="card-title" style="color:var(--sub1)">AI 답변 누락 각도</div>
+    <ul class="bullet"><li>기획 전 단계: 서비스 아이디어 검증(PMF) 방법론 미언급</li><li>개발자 없는 회사가 외주 진행 중 품질을 어떻게 검수하는지 구체적 방법 미언급</li><li>정부 지원 바우처·사업 활용 가능성 미언급</li><li>계약 분쟁 시 대응 방법 미언급</li></ul>
+  </div></div></div>
+  
+</div>
+
+
+<div class="sec-heading"><span class="sec-heading-icon">&#x1F4C8;</span><span class="sec-heading-text">위시켓 데이터 인사이트</span></div>
+
+
+<div class="card">
+  <div class="card-title">예산 분포 (12건, 발주자 희망 예산)</div>
+  <div class="two-col" style="margin-bottom:0">
+    <div>
+      <table><tr><th>구분</th><th style="text-align:right">중위값</th><th style="text-align:right">Q1</th><th style="text-align:right">Q3</th></tr>
+      <tr><td><strong>신규개발</strong> (0건)</td><td class="td-num">—</td><td class="td-num">—</td><td class="td-num">—</td></tr>
+      <tr><td><strong>유지보수</strong> (0건)</td><td class="td-num">—</td><td class="td-num">—</td><td class="td-num">—</td></tr>
+      <tr><td><strong>디자인</strong> (0건)</td><td class="td-num">—</td><td class="td-num">&mdash;</td><td class="td-num">&mdash;</td></tr>
+      </table>
+      <p style="font-size:10px;color:var(--text-dim);margin-top:8px">* 실제 계약 금액이 아님. 신규개발 기간 중위값 0일.</p>
+    </div>
+    <div>
+      <div class="card-title">업무 유형 비율</div>
+      
+      <div class="dist-item"><div class="dist-label">신규개발</div><div class="dist-bar-wrap"><div class="dist-bar-fill" style="width:0.0%;background:var(--hub)"></div></div><div class="dist-count">0%</div></div>
+      
+      <div class="dist-item"><div class="dist-label">유지보수</div><div class="dist-bar-wrap"><div class="dist-bar-fill" style="width:0.0%;background:var(--sub3)"></div></div><div class="dist-count">0%</div></div>
+      
+      <div class="dist-item"><div class="dist-label">디자인</div><div class="dist-bar-wrap"><div class="dist-bar-fill" style="width:0.0%;background:var(--sub2)"></div></div><div class="dist-count">0%</div></div>
+      
+      <div class="dist-item"><div class="dist-label">컨설팅</div><div class="dist-bar-wrap"><div class="dist-bar-fill" style="width:0.0%;background:var(--text-dim)"></div></div><div class="dist-count">0%</div></div>
+      
+    </div>
+  </div>
+</div>
+
+<div class="angle-box">
+  <div class="card-title">&#x1F4A1; 데이터 활용 각도 (콘텐츠용)</div>
+  
+  <div class="angle-item"><strong>기능 범위별 예산 차이</strong> <span>단일 기능 중심(600~800만 원)부터 AI 연동·결제 플로우 포함(3,500만 원)까지 사례가 분포. 같은 '웹서비스'라도 포함 기능에 따라 6배 차이 가능하다는 점을 사례로 보여줄 수 있음</span></div>
+  
+  <div class="angle-item"><strong>기간과 예산의 관계</strong> <span>40일/800만 원부터 120일/3,500만 원까지 기간-예산 연동 패턴 확인 가능. 기간이 길어질수록 예산도 올라가는 경향 — 투입 공수 기반 견적 구조를 독자에게 설명하는 근거로 활용 가능</span></div>
+  
+</div>
+
+
+
+<div class="sec-heading"><span class="sec-heading-icon">&#x1F33F;</span><span class="sec-heading-text">팬아웃 제안 (추가 콘텐츠 후보)</span></div>
+
+
+<div class="fanout-grid">
+  
+  <div class="fanout-item">
+    <div class="fanout-top">
+      <div class="fanout-q">개발자 없는 팀이 외주 개발사와 협업할 때 내부 담당자는 어떤 역할을 맡아야 하나요?</div>
+      <span class="badge b-purple">외주 개발 내부 담당자 역할</span>
+    </div>
+    <div class="fanout-reason">축2(AI 응답) 3개 모두에서 '내부 PM 역할 설정 방법'이 missing_angle로 지적됨. 축3 경쟁 콘텐츠에서도 이 주제를 전문적으로 다룬 글 부재 확인.</div>
+  </div>
+  
+  <div class="fanout-item">
+    <div class="fanout-top">
+      <div class="fanout-q">웹서비스 외주 첫 미팅 전, 비개발자가 요구사항 문서 없이 아이디어만 있는 상태에서 어떻게 기획을 구체화하나요?</div>
+      <span class="badge b-purple">외주 개발 기획 구체화 비개발자</span>
+    </div>
+    <div class="fanout-reason">축1(PAA)에서 '맡기기 전 고려사항'이 검색 패턴으로 확인됨. 기존 블로그(요구사항 문서 작성법, 첫 미팅 준비)가 문서 완성 이후를 다루는 반면 그 이전 단계 공백이 있음 — 축4에서 도출.</div>
+  </div>
+  
+  <div class="fanout-item">
+    <div class="fanout-top">
+      <div class="fanout-q">외주로 만든 웹서비스, 소스코드와 운영 권한을 어떻게 인수인계 받아야 하나요?</div>
+      <span class="badge b-purple">외주 개발 소스코드 인수인계</span>
+    </div>
+    <div class="fanout-reason">축3 경쟁 콘텐츠 분석에서 소스코드 소유권·인수인계 문서 요구 방법을 다룬 글이 없음으로 확인됨. AI 응답에서도 missing_angle로 반복 지적.</div>
+  </div>
+  
+  <div class="fanout-item">
+    <div class="fanout-top">
+      <div class="fanout-q">웹서비스를 직접 개발할지, 노코드·SaaS로 대체할지, 어떤 기준으로 판단하나요?</div>
+      <span class="badge b-purple">노코드 외주 개발 비교 판단</span>
+    </div>
+    <div class="fanout-reason">축2(AI 응답)에서 3개 모두 노코드·SaaS 대안 미언급을 missing_angle로 지적. 축3 경쟁 콘텐츠 중 스윙투앱 글이 노코드 vs 외주 비교 접근을 했으나 중소기업 입장의 '판단 기준' 제시가 부족.</div>
+  </div>
+  
+  <div class="fanout-item">
+    <div class="fanout-top">
+      <div class="fanout-q">웹서비스 외주 비용, 어떤 기준으로 예산을 잡아야 하나요?</div>
+      <span class="badge b-purple">웹서비스 외주 비용</span>
+    </div>
+    <div class="fanout-reason">축1(PAA)에서 '외주 비용이 얼마나 드나요?'가 직접 검색 질문으로 확인됨. AI 응답 3개 모두 비용 범위를 언급했으나 구체적 산정 기준(기능 복잡도·기술 스택·팀 구성)은 표면적으로 다룸. 기존 블로그(web-service-outsourcing-budget-guide.html)가 있으나 웹서비스에 특화된 유형별 예산 가이드 각도로 차별화 가능.</div>
+  </div>
+  
+</div>
+
+
+</div>
+
+
+
+
+
+<div class="tab-panel" id="view-context">
+
+<div class="hero">
+  <div class="hero-body">
+    <div class="hero-desc">콘텐츠를 쓸 때 지켜야 할 방향과 넘지 말아야 할 선을 정의합니다.</div>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="hero-stat-value" style="color:var(--sub1)">5</div><div class="hero-stat-label">독자 오해</div></div>
+    <div class="hero-stat"><div class="hero-stat-value" style="color:var(--hub)">5</div><div class="hero-stat-label">AI 교정</div></div>
+    <div class="hero-stat"><div class="hero-stat-value" style="color:var(--sub2)">10</div><div class="hero-stat-label">Don'ts</div></div>
+    <div class="hero-stat"><div class="hero-stat-value" style="color:var(--accent)">8</div><div class="hero-stat-label">용어 규칙</div></div>
+  </div>
+</div>
+
+
+<div class="sec-heading"><span class="sec-heading-icon">&#x1F4A1;</span><span class="sec-heading-text">독자 오해 교정 (5건)</span></div>
+<div class="card">
+  
+  <div class="mis-row">
+    <div class="mis-belief-inline">아이디어만 있으면 업체에 연락해서 견적을 받을 수 있다</div>
+    <div class="mis-arrow-inline">&rarr;</div>
+    <div class="mis-reality-inline">기능 요구사항 없이는 정확한 견적 산출이 불가능하다. 막연한 의뢰는 막연한 견적을 낳고, 나중에 범위 분쟁으로 이어진다</div>
+  </div>
+  
+  <div class="mis-row">
+    <div class="mis-belief-inline">개발사나 프리랜서에게 맡기면 알아서 다 해준다</div>
+    <div class="mis-arrow-inline">&rarr;</div>
+    <div class="mis-reality-inline">클라이언트가 요구사항 전달, 중간 확인, 최종 검수를 해야 한다. 방치하면 기대와 다른 결과물이 나온다</div>
+  </div>
+  
+  <div class="mis-row">
+    <div class="mis-belief-inline">소스코드는 당연히 받을 수 있다</div>
+    <div class="mis-arrow-inline">&rarr;</div>
+    <div class="mis-reality-inline">계약서에 지재권 조항이 없으면 소스코드를 못 받거나 추가 비용을 요구받을 수 있다</div>
+  </div>
+  
+  <div class="mis-row">
+    <div class="mis-belief-inline">비슷한 종류의 서비스라면 견적도 비슷할 것이다</div>
+    <div class="mis-arrow-inline">&rarr;</div>
+    <div class="mis-reality-inline">같은 '커머스 사이트'라도 기획 포함 여부, 기능 범위, 서버 구축비 포함 여부에 따라 견적이 수배 차이 난다</div>
+  </div>
+  
+  <div class="mis-row">
+    <div class="mis-belief-inline">하자보수 기간에는 수정 요청을 무한정 할 수 있다</div>
+    <div class="mis-arrow-inline">&rarr;</div>
+    <div class="mis-reality-inline">하자보수는 개발사 귀책 버그만 해당. 기능 변경·추가는 유상 유지보수 계약 대상</div>
+  </div>
+  
+</div>
+
+
+
+<div class="sec-heading"><span class="sec-heading-icon">&#x1F527;</span><span class="sec-heading-text">AI 응답 교정 (ChatGPT Key Points)</span></div>
+<div class="card" style="padding:16px 20px">
+  
+  <div class="kp-correction">
+    <div class="kp-claim">ChatGPT 응답: '프리랜서(개인) vs 외주 개발사(SI) 비교 제시: 비용 vs 안정성 트레이드오프' — 프리랜서가 비용 면에서 유리한 것처럼 구조화</div>
+    <div class="kp-fix">비용은 방식(프리랜서/개발사)이 아니라 요구사항 범위와 파트너에 따라 결정된다. 프리랜서 월 단가 400~600만 원대도 있고, 소형 개발사가 오히려 저렴한 경우도 있다. '프리랜서=싸다, 개발사=비싸다' 프레이밍은 금지(outsourcing_industry_context.md §1-7 참조). 방식 비교가 필요하면 같은 요구사항 기준 개별 사례로 범위감만 전달해야 한다.</div>
+  </div>
+  
+  <div class="kp-correction">
+    <div class="kp-claim">Claude 응답: '외주 개발 성패는 기획 단계에서 80% 결정된다' — 수치 단정</div>
+    <div class="kp-fix">출처 불명의 수치 단정. '기획이 중요하다'는 사실이지만 '80%'라는 수치는 근거가 없다. data_evidence.md §2 채택 기준(조사 주체·구체 수치·2024년 이후)을 충족하지 못하므로 인용 불가. '기획 준비만 잘해도 프로젝트 완성도가 크게 달라진다'(outsourcing_industry_context.md §2) 수준으로만 서술.</div>
+  </div>
+  
+  <div class="kp-correction">
+    <div class="kp-claim">AI 응답 3개 모두: '요구사항 정의서(RFP) 작성'을 첫 단계로 제시하고 독자가 직접 작성할 것을 권유</div>
+    <div class="kp-fix">tech_foggy 독자는 구조화된 요구사항 문서를 직접 작성하지 못한다(product_target.md §2 tech_foggy 권유 금지 목록). '나열은 하지만 빠진 게 뭔지 모름' 상태다. RFP 작성을 권유하는 대신, '핵심 기능을 일상어로 나열 + 참고 서비스 URL 정리' 수준으로 낮추고, 나머지는 매니저 상담으로 연결하는 구조가 적절하다.</div>
+  </div>
+  
+  <div class="kp-correction">
+    <div class="kp-claim">공통 주제: '계약 체결 시 작업 범위(SOW)·소유권·유지보수 조건을 명확히 정의해야 한다' — 클라이언트가 직접 계약 조항을 정의할 것을 권유</div>
+    <div class="kp-fix">계약 조항 직접 설계는 비개발자 클라이언트가 할 수 없는 영역이다(outsourcing_industry_context.md §1-4). 대신 '위시켓 표준계약서에는 하자보수·지재권·대금보호가 포함되어 있다'는 해결 구조를 보여주는 것이 올바르다. 독자가 해야 할 것은 계약서 설계가 아니라 '지재권 양도 명시 여부 확인'처럼 단순 확인 수준으로 낮춰야 한다.</div>
+  </div>
+  
+  <div class="kp-correction">
+    <div class="kp-claim">경쟁글 공통 주제: '프리랜서·개발사·플랫폼' 3가지 경로를 나란히 제시하며 위시켓·크몽·이랜서를 병렬로 언급</div>
+    <div class="kp-fix">경쟁사(크몽, 이랜서 등)를 직접 언급하는 것은 wishket_service_context.md §6 경쟁사 관련 금지 사항. 비교가 필요한 맥락에서는 '일반적인 프리랜서 플랫폼', '단순 매칭 서비스' 수준으로만 언급 가능. 차별화는 매니저 동반·대금보호·표준계약서 팩트로 자연스럽게 서술.</div>
+  </div>
+  
+</div>
+
+
+
+<div class="sec-heading"><span class="sec-heading-icon">&#x1F6A7;</span><span class="sec-heading-text">집필 가드레일 (Don'ts)</span></div>
+
+<div class="gr-card">
+  <div class="gr-rule">&#x2716; 아이디어만 있으면 바로 업체부터 찾아도 된다고 제시하지 않는다</div>
+  <div class="gr-alt">&#x2192; 핵심 기능 목록과 참고 서비스 URL을 먼저 정리하는 것이 첫 단계. 기획이 어려우면 기획 단계부터 도움을 요청하는 것도 방법이다</div>
+</div>
+
+<div class="gr-card">
+  <div class="gr-rule">&#x2716; '개발사가 기획을 도와줄 것'처럼 기획 책임을 파트너에게 돌리지 않는다</div>
+  <div class="gr-alt">&#x2192; 기획이 어려우면 기획부터 별도 의뢰하는 방법이 있음을 명시하고, 위시켓에서 매니저 상담을 통해 요구사항 정리를 도움받을 수 있음을 연결</div>
+</div>
+
+<div class="gr-card">
+  <div class="gr-rule">&#x2716; '외주를 맡기면 알아서 다 해준다'는 수동적 역할 인식을 심지 않는다</div>
+  <div class="gr-alt">&#x2192; 외주 프로젝트도 클라이언트의 적극적 참여(중간 확인, 피드백)가 필요하다는 점을 명확히 안내</div>
+</div>
+
+<div class="gr-card">
+  <div class="gr-rule">&#x2716; '소스코드는 당연히 받을 수 있다'고 전제하지 않는다</div>
+  <div class="gr-alt">&#x2192; 계약 시 '소스코드를 포함한 지재권 일체' 양도를 명시해야 한다고 안내</div>
+</div>
+
+<div class="gr-card">
+  <div class="gr-rule">&#x2716; '서버·도메인은 개발사가 세팅해줄 것'이라는 기대를 심지 않는다</div>
+  <div class="gr-alt">&#x2192; 서버·도메인·앱스토어 계정은 클라이언트 회사 명의로 만들어달라고 요청해야 한다고 안내</div>
+</div>
+
+<div class="gr-card">
+  <div class="gr-rule">&#x2716; '하자보수 기간에 기능 개선도 요청할 수 있다'고 안내하지 않는다</div>
+  <div class="gr-alt">&#x2192; 하자보수(버그 무상)와 유지보수(기능 추가·운영 유상)를 명확히 구분해서 안내</div>
+</div>
+
+<div class="gr-card">
+  <div class="gr-rule">&#x2716; '프리랜서가 싸다', '개발사가 비싸다' 등 방식별 비용 고저를 단정하지 않는다</div>
+  <div class="gr-alt">&#x2192; 방식별 비교가 필요하면 같은 요구사항 기준의 개별 사례로 범위감만 전달</div>
+</div>
+
+<div class="gr-card">
+  <div class="gr-rule">&#x2716; '예산 N만 원이면 이 방식', 'N만 원 이상이면 저 방식'처럼 예산 구간별 방식을 분기하지 않는다</div>
+  <div class="gr-alt">&#x2192; 독자의 상황(경험, 역량, 긴급도)을 기준으로 분기. 예산은 결과적 제약으로만 언급</div>
+</div>
+
+<div class="gr-card">
+  <div class="gr-rule">&#x2716; '아키텍처를 물어보세요', '기술 스택을 확인하세요' 같은 비개발자가 실행 불가능한 행동을 제안하지 않는다</div>
+  <div class="gr-alt">&#x2192; 비슷한 프로젝트 경험이 있는지, 결과물을 보여줄 수 있는지 확인하도록 안내</div>
+</div>
+
+<div class="gr-card">
+  <div class="gr-rule">&#x2716; '이 6가지 체크리스트를 모두 확인하세요' 식의 과도한 숙제를 주지 않는다</div>
+  <div class="gr-alt">&#x2192; 핵심 2~3가지만 + '나머지는 매니저와 함께' 구조로 연결</div>
+</div>
+
+
+
+<div class="sec-heading"><span class="sec-heading-icon">&#x1F4DD;</span><span class="sec-heading-text">용어 규칙 &amp; 서비스 경계</span></div>
+<div class="two-col">
+  
+  <div class="card">
+    <div class="card-title">용어 교정</div>
+    <table><tr><th style="color:var(--sub1)">사용 금지</th><th style="color:var(--hub)">올바른 표현</th></tr>
+    <tr><td>외주 업체</td><td>파트너 (위시켓 맥락), 개발사 또는 프리랜서 (일반 맥락)</td></tr><tr><td>발주자 / 의뢰인</td><td>클라이언트</td></tr><tr><td>PM / 전담 PM</td><td>위시켓 매니저</td></tr><tr><td>하자보수 기간에 수정 가능</td><td>하자보수 기간에 귀책 버그만 무상 수정 가능</td></tr><tr><td>플랫폼 수수료 / 중개 비용</td><td>프로젝트 대금 (클라이언트 별도 이용료 없음)</td></tr><tr><td>자동 매칭 / 즉시 매칭</td><td>프로젝트에 맞는 파트너를 찾아드립니다</td></tr><tr><td>RFP (그대로 사용)</td><td>요구사항 문서 또는 기능 정리 자료</td></tr><tr><td>MVP (그대로 사용)</td><td>핵심 기능만 먼저 개발하는 방식</td></tr>
+    </table>
+  </div>
+  
+  <div class="card">
+    
+    <div class="card-title" style="color:var(--hub)">&#x2705; 주장 가능</div>
+    <ul class="check-list"><li class="ok">프로젝트 등록과 매니저 상담은 무료 (계약 체결 전까지 비용 없음)</li><li class="ok">등록 후 영업일 24시간 이내에 매니저가 연락해서 적정 금액·기간을 무료로 상담해준다</li><li class="ok">위시켓 매니저가 요구사항 정리를 도와주고 미팅에 동반한다</li><li class="ok">법무법인이 검토한 표준계약서를 제공한다 (하자보수·지재권·대금보호 포함)</li><li class="ok">대금을 위시켓이 안전하게 보관하는 에스크로 구조가 있다 (검수 후 승인하면 지급)</li><li class="ok">14만 명+ IT 전문가 파트너 풀에서 이전 프로젝트 평가를 확인하며 비교할 수 있다</li><li class="ok">문제가 생기면 매니저가 중재에 나선다</li><li class="ok">IT팀 없이 기획부터 구축·운영까지 맡기고 싶은 경우 AIDP(직접 구축 서비스)라는 선택지도 있다</li><li class="ok">회사 정보는 프로젝트 등록 시 비공개 처리된다</li></ul>
+    
+    
+    <div class="card-title" style="margin-top:20px;color:var(--sub1)">&#x26D4; 주장 불가</div>
+    <ul class="check-list"><li class="no">{'item': '위시켓이 프로젝트 성공을 보장한다 (대금보호 ≠ 결과물 품질 보장)', 'meta': '검증 전용 — 본문에 서술하지 않는다'}</li><li class="no">{'item': '전담 PM이 프로젝트를 관리해준다 (매니저 ≠ PM. 실행 관리는 클라이언트-파트너 책임)', 'meta': '검증 전용 — 본문에 서술하지 않는다'}</li><li class="no">{'item': '모든 파트너가 검증되어 실력이 보장된다 (검증 수준은 등급에 따라 다름)', 'meta': '검증 전용 — 본문에 서술하지 않는다'}</li><li class="no">{'item': '위시켓을 이용하면 무료다 (등록·상담 무료이나 계약 후 프로젝트 대금은 유료)', 'meta': '검증 전용 — 본문에 서술하지 않는다'}</li><li class="no">{'item': '즉시 또는 자동으로 파트너를 매칭해준다 (등록→검수→모집→미팅 과정 존재)', 'meta': '검증 전용 — 본문에 서술하지 않는다'}</li><li class="no">{'item': '외부에서 이미 진행 중인 프로젝트에 대한 중재·매니저 개입 가능 (위시켓에서 시작한 프로젝트만 지원)', 'meta': '검증 전용 — 본문에 서술하지 않는다'}</li></ul>
+    
+  </div>
+</div>
+
+</div>
+
+
+
+
+
+<div class="tab-panel" id="view-journey">
+
+<div class="hero">
+  <div class="hero-body">
+    <div class="hero-desc">독자가 누구인지, 어떤 감정 상태에서 이 질문을 검색하는지를 먼저 정의하고, 그 독자의 사고 흐름에 맞춘 콘텐츠 기획을 저니맵 형태로 보여줍니다.</div>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="hero-stat-value" style="color:var(--hub)">1</div><div class="hero-stat-label">Hub</div></div>
+    <div class="hero-stat"><div class="hero-stat-value" style="color:var(--sub1)">3</div><div class="hero-stat-label">Sub</div></div>
+    <div class="hero-stat"><div class="hero-stat-value" style="color:var(--accent)">14</div><div class="hero-stat-label">총 섹션</div></div>
+    <div class="hero-stat"><div class="hero-stat-value" style="color:var(--sub2)">8</div><div class="hero-stat-label">페인포인트</div></div>
+  </div>
+</div>
+
+
+<div class="two-col">
+  <div class="card">
+    <div class="card-title">독자 프로필</div>
+    <p style="font-size:13px;color:var(--text);line-height:1.7;margin-bottom:14px">개발 경험이 없고 외주를 처음 시도하는 중소기업 담당자 또는 대표로, 웹서비스 아이디어는 있지만 어떤 순서로 무엇을 준비해야 하는지 전혀 모르는 상태에서 검색하는 사람</p>
+    
+    <div class="card-title">독자 세그먼트</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px"><span class="badge b-gray">size_micro</span><span class="badge b-gray">size_small</span><span class="badge b-gray">size_mid</span><span class="badge b-gray">exp_first</span><span class="badge b-gray">stage_ready</span></div>
+    
+    
+    <div class="reasoning-box rb-hub" style="margin-top:14px">
+      <div class="rb-label">Reader Profile Reasoning</div>
+      <div class="rb-text">연관 검색에서 '비개발자웹서비스', '외주개발업체선정'이 상위에 나타나고, PAA에서 '고려해야 할 사항', '주의해야 할 점' 같은 입문자 질문이 다수 확인된다. AI 검색 3개 모두 비전문자를 전제로 요구사항 정의를 첫 단계로 제시하고 있고, 경쟁글 상위 결과도 비개발자 가이드 형식이 지배적이다. context.json의 reading_context가 '저니 1(인지)→2(프로젝트 등록) 사이, 아직 업체를 접촉하지 않은 상태'로 명시하고 있어 이를 상위 프로필로 확정했다.</div>
+    </div>
+    
+  </div>
+  <div class="card">
+    
+    <div class="card-title">독자 감정 상태</div>
+    <table><tr><td style="font-weight:700;width:100px;font-size:13.5px;padding:14px 16px">막막함</td><td style="padding:14px 16px"></td></tr><tr><td style="font-weight:700;width:100px;font-size:13.5px;padding:14px 16px">불신</td><td style="padding:14px 16px"></td></tr><tr><td style="font-weight:700;width:100px;font-size:13.5px;padding:14px 16px">리스크 회피</td><td style="padding:14px 16px"></td></tr></table>
+    
+    
+    <div class="card-title" style="margin-top:16px">페인포인트</div>
+    <ul class="bullet"><li>뭘 만들어야 하는지, 어떻게 설명해야 하는지 모른다 — 아이디어는 있지만 기능 단위로 정리하는 법 자체를 모름</li><li>견적을 받아도 비교 기준이 없다 — 어떤 항목이 포함인지 누락인지 판단 불가</li><li>개발자가 없어서 진행 중에 품질을 확인할 수 없다 — 중간 결과물 검수 방법을 모름</li><li>외주 진행 중 담당자 역할이 무엇인지 모른다 — '관리'를 어떻게 해야 하는지 감이 없음</li><li>계약·대금·소스코드 등 리스크 항목을 모른다 — 모르기 때문에 질문도 못 함</li><li>업체마다 설명이 달라 판단이 어렵다 — 어느 말이 맞는 건지 기준이 없음</li><li>비용이 얼마나 드는지 감이 없다 — 예산을 얼마나 잡아야 할지 막막함</li><li>어떤 경로로 업체를 찾아야 하는지 모른다 — 직접 구글링, 플랫폼, 지인 추천 중 무엇이 나은지 불명확</li></ul>
+    
+  </div>
+</div>
+
+
+<div class="inner-tabs">
+  <button class="inner-tab active" data-color="hub" onclick="switchInner('jm-hub',this)">Hub: 사내에 개발자가 없는 중소기업이 웹서...</button>
+  
+  <button class="inner-tab" data-color="sub1" onclick="switchInner('jm-sub1',this)">Sub 1: 웹서비스 외주 계약에서 소스코드 ...</button>
+  
+  <button class="inner-tab" data-color="sub2" onclick="switchInner('jm-sub2',this)">Sub 2: 웹서비스 외주 예산, 기능 범위에...</button>
+  
+  <button class="inner-tab" data-color="sub3" onclick="switchInner('jm-sub3',this)">Sub 3: 개발팀 없는 중소기업이 외주 개발...</button>
+  
+</div>
+
+
+<div class="inner-panel active" id="jm-hub">
+  <div class="section-title-bar">
+    <div class="stb-head">
+      <div class="stb-color" style="background:var(--hub)"></div>
+      <div class="stb-content">
+        <div class="stb-overline" style="color:var(--hub)">Hub &mdash; 메인 콘텐츠</div>
+        <div class="stb-question">사내에 개발자가 없는 중소기업이 웹서비스 외주를 처음 시작하려면, 어떤 순서로 무엇을 준비해야 하나요?</div>
+        <div class="stb-tags">
+          <span class="stb-tag" style="background:var(--hub-light);color:var(--hub)">4 steps</span>
+          <span class="stb-tag" style="background:var(--hub-light);color:var(--hub)">&rarr; sub_risk</span><span class="stb-tag" style="background:var(--hub-light);color:var(--hub)">&rarr; sub_budget</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="reasoning-box rb-hub"><div class="rb-label">Flow Reasoning</div><div class="rb-text">AI 검색 3개의 공통 순서(아이디어 구체화 → 요구사항 정리 → 업체 탐색/비교 → 계약)를 독자 학습 흐름에 맞게 재구성했다. 첫 단계를 '아이디어를 기능 단위로 구체화하기'로 잡은 것은 context.json의 research_corrections에서 'tech_foggy 독자에게 RFP 작성을 권유하는 대신 핵심 기능을 일상어로 나열하는 수준으로 낮춰야 한다'고 명시했기 때문이다. 두 번째 노드에서 플랫폼 등록과 매니저 상담을 제시하는 것은 journey_mapping.cta_direction의 '등록하면 매니저가 요구사항 정리부터 함께합니다'를 학습 흐름에 자연스럽게 내재화한 것이다. 세 번째 노드에서 업체 비교 기준을 다루는 순서는 AI 검색 3개 모두 업체 탐색/비교를 요구사항 정리 다음에 배치한 것과 일치한다. 마지막 노드를 계약 리스크로 잡은 것은 독자의 마지막 감정 장벽('잘못 계약하면 소스코드를 못 받거나 돈을 날릴 것 같다')을 해소하기 위해서이며, 정보 추가가 아닌 신뢰 확보 목적이다. AI 응답에서 공통으로 언급된 '예산 설정' 독립 노드는 context.json dont '예산 구간별 방식 분기 금지' 규칙에 따라 별도 H2로 세우지 않고, 업체 탐색 노드에서 '비용은 요구사항 범위의 결과'라는 관점으로 다룬다.</div></div>
+    
+  </div>
+
+  <div class="section-scroll"><div class="map-grid c-hub" style="grid-template-columns:var(--row-label-w) repeat(4,var(--col-w))">
+  
+  <div class="rl" style="min-height:auto">&#x1F3F7;&#xFE0F; Stage</div>
+  <div class="stage-cell"><div class="stage-pill">H1</div></div><div class="stage-cell"><div class="stage-pill">H2</div></div><div class="stage-cell"><div class="stage-pill">H3</div></div><div class="stage-cell"><div class="stage-pill">H4</div></div>
+  <div class="rl" style="min-height:auto">&#x1F4C8; 감정</div>
+  <div class="emotion-strip"><svg class="emotion-svg" viewBox="0 0 1040 130" preserveAspectRatio="none">
+<rect x="0" y="0" width="260" height="130" fill="rgba(231,76,60,.04)" rx="4"/>
+<rect x="260" y="0" width="260" height="130" fill="rgba(243,156,18,.04)" rx="4"/>
+<rect x="520" y="0" width="260" height="130" fill="rgba(243,156,18,.04)" rx="4"/>
+<rect x="780" y="0" width="260" height="130" fill="rgba(46,204,113,.04)" rx="4"/>
+<path d="M130,100 C216,100 304,74 390,74 C476,74 564,48 650,48 C736,48 824,22 910,22" fill="none" stroke="var(--hub)" stroke-width="3" stroke-linecap="round"/>
+<text x="130" y="80" text-anchor="middle" style="font-size:18px">😯</text>
+<circle cx="130" cy="100" r="6" fill="var(--emotion-low)"/>
+<text x="130" y="118" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-low)">막막</text>
+<text x="130" y="126" text-anchor="middle" class="emotion-sublabel">아이디어만 있는?</text>
+<text x="390" y="54" text-anchor="middle" style="font-size:18px">🤔</text>
+<circle cx="390" cy="74" r="6" fill="var(--emotion-mid)"/>
+<text x="390" y="92" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-mid)">확신</text>
+<text x="390" y="126" text-anchor="middle" class="emotion-sublabel">기능 목록을 어?</text>
+<text x="650" y="28" text-anchor="middle" style="font-size:18px">🤔</text>
+<circle cx="650" cy="48" r="6" fill="var(--emotion-mid)"/>
+<text x="650" y="66" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-mid)">불안</text>
+<text x="650" y="126" text-anchor="middle" class="emotion-sublabel">개발사 제안서를?</text>
+<text x="910" y="2" text-anchor="middle" style="font-size:18px">😌</text>
+<circle cx="910" cy="22" r="6" fill="var(--emotion-high)"/>
+<text x="910" y="40" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-high)">불안</text>
+<text x="910" y="126" text-anchor="middle" class="emotion-sublabel">계약할 때 꼭 ?</text>
+</svg></div>
+  <div class="rl">&#x1F4AD; 상태</div>
+  <div class="dc state-cell">웹서비스를 만들어야겠다는 생각은 있는데 업체에 무슨 말을 해야 할지, 어디서부터 손을 대야 할지 몰라서 검색창 앞에 멈춰 있다</div><div class="dc state-cell">기능 목록을 어느 정도 정리했는데 이게 맞는지 확신이 없고, 이 상태로 업체에 연락해도 되는 건지, 어디서 업체를 찾아야 하는지 모르겠다</div><div class="dc state-cell">제안서가 여러 개 왔는데 가격도 다르고 기간도 달라서 어떤 기준으로 골라야 할지 모르겠고, 가장 저렴한 곳을 고르면 되는 건지 불안하다</div><div class="dc state-cell">업체를 골랐는데 계약서를 받아보니 내용이 이해가 안 되고, 소스코드를 못 받거나 나중에 수정 비용이 계속 생길 것 같아서 계약하기 전에 불안하다</div>
+  <div class="rl q-label">&#x2753; 질문</div>
+  <div class="dc q">아이디어만 있는 상태에서 외주를 시작하려면 뭘 제일 먼저 해야 하나요?</div><div class="dc q">기능 목록을 어느 정도 만들었는데, 이제 어디서 어떻게 업체를 찾아야 하나요?</div><div class="dc q">개발사 제안서를 받았는데 어떤 기준으로 비교하고 선택해야 하나요?</div><div class="dc q">계약할 때 꼭 확인해야 할 항목이 무엇인가요?</div>
+  <div class="rl">&#x1F4A1; 핵심 답변</div>
+  <div class="dc">업체에 연락하기 전에 '무엇을 만들지'를 업체가 이해할 수 있는 형태로 정리하는 것이 첫 단계다. 완성된 기획서나 문서가 아니어도 된다 — 핵심 기능을 일상어로 나열하고, '이 서비스처럼 동작했으면 한다'는 참고 서비스 URL을 함께 정리하면 업체와 첫 대화가 가능한 수준이 된다. 기능을 나열하다가 빠진 게 없는지 모르겠을 때, 그 단계부터 매니저 상담을 받는 것도 방법이다.</div><div class="dc">기능 목록이 완벽하지 않아도 업체 탐색을 시작할 수 있다. 탐색 경로는 크게 아웃소싱 플랫폼을 통하는 방법과 개발사에 직접 연락하는 방법이 있는데, 비개발자가 처음 진행한다면 플랫폼을 통하는 것이 일정·대금·계약 관리 측면에서 수월하다. 위시켓에 프로젝트를 등록하면 매니저가 요구사항 정리를 함께 도와주고, 적정 금액과 기간도 무료로 상담받을 수 있다.</div><div class="dc">가격만으로 업체를 고르면 나중에 기대한 결과와 다른 결과물을 받을 가능성이 높다. 유사한 서비스를 만들어본 경험이 있는지, 미팅에서 소통이 잘 되는지, 그리고 제안한 내용이 처음 정리한 기능 목록과 범위가 맞는지를 함께 봐야 한다. 가격 차이는 대부분 포함된 기능 범위가 달라서 생기므로, 가격을 비교하기 전에 무엇이 포함되어 있는지를 먼저 확인하는 것이 순서다.</div><div class="dc">계약서에서 반드시 확인해야 할 핵심은 세 가지다. 소스코드를 포함한 지재권이 클라이언트에게 귀속된다는 조항이 있는지, 개발 완료 후 발생하는 버그(하자보수)와 기능을 새로 추가하는 것(유지보수)이 계약서에서 구분되어 있는지, 그리고 결과물 검수 후에 대금이 지급되는 구조인지 확인해야 분쟁 없이 프로젝트를 마무리할 수 있다. 위시켓에서 진행하면 이 세 가지가 포함된 법무법인 검토 표준계약서를 제공하고 에스크로로 대금을 보호하므로, 조항 하나하나를 독자가 직접 설계할 필요가 없다.</div>
+  <div class="rl">&#x25B6;&#xFE0F; 도전</div>
+  <div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 만들고 싶은 기능을 메모 앱에 나열해보고, '이 서비스와 비슷하게'라고 말할 수 있는 참고 사이트 URL을 하나 이상 찾아본다</div></div><div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 위시켓에 프로젝트를 등록하고, 매니저 연락을 기다린다</div></div><div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 제안서를 보낸 업체 2~3곳과 짧은 미팅을 잡고, 기능 목록을 가지고 가서 '이 기능이 제안에 포함되어 있나요?'를 직접 확인해본다</div></div><div class="dc try-row"><span style="color:var(--text-dim);font-size:11px">&mdash;</span></div>
+  <div class="rl">&#x2716; 다음 문제</div>
+  <div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 기능을 나열했는데 어디까지 적어야 하는지 모르겠고, 빠진 기능이 있는 것 같아서 완성이 안 된 느낌이다</div></div><div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 등록은 했는데 여러 업체가 제안서를 보내왔고, 제안서마다 가격과 기간이 달라서 어떤 기준으로 비교해야 할지 모르겠다</div></div><div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 미팅까지 했는데 한 업체로 좁혔다. 이제 계약을 해야 하는데, 계약서에 어떤 내용이 들어가야 하는지 모르겠고 소스코드를 나중에 제대로 받을 수 있는지 걱정된다</div></div><div class="dc block-row"><span style="color:var(--text-dim);font-size:11px">&mdash;</span></div>
+  <div class="rl basis-label">&#x1F4CE; 근거</div>
+  <div class="dc basis-cell">primary_context에서 출발하는 첫 노드. '어디서부터 시작해야 하나'는 질문의 핵심이 요구사항 정리 이전의 막힘임을 가리킨다. AI 검색 3개 모두 아이디어 구체화와 요구사항 정의를 가장 먼저 제시했고, Gemini는 특히 '레퍼런스 서비스 제시'를 기획의 핵심 도구로 언급했다. context.json research_corrections에서 tech_foggy 독자에게 RFP 직접 작성 권유 대신 핵심 기능 나열 수준으로 낮출 것을 명시했으므로 이 관점으로 stance를 구성했다.</div><div class="dc basis-cell">h1의 block(기능 목록이 완성된 느낌이 안 든다)에서 자연스럽게 이어지는 다음 단계. '완성이 안 됐어도 탐색을 시작할 수 있다'는 관점이 독자의 행동을 언블락한다. 연관 검색에서 '외주개발업체선정'이 상위에 있고, AI 검색에서 경로 제시(플랫폼)를 요구사항 정리 다음 단계로 배치했다. context.json cta_direction에서 '등록하면 매니저가 요구사항 정리부터 함께합니다'를 CTA 논리로 활용하라고 명시했으므로 이 노드에서 자연스럽게 연결했다.</div><div class="dc basis-cell">h2의 block(제안서 비교 기준을 모른다)에서 자연스럽게 이어지는 노드. 비용만 보는 것이 아니라 포함 범위를 먼저 보는 것이 순서라는 관점은 context.json confusion_pairs '견적 비교 ≠ 같은 조건 비교'에서 직접 도출된다. AI 검색 3개 모두 업체 선정 기준으로 포트폴리오·소통 능력·계약 조건을 공통으로 제시했다.</div><div class="dc basis-cell">h3의 block(계약서 내용을 이해하기 어렵고 소스코드·추가 비용 걱정)에서 출발하는 마지막 노드. 정보 추가가 아니라 '계약하기가 두렵다'는 감정적 장벽을 해소하는 것이 이 노드의 목적이다. context.json confusion_pairs '소스코드 납품 ≠ 운영 인수인계', '하자보수 ≠ 유지보수'가 독자가 이 단계에서 혼동하는 핵심 쌍이며, responsibility_map '소스코드·지재권 귀속 → 계약서 명시 사항'이 이 노드의 내용을 뒷받침한다. AI 검색 3개 모두 계약 단계를 마지막 주요 항목으로 배치했고, 경쟁글도 계약 조건 확인을 마지막 섹션으로 구성하는 공통 패턴을 보인다.</div>
+  <div class="rl" style="border-bottom:none">&#x2935;&#xFE0F; 분기</div>
+  <div class="dc branch-cell empty">&mdash;</div><div class="dc branch-cell empty">&mdash;</div><div class="dc branch-cell"><span class="branch-pill" style="background:var(--sub2-light);color:var(--sub2)">&#x2193; sub_budget</span></div><div class="dc branch-cell"><span class="branch-pill" style="background:var(--sub1-light);color:var(--sub1)">&#x2193; sub_risk</span></div>
+  </div></div>
+</div>
+
+
+
+<div class="inner-panel" id="jm-sub1">
+  
+  <div class="hub-sub-connector"><div class="connector-visual">
+    <div class="cv-line" style="background:var(--hub)"></div>
+    <span class="cv-label" style="background:var(--hub-light);color:var(--hub)">Hub h4</span>
+    <span style="color:var(--text-dim)">&rarr;</span>
+    <div class="cv-line" style="background:var(--sub1)"></div>
+    <span class="cv-label" style="background:#FDF0F0;color:#D94F4F">sub_risk</span>
+    <span class="cv-desc">depth &mdash; 웹서비스 외주 계약에서 소스코드 소유권, 하자보수, 대금 보호를 어떻게 ...</span>
+  </div></div>
+  
+
+  <div class="section-title-bar">
+    <div class="stb-head">
+      <div class="stb-color" style="background:var(--sub1)"></div>
+      <div class="stb-content">
+        <div class="stb-overline" style="color:var(--sub1)">Sub Content 1 &mdash; depth from h4</div>
+        <div class="stb-question">웹서비스 외주 계약에서 소스코드 소유권, 하자보수, 대금 보호를 어떻게 확인하고 지켜야 하나요?</div>
+        <div class="stb-tags">
+          <span class="stb-tag" style="background:#FDF0F0;color:#D94F4F">4 steps</span>
+          <span class="stb-tag" style="background:#FDF0F0;color:#D94F4F">source: depth</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="reasoning-box rb-sub1"><div class="rb-label">Selection Reasoning</div><div class="rb-text">hub h4에서 계약 리스크 3가지(지재권, 하자/유지보수 구분, 대금보호)를 한 노드에서 개요로만 다룬다. 그러나 독자 입장에서 '지재권 양도 조항이 어떻게 적혀 있어야 하는지', '소스코드 납품과 운영 인수인계가 어떻게 다른지', '하자보수 기간이 끝나면 무엇이 유상이 되는지'처럼 각 항목을 실제로 계약서에서 확인하는 방법이 필요하다. 경쟁글 missing_angles에서도 '소스코드 소유권·인수인계 문서 요구 방법을 다룬 글 부재'가 명시되어 있고, existing_blog gap에서 '소스코드 인수인계 요구 방법'을 다루지 않은 공백이 확인된다. 계약 직전 단계 독자가 실제로 확인해야 할 내용을 단계별로 풀어주는 depth sub가 필요하다.</div></div>
+    
+  </div>
+
+  <div class="section-scroll"><div class="map-grid c-sub1" style="grid-template-columns:var(--row-label-w) repeat(4,var(--col-w))">
+  
+  
+  <div class="rl flow-reason-label">흐름 근거</div><div class="dc flow-reason-cell">hub h4를 읽고 온 독자는 '지재권·하자보수·대금보호가 중요하다'는 것은 이해했지만, 실제 계약서를 펼쳐봤을 때 어떤 표현이 있어야 하는지 모르는 상태다. 첫 노드는 계약서를 받아서 읽어봤는데 어디를 봐야 하는지 모르는 상태에서 출발한다. 두 번째 노드는 지재권과 소스코드 관련 표현을 확인하는 법, 세 번째 노드는 하자보수와 유지보수 구분이 계약서에 어떻게 명시되어야 하는지 다룬다. 네 번째 노드는 대금 지급 구조와 위시켓 에스크로 연결로 마무리한다. AI 검색 3개에서 공통으로 언급한 '계약 체결 시 SOW·소유권·유지보수 조건 명시'를 비개발자 수준으로 풀어내는 것이 이 sub의 목적이다.</div>
+  
+  <div class="rl" style="min-height:auto">&#x1F3F7;&#xFE0F; Stage</div>
+  <div class="stage-cell"><div class="stage-pill">S1_1</div></div><div class="stage-cell"><div class="stage-pill">S1_2</div></div><div class="stage-cell"><div class="stage-pill">S1_3</div></div><div class="stage-cell"><div class="stage-pill">S1_4</div></div>
+  <div class="rl" style="min-height:auto">&#x1F4C8; 감정</div>
+  <div class="emotion-strip tall"><svg class="emotion-svg" viewBox="0 0 1040 130" preserveAspectRatio="none">
+<rect x="0" y="0" width="260" height="130" fill="rgba(231,76,60,.04)" rx="4"/>
+<rect x="260" y="0" width="260" height="130" fill="rgba(243,156,18,.04)" rx="4"/>
+<rect x="520" y="0" width="260" height="130" fill="rgba(243,156,18,.04)" rx="4"/>
+<rect x="780" y="0" width="260" height="130" fill="rgba(46,204,113,.04)" rx="4"/>
+<path d="M130,100 C216,100 304,74 390,74 C476,74 564,48 650,48 C736,48 824,22 910,22" fill="none" stroke="var(--sub1)" stroke-width="3" stroke-linecap="round"/>
+<text x="130" y="80" text-anchor="middle" style="font-size:18px">😯</text>
+<circle cx="130" cy="100" r="6" fill="var(--emotion-low)"/>
+<text x="130" y="118" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-low)">막막</text>
+<text x="130" y="126" text-anchor="middle" class="emotion-sublabel">계약서에서 가장?</text>
+<text x="390" y="54" text-anchor="middle" style="font-size:18px">🤔</text>
+<circle cx="390" cy="74" r="6" fill="var(--emotion-mid)"/>
+<text x="390" y="92" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-mid)">답답</text>
+<text x="390" y="126" text-anchor="middle" class="emotion-sublabel">소스코드를 제대?</text>
+<text x="650" y="28" text-anchor="middle" style="font-size:18px">🤔</text>
+<circle cx="650" cy="48" r="6" fill="var(--emotion-mid)"/>
+<text x="650" y="66" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-mid)">갈팡질팡</text>
+<text x="650" y="126" text-anchor="middle" class="emotion-sublabel">납품 후 발생하?</text>
+<text x="910" y="2" text-anchor="middle" style="font-size:18px">😌</text>
+<circle cx="910" cy="22" r="6" fill="var(--emotion-high)"/>
+<text x="910" y="40" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-high)">불안</text>
+<text x="910" y="126" text-anchor="middle" class="emotion-sublabel">계약금을 냈는데?</text>
+</svg></div>
+  <div class="rl">&#x1F4AD; 상태</div>
+  <div class="dc state-cell">계약서를 받아서 읽어봤는데 법률 용어가 많아서 무엇을 어떻게 확인해야 하는지 모르겠고, 무언가를 놓칠 것 같아서 서명하기가 두렵다</div><div class="dc state-cell">지식재산권 항목을 찾았는데 어떤 표현이 있어야 내가 소스코드를 온전히 받을 수 있는 건지 판단이 안 된다</div><div class="dc state-cell">소스코드는 받기로 했는데, 런칭 후에 버그가 생기면 무상으로 고쳐주는지, 기능을 추가하고 싶을 때는 어떻게 되는지 아직 모르겠다</div><div class="dc state-cell">하자보수 조건은 확인했는데, 계약금을 선불로 내고 나서 개발이 흐지부지되거나 결과물이 기대와 다를 때 돌려받을 방법이 없을 것 같아 불안하다</div>
+  <div class="rl q-label">&#x2753; 질문</div>
+  <div class="dc q">계약서에서 가장 먼저 어디를 봐야 하나요?</div><div class="dc q">소스코드를 제대로 받으려면 계약서에 어떤 표현이 있어야 하나요?</div><div class="dc q">납품 후 발생하는 버그 수정과 기능 추가는 어떻게 다른가요?</div><div class="dc q">계약금을 냈는데 결과물이 기대와 다르면 어떻게 되나요?</div>
+  <div class="rl">&#x1F4A1; 핵심 답변</div>
+  <div class="dc">계약서 전체를 이해하려 하지 않아도 된다. 소스코드 귀속, 하자보수 기간과 범위, 대금 지급 방식 — 이 세 항목이 계약서 어디에 어떻게 적혀 있는지를 순서대로 확인하는 것이 현실적이다. 이 항목들이 없거나 불명확하게 적혀 있다면 서명 전에 수정을 요청할 수 있다.</div><div class="dc">계약서에 '소스코드를 포함한 지식재산권 일체를 클라이언트에게 귀속한다'는 표현이 있어야 한다. '결과물을 납품한다'는 표현만으로는 소스코드가 포함되지 않을 수 있다. 소스코드를 받는 것과 운영을 인수받는 것은 별개이므로, 소스코드 납품 외에도 시스템 구조 문서와 배포 절차를 함께 요청하는 것이 좋다.</div><div class="dc">하자보수는 개발사가 귀책을 진 버그를 무상으로 고치는 것이고, 통상 납품 후 3~6개월 이내가 기준이다. 기능을 추가하거나 변경하는 것은 유지보수로 별도 계약이 필요하며 유상이 기본이다. 이 둘을 혼용하면 납품 후 분쟁으로 이어지므로, 계약서에 하자보수 기간과 범위가 명시되어 있는지 확인하고 서명해야 한다.</div><div class="dc">대금 보호 방식이 계약서에 명시되어 있는지 확인해야 한다. 위시켓에서 진행하면 대금을 위시켓이 에스크로로 보관하다가 검수 후 클라이언트가 승인해야 지급되는 구조이므로, 결과물을 받기 전에 대금을 업체가 가져가는 상황이 생기지 않는다. 계약·대금·분쟁 중재 과정에서 매니저가 함께하므로 혼자 계약서를 검토할 필요가 없다.</div>
+  <div class="rl">&#x25B6;&#xFE0F; 도전</div>
+  <div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 계약서를 펴고 '지식재산권' 또는 '저작권' 항목을 찾아 무엇이 적혀 있는지 확인해본다</div></div><div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 개발사에 '소스코드 납품과 운영 인수인계 문서도 계약에 포함해달라'고 요청해본다</div></div><div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 계약서에서 '하자보수' 항목을 찾아 기간과 범위가 적혀 있는지 확인해본다</div></div><div class="dc try-row"><span style="color:var(--text-dim);font-size:11px">&mdash;</span></div>
+  <div class="rl">&#x2716; 다음 문제</div>
+  <div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 지식재산권 항목을 찾았는데 '을이 갑에게 양도한다'는 표현이 있는 버전도 있고 없는 버전도 있어서 어떤 표현이 있어야 맞는 건지 판단이 안 선다</div></div><div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 소스코드는 받기로 했는데, 이제 하자보수 기간 동안 어디까지 무상으로 수정을 요청할 수 있는지 궁금하고, 기능을 추가하고 싶을 때 어떻게 되는지 모르겠다</div></div><div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 하자보수 기간과 범위는 계약서에서 확인했는데, 계약금을 미리 내야 하는지, 중간에 개발이 흐지부지되면 대금을 돌려받을 수 있는지 걱정된다</div></div><div class="dc block-row"><span style="color:var(--text-dim);font-size:11px">&mdash;</span></div>
+  <div class="rl basis-label" style="border-bottom:none">&#x1F4CE; 근거</div>
+  <div class="dc basis-cell" style="border-bottom:none">hub h4 stance를 이미 이해하고 온 독자의 다음 막힘(계약서를 실제로 어떻게 보나)에서 출발. context.json dont '소스코드는 당연히 받을 수 있다고 전제하지 않는다'와 responsibility_map '소스코드·지재권 귀속 → 계약서 명시 사항'이 이 노드의 핵심 근거다.</div><div class="dc basis-cell" style="border-bottom:none">s1_1의 block(어떤 표현이 맞는지 모른다)에서 이어지는 노드. context.json confusion_pairs '소스코드 납품 ≠ 운영 인수인계'가 이 노드의 핵심이다.</div><div class="dc basis-cell" style="border-bottom:none">s1_2의 block(하자보수·기능 추가 차이 모름)에서 이어지는 노드. context.json confusion_pairs '하자보수 ≠ 유지보수'가 이 노드의 핵심이다. AI 검색과 경쟁글 모두 계약 조건 설명에서 이 구분을 별도로 다루고 있다.</div><div class="dc basis-cell" style="border-bottom:none">s1_3의 block(대금 보호 방법 모름)에서 이어지는 마지막 노드. 정보 격차가 아니라 '돈을 날릴 것 같다'는 감정 장벽을 해소하는 것이 목적이다. context.json service_boundaries can_claim '대금을 위시켓이 안전하게 보관하는 에스크로 구조가 있다'가 이 노드의 근거다.</div>
+  </div></div>
+</div>
+
+<div class="inner-panel" id="jm-sub2">
+  
+  <div class="hub-sub-connector"><div class="connector-visual">
+    <div class="cv-line" style="background:var(--hub)"></div>
+    <span class="cv-label" style="background:var(--hub-light);color:var(--hub)">Hub h3</span>
+    <span style="color:var(--text-dim)">&rarr;</span>
+    <div class="cv-line" style="background:var(--sub2)"></div>
+    <span class="cv-label" style="background:#FFF8EB;color:#C68A1D">sub_budget</span>
+    <span class="cv-desc">example &mdash; 웹서비스 외주 예산, 기능 범위에 따라 어떻게 달라지고 어떻게 가늠하나요...</span>
+  </div></div>
+  
+
+  <div class="section-title-bar">
+    <div class="stb-head">
+      <div class="stb-color" style="background:var(--sub2)"></div>
+      <div class="stb-content">
+        <div class="stb-overline" style="color:var(--sub2)">Sub Content 2 &mdash; example from h3</div>
+        <div class="stb-question">웹서비스 외주 예산, 기능 범위에 따라 어떻게 달라지고 어떻게 가늠하나요?</div>
+        <div class="stb-tags">
+          <span class="stb-tag" style="background:#FFF8EB;color:#C68A1D">3 steps</span>
+          <span class="stb-tag" style="background:#FFF8EB;color:#C68A1D">source: example</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="reasoning-box rb-sub2"><div class="rb-label">Selection Reasoning</div><div class="rb-text">hub h3에서 '가격 차이는 포함 범위가 달라서 생긴다'는 관점을 제시하지만, 독자는 '그러면 내 프로젝트는 얼마 정도면 되는 거야?'라는 질문을 자연스럽게 갖게 된다. PAA에서 '외주 비용이 얼마나 드나요?'가 직접 질문으로 확인됐고, context.json data_angles에 '기능 범위별 예산 차이'를 사례로 보여줄 수 있다는 feasibility가 명시되어 있다. 기존 블로그 'web-service-outsourcing-budget-guide.html'이 있지만 웹서비스 신규 개발에 특화된 사례 각도가 다르다. 검증된 사례 8건을 활용해 '같은 웹서비스라도 기능 범위에 따라 예산이 어떻게 달라지는지'를 독자가 자기 프로젝트에 대입할 수 있는 형태로 보여주는 example sub가 필요하다.</div></div>
+    
+  </div>
+
+  <div class="section-scroll"><div class="map-grid c-sub2" style="grid-template-columns:var(--row-label-w) repeat(3,var(--col-w))">
+  
+  
+  <div class="rl flow-reason-label">흐름 근거</div><div class="dc flow-reason-cell">hub h3 stance(비교 전에 포함 범위 먼저 확인)를 이미 이해한 독자가 '그래서 내 프로젝트는 얼마나 드는 건지'를 구체적으로 알고 싶어 하는 상태에서 출발한다. 첫 노드는 예산이 어떻게 결정되는지 구조를 이해하는 것, 두 번째 노드는 사례를 통해 기능 범위별로 예산이 어떻게 달라지는지 보여주는 것, 세 번째 노드는 독자가 자기 프로젝트를 어떤 사례에 비교해서 가늠할 수 있는지 다루는 것으로 흐름을 잡았다. AI 검색 3개 모두 예산 범위를 제시하면서도 '같은 유형이라도 기능 범위에 따라 2~3배 차이'라고 언급했는데, 이를 단순 수치 나열이 아니라 실제 사례 비교로 풀어내는 것이 이 sub의 차별화 각도다.</div>
+  
+  <div class="rl" style="min-height:auto">&#x1F3F7;&#xFE0F; Stage</div>
+  <div class="stage-cell"><div class="stage-pill">S2_1</div></div><div class="stage-cell"><div class="stage-pill">S2_2</div></div><div class="stage-cell"><div class="stage-pill">S2_3</div></div>
+  <div class="rl" style="min-height:auto">&#x1F4C8; 감정</div>
+  <div class="emotion-strip short"><svg class="emotion-svg" viewBox="0 0 780 110" preserveAspectRatio="none">
+<rect x="0" y="0" width="260" height="110" fill="rgba(231,76,60,.04)" rx="4"/>
+<rect x="260" y="0" width="260" height="110" fill="rgba(243,156,18,.04)" rx="4"/>
+<rect x="520" y="0" width="260" height="110" fill="rgba(46,204,113,.04)" rx="4"/>
+<path d="M130,100 C216,100 304,61 390,61 C476,61 564,22 650,22" fill="none" stroke="var(--sub2)" stroke-width="3" stroke-linecap="round"/>
+<text x="130" y="80" text-anchor="middle" style="font-size:18px">😯</text>
+<circle cx="130" cy="100" r="6" fill="var(--emotion-low)"/>
+<text x="130" y="118" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-low)">불안</text>
+<text x="130" y="106" text-anchor="middle" class="emotion-sublabel">같은 웹서비스인?</text>
+<text x="390" y="41" text-anchor="middle" style="font-size:18px">🤔</text>
+<circle cx="390" cy="61" r="6" fill="var(--emotion-mid)"/>
+<text x="390" y="79" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-mid)">관망</text>
+<text x="390" y="106" text-anchor="middle" class="emotion-sublabel">비슷한 웹서비스?</text>
+<text x="650" y="2" text-anchor="middle" style="font-size:18px">😌</text>
+<circle cx="650" cy="22" r="6" fill="var(--emotion-high)"/>
+<text x="650" y="40" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-high)">확신</text>
+<text x="650" y="106" text-anchor="middle" class="emotion-sublabel">업체에 예산을 ?</text>
+</svg></div>
+  <div class="rl">&#x1F4AD; 상태</div>
+  <div class="dc state-cell">업체 제안서를 받아서 비교 중인데, 비슷한 기능처럼 보이는데도 업체마다 견적이 수백만 원 이상 차이가 나서 어디가 합리적인지 기준이 없다</div><div class="dc state-cell">기능 목록은 맞췄는데도 업체마다 금액이 달라서 어느 쪽이 합리적인지 모르겠고, 실제 웹서비스 외주 프로젝트에서 어느 정도 예산이 오가는지 참고할 사례가 없다</div><div class="dc state-cell">대략적인 예산 범위는 감이 잡혔는데, 내 프로젝트가 정확히 어느 구간에 해당하는지 확신이 없어서 업체에 예산을 어떻게 제시해야 하는지 모르겠다</div>
+  <div class="rl q-label">&#x2753; 질문</div>
+  <div class="dc q">같은 웹서비스인데 업체마다 견적이 이렇게 차이 나는 게 정상인가요?</div><div class="dc q">비슷한 웹서비스 외주 프로젝트는 예산이 어느 정도 드나요?</div><div class="dc q">업체에 예산을 처음 말할 때 어떻게 전달해야 하나요?</div>
+  <div class="rl">&#x1F4A1; 핵심 답변</div>
+  <div class="dc">같은 '웹서비스'라도 어떤 기능이 얼마나 포함되어 있느냐에 따라 예산이 크게 달라지는 것이 정상이다. 단순한 단일 기능 서비스와 결제·회원 관리·데이터 연동이 모두 들어간 서비스는 같은 '웹서비스'라는 이름이지만 구현 공수가 전혀 다르다. 예산 차이의 원인은 대부분 포함 기능의 범위 차이이므로, 견적서를 비교할 때 금액 전에 어떤 기능이 포함되어 있는지를 먼저 보는 것이 순서다.</div><div class="dc">예산은 기능 범위의 결과이므로 절대적인 정답은 없지만, 실제 프로젝트 사례를 보면 대략적인 범위감을 잡는 데 도움이 된다. 단순한 단일 기능 웹서비스는 수백만 원대에서 시작하고, 비교·연산·회원 관리 등이 포함된 중형 서비스는 수천만 원대로 올라간다. 같은 예산 구간의 사례라도 포함된 기능이 다르므로, '이 사례와 같은 예산이면 된다'고 단정하기보다 '우리 서비스는 이 사례보다 기능이 많으니 더 높을 수 있다'는 방식으로 가늠하는 것이 현실적이다.</div><div class="dc">정확한 예산을 먼저 확정하고 업체에 연락해야 한다고 생각할 필요가 없다. 핵심 기능 목록을 바탕으로 '이 정도 범위인데 어느 수준의 예산이 필요한지'를 매니저와 먼저 상담하면 현실적인 예산 범위를 잡는 데 도움이 된다. 예산을 먼저 정하고 그에 맞게 기능을 조절하거나, 핵심 기능만 먼저 개발하고 이후에 기능을 추가하는 방식도 현실적인 선택이다.</div>
+  <div class="rl">&#x25B6;&#xFE0F; 도전</div>
+  <div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 각 업체 제안서에서 '포함 기능 목록' 항목을 찾아 처음 정리한 기능 목록과 대조해본다</div></div><div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 사례들의 기능 구성과 예산을 훑어보면서 내가 만들려는 웹서비스가 어떤 사례에 가장 가까운지 골라본다</div></div><div class="dc try-row"><span style="color:var(--text-dim);font-size:11px">&mdash;</span></div>
+  <div class="rl">&#x2716; 다음 문제</div>
+  <div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 기능 목록은 맞춰봤는데 기능 수가 비슷한데도 금액이 다르다. 내 프로젝트와 비슷한 사례의 예산이 어느 정도인지 비교 기준점이 없다</div></div><div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 비슷한 사례는 찾았는데, 내 프로젝트에 포함할 기능이 애매해서 어느 구간에 해당하는지 확신이 없고 업체에 예산 기준을 어떻게 전달해야 할지 모르겠다</div></div><div class="dc block-row"><span style="color:var(--text-dim);font-size:11px">&mdash;</span></div>
+  <div class="rl basis-label" style="border-bottom:none">&#x1F4CE; 근거</div>
+  <div class="dc basis-cell" style="border-bottom:none">hub h3의 '포함 범위 먼저 확인'을 이미 이해한 독자가 다음으로 '내 프로젝트 예산 기준점'을 찾는 상태에서 출발. PAA '비용이 얼마나 드나요?'가 직접 질문으로 확인됐고, AI 검색 3개 모두 예산 범위를 업체 탐색 단계에서 제시했다.</div><div class="dc basis-cell" style="border-bottom:none">s2_1의 block(비교 기준점이 없다)에서 이어지는 노드. context.json data_angles '기능 범위별 예산 차이 — 단일 기능 중심부터 AI 연동·결제 플로우까지 사례 분포' 각도를 직접 활용하는 노드. comparison_warning '사례 카드 형식으로만 활용'에 따라 집계 통계 대신 사례 제시 방식을 취한다.</div><div class="dc basis-cell" style="border-bottom:none">s2_2의 block(어느 구간에 해당하는지 확신 없음)에서 이어지는 마지막 노드. 정확한 예산 확정이 아니라 매니저 상담으로 연결하는 것이 context.json cta_direction과 일치한다. context.json dont '예산 구간별 방식 분기 금지' 규칙에 따라 예산 범위로 방식을 분기하지 않는다.</div>
+  </div></div>
+</div>
+
+<div class="inner-panel" id="jm-sub3">
+  
+  <div class="hub-sub-connector"><div class="connector-visual">
+    <span class="cv-label" style="background:#F3F1FE;color:#6C5CE7">sub_role</span>
+    <span class="cv-desc">독립 Branch &mdash; 개발팀 없는 중소기업이 외주 개발 진행 중에 클라이언트로서 해야 할 역할...</span>
+  </div></div>
+  
+
+  <div class="section-title-bar">
+    <div class="stb-head">
+      <div class="stb-color" style="background:var(--sub3)"></div>
+      <div class="stb-content">
+        <div class="stb-overline" style="color:var(--sub3)">Sub Content 3 &mdash; branch Independent Branch</div>
+        <div class="stb-question">개발팀 없는 중소기업이 외주 개발 진행 중에 클라이언트로서 해야 할 역할이 무엇인가요?</div>
+        <div class="stb-tags">
+          <span class="stb-tag" style="background:#F3F1FE;color:#6C5CE7">3 steps</span>
+          <span class="stb-tag" style="background:#F3F1FE;color:#6C5CE7">source: branch</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="reasoning-box rb-sub3"><div class="rb-label">Selection Reasoning</div><div class="rb-text">hub은 아직 업체를 접촉하지 않은 독자를 위한 흐름이다. 그런데 이미 업체를 찾았거나 프로젝트를 시작하려는 단계에서 '진행 중에 내가 뭘 해야 하는지 모르겠다'는 막힘이 있는 독자는 hub에 진입해도 첫 두 노드를 건너뛰게 된다. AI 검색 3개 모두 '내부 담당자 역할 설정 방법'을 missing_angle로 지적했고, 경쟁글 분석에서도 이 주제를 전문적으로 다룬 글이 없다고 확인됐다. context.json reader_misconceptions에서 '개발사나 프리랜서에게 맡기면 알아서 다 해준다'는 오해가 명시돼 있는데, 이 오해를 가진 독자에게 hub 내용보다 '프로젝트 진행 중 클라이언트 역할'을 먼저 알려주는 것이 더 효과적이다. existing_blog gap에서 '내부 담당자 역할 구체화'가 기존 글에 없는 각도로 확인됐다.</div></div>
+    
+  </div>
+
+  <div class="section-scroll"><div class="map-grid c-sub3" style="grid-template-columns:var(--row-label-w) repeat(3,var(--col-w))">
+  
+  
+  <div class="rl flow-reason-label">흐름 근거</div><div class="dc flow-reason-cell">이 독자는 hub을 읽지 않았거나 읽었더라도 '이제 업체를 골랐는데 내가 뭘 해야 하는지'가 막히는 상태다. 첫 노드는 계약 후 또는 프로젝트 시작 직전에 '개발사가 알아서 해주겠지'라고 생각하다가 첫 미팅에서 어떻게 해야 할지 모르는 상태에서 출발한다. 두 번째 노드는 개발이 진행되는 동안 중간에 클라이언트가 무엇을 확인해야 하는지, 세 번째 노드는 최종 검수를 어떻게 해야 하는지 다룬다. context.json responsibility_map '기능 단위 테스트 → 파트너 기본 책임' vs '시나리오 검수(QA) → 클라이언트 기본 책임'이 이 sub의 구조를 직접 뒷받침한다.</div>
+  
+  <div class="rl" style="min-height:auto">&#x1F3F7;&#xFE0F; Stage</div>
+  <div class="stage-cell"><div class="stage-pill">S3_1</div></div><div class="stage-cell"><div class="stage-pill">S3_2</div></div><div class="stage-cell"><div class="stage-pill">S3_3</div></div>
+  <div class="rl" style="min-height:auto">&#x1F4C8; 감정</div>
+  <div class="emotion-strip short"><svg class="emotion-svg" viewBox="0 0 780 110" preserveAspectRatio="none">
+<rect x="0" y="0" width="260" height="110" fill="rgba(231,76,60,.04)" rx="4"/>
+<rect x="260" y="0" width="260" height="110" fill="rgba(243,156,18,.04)" rx="4"/>
+<rect x="520" y="0" width="260" height="110" fill="rgba(46,204,113,.04)" rx="4"/>
+<path d="M130,100 C216,100 304,61 390,61 C476,61 564,22 650,22" fill="none" stroke="var(--sub3)" stroke-width="3" stroke-linecap="round"/>
+<text x="130" y="80" text-anchor="middle" style="font-size:18px">😯</text>
+<circle cx="130" cy="100" r="6" fill="var(--emotion-low)"/>
+<text x="130" y="118" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-low)">불안</text>
+<text x="130" y="106" text-anchor="middle" class="emotion-sublabel">외주 개발이 진?</text>
+<text x="390" y="41" text-anchor="middle" style="font-size:18px">🤔</text>
+<circle cx="390" cy="61" r="6" fill="var(--emotion-mid)"/>
+<text x="390" y="79" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-mid)">관망</text>
+<text x="390" y="106" text-anchor="middle" class="emotion-sublabel">중간에 개발 결?</text>
+<text x="650" y="2" text-anchor="middle" style="font-size:18px">😌</text>
+<circle cx="650" cy="22" r="6" fill="var(--emotion-high)"/>
+<text x="650" y="40" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-high)">안심</text>
+<text x="650" y="106" text-anchor="middle" class="emotion-sublabel">최종 검수는 어?</text>
+</svg></div>
+  <div class="rl">&#x1F4AD; 상태</div>
+  <div class="dc state-cell">업체와 계약을 했거나 프로젝트를 시작하려는 참인데, 개발이 진행되는 동안 내가 무엇을 해야 하는지 몰라서 개발사가 알아서 잘 해주겠지 하고 기다리고 있다</div><div class="dc state-cell">중간 확인을 해보려고 하는데, 화면이나 기능을 보여줬을 때 무엇을 기준으로 피드백을 줘야 하는지, 좋다·나쁘다 말고 어떻게 말해야 하는지 모르겠다</div><div class="dc state-cell">개발이 거의 다 된 것 같은데, 최종 검수를 어떻게 해야 하는지 모르고, 검수 완료를 어떤 기준으로 선언해야 하는지 기준이 없어서 마냥 미루고 있다</div>
+  <div class="rl q-label">&#x2753; 질문</div>
+  <div class="dc q">외주 개발이 진행되는 동안 저는 무엇을 해야 하나요?</div><div class="dc q">중간에 개발 결과물을 확인할 때 무엇을 어떻게 봐야 하나요?</div><div class="dc q">최종 검수는 어떻게 하고, 언제 완료라고 판단하나요?</div>
+  <div class="rl">&#x1F4A1; 핵심 답변</div>
+  <div class="dc">외주 프로젝트는 개발사에 맡기면 알아서 다 해주는 방식이 아니다. 요구사항을 명확히 전달하고, 중간 산출물을 확인하고, 완성 후 검수를 하는 역할이 클라이언트에게 있다. 이것이 잘 안 되면 완성 후 기대와 전혀 다른 결과물을 받는 가장 흔한 원인이 된다.</div><div class="dc">중간 확인은 기술 완성도를 평가하는 것이 아니라 처음 요청한 기능이 맞게 동작하는지를 직접 시나리오로 테스트하는 것이다. '이 화면에서 이 버튼을 누르면 이렇게 되어야 한다'는 기대를 기준으로, 실제로 그렇게 동작하는지 직접 사용해보는 것이 가장 현실적인 방법이다. 기능 단위 버그 수정은 개발사 역할이지만, 전체 시나리오가 맞는지 확인하는 것은 클라이언트 역할이다.</div><div class="dc">최종 검수는 처음 요청한 기능 목록 전체를 실제 사용 시나리오로 테스트하고, 계약에 명시된 범위가 모두 구현되었는지 확인하는 것이다. 검수 완료의 기준은 '기대한 기능이 모두 동작하는가'이지 '완벽한가'가 아니다. 검수 중 나온 버그는 하자보수 기간 내에 개발사가 수정하고, 새로 추가하고 싶은 기능은 유지보수 계약으로 이어가면 된다. 위시켓에서 진행했다면 에스크로 대금은 검수 후 클라이언트가 승인해야 지급되므로, 검수를 꼼꼼히 한 뒤 승인하면 된다.</div>
+  <div class="rl">&#x25B6;&#xFE0F; 도전</div>
+  <div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 개발사에 '중간 확인을 어떻게 진행할 건지' 일정과 방식을 먼저 물어본다</div></div><div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 처음 작성한 기능 목록을 꺼내서, 각 기능이 실제로 동작하는지 하나씩 직접 사용해보고 안 되는 항목을 메모한다</div></div><div class="dc try-row"><span style="color:var(--text-dim);font-size:11px">&mdash;</span></div>
+  <div class="rl">&#x2716; 다음 문제</div>
+  <div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 중간 확인을 하겠다고 했는데, 개발 중간 결과물을 받아서 봤을 때 무엇을 어떻게 확인해야 하는지 모르겠다</div></div><div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 중간 확인은 했는데, 개발이 끝나고 최종 결과물을 받았을 때 무엇을 기준으로 검수 완료를 해야 하는지, 검수 후 대금을 지급해도 되는 시점이 언제인지 모르겠다</div></div><div class="dc block-row"><span style="color:var(--text-dim);font-size:11px">&mdash;</span></div>
+  <div class="rl basis-label" style="border-bottom:none">&#x1F4CE; 근거</div>
+  <div class="dc basis-cell" style="border-bottom:none">context_index 1 상황 — 업체를 찾거나 계약을 마친 독자. hub 첫 두 노드를 건너뛰는 출발점. context.json reader_misconceptions '개발사나 프리랜서에게 맡기면 알아서 다 해준다' 오해 해소가 이 노드의 목적이다. AI 검색 3개 모두 missing_angle로 '내부 담당자 역할 설정 방법'을 지적했다.</div><div class="dc basis-cell" style="border-bottom:none">s3_1의 block(중간 결과물을 어떻게 확인하나)에서 이어지는 노드. context.json responsibility_map '시나리오 검수(QA) → 클라이언트 기본 책임'이 이 노드의 핵심이다. capability_limits '중간 산출물을 무엇을 기준으로 검수해야 하는지 모른다'가 이 노드의 필요성을 직접 지목한다.</div><div class="dc basis-cell" style="border-bottom:none">s3_2의 block(최종 검수 기준이 없다)에서 이어지는 마지막 노드. '검수 완료 기준이 없다'는 감정 장벽을 해소하는 것이 목적이다. context.json responsibility_map '하자보수(버그 수정) → 파트너, 계약 기간 내 귀책 버그만', '유지보수(기능 추가·변경) → 별도 계약 필요, 유상'이 이 노드의 근거다.</div>
+  </div></div>
+</div>
+
+
+</div>
+
+
+<div class="page-footer">
+  Strategy Report &middot; 중소기업웹서비스외주시작 &middot; 2026-04-14 &middot; 20260414_1426_중소기업웹서비스외주시작
+</div>
+
+<script>
+function switchView(id){
+  document.querySelectorAll('.top-tab').forEach(function(b){b.classList.remove('active')});
+  document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active')});
+  document.getElementById('view-'+id).classList.add('active');
+  var labels={'research':'리서치','context':'방향','journey':'콘텐츠'};
+  document.querySelectorAll('.top-tab').forEach(function(b){if(b.textContent.indexOf(labels[id])!==-1)b.classList.add('active')});
+}
+function switchInner(panelId,btn){
+  document.querySelectorAll('.inner-tab').forEach(function(b){b.classList.remove('active')});
+  document.querySelectorAll('.inner-panel').forEach(function(p){p.classList.remove('active')});
+  btn.classList.add('active');
+  document.getElementById(panelId).classList.add('active');
+}
+</script>
+</body>
+</html>
