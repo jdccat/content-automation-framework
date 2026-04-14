@@ -34,7 +34,7 @@ ul.check-list{list-style:none;padding:0;margin:0}ul.check-list li{position:relat
 .map-grid{display:grid;gap:0;min-width:fit-content;margin-bottom:8px}
 .rl{display:flex;align-items:center;justify-content:flex-end;padding-right:14px;font-family:var(--font-mono);font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);min-height:44px;border-right:2px solid var(--border)}.stage-cell{display:flex;align-items:center;justify-content:center;padding:6px 8px;position:relative}.stage-pill{color:#fff;padding:11px 0;border-radius:26px;font-size:13px;font-weight:600;text-align:center;width:100%;position:relative;z-index:2}.stage-id{font-family:var(--font-mono);font-size:10px;opacity:.7;margin-right:3px}.stage-cell:not(:last-child)::after{content:'';position:absolute;right:-4px;top:50%;transform:translateY(-50%);width:0;height:0;border-top:7px solid transparent;border-bottom:7px solid transparent;z-index:3;opacity:.45}
 .c-hub .stage-pill{background:var(--hub)}.c-hub .stage-cell:not(:last-child)::after{border-left:9px solid var(--hub)}.c-sub1 .stage-pill{background:var(--sub1)}.c-sub1 .stage-cell:not(:last-child)::after{border-left:9px solid var(--sub1)}.c-sub1 .rl{border-right-color:rgba(217,79,79,.25)}.c-sub2 .stage-pill{background:var(--sub2)}.c-sub2 .stage-cell:not(:last-child)::after{border-left:9px solid var(--sub2)}.c-sub2 .rl{border-right-color:rgba(198,138,29,.25)}.c-sub3 .stage-pill{background:var(--sub3)}.c-sub3 .stage-cell:not(:last-child)::after{border-left:9px solid var(--sub3)}.c-sub3 .rl{border-right-color:rgba(108,92,231,.25)}
-.emotion-strip{grid-column:2/-1;position:relative;height:130px;margin:0 8px}.emotion-strip.short{height:110px}.emotion-svg{width:100%;height:100%}.emotion-label{font-family:var(--font);font-size:11px;font-weight:600}.emotion-sublabel{font-family:var(--font);font-size:9px;fill:var(--text-muted)}
+.emotion-strip{grid-column:2/-1;position:relative;height:150px;margin:0 8px}.emotion-strip.short{height:130px}.emotion-svg{width:100%;height:100%}.emotion-label{font-family:var(--font);font-size:11px;font-weight:600}.emotion-sublabel{font-family:var(--font);font-size:9px;fill:var(--text-muted)}
 .dc{padding:14px 16px;border-right:1px dashed var(--border-light);border-bottom:1px solid var(--border-light);font-size:12.5px;color:var(--text-secondary);word-break:keep-all;line-height:1.75}.dc:last-child{border-right:none}.dc.q{font-weight:600;color:var(--text);font-size:13.5px}
 .dc strong{color:var(--text);font-weight:600}.c-hub .dc.q{background:var(--hub-bg);border-bottom-color:var(--hub-light)}.c-hub .rl.q-label{background:var(--hub-bg)}.c-sub1 .dc.q{background:var(--sub1-bg);border-bottom-color:rgba(217,79,79,.12)}.c-sub1 .rl.q-label{background:var(--sub1-bg)}.c-sub2 .dc.q{background:var(--sub2-bg);border-bottom-color:rgba(198,138,29,.12)}.c-sub2 .rl.q-label{background:var(--sub2-bg)}.c-sub3 .dc.q{background:var(--sub3-bg);border-bottom-color:rgba(108,92,231,.12)}.c-sub3 .rl.q-label{background:var(--sub3-bg)}
 .dc.state-cell{font-size:11.5px;color:var(--text-muted);border-top:1px solid var(--border);line-height:1.7;font-style:italic}.dc.try-cell{font-size:11.5px;line-height:1.7}.try-line,.block-line{display:flex;align-items:flex-start;gap:6px;line-height:1.65}.try-line+.block-line{margin-top:8px}.try-ico{color:var(--try-color);font-size:8px;margin-top:5px;flex-shrink:0}.block-ico{color:var(--block-color);font-size:9px;margin-top:4px;flex-shrink:0;font-weight:700}.dc.basis-cell{background:var(--basis-bg);border-bottom-color:var(--basis-border);font-size:11px;color:var(--text-dim);line-height:1.7;padding:10px 16px}.rl.basis-label{background:var(--basis-bg)}.dc.flow-reason-cell{grid-column:2/-1;background:var(--basis-bg);border:1px solid var(--basis-border);border-left:none;font-size:11.5px;color:var(--text-dim);line-height:1.75;padding:12px 16px}.rl.flow-reason-label{background:var(--basis-bg);border-bottom:1px solid var(--basis-border)}.dc.branch-cell{text-align:center;border-bottom:none;padding:6px 12px}.branch-pill{font-family:var(--font-mono);font-size:10px;padding:3px 10px;border-radius:100px;display:inline-block}.dc.branch-cell.empty{color:var(--text-dim);font-size:11px}
@@ -288,15 +288,19 @@ tr.vol-low td{color:var(--text-dim)}tr.vol-low td:first-child{font-weight:400}
     <span style="font-size:11px;color:var(--text-muted)">위시켓 <span style="color:var(--hub);font-weight:600">언급됨</span></span>
   </div>
   <p style="font-size:11px;color:var(--text-dim);margin-bottom:10px">단계별 번호 나열형 (요구사항 정의 → 예산 설정 → 업체 탐색 → 제안서 비교 → 계약 → 프로젝트 관리 → 테스트/런칭 → 유지보수), 7~8단계 구성</p>
-  <ul class="bullet" style="margin-bottom:14px"><li>요구사항 정의서(RFP) 작성이 첫 단계로 제시됨 — 핵심 기능 목록, 레퍼런스 서비스, 예산·일정 포함</li><li>MVP(최소 기능 제품) 관점으로 핵심 기능과 나중에 추가할 기능을 분리할 것을 권장</li><li>단순 홍보 웹사이트 300~1,000만 원, 복잡한 플랫폼 3,000만 원~1억 이상</li><li>유지보수 비용(서버, 도메인, 월정액 유지보수)이 개발 이후에도 지속 발생함을 주의사항으로 언급</li><li>매칭 플랫폼(위시켓, 크몽, 이랜서), 개발사 직접 탐색, 지인 추천</li><li>위시켓이 국내 최대 IT 아웃소싱 플랫폼으로 매 회차 언급됨 (에스크로·전담 매니저 언급)</li><li>비용 vs 안정성 트레이드오프</li><li>계약 체결 시 작업 범위(SOW)·일정·소유권·유지보수 조건을 명확히 정의해야 한다고 강조</li><li>개발 과정에서 정기 미팅과 피드백 제공 필요성 언급</li></ul>
   <div class="two-col">
-    <div style="background:var(--basis-bg);border:1px solid var(--basis-border);border-radius:8px;padding:14px 16px">
-      <div class="card-title" style="margin-bottom:8px">인용 소스 (3)</div>
-      <div style="font-size:11.5px;line-height:1.8;color:var(--text-secondary)"><span style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);margin-right:4px">1</span> divit.co.kr <a href="https://www.divit.co.kr/" target="_blank" style="font-size:10px;color:var(--text-dim);text-decoration:none;opacity:.5">&#x2197;</a></div><div style="font-size:11.5px;line-height:1.8;color:var(--text-secondary)"><span style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);margin-right:4px">2</span> dpectrum.app <a href="https://dpectrum.app/blog/131" target="_blank" style="font-size:10px;color:var(--text-dim);text-decoration:none;opacity:.5">&#x2197;</a></div><div style="font-size:11.5px;line-height:1.8;color:var(--text-secondary)"><span style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);margin-right:4px">3</span> bizbegin.me <a href="https://bizbegin.me/blog/?bmode=view&idx=18733676" target="_blank" style="font-size:10px;color:var(--text-dim);text-decoration:none;opacity:.5">&#x2197;</a></div>
+    <div>
+      <ul class="bullet"><li>요구사항 정의서(RFP) 작성이 첫 단계로 제시됨 — 핵심 기능 목록, 레퍼런스 서비스, 예산·일정 포함</li><li>MVP(최소 기능 제품) 관점으로 핵심 기능과 나중에 추가할 기능을 분리할 것을 권장</li><li>단순 홍보 웹사이트 300~1,000만 원, 복잡한 플랫폼 3,000만 원~1억 이상</li><li>유지보수 비용(서버, 도메인, 월정액 유지보수)이 개발 이후에도 지속 발생함을 주의사항으로 언급</li><li>매칭 플랫폼(위시켓, 크몽, 이랜서), 개발사 직접 탐색, 지인 추천</li><li>위시켓이 국내 최대 IT 아웃소싱 플랫폼으로 매 회차 언급됨 (에스크로·전담 매니저 언급)</li><li>비용 vs 안정성 트레이드오프</li><li>계약 체결 시 작업 범위(SOW)·일정·소유권·유지보수 조건을 명확히 정의해야 한다고 강조</li><li>개발 과정에서 정기 미팅과 피드백 제공 필요성 언급</li></ul>
     </div>
-    <div style="background:var(--basis-bg);border:1px solid var(--basis-border);border-radius:8px;padding:14px 16px">
-      <div class="card-title" style="margin-bottom:8px;color:var(--sub1)">누락 각도 (4)</div>
-      <ul class="bullet"><li>기획 전 단계: 서비스 아이디어 검증(PMF) 방법론 미언급</li><li>개발자 없는 회사가 외주 진행 중 품질을 어떻게 검수하는지 구체적 방법 미언급</li><li>정부 지원 바우처·사업 활용 가능성 미언급</li><li>계약 분쟁 시 대응 방법 미언급</li></ul>
+    <div>
+      <div style="background:var(--basis-bg);border:1px solid var(--basis-border);border-radius:8px;padding:14px 16px;margin-bottom:10px">
+        <div class="card-title" style="margin-bottom:8px">인용 소스 (3)</div>
+        <div style="font-size:11.5px;line-height:1.8;color:var(--text-secondary)"><span style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);margin-right:4px">1</span> divit.co.kr <a href="https://www.divit.co.kr/" target="_blank" style="font-size:10px;color:var(--text-dim);text-decoration:none;opacity:.5">&#x2197;</a></div><div style="font-size:11.5px;line-height:1.8;color:var(--text-secondary)"><span style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);margin-right:4px">2</span> dpectrum.app <a href="https://dpectrum.app/blog/131" target="_blank" style="font-size:10px;color:var(--text-dim);text-decoration:none;opacity:.5">&#x2197;</a></div><div style="font-size:11.5px;line-height:1.8;color:var(--text-secondary)"><span style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);margin-right:4px">3</span> bizbegin.me <a href="https://bizbegin.me/blog/?bmode=view&idx=18733676" target="_blank" style="font-size:10px;color:var(--text-dim);text-decoration:none;opacity:.5">&#x2197;</a></div>
+      </div>
+      <div style="background:var(--basis-bg);border:1px solid var(--basis-border);border-radius:8px;padding:14px 16px">
+        <div class="card-title" style="margin-bottom:8px;color:var(--sub1)">누락 각도 (4)</div>
+        <ul class="bullet"><li>기획 전 단계: 서비스 아이디어 검증(PMF) 방법론 미언급</li><li>개발자 없는 회사가 외주 진행 중 품질을 어떻게 검수하는지 구체적 방법 미언급</li><li>정부 지원 바우처·사업 활용 가능성 미언급</li><li>계약 분쟁 시 대응 방법 미언급</li></ul>
+      </div>
     </div>
   </div>
 </div>
@@ -311,15 +315,19 @@ tr.vol-low td{color:var(--text-dim)}tr.vol-low td:first-child{font-weight:400}
     <span style="font-size:11px;color:var(--text-muted)">위시켓 <span style="color:var(--hub);font-weight:600">언급됨</span></span>
   </div>
   <p style="font-size:11px;color:var(--text-dim);margin-bottom:10px">단계별 번호 나열형 (사전 준비 → 예산 계획 → 업체 선정 기준 → 계약 → 개발 관리), 5단계 구성, 각 단계마다 세부 체크포인트 포함</p>
-  <ul class="bullet" style="margin-bottom:14px"><li>외주 개발 성패는 기획 단계에서 80% 결정된다는 표현 사용</li><li>요구사항 정의서 작성이 가장 중요한 선행 작업으로 제시됨</li><li>핵심 기능 3~5개와 참고 서비스 URL을 정리하면 첫 미팅이 빠르다는 실무 팁 포함</li><li>홈페이지 300~700만 원, 업무용 웹 시스템 500~2,000만 원, 모바일 앱 1,000~5,000만 원</li><li>같은 유형이라도 기능 범위에 따라 2~3배 차이 가능함을 언급</li><li>유사 서비스 경험(역량), 포트폴리오, 소통 능력, 계약 조건, 유지보수 체계</li><li>위시켓이 비개발자 기업에 '가장 추천'되는 플랫폼으로 명시됨 (전담 매니저·계약 지원 이유)</li><li>크몽, 이랜서도 경로로 언급됨</li></ul>
   <div class="two-col">
-    <div style="background:var(--basis-bg);border:1px solid var(--basis-border);border-radius:8px;padding:14px 16px">
-      <div class="card-title" style="margin-bottom:8px">인용 소스 (5)</div>
-      <div style="font-size:11.5px;line-height:1.8;color:var(--text-secondary)"><span style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);margin-right:4px">1</span> brunch.co.kr <a href="https://brunch.co.kr/@dreamit/21" target="_blank" style="font-size:10px;color:var(--text-dim);text-decoration:none;opacity:.5">&#x2197;</a></div><div style="font-size:11.5px;line-height:1.8;color:var(--text-secondary)"><span style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);margin-right:4px">2</span> thingsw.com <a href="https://thingsw.com/blog/program-outsourcing-guide" target="_blank" style="font-size:10px;color:var(--text-dim);text-decoration:none;opacity:.5">&#x2197;</a></div><div style="font-size:11.5px;line-height:1.8;color:var(--text-secondary)"><span style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);margin-right:4px">3</span> dpectrum.app <a href="https://dpectrum.app/blog/116" target="_blank" style="font-size:10px;color:var(--text-dim);text-decoration:none;opacity:.5">&#x2197;</a></div><div style="font-size:11.5px;line-height:1.8;color:var(--text-secondary)"><span style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);margin-right:4px">4</span> dpectrum.app <a href="https://dpectrum.app/blog/133" target="_blank" style="font-size:10px;color:var(--text-dim);text-decoration:none;opacity:.5">&#x2197;</a></div><div style="font-size:11.5px;line-height:1.8;color:var(--text-secondary)"><span style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);margin-right:4px">5</span> thingsw.com <a href="https://thingsw.com/blog/sw-outsourcing-guide" target="_blank" style="font-size:10px;color:var(--text-dim);text-decoration:none;opacity:.5">&#x2197;</a></div>
+    <div>
+      <ul class="bullet"><li>외주 개발 성패는 기획 단계에서 80% 결정된다는 표현 사용</li><li>요구사항 정의서 작성이 가장 중요한 선행 작업으로 제시됨</li><li>핵심 기능 3~5개와 참고 서비스 URL을 정리하면 첫 미팅이 빠르다는 실무 팁 포함</li><li>홈페이지 300~700만 원, 업무용 웹 시스템 500~2,000만 원, 모바일 앱 1,000~5,000만 원</li><li>같은 유형이라도 기능 범위에 따라 2~3배 차이 가능함을 언급</li><li>유사 서비스 경험(역량), 포트폴리오, 소통 능력, 계약 조건, 유지보수 체계</li><li>위시켓이 비개발자 기업에 '가장 추천'되는 플랫폼으로 명시됨 (전담 매니저·계약 지원 이유)</li><li>크몽, 이랜서도 경로로 언급됨</li></ul>
     </div>
-    <div style="background:var(--basis-bg);border:1px solid var(--basis-border);border-radius:8px;padding:14px 16px">
-      <div class="card-title" style="margin-bottom:8px;color:var(--sub1)">누락 각도 (3)</div>
-      <ul class="bullet"><li>내부 담당자(PM 대리인) 역할 설정 방법 미언급</li><li>노코드/로우코드 도구 대안 미언급</li><li>첫 미팅에서 비개발자가 준비할 질문 목록 미언급</li></ul>
+    <div>
+      <div style="background:var(--basis-bg);border:1px solid var(--basis-border);border-radius:8px;padding:14px 16px;margin-bottom:10px">
+        <div class="card-title" style="margin-bottom:8px">인용 소스 (5)</div>
+        <div style="font-size:11.5px;line-height:1.8;color:var(--text-secondary)"><span style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);margin-right:4px">1</span> brunch.co.kr <a href="https://brunch.co.kr/@dreamit/21" target="_blank" style="font-size:10px;color:var(--text-dim);text-decoration:none;opacity:.5">&#x2197;</a></div><div style="font-size:11.5px;line-height:1.8;color:var(--text-secondary)"><span style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);margin-right:4px">2</span> thingsw.com <a href="https://thingsw.com/blog/program-outsourcing-guide" target="_blank" style="font-size:10px;color:var(--text-dim);text-decoration:none;opacity:.5">&#x2197;</a></div><div style="font-size:11.5px;line-height:1.8;color:var(--text-secondary)"><span style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);margin-right:4px">3</span> dpectrum.app <a href="https://dpectrum.app/blog/116" target="_blank" style="font-size:10px;color:var(--text-dim);text-decoration:none;opacity:.5">&#x2197;</a></div><div style="font-size:11.5px;line-height:1.8;color:var(--text-secondary)"><span style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);margin-right:4px">4</span> dpectrum.app <a href="https://dpectrum.app/blog/133" target="_blank" style="font-size:10px;color:var(--text-dim);text-decoration:none;opacity:.5">&#x2197;</a></div><div style="font-size:11.5px;line-height:1.8;color:var(--text-secondary)"><span style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);margin-right:4px">5</span> thingsw.com <a href="https://thingsw.com/blog/sw-outsourcing-guide" target="_blank" style="font-size:10px;color:var(--text-dim);text-decoration:none;opacity:.5">&#x2197;</a></div>
+      </div>
+      <div style="background:var(--basis-bg);border:1px solid var(--basis-border);border-radius:8px;padding:14px 16px">
+        <div class="card-title" style="margin-bottom:8px;color:var(--sub1)">누락 각도 (3)</div>
+        <ul class="bullet"><li>내부 담당자(PM 대리인) 역할 설정 방법 미언급</li><li>노코드/로우코드 도구 대안 미언급</li><li>첫 미팅에서 비개발자가 준비할 질문 목록 미언급</li></ul>
+      </div>
     </div>
   </div>
 </div>
@@ -334,15 +342,19 @@ tr.vol-low td{color:var(--text-dim)}tr.vol-low td:first-child{font-weight:400}
     <span style="font-size:11px;color:var(--text-muted)">위시켓 <span style="color:var(--hub);font-weight:600">언급됨</span></span>
   </div>
   <p style="font-size:11px;color:var(--text-dim);margin-bottom:10px">단계별 번호 나열형 (아이디어 구체화 → 예산·일정 수립 → 업체/플랫폼 찾기 → 업체 선정 확인 사항 → 계약 → 프로젝트 관리 → 테스트/런칭), 5~7단계 구성</p>
-  <ul class="bullet" style="margin-bottom:14px"><li>'무엇을 만들지'를 명확히 정의하는 것이 외주 시작의 핵심이라는 공통 메시지 반복</li><li>레퍼런스 서비스 제시(기존 서비스의 어떤 기능처럼 동작했으면 좋겠다는 방식)를 기획의 핵심 도구로 언급</li><li>요구사항 정의서·RFP 작성이 반복적으로 강조됨</li><li>RFP 작성 가이드 외부 링크(studio-particle.com) 인용</li><li>위시켓이 '가장 추천'되는 플랫폼으로 3회 모두 언급됨 (전담 매니저·에스크로 시스템 근거)</li><li>크몽(소규모 적합), 이랜서(경력 프리랜서) 비교 언급</li><li>포트폴리오 확인 시 '우리가 만들려는 서비스와 유사한 업종·기능' 두 가지 축으로 확인하라는 구체적 방법 제시</li><li>계약 체결 전 'MVP 기능 우선순위' 설정 권장</li><li>유지보수 계획(서버·버그 수정·기능 추가) 사전 수립 필요성 언급</li></ul>
   <div class="two-col">
-    <div style="background:var(--basis-bg);border:1px solid var(--basis-border);border-radius:8px;padding:14px 16px">
-      <div class="card-title" style="margin-bottom:8px">인용 소스 (5)</div>
-      <div style="font-size:11.5px;line-height:1.8;color:var(--text-secondary)"><span style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);margin-right:4px">1</span> vertexaisearch.cloud.google.com <a href="https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGwH1wEWHKEzqiXPd9mMf0_wZPTZjpL589buFDi4qQ4Bjws15YmF0WREZ2hhfgHuOXwRwNNKsr10BWClqjFgsgnLPKEsxT_Dlpd1udvjqbKQgLkq7fB21-0z4wYT52e5zRIn8eA" target="_blank" style="font-size:10px;color:var(--text-dim);text-decoration:none;opacity:.5">&#x2197;</a></div><div style="font-size:11.5px;line-height:1.8;color:var(--text-secondary)"><span style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);margin-right:4px">2</span> vertexaisearch.cloud.google.com <a href="https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHtoNQV2rGOiEf6cmKqgz_5hp83gUjcyvgDvUj0q_GZdiYiRDiHcre6ieHDXAW4jHXKSLLkmNyCWoRs68EEbnUtimgcbNgVIzfugn1wf5SDpvIUxUix3Z1n74GhhB9bNk9xm-6nCnQKeeqZNHgfn9JCh3pPs70MuKG7dSOB" target="_blank" style="font-size:10px;color:var(--text-dim);text-decoration:none;opacity:.5">&#x2197;</a></div><div style="font-size:11.5px;line-height:1.8;color:var(--text-secondary)"><span style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);margin-right:4px">3</span> vertexaisearch.cloud.google.com <a href="https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQE9WU8hTBezvLQR0d7KYJFHHQ9l6oBnbfh8k6t3MI8-VkpPy2d-Yxpj4fYKu1c2jvKsGG8r-hhwPQWZ0M5GzXaVB0EEgNqMYQXolaTXoYkuvmQQ4um7LZF6SR3dWA==" target="_blank" style="font-size:10px;color:var(--text-dim);text-decoration:none;opacity:.5">&#x2197;</a></div><div style="font-size:11.5px;line-height:1.8;color:var(--text-secondary)"><span style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);margin-right:4px">4</span> vertexaisearch.cloud.google.com <a href="https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQG73FbFciLtMk33qbXK6dPUAECI9ubp0SgeWfCPPaHPa_GVu-3MYNpItZv2nIZD-dxvnDQXhzUkzAB1EdjRPjtBdWmKt1-tkM_htFb4AACUOU80vRV5X8v9HhXQ8p32JOqKzXNhZJ9gFgGfFaPl9pfsFWBY0ryVlTLk-asFStNB9w==" target="_blank" style="font-size:10px;color:var(--text-dim);text-decoration:none;opacity:.5">&#x2197;</a></div><div style="font-size:11.5px;line-height:1.8;color:var(--text-secondary)"><span style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);margin-right:4px">5</span> vertexaisearch.cloud.google.com <a href="https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGKAb59hdRgAJItNXSVGzqVAdxjyFSv9qS952v7W_rkE6hPRtJD0LS7nwyqoJBi_dWaxcN01pMuM8qQ7RggEhoIzqeyORlMatmlzmNAVK4nUFQHxWSkso1nBRWDK12AElz94-hlJFs_hfj-P7c=" target="_blank" style="font-size:10px;color:var(--text-dim);text-decoration:none;opacity:.5">&#x2197;</a></div>
+    <div>
+      <ul class="bullet"><li>'무엇을 만들지'를 명확히 정의하는 것이 외주 시작의 핵심이라는 공통 메시지 반복</li><li>레퍼런스 서비스 제시(기존 서비스의 어떤 기능처럼 동작했으면 좋겠다는 방식)를 기획의 핵심 도구로 언급</li><li>요구사항 정의서·RFP 작성이 반복적으로 강조됨</li><li>RFP 작성 가이드 외부 링크(studio-particle.com) 인용</li><li>위시켓이 '가장 추천'되는 플랫폼으로 3회 모두 언급됨 (전담 매니저·에스크로 시스템 근거)</li><li>크몽(소규모 적합), 이랜서(경력 프리랜서) 비교 언급</li><li>포트폴리오 확인 시 '우리가 만들려는 서비스와 유사한 업종·기능' 두 가지 축으로 확인하라는 구체적 방법 제시</li><li>계약 체결 전 'MVP 기능 우선순위' 설정 권장</li><li>유지보수 계획(서버·버그 수정·기능 추가) 사전 수립 필요성 언급</li></ul>
     </div>
-    <div style="background:var(--basis-bg);border:1px solid var(--basis-border);border-radius:8px;padding:14px 16px">
-      <div class="card-title" style="margin-bottom:8px;color:var(--sub1)">누락 각도 (3)</div>
-      <ul class="bullet"><li>내부 담당자 부재 시 커뮤니케이션 구조 설계 방법 미언급</li><li>첫 외주 시 흔히 발생하는 실패 패턴 구체 사례 미언급</li><li>노코드·SaaS 솔루션으로 대체 가능한 경우 판단 기준 미언급</li></ul>
+    <div>
+      <div style="background:var(--basis-bg);border:1px solid var(--basis-border);border-radius:8px;padding:14px 16px;margin-bottom:10px">
+        <div class="card-title" style="margin-bottom:8px">인용 소스 (5)</div>
+        <div style="font-size:11.5px;line-height:1.8;color:var(--text-secondary)"><span style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);margin-right:4px">1</span> vertexaisearch.cloud.google.com <a href="https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGwH1wEWHKEzqiXPd9mMf0_wZPTZjpL589buFDi4qQ4Bjws15YmF0WREZ2hhfgHuOXwRwNNKsr10BWClqjFgsgnLPKEsxT_Dlpd1udvjqbKQgLkq7fB21-0z4wYT52e5zRIn8eA" target="_blank" style="font-size:10px;color:var(--text-dim);text-decoration:none;opacity:.5">&#x2197;</a></div><div style="font-size:11.5px;line-height:1.8;color:var(--text-secondary)"><span style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);margin-right:4px">2</span> vertexaisearch.cloud.google.com <a href="https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQHtoNQV2rGOiEf6cmKqgz_5hp83gUjcyvgDvUj0q_GZdiYiRDiHcre6ieHDXAW4jHXKSLLkmNyCWoRs68EEbnUtimgcbNgVIzfugn1wf5SDpvIUxUix3Z1n74GhhB9bNk9xm-6nCnQKeeqZNHgfn9JCh3pPs70MuKG7dSOB" target="_blank" style="font-size:10px;color:var(--text-dim);text-decoration:none;opacity:.5">&#x2197;</a></div><div style="font-size:11.5px;line-height:1.8;color:var(--text-secondary)"><span style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);margin-right:4px">3</span> vertexaisearch.cloud.google.com <a href="https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQE9WU8hTBezvLQR0d7KYJFHHQ9l6oBnbfh8k6t3MI8-VkpPy2d-Yxpj4fYKu1c2jvKsGG8r-hhwPQWZ0M5GzXaVB0EEgNqMYQXolaTXoYkuvmQQ4um7LZF6SR3dWA==" target="_blank" style="font-size:10px;color:var(--text-dim);text-decoration:none;opacity:.5">&#x2197;</a></div><div style="font-size:11.5px;line-height:1.8;color:var(--text-secondary)"><span style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);margin-right:4px">4</span> vertexaisearch.cloud.google.com <a href="https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQG73FbFciLtMk33qbXK6dPUAECI9ubp0SgeWfCPPaHPa_GVu-3MYNpItZv2nIZD-dxvnDQXhzUkzAB1EdjRPjtBdWmKt1-tkM_htFb4AACUOU80vRV5X8v9HhXQ8p32JOqKzXNhZJ9gFgGfFaPl9pfsFWBY0ryVlTLk-asFStNB9w==" target="_blank" style="font-size:10px;color:var(--text-dim);text-decoration:none;opacity:.5">&#x2197;</a></div><div style="font-size:11.5px;line-height:1.8;color:var(--text-secondary)"><span style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);margin-right:4px">5</span> vertexaisearch.cloud.google.com <a href="https://vertexaisearch.cloud.google.com/grounding-api-redirect/AUZIYQGKAb59hdRgAJItNXSVGzqVAdxjyFSv9qS952v7W_rkE6hPRtJD0LS7nwyqoJBi_dWaxcN01pMuM8qQ7RggEhoIzqeyORlMatmlzmNAVK4nUFQHxWSkso1nBRWDK12AElz94-hlJFs_hfj-P7c=" target="_blank" style="font-size:10px;color:var(--text-dim);text-decoration:none;opacity:.5">&#x2197;</a></div>
+      </div>
+      <div style="background:var(--basis-bg);border:1px solid var(--basis-border);border-radius:8px;padding:14px 16px">
+        <div class="card-title" style="margin-bottom:8px;color:var(--sub1)">누락 각도 (3)</div>
+        <ul class="bullet"><li>내부 담당자 부재 시 커뮤니케이션 구조 설계 방법 미언급</li><li>첫 외주 시 흔히 발생하는 실패 패턴 구체 사례 미언급</li><li>노코드·SaaS 솔루션으로 대체 가능한 경우 판단 기준 미언급</li></ul>
+      </div>
     </div>
   </div>
 </div>
@@ -355,44 +367,40 @@ tr.vol-low td{color:var(--text-dim)}tr.vol-low td:first-child{font-weight:400}
 
 
 
-<div class="two-col" style="margin-bottom:14px">
-  <div>
-    
-    <div class="warn-card" style="margin-bottom:0">
-      <div class="lbl">DATA NOTE</div>
-      <div class="txt">웹서비스 키워드 exact 모드 12건 기준으로 모집단이 작아 통계 인용 불가. 개별 사례 카드 형식으로만 활용한다. 사례 간 기능 범위가 상이하므로 같은 예산 구간이라도 '이 사례와 비슷하다'고 단정하지 않는다. 예산 차이가 나는 이유를 기능 범위(포함 항목)의 차이로 설명해야 한다.</div>
-    </div>
-    
-  </div>
-  <div>
-    
-    <div class="warn-card" style="margin-bottom:0;background:var(--basis-bg);border-color:var(--basis-border);border-left-color:var(--hub)">
-      <div class="lbl" style="color:var(--hub)">DATA ANGLE</div>
-      
-      <div style="font-size:12px;line-height:1.7;margin-bottom:8px"><strong style="color:var(--text)">기능 범위별 예산 차이</strong><br><span style="color:var(--text-muted)">단일 기능 중심(600~800만 원)부터 AI 연동·결제 플로우 포함(3,500만 원)까지 사례가 분포. 같은 '웹서비스'라도 포함 기능에 따라 6배 차이 가능하다는 점을 사례로 보여줄 수 있음</span></div>
-      
-      <div style="font-size:12px;line-height:1.7;margin-bottom:0"><strong style="color:var(--text)">기간과 예산의 관계</strong><br><span style="color:var(--text-muted)">40일/800만 원부터 120일/3,500만 원까지 기간-예산 연동 패턴 확인 가능. 기간이 길어질수록 예산도 올라가는 경향 — 투입 공수 기반 견적 구조를 독자에게 설명하는 근거로 활용 가능</span></div>
-      
-    </div>
-    
-  </div>
+
+<div class="warn-card" style="margin-bottom:14px">
+  <div class="lbl">DATA NOTE</div>
+  <div class="txt">웹서비스 키워드 exact 모드 12건 기준으로 모집단이 작아 통계 인용 불가. 개별 사례 카드 형식으로만 활용한다. 사례 간 기능 범위가 상이하므로 같은 예산 구간이라도 '이 사례와 비슷하다'고 단정하지 않는다. 예산 차이가 나는 이유를 기능 범위(포함 항목)의 차이로 설명해야 한다.</div>
 </div>
 
 
 
-<div class="card">
-  <div class="card-title">예산 분포 (12건, 발주자 희망 예산)</div>
-  <div class="" style="margin-bottom:0">
-    <div>
+<div class="two-col" style="margin-bottom:14px">
+  <div>
+    
+    <div class="card" style="margin-bottom:0">
+      <div class="card-title" style="color:var(--hub)">&#x1F4A1; 데이터 활용 각도</div>
+      
+      <div style="font-size:12.5px;line-height:1.7;margin-bottom:10px"><strong style="color:var(--text)">기능 범위별 예산 차이</strong><br><span style="color:var(--text-muted);font-size:12px">단일 기능 중심(600~800만 원)부터 AI 연동·결제 플로우 포함(3,500만 원)까지 사례가 분포. 같은 '웹서비스'라도 포함 기능에 따라 6배 차이 가능하다는 점을 사례로 보여줄 수 있음</span></div>
+      
+      <div style="font-size:12.5px;line-height:1.7;margin-bottom:0"><strong style="color:var(--text)">기간과 예산의 관계</strong><br><span style="color:var(--text-muted);font-size:12px">40일/800만 원부터 120일/3,500만 원까지 기간-예산 연동 패턴 확인 가능. 기간이 길어질수록 예산도 올라가는 경향 — 투입 공수 기반 견적 구조를 독자에게 설명하는 근거로 활용 가능</span></div>
+      
+    </div>
+    
+  </div>
+  <div>
+    
+    <div class="card" style="margin-bottom:0">
+      <div class="card-title">예산 분포 (12건)</div>
       <table><tr><th>구분</th><th style="text-align:right">Q1</th><th style="text-align:right">Q3</th></tr>
       <tr><td><strong>전체</strong></td><td class="td-num">1,000만</td><td class="td-num">2,500만</td></tr>
       </table>
       <p style="font-size:10px;color:var(--text-dim);margin-top:8px">* 12건으로 10~49건 구간. 집계 통계(중위값·Q1/Q3)를 본문에 인용하지 않는다. 개별 사례만 활용 가능. '웹서비스' 키워드 exact 모드 기준이므로 '웹 신규개발' 전체 모집단보다 훨씬 좁다.</p>
     </div>
     
+    
   </div>
 </div>
-
 
 
 
@@ -772,27 +780,27 @@ tr.vol-low td{color:var(--text-dim)}tr.vol-low td:first-child{font-weight:400}
   <div class="rl" style="min-height:auto">&#x1F3F7;&#xFE0F; Stage</div>
   <div class="stage-cell"><div class="stage-pill">H1</div></div><div class="stage-cell"><div class="stage-pill">H2</div></div><div class="stage-cell"><div class="stage-pill">H3</div></div><div class="stage-cell"><div class="stage-pill">H4</div></div>
   <div class="rl" style="min-height:auto">&#x1F4C8; 감정</div>
-  <div class="emotion-strip"><svg class="emotion-svg" viewBox="0 0 1040 130" preserveAspectRatio="none">
-<rect x="0" y="0" width="260" height="130" fill="rgba(231,76,60,.04)" rx="4"/>
-<rect x="260" y="0" width="260" height="130" fill="rgba(46,204,113,.04)" rx="4"/>
-<rect x="520" y="0" width="260" height="130" fill="rgba(231,76,60,.04)" rx="4"/>
-<rect x="780" y="0" width="260" height="130" fill="rgba(46,204,113,.04)" rx="4"/>
-<text x="130" y="80" text-anchor="middle" style="font-size:18px">😯</text>
-<circle cx="130" cy="100" r="6" fill="var(--emotion-low)"/>
-<text x="130" y="118" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-low)">막막</text>
-<text x="130" y="126" text-anchor="middle" class="emotion-sublabel">아이디어만 있는?</text>
-<text x="390" y="2" text-anchor="middle" style="font-size:18px">😌</text>
-<circle cx="390" cy="22" r="6" fill="var(--emotion-high)"/>
-<text x="390" y="40" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-high)">확신</text>
-<text x="390" y="126" text-anchor="middle" class="emotion-sublabel">기능 목록을 어?</text>
-<text x="650" y="80" text-anchor="middle" style="font-size:18px">😯</text>
-<circle cx="650" cy="100" r="6" fill="var(--emotion-low)"/>
-<text x="650" y="118" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-low)">불안</text>
-<text x="650" y="126" text-anchor="middle" class="emotion-sublabel">개발사 제안서를?</text>
-<text x="910" y="2" text-anchor="middle" style="font-size:18px">😌</text>
-<circle cx="910" cy="22" r="6" fill="var(--emotion-high)"/>
-<text x="910" y="40" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-high)">안심</text>
-<text x="910" y="126" text-anchor="middle" class="emotion-sublabel">계약할 때 꼭 ?</text>
+  <div class="emotion-strip"><svg class="emotion-svg" viewBox="0 0 1040 150" preserveAspectRatio="none">
+<rect x="0" y="0" width="260" height="150" fill="rgba(231,76,60,.04)" rx="4"/>
+<rect x="260" y="0" width="260" height="150" fill="rgba(243,156,18,.04)" rx="4"/>
+<rect x="520" y="0" width="260" height="150" fill="rgba(231,76,60,.04)" rx="4"/>
+<rect x="780" y="0" width="260" height="150" fill="rgba(46,204,113,.04)" rx="4"/>
+<text x="130" y="90" text-anchor="middle" style="font-size:18px">😯</text>
+<circle cx="130" cy="110" r="6" fill="var(--emotion-low)"/>
+<text x="130" y="128" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-low)">막막</text>
+<text x="130" y="146" text-anchor="middle" class="emotion-sublabel">아이디어만 있는?</text>
+<text x="390" y="55" text-anchor="middle" style="font-size:18px">🤔</text>
+<circle cx="390" cy="75" r="6" fill="var(--emotion-mid)"/>
+<text x="390" y="93" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-mid)">답답</text>
+<text x="390" y="146" text-anchor="middle" class="emotion-sublabel">기능 목록을 어?</text>
+<text x="650" y="90" text-anchor="middle" style="font-size:18px">😯</text>
+<circle cx="650" cy="110" r="6" fill="var(--emotion-low)"/>
+<text x="650" y="128" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-low)">불안</text>
+<text x="650" y="146" text-anchor="middle" class="emotion-sublabel">개발사 제안서를?</text>
+<text x="910" y="20" text-anchor="middle" style="font-size:18px">😌</text>
+<circle cx="910" cy="40" r="6" fill="var(--emotion-high)"/>
+<text x="910" y="58" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-high)">안심</text>
+<text x="910" y="146" text-anchor="middle" class="emotion-sublabel">계약할 때 꼭 ?</text>
 </svg></div>
   <div class="rl">&#x1F4AD; 상태</div>
   <div class="dc state-cell">웹서비스를 만들어야겠다는 생각은 있는데 업체에 무슨 말을 해야 할지, 어디서부터 손을 대야 할지 몰라서 검색창 앞에 멈춰 있다</div><div class="dc state-cell">기능 목록을 어느 정도 정리했는데 이게 맞는지 확신이 없고, 이 상태로 업체에 연락해도 되는 건지, 어디서 업체를 찾아야 하는지 모르겠다</div><div class="dc state-cell">제안서가 여러 개 왔는데 가격도 다르고 기간도 달라서 어떤 기준으로 골라야 할지 모르겠고, 가장 저렴한 곳을 고르면 되는 건지 불안하다</div><div class="dc state-cell">업체를 골랐는데 계약서를 받아보니 내용이 이해가 안 되고, 소스코드를 못 받거나 나중에 수정 비용이 계속 생길 것 같아서 계약하기 전에 불안하다</div>
@@ -850,27 +858,27 @@ tr.vol-low td{color:var(--text-dim)}tr.vol-low td:first-child{font-weight:400}
   <div class="rl" style="min-height:auto">&#x1F3F7;&#xFE0F; Stage</div>
   <div class="stage-cell"><div class="stage-pill">S1_1</div></div><div class="stage-cell"><div class="stage-pill">S1_2</div></div><div class="stage-cell"><div class="stage-pill">S1_3</div></div><div class="stage-cell"><div class="stage-pill">S1_4</div></div>
   <div class="rl" style="min-height:auto">&#x1F4C8; 감정</div>
-  <div class="emotion-strip tall"><svg class="emotion-svg" viewBox="0 0 1040 130" preserveAspectRatio="none">
-<rect x="0" y="0" width="260" height="130" fill="rgba(231,76,60,.04)" rx="4"/>
-<rect x="260" y="0" width="260" height="130" fill="rgba(243,156,18,.04)" rx="4"/>
-<rect x="520" y="0" width="260" height="130" fill="rgba(243,156,18,.04)" rx="4"/>
-<rect x="780" y="0" width="260" height="130" fill="rgba(46,204,113,.04)" rx="4"/>
-<text x="130" y="80" text-anchor="middle" style="font-size:18px">😯</text>
-<circle cx="130" cy="100" r="6" fill="var(--emotion-low)"/>
-<text x="130" y="118" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-low)">막막</text>
-<text x="130" y="126" text-anchor="middle" class="emotion-sublabel">계약서에서 가장?</text>
-<text x="390" y="41" text-anchor="middle" style="font-size:18px">🤔</text>
-<circle cx="390" cy="61" r="6" fill="var(--emotion-mid)"/>
-<text x="390" y="79" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-mid)">답답</text>
-<text x="390" y="126" text-anchor="middle" class="emotion-sublabel">소스코드를 제대?</text>
-<text x="650" y="41" text-anchor="middle" style="font-size:18px">🤔</text>
-<circle cx="650" cy="61" r="6" fill="var(--emotion-mid)"/>
-<text x="650" y="79" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-mid)">갈팡질팡</text>
-<text x="650" y="126" text-anchor="middle" class="emotion-sublabel">납품 후 발생하?</text>
-<text x="910" y="2" text-anchor="middle" style="font-size:18px">😌</text>
-<circle cx="910" cy="22" r="6" fill="var(--emotion-high)"/>
-<text x="910" y="40" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-high)">안심</text>
-<text x="910" y="126" text-anchor="middle" class="emotion-sublabel">계약금을 냈는데?</text>
+  <div class="emotion-strip tall"><svg class="emotion-svg" viewBox="0 0 1040 150" preserveAspectRatio="none">
+<rect x="0" y="0" width="260" height="150" fill="rgba(231,76,60,.04)" rx="4"/>
+<rect x="260" y="0" width="260" height="150" fill="rgba(243,156,18,.04)" rx="4"/>
+<rect x="520" y="0" width="260" height="150" fill="rgba(243,156,18,.04)" rx="4"/>
+<rect x="780" y="0" width="260" height="150" fill="rgba(46,204,113,.04)" rx="4"/>
+<text x="130" y="90" text-anchor="middle" style="font-size:18px">😯</text>
+<circle cx="130" cy="110" r="6" fill="var(--emotion-low)"/>
+<text x="130" y="128" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-low)">막막</text>
+<text x="130" y="146" text-anchor="middle" class="emotion-sublabel">계약서에서 가장?</text>
+<text x="390" y="55" text-anchor="middle" style="font-size:18px">🤔</text>
+<circle cx="390" cy="75" r="6" fill="var(--emotion-mid)"/>
+<text x="390" y="93" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-mid)">답답</text>
+<text x="390" y="146" text-anchor="middle" class="emotion-sublabel">소스코드를 제대?</text>
+<text x="650" y="55" text-anchor="middle" style="font-size:18px">🤔</text>
+<circle cx="650" cy="75" r="6" fill="var(--emotion-mid)"/>
+<text x="650" y="93" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-mid)">갈팡질팡</text>
+<text x="650" y="146" text-anchor="middle" class="emotion-sublabel">납품 후 발생하?</text>
+<text x="910" y="20" text-anchor="middle" style="font-size:18px">😌</text>
+<circle cx="910" cy="40" r="6" fill="var(--emotion-high)"/>
+<text x="910" y="58" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-high)">안심</text>
+<text x="910" y="146" text-anchor="middle" class="emotion-sublabel">계약금을 냈는데?</text>
 </svg></div>
   <div class="rl">&#x1F4AD; 상태</div>
   <div class="dc state-cell">계약서를 받아서 읽어봤는데 법률 용어가 많아서 무엇을 어떻게 확인해야 하는지 모르겠고, 무언가를 놓칠 것 같아서 서명하기가 두렵다</div><div class="dc state-cell">지식재산권 항목을 찾았는데 어떤 표현이 있어야 내가 소스코드를 온전히 받을 수 있는 건지 판단이 안 된다</div><div class="dc state-cell">소스코드는 받기로 했는데, 런칭 후에 버그가 생기면 무상으로 고쳐주는지, 기능을 추가하고 싶을 때는 어떻게 되는지 아직 모르겠다</div><div class="dc state-cell">하자보수 조건은 확인했는데, 계약금을 선불로 내고 나서 개발이 흐지부지되거나 결과물이 기대와 다를 때 돌려받을 방법이 없을 것 같아 불안하다</div>
@@ -924,22 +932,22 @@ tr.vol-low td{color:var(--text-dim)}tr.vol-low td:first-child{font-weight:400}
   <div class="rl" style="min-height:auto">&#x1F3F7;&#xFE0F; Stage</div>
   <div class="stage-cell"><div class="stage-pill">S2_1</div></div><div class="stage-cell"><div class="stage-pill">S2_2</div></div><div class="stage-cell"><div class="stage-pill">S2_3</div></div>
   <div class="rl" style="min-height:auto">&#x1F4C8; 감정</div>
-  <div class="emotion-strip short"><svg class="emotion-svg" viewBox="0 0 780 110" preserveAspectRatio="none">
-<rect x="0" y="0" width="260" height="110" fill="rgba(231,76,60,.04)" rx="4"/>
-<rect x="260" y="0" width="260" height="110" fill="rgba(243,156,18,.04)" rx="4"/>
-<rect x="520" y="0" width="260" height="110" fill="rgba(46,204,113,.04)" rx="4"/>
-<text x="130" y="80" text-anchor="middle" style="font-size:18px">😯</text>
-<circle cx="130" cy="100" r="6" fill="var(--emotion-low)"/>
-<text x="130" y="118" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-low)">불안</text>
-<text x="130" y="106" text-anchor="middle" class="emotion-sublabel">같은 웹서비스인?</text>
-<text x="390" y="41" text-anchor="middle" style="font-size:18px">🤔</text>
-<circle cx="390" cy="61" r="6" fill="var(--emotion-mid)"/>
-<text x="390" y="79" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-mid)">관망</text>
-<text x="390" y="106" text-anchor="middle" class="emotion-sublabel">비슷한 웹서비스?</text>
-<text x="650" y="2" text-anchor="middle" style="font-size:18px">😌</text>
-<circle cx="650" cy="22" r="6" fill="var(--emotion-high)"/>
-<text x="650" y="40" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-high)">안심</text>
-<text x="650" y="106" text-anchor="middle" class="emotion-sublabel">업체에 예산을 ?</text>
+  <div class="emotion-strip short"><svg class="emotion-svg" viewBox="0 0 780 130" preserveAspectRatio="none">
+<rect x="0" y="0" width="260" height="130" fill="rgba(231,76,60,.04)" rx="4"/>
+<rect x="260" y="0" width="260" height="130" fill="rgba(243,156,18,.04)" rx="4"/>
+<rect x="520" y="0" width="260" height="130" fill="rgba(46,204,113,.04)" rx="4"/>
+<text x="130" y="90" text-anchor="middle" style="font-size:18px">😯</text>
+<circle cx="130" cy="110" r="6" fill="var(--emotion-low)"/>
+<text x="130" y="128" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-low)">불안</text>
+<text x="130" y="126" text-anchor="middle" class="emotion-sublabel">같은 웹서비스인?</text>
+<text x="390" y="55" text-anchor="middle" style="font-size:18px">🤔</text>
+<circle cx="390" cy="75" r="6" fill="var(--emotion-mid)"/>
+<text x="390" y="93" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-mid)">관망</text>
+<text x="390" y="126" text-anchor="middle" class="emotion-sublabel">비슷한 웹서비스?</text>
+<text x="650" y="20" text-anchor="middle" style="font-size:18px">😌</text>
+<circle cx="650" cy="40" r="6" fill="var(--emotion-high)"/>
+<text x="650" y="58" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-high)">안심</text>
+<text x="650" y="126" text-anchor="middle" class="emotion-sublabel">업체에 예산을 ?</text>
 </svg></div>
   <div class="rl">&#x1F4AD; 상태</div>
   <div class="dc state-cell">업체 제안서를 받아서 비교 중인데, 비슷한 기능처럼 보이는데도 업체마다 견적이 수백만 원 이상 차이가 나서 어디가 합리적인지 기준이 없다</div><div class="dc state-cell">기능 목록은 맞췄는데도 업체마다 금액이 달라서 어느 쪽이 합리적인지 모르겠고, 실제 웹서비스 외주 프로젝트에서 어느 정도 예산이 오가는지 참고할 사례가 없다</div><div class="dc state-cell">대략적인 예산 범위는 감이 잡혔는데, 내 프로젝트가 정확히 어느 구간에 해당하는지 확신이 없어서 업체에 예산을 어떻게 제시해야 하는지 모르겠다</div>
@@ -989,22 +997,22 @@ tr.vol-low td{color:var(--text-dim)}tr.vol-low td:first-child{font-weight:400}
   <div class="rl" style="min-height:auto">&#x1F3F7;&#xFE0F; Stage</div>
   <div class="stage-cell"><div class="stage-pill">S3_1</div></div><div class="stage-cell"><div class="stage-pill">S3_2</div></div><div class="stage-cell"><div class="stage-pill">S3_3</div></div>
   <div class="rl" style="min-height:auto">&#x1F4C8; 감정</div>
-  <div class="emotion-strip short"><svg class="emotion-svg" viewBox="0 0 780 110" preserveAspectRatio="none">
-<rect x="0" y="0" width="260" height="110" fill="rgba(231,76,60,.04)" rx="4"/>
-<rect x="260" y="0" width="260" height="110" fill="rgba(243,156,18,.04)" rx="4"/>
-<rect x="520" y="0" width="260" height="110" fill="rgba(46,204,113,.04)" rx="4"/>
-<text x="130" y="80" text-anchor="middle" style="font-size:18px">😯</text>
-<circle cx="130" cy="100" r="6" fill="var(--emotion-low)"/>
-<text x="130" y="118" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-low)">불안</text>
-<text x="130" y="106" text-anchor="middle" class="emotion-sublabel">외주 개발이 진?</text>
-<text x="390" y="41" text-anchor="middle" style="font-size:18px">🤔</text>
-<circle cx="390" cy="61" r="6" fill="var(--emotion-mid)"/>
-<text x="390" y="79" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-mid)">관망</text>
-<text x="390" y="106" text-anchor="middle" class="emotion-sublabel">중간에 개발 결?</text>
-<text x="650" y="2" text-anchor="middle" style="font-size:18px">😌</text>
-<circle cx="650" cy="22" r="6" fill="var(--emotion-high)"/>
-<text x="650" y="40" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-high)">안심</text>
-<text x="650" y="106" text-anchor="middle" class="emotion-sublabel">최종 검수는 어?</text>
+  <div class="emotion-strip short"><svg class="emotion-svg" viewBox="0 0 780 130" preserveAspectRatio="none">
+<rect x="0" y="0" width="260" height="130" fill="rgba(231,76,60,.04)" rx="4"/>
+<rect x="260" y="0" width="260" height="130" fill="rgba(243,156,18,.04)" rx="4"/>
+<rect x="520" y="0" width="260" height="130" fill="rgba(46,204,113,.04)" rx="4"/>
+<text x="130" y="90" text-anchor="middle" style="font-size:18px">😯</text>
+<circle cx="130" cy="110" r="6" fill="var(--emotion-low)"/>
+<text x="130" y="128" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-low)">불안</text>
+<text x="130" y="126" text-anchor="middle" class="emotion-sublabel">외주 개발이 진?</text>
+<text x="390" y="55" text-anchor="middle" style="font-size:18px">🤔</text>
+<circle cx="390" cy="75" r="6" fill="var(--emotion-mid)"/>
+<text x="390" y="93" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-mid)">관망</text>
+<text x="390" y="126" text-anchor="middle" class="emotion-sublabel">중간에 개발 결?</text>
+<text x="650" y="20" text-anchor="middle" style="font-size:18px">😌</text>
+<circle cx="650" cy="40" r="6" fill="var(--emotion-high)"/>
+<text x="650" y="58" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-high)">안심</text>
+<text x="650" y="126" text-anchor="middle" class="emotion-sublabel">최종 검수는 어?</text>
 </svg></div>
   <div class="rl">&#x1F4AD; 상태</div>
   <div class="dc state-cell">업체와 계약을 했거나 프로젝트를 시작하려는 참인데, 개발이 진행되는 동안 내가 무엇을 해야 하는지 몰라서 개발사가 알아서 잘 해주겠지 하고 기다리고 있다</div><div class="dc state-cell">중간 확인을 해보려고 하는데, 화면이나 기능을 보여줬을 때 무엇을 기준으로 피드백을 줘야 하는지, 좋다·나쁘다 말고 어떻게 말해야 하는지 모르겠다</div><div class="dc state-cell">개발이 거의 다 된 것 같은데, 최종 검수를 어떻게 해야 하는지 모르고, 검수 완료를 어떤 기준으로 선언해야 하는지 기준이 없어서 마냥 미루고 있다</div>
