@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>개발팀 없는 중소기업이 외주 개발 중에 해야 할 3가지 역할</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+    font-size: 17px;
+    line-height: 2.0;
+    color: #1a1a1a;
+    background: #fff;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Toolbar (편집용) ── */
+  #toolbar {
+    position: fixed; top: 0; left: 0; right: 0;
+    background: #1E293B; color: #fff;
+    padding: 10px 20px;
+    display: flex; align-items: center; gap: 16px;
+    z-index: 9999; font-size: 14px;
+  }
+  #toolbar button {
+    background: #2477F3; color: #fff; border: none;
+    padding: 6px 16px; border-radius: 6px; cursor: pointer;
+    font-size: 13px; font-weight: 600;
+  }
+  #toolbar button:hover { background: #1B5FD1; }
+  #edit-status { color: #94A3B8; font-size: 12px; }
+  #edit-status.modified { color: #FBBF24; }
+
+  /* ── Layout ── */
+  .page-wrap {
+    max-width: 720px;
+    margin: 80px auto 80px;
+    padding: 0 20px;
+  }
+
+  /* ── Header ── */
+  .article-header { margin-bottom: 32px; }
+  .article-category {
+    font-size: 12px; font-weight: 600; color: #2477F3;
+    letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 12px;
+  }
+  h1 {
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 800; line-height: 1.35;
+    letter-spacing: -0.5px; color: #0d0d0d;
+    margin: 0 0 16px 0;
+  }
+  .article-meta { font-size: 13px; color: #999; }
+
+  /* ── Typography ── */
+  h2 {
+    font-size: 21px; font-weight: 700; color: #2477F3;
+    margin: 48px 0 16px 0; padding-bottom: 10px;
+    border-bottom: 2px solid #E5E7EB;
+    letter-spacing: -0.3px;
+  }
+  h3 {
+    font-size: 17px; font-weight: 700; color: #2477F3;
+    margin: 28px 0 10px 0;
+  }
+  p { margin: 0 0 30px 0; }
+  a { color: #2477F3; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  strong { font-weight: 700; }
+
+  /* ── Lists ── */
+  ul, ol { margin: 0 0 30px 0; padding-left: 22px; }
+  li { margin-bottom: 6px; line-height: 2.5; }
+  li::marker { color: #999; }
+
+  hr { border: none; border-top: 1px solid #e8e8e8; margin: 40px 0; }
+
+  /* ── GEO Table ── */
+  .tbl-wrap {
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    margin: 30px 0; border: 1px solid #e0e0e5;
+    border-radius: 12px; background: #fff;
+  }
+  table.geo {
+    width: 100%; border-collapse: collapse; border-spacing: 0;
+    font-size: 14.5px; line-height: 1.65; table-layout: fixed;
+  }
+  table.geo caption {
+    position: absolute; width: 1px; height: 1px;
+    overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap;
+  }
+  table.geo thead th {
+    padding: 12px 18px; font-size: 12.5px; font-weight: 700;
+    letter-spacing: 0.01em; text-align: left;
+    border-bottom: 1px solid #d1d1d9; background: #f6f6f9; vertical-align: bottom;
+  }
+  table.geo thead th:first-child { color: #82828e; border-right: 1px solid #d1d1d9; }
+  table.geo thead th:not(:first-child) { color: #1a1a23; }
+  table.geo tbody th[scope="row"] {
+    padding: 14px 18px; font-size: 14px; font-weight: 600; color: #1a1a23;
+    text-align: left; border-bottom: 1px solid #ececf0; border-right: 1px solid #ececf0;
+    background: #fff; vertical-align: top; word-break: keep-all;
+  }
+  table.geo tbody td {
+    padding: 14px 18px; color: #3a3a47;
+    border-bottom: 1px solid #ececf0; vertical-align: top; word-break: keep-all;
+  }
+  table.geo tbody tr:nth-child(even) td,
+  table.geo tbody tr:nth-child(even) th[scope="row"] { background: #f9f9fb; }
+  table.geo tbody tr:hover td,
+  table.geo tbody tr:hover th[scope="row"] { background: #f0f0f5; }
+  table.geo tfoot td {
+    padding: 9px 18px; font-size: 12px; color: #9ca3af;
+    border-top: 1px solid #ececf0; background: #f9f9fb;
+  }
+
+  /* ── TLDR (핵심 요약) ── */
+  .summary-box {
+    background: #F5F5F5;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 30px;
+  }
+  .summary-box p:first-child {
+    font-size: 13px; font-weight: 700; color: #1A1A1A;
+    margin-bottom: 8px; letter-spacing: 0.3px;
+  }
+  .summary-box p:not(:first-child) {
+    font-size: 15.5px; color: #1A1A1A; line-height: 1.75;
+  }
+  .summary-box p:last-child { margin-bottom: 0; }
+
+  /* ── FAQ ── */
+  .faq-list {
+    display: flex; flex-direction: column; gap: 0;
+    margin: 20px 0 24px; border: 1px solid #E5E7EB;
+    border-radius: 14px; overflow: hidden;
+  }
+  .faq-item { border-bottom: 1px solid #ebebeb; background: #fff; }
+  .faq-item:last-child { border-bottom: none; }
+  .faq-q {
+    font-size: 15px; font-weight: 700; color: #0d0d0d;
+    padding: 18px 20px 8px; display: flex; gap: 10px;
+  }
+  .faq-q .q-mark { color: #2477F3; font-weight: 800; font-size: 16px; flex-shrink: 0; }
+  .faq-a {
+    font-size: 14.5px; color: #444; line-height: 1.75;
+    padding: 0 20px 18px 44px;
+  }
+
+  /* ── Related ── */
+  .related-section { margin: 32px 0; }
+  .related-section h3 { font-size: 16px; font-weight: 700; margin-bottom: 12px; }
+  .related-section ul { list-style: none; padding: 0; }
+  .related-section li {
+    padding: 10px 0; border-bottom: 1px solid #f0f0f0;
+  }
+  .related-section li:last-child { border-bottom: none; }
+  .related-section a { font-size: 15px; font-weight: 500; }
+
+  /* ── Image guide box ── */
+  .image-guide, table.guide-box {
+    background: #FAFAFA; border: 2px solid #E5E7EB;
+    border-radius: 12px; padding: 16px 24px; margin: 30px -20px;
+  }
+
+  /* ── CMS meta area ── */
+  .cms-meta-area { background: #f9fafb; border-radius: 12px; padding: 20px; margin-top: 40px; }
+
+  /* ── Contenteditable ── */
+  [contenteditable="true"]:focus { outline: 2px solid #2477F3; outline-offset: 2px; border-radius: 4px; }
+  [contenteditable="true"]:hover { outline: 1px dashed #CBD5E1; outline-offset: 2px; border-radius: 4px; }
+  [contenteditable="true"]:focus:hover { outline: 2px solid #2477F3; outline-offset: 2px; }
+
+  /* ── Responsive ── */
+  @media (max-width: 640px) {
+    .page-wrap { padding: 0 16px; margin-top: 60px; }
+    h1 { font-size: 22px; }
+    h2 { font-size: 19px; }
+    table.geo { table-layout: auto; }
+    table.geo thead th, table.geo tbody th[scope="row"], table.geo tbody td {
+      padding: 11px 14px; font-size: 13px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- toolbar -->
+<div id="toolbar">
+  <button id="copy-btn" onclick="copyContent()">본문 복사</button>
+  <span id="edit-status">저장됨</span>
+</div>
+
+<div class="page-wrap">
+
+  <div class="article-header">
+    <h1 contenteditable="true">개발팀 없는 중소기업이 외주 개발 중에 해야 할 3가지 역할</h1>
+    <div class="article-meta"><time datetime="2026-04-14">2026-04-14</time></div>
+  </div>
+
+  <div id="cms-content" contenteditable="true" style="outline:none;">
+
+  <div class="summary-box">
+<p>💡 핵심 요약</p>
+<p>외주 개발에서 결과물이 기대와 달라지는 건 대부분 개발사 실력 문제가 아니라 중간에 확인하지 않았기 때문입니다. 클라이언트가 해야 할 역할은 요구사항을 명확히 전달하고, 중간 결과물을 직접 사용해보면서 기능이 맞게 동작하는지 확인하고, 최종 검수 후 승인하는 것입니다. 기술을 몰라도 됩니다. 처음 작성한 기능 목록을 기준 삼아 실제로 동작하는지 확인하는 것만으로 충분합니다.</p>
+</div>
+
+  <p>업체와 계약을 마치고 나면 긴장이 풀립니다. 기능 목록도 넘겼고, 견적도 합의했고, 계약서에 서명도 했으니 이제 개발사가 알아서 만들어주겠지. 이렇게 생각하는 분이 꽤 많습니다.</p>
+<p>그런데 위시켓에서 수많은 프로젝트를 지켜본 경험으로 말하자면, <strong>기대와 다른 결과물이 나오는 경우 대부분은 개발사 실력 문제가 아니라 중간에 확인하지 않은 데서 시작됩니다.</strong> 개발 기간 내내 한 번도 중간 결과물을 보지 않다가, 완성 후에야 "이건 내가 원한 게 아닌데"라고 말하게 되는 거죠.</p>
+<p>외주 프로젝트에서 클라이언트가 해야 할 역할은 크게 세 가지입니다. 요구사항을 명확하게 전달하는 것, 중간에 확인하는 것, 그리고 최종 검수를 하는 것. 이 세 가지만 챙겨도 결과물이 엉뚱한 방향으로 가는 걸 막을 수 있습니다.</p>
+<h2 id="외주-개발이-시작되면-클라이언트는-무엇을-해야-하나요">외주 개발이 시작되면 클라이언트는 무엇을 해야 하나요?</h2>
+<p>코드를 읽을 줄 몰라도, 기술을 이해하지 못해도 상관없어요. 클라이언트의 역할은 개발을 관리하는 게 아니거든요. 핵심은 <strong>내가 원하는 것을 정확히 전달하고, 그대로 만들어지고 있는지 중간에 확인하는 것</strong>입니다.</p>
+<p>문제는 이 역할이 있다는 것 자체를 모르는 경우가 많다는 점이에요. 전문가에게 맡겼으니 알아서 하겠지, 라는 기대가 자연스럽긴 하지만, 외주 개발은 구조적으로 그렇게 돌아가지 않습니다.</p>
+<div class="tbl-wrap"><table class="geo"><caption>외주 개발이 시작되면 클라이언트는 무엇을 해야 하나요? — 단계 · 클라이언트 역할 · 개발사 역할</caption><colgroup><col style="width:22%"/><col style="width:39%"/><col style="width:39%"/></colgroup><thead><tr><th scope="col">단계</th><th scope="col">클라이언트 역할</th><th scope="col">개발사 역할</th></tr></thead><tbody><tr><th scope="row">착수 전</th><td>기능 목록 전달, 우선순위 정리</td><td>기능별 구현 방식·일정 제안</td></tr><tr><th scope="row">개발 중</th><td>중간 결과물 확인, 피드백 전달</td><td>기능 구현, 단위 테스트</td></tr><tr><th scope="row">완료 후</th><td>시나리오 기반 최종 검수</td><td>버그 수정(하자보수 범위 내)</td></tr></tbody></table></div>
+<p>2025년 위시켓에 등록된 웹 신규 개발 프로젝트 약 2,400건을 보면, 개발 기간의 절반이 60일(약 2개월) 이내입니다. 짧으면 한 달, 길어도 석 달 안에 결과물이 나오는 프로젝트가 대부분이에요. 이 기간 동안 중간 확인 없이 기다리면 문제를 발견할 시점이 납품 직전으로 몰립니다.</p>
+<p>개발사에 연락할 때 가장 먼저 물어볼 것이 있습니다. <strong>"중간 확인은 어떤 주기로 어떻게 진행하나요?"</strong> 이 질문 하나로 프로젝트 진행 방식이 잡혀요. 2개월 프로젝트라면 격주 1회, 3개월이면 주 1회가 현실적인 기준입니다. 중간 확인 일정이 정해져 있어야 문제가 커지기 전에 방향을 잡을 수 있거든요.</p><div style="background:linear-gradient(135deg,#5E9ADE 0%,#7BB2E8 100%);border-radius:14px;padding:20px 24px;margin:30px 0;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+<p style="font-size:15px;color:#fff;line-height:1.65;margin:0;flex:1;">중간 확인 주기부터 검수까지, 매니저와 함께 잡아보세요</p>
+<a href="https://wishket.com/project/free-consulting/?utm_source=blog_webflow&amp;utm_medium=inline_cta&amp;utm_campaign=260414_outsourcing-client-role-guide-sme" style="display:inline-block;background:#fff;color:#2477F3;font-size:14px;font-weight:700;padding:10px 18px;border-radius:10px;white-space:nowrap;text-decoration:none;">상담 요청하기</a>
+</div>
+<h2 id="중간-결과물을-확인할-때-무엇을-어떻게-봐야-하나요">중간 결과물을 확인할 때 무엇을 어떻게 봐야 하나요?</h2>
+<p>중간 확인은 기술 완성도를 평가하는 게 아닙니다. 비개발자가 코드의 품질이나 설계 구조를 판단할 수는 없어요. 대신 할 수 있는 것이 있습니다. <strong>처음 전달한 기능 목록을 꺼내서, 각 기능이 실제로 동작하는지 직접 사용해보는 것</strong>이에요.</p>
+<p>이 화면에서 이 버튼을 누르면 회원가입이 되어야 한다. 이런 기대를 기준으로, 실제로 그렇게 동작하는지 직접 테스트하는 거죠. 안 되는 항목이 있으면 메모해서 전달하면 됩니다. 이것만 해도 충분합니다.</p>
+<p>여기서 역할 구분이 하나 있습니다.</p>
+<ul>
+<li><strong>기능 단위 버그 수정</strong>: 개발사 기본 책임입니다. 버튼을 눌렀는데 에러가 나는 것은 개발사가 고쳐야 합니다</li>
+<li><strong>전체 시나리오 테스트</strong>: 클라이언트 역할입니다. 회원가입에서 로그인, 상품 조회, 결제까지 이어지는 흐름을 직접 사용해보면서 기대한 대로 동작하는지 확인하는 것은 서비스를 기획한 사람이 해야 합니다</li>
+</ul>
+<p>피드백을 줄 때도 요령이 있습니다. "이 부분 좀 이상해요"보다는 "회원가입 화면에서 가입하기 버튼을 눌렀는데 다음 화면으로 넘어가지 않습니다"처럼 <strong>어디서, 무엇을 했는데, 어떻게 안 됐는지</strong>를 구체적으로 적어야 개발사가 빠르게 수정할 수 있어요.</p>
+<blockquote>
+<p><strong>위시켓 매니저 Tip</strong>
+<strong>중간 확인 전:</strong> 처음 작성한 기능 목록을 프린트하거나 메모앱에 열어두세요. 이것이 검수 기준표 역할을 합니다.
+<strong>피드백 전달 시:</strong> 화면 캡처와 함께 어디서 무엇을 했는데 어떻게 안 됐다는 형식으로 정리하면 수정 속도가 빨라집니다.</p>
+</blockquote>
+<h2 id="최종-검수는-어떻게-하고-언제-완료라고-판단하나요">최종 검수는 어떻게 하고, 언제 완료라고 판단하나요?</h2>
+<p>최종 검수의 기준은 완벽한가가 아닙니다. <strong>처음 요청한 기능 목록에 있는 기능이 모두 동작하는가</strong>, 이것이 기준이에요.</p>
+<p>기능 목록을 꺼내서 하나씩 체크해보세요. 회원가입이 되는지, 로그인이 되는지, 핵심 기능이 의도한 대로 작동하는지. 계약서에 명시된 범위가 모두 구현되었는지를 기능 단위로 확인하면 됩니다.</p>
+<p>검수 중에 버그가 나올 수 있습니다. 이때 알아둬야 할 구분이 있어요.</p>
+<ul>
+<li><strong>하자보수</strong>: 개발사 귀책의 버그를 무상으로 수정하는 것. 보통 납품 후 3~6개월이 기간입니다. 계약서에 기간과 범위가 명시되어 있어야 합니다</li>
+<li><strong>유지보수</strong>: 새로운 기능을 추가하거나 기존 기능을 변경하는 것. 별도 계약이 필요하고 유상입니다</li>
+</ul>
+<p>검수 중에 "이 기능도 있으면 좋겠다"라는 생각이 들 수 있는데, 이건 하자보수 범위가 아닙니다. 처음 계약에 포함되지 않은 기능은 유지보수 계약으로 별도 진행해야 해요. 이 구분을 모르면 납품 후 분쟁이 생기는 가장 흔한 원인이 됩니다.</p>
+<p>위시켓에서 프로젝트를 진행했다면 에스크로로 대금이 보관되어 있으므로, 검수를 꼼꼼히 마친 뒤 승인하면 됩니다. 검수 전에 대금이 개발사에 지급되는 일이 없으니, 서두를 필요 없이 기능 목록 기준으로 하나씩 확인한 뒤 승인하세요.</p>
+
+  <div style="background:linear-gradient(135deg,#5E9ADE 0%,#7BB2E8 100%);border-radius:16px;padding:32px 30px;color:#fff;margin:40px 0 0;">
+<div style="font-size:12px;font-weight:600;letter-spacing:0.8px;opacity:0.75;margin-bottom:10px;text-transform:uppercase;">다음 단계</div>
+<h3 style="font-size:20px;font-weight:800;line-height:1.45;margin-bottom:20px;color:#fff;letter-spacing:-0.3px;">기능 목록을 들고 검수를 시작할 준비가 됐나요?</h3>
+<div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;"><div style="background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px;font-size:14.5px;line-height:1.65;"><span style="font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;">최종 검수 기준이 아직 막막하다면</span>기능 목록과 계약서를 기준으로 검수 흐름을 매니저와 함께 정리할 수 있습니다. 검수 전 승인하지 않으면 에스크로 대금이 지급되지 않으니 서두를 필요 없습니다.</div>
+<div style="background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px;font-size:14.5px;line-height:1.65;"><span style="font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;">이미 검수까지 완료하고 다음 단계를 준비 중이라면</span>새로운 기능을 추가하거나 다음 프로젝트를 시작하려는 경우, 요구사항 정리부터 파트너 탐색까지 위시켓에서 이어갈 수 있습니다.</div></div><div style="text-align:center;"><a href="https://wishket.com/project/free-consulting/?utm_source=blog_webflow&amp;utm_medium=cta_banner&amp;utm_campaign=260414_outsourcing-client-role-guide-sme" style="display:inline-block;background:#fff;color:#2477F3;font-size:15px;font-weight:800;padding:13px 28px;border-radius:10px;text-decoration:none;">매니저와 정리하기</a></div>
+</div>
+
+  <div class="related-section">
+  
+  </div>
+
+  </div>
+
+  <h2>자주 묻는 질문</h2>
+<div class="faq-list">
+<div class="faq-item">
+  <div class="faq-q"><span class="q-mark">Q.</span>개발이 진행되는 동안 중간 확인을 얼마나 자주 해야 하나요?</div>
+  <div class="faq-a">2개월 이내 프로젝트라면 격주 1회, 3개월 이상이면 주 1회가 현실적인 기준입니다. 중간 확인 일정은 계약 직후 개발사에 먼저 물어봐서 잡아두는 것이 좋아요. 일정이 정해져 있지 않으면 문제가 커진 뒤에야 발견하게 되는 경우가 많습니다. 위시켓에서 진행 중이라면 매니저가 소통 채널 설정을 처음 단계에서 같이 잡아줍니다.</div>
+</div>
+<div class="faq-item">
+  <div class="faq-q"><span class="q-mark">Q.</span>비개발자인데 중간 결과물을 어떻게 평가해야 하나요?</div>
+  <div class="faq-a">코드나 기술 구조를 평가하는 게 아닙니다. 처음 요청한 기능 목록을 꺼내서 각 기능이 실제로 동작하는지 직접 사용해보는 것이 전부예요. 기능 단위 버그 수정은 개발사 책임이지만, &#x27;회원가입에서 결제까지 이어지는 흐름이 기대대로 되는가&#x27;를 테스트하는 것은 서비스를 기획한 클라이언트만 할 수 있는 역할입니다. 피드백은 &#x27;이 화면에서 이 버튼을 눌렀는데 다음 화면으로 넘어가지 않는다&#x27;처럼 구체적으로 적어야 개발사가 빠르게 수정할 수 있어요.</div>
+</div>
+<div class="faq-item">
+  <div class="faq-q"><span class="q-mark">Q.</span>하자보수 기간에 기능을 추가하거나 변경할 수 있나요?</div>
+  <div class="faq-a">하자보수는 개발사 귀책 버그만 무상으로 수정하는 것이고, 기능 추가나 변경은 별도 유지보수 계약이 필요합니다. 납품 후 &#x27;이 기능도 있으면 좋겠다&#x27;는 생각이 들면 그건 유상 유지보수 대상이에요. 이 구분이 계약서에 명시되어 있지 않으면 납품 후 분쟁이 생기는 가장 흔한 원인이 됩니다. 하자보수 기간과 범위가 계약서에 적혀 있는지 서명 전에 확인해두는 것이 중요합니다.</div>
+</div>
+<div class="faq-item">
+  <div class="faq-q"><span class="q-mark">Q.</span>최종 검수를 마쳤는데 며칠 후에 버그가 생기면 어떻게 하나요?</div>
+  <div class="faq-a">검수 승인 후에도 하자보수 기간 내에 개발사 귀책 버그가 발생하면 무상 수정을 요청할 수 있습니다. 계약서에 명시된 하자보수 기간(통상 납품 후 3~6개월)을 확인해두고, 버그가 발생하면 어디서 어떻게 재현되는지 구체적으로 기록해서 전달하면 됩니다. 단, 검수 후 새로 요청한 기능이나 운영상 변경 사항은 하자보수 범위가 아니라 별도 유지보수 계약 대상입니다.</div>
+</div>
+</div>
+
+  <div class="cms-meta-area">
+    <h3 style="font-size:16px; font-weight:700; margin:0 0 16px 0; color:#666;">CMS 입력 필드</h3>
+    <table style="width:100%;border-collapse:collapse;margin:16px 0;">
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">써머리</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">외주 진행 중 클라이언트 역할 3가지</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">slug</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">outsourcing-client-role-guide-sme</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">날짜</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">2026-04-14</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">카테고리</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">IT 아웃소싱</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">태그</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">개발외주</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">메타 디스크립션</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">외주 개발 중 클라이언트가 해야 할 역할은 요구사항 전달, 중간 확인, 최종 검수 세 가지입니다. 개발사 탓이 아니라 중간 확인 부재에서 분쟁이 생깁니다.</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">Author</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">조가은 / 콘텐츠 마케터 — 위시켓 마케터 조가은입니다. 기업의 쉽고 안전한 IT 의사결정을 돕는 콘텐츠를 만듭니다.</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">TLDR</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">외주 개발에서 결과물이 기대와 달라지는 건 대부분 개발사 실력 문제가 아니라 중간에 확인하지 않았기 때문입니다. 클라이언트가 해야 할 역할은 요구사항을 명확히 전달하고, 중간 결과물을 직접 사용해보면서 기능이 맞게 동작하는지 확인하고, 최종 검수 후 승인하는 것입니다. 기술을 몰라도 됩니다. 처음 작성한 기능 목록을 기준 삼아 실제로 동작하는지 확인하는 것만으로 충분합니다.
+</td>
+</tr>
+</table>
+  </div>
+
+  <table class="guide-box" style="width:100%;border:1px solid #D1D5DB;border-collapse:collapse;margin:20px 0;">
+<tr><td style="background:#F9FAFB;padding:16px 20px;border:1px solid #D1D5DB;">
+<p style="margin:0 0 10px 0;font-weight:700;font-size:16px;">🖼 썸네일 제작 가이드</p>
+<p style="margin:0 0 4px 0;"><b>스타일:</b> 단색 배경 + 텍스트</p>
+<p style="margin:0 0 4px 0;"><b>배경색:</b> #1A3C6E</p>
+<p style="margin:0 0 4px 0;"><b>제목 텍스트:</b></p>
+<p style="margin:0 0 4px 0;">　1줄: 외주 개발 중</p>
+<p style="margin:0 0 4px 0;">　2줄: 클라이언트 역할 3가지</p>
+<p style="margin:0 0 4px 0;"><b>장식 요소:</b> 체크리스트 아이콘</p>
+<p style="margin:0;"><b>로고:</b> wishket 로고 좌상단</p>
+</td></tr>
+</table>
+
+  <h3 style="font-size:18px;font-weight:600;margin:32px 0 12px 0;">Embed 코드 (붙여넣기용)</h3>
+<div style="margin:16px 0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:14px;font-weight:600;color:#374151;">외주 개발이 시작되면 클라이언트는 무엇을 해야 하나요? — 단계 · 클라이언트 역할 · 개발사 역할</span><button onclick="copyCodeBlock(this)" style="background:#2477F3;color:#fff;border:none;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">복사</button></div><pre style="background:#1E293B;color:#E2E8F0;padding:12px;border-radius:8px;overflow-x:auto;font-size:11px;line-height:1.4;white-space:pre-wrap;max-height:200px;overflow-y:auto;">&lt;style&gt;
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:1.5rem 0;border:1px solid #E5E7EB;border-radius:12px;background:#fff}
+table.geo{width:100%;border-collapse:collapse;border-spacing:0;font-size:14px;line-height:1.6;table-layout:fixed}
+table.geo caption{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+table.geo thead th{padding:12px 18px;font-size:12.5px;font-weight:700;letter-spacing:.01em;text-align:left;border-bottom:1px solid #D1D1D9;background:#F6F6F9;vertical-align:bottom}
+table.geo thead th:first-child{color:#82828E;border-right:1px solid #D1D1D9}
+table.geo thead th:not(:first-child){color:#1A1A23}
+table.geo tbody th[scope=row]{padding:14px 18px;font-size:14px;font-weight:600;color:#1A1A23;text-align:left;border-bottom:1px solid #ECECF0;border-right:1px solid #ECECF0;background:#fff;vertical-align:top;word-break:keep-all}
+table.geo tbody td{padding:14px 18px;color:#3A3A47;border-bottom:1px solid #ECECF0;vertical-align:top;word-break:keep-all}
+table.geo tbody tr:nth-child(even) td,table.geo tbody tr:nth-child(even) th[scope=row]{background:#F9F9FB}
+table.geo tbody tr:hover td,table.geo tbody tr:hover th[scope=row]{background:#F0F0F5}
+table.geo tfoot td{padding:9px 18px;font-size:12px;color:#9CA3AF;border-top:1px solid #ECECF0;background:#F9F9FB}
+table.geo tfoot time{font-weight:500}
+@media(max-width:640px){table.geo{table-layout:auto}table.geo thead th,table.geo tbody th[scope=row],table.geo tbody td{padding:11px 14px;font-size:13px}table.geo tfoot td{padding:8px 14px}}
+&lt;/style&gt;
+&lt;div class=&quot;tbl-wrap&quot;&gt;&lt;table class=&quot;geo&quot;&gt;&lt;caption&gt;외주 개발이 시작되면 클라이언트는 무엇을 해야 하나요? — 단계 · 클라이언트 역할 · 개발사 역할&lt;/caption&gt;&lt;colgroup&gt;&lt;col style=&quot;width:22%&quot;/&gt;&lt;col style=&quot;width:39%&quot;/&gt;&lt;col style=&quot;width:39%&quot;/&gt;&lt;/colgroup&gt;&lt;thead&gt;&lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;단계&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;클라이언트 역할&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;개발사 역할&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;착수 전&lt;/th&gt;&lt;td&gt;기능 목록 전달, 우선순위 정리&lt;/td&gt;&lt;td&gt;기능별 구현 방식·일정 제안&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;개발 중&lt;/th&gt;&lt;td&gt;중간 결과물 확인, 피드백 전달&lt;/td&gt;&lt;td&gt;기능 구현, 단위 테스트&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;완료 후&lt;/th&gt;&lt;td&gt;시나리오 기반 최종 검수&lt;/td&gt;&lt;td&gt;버그 수정(하자보수 범위 내)&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;</pre></div>
+<div style="margin:16px 0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:14px;font-weight:600;color:#374151;">CTA 배너</span><button onclick="copyCodeBlock(this)" style="background:#2477F3;color:#fff;border:none;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">복사</button></div><pre style="background:#1E293B;color:#E2E8F0;padding:12px;border-radius:8px;overflow-x:auto;font-size:11px;line-height:1.4;white-space:pre-wrap;max-height:200px;overflow-y:auto;">&lt;div style=&quot;background:linear-gradient(135deg,#5E9ADE 0%,#7BB2E8 100%);border-radius:16px;padding:32px 30px;color:#fff;margin:40px 0 0;&quot;&gt;
+&lt;div style=&quot;font-size:12px;font-weight:600;letter-spacing:0.8px;opacity:0.75;margin-bottom:10px;text-transform:uppercase;&quot;&gt;다음 단계&lt;/div&gt;
+&lt;h3 style=&quot;font-size:20px;font-weight:800;line-height:1.45;margin-bottom:20px;color:#fff;letter-spacing:-0.3px;&quot;&gt;기능 목록을 들고 검수를 시작할 준비가 됐나요?&lt;/h3&gt;
+&lt;div style=&quot;display:flex;flex-direction:column;gap:12px;margin-bottom:24px;&quot;&gt;&lt;div style=&quot;background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px;font-size:14.5px;line-height:1.65;&quot;&gt;&lt;span style=&quot;font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;&quot;&gt;최종 검수 기준이 아직 막막하다면&lt;/span&gt;기능 목록과 계약서를 기준으로 검수 흐름을 매니저와 함께 정리할 수 있습니다. 검수 전 승인하지 않으면 에스크로 대금이 지급되지 않으니 서두를 필요 없습니다.&lt;/div&gt;
+&lt;div style=&quot;background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px;font-size:14.5px;line-height:1.65;&quot;&gt;&lt;span style=&quot;font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;&quot;&gt;이미 검수까지 완료하고 다음 단계를 준비 중이라면&lt;/span&gt;새로운 기능을 추가하거나 다음 프로젝트를 시작하려는 경우, 요구사항 정리부터 파트너 탐색까지 위시켓에서 이어갈 수 있습니다.&lt;/div&gt;&lt;/div&gt;&lt;div style=&quot;text-align:center;&quot;&gt;&lt;a href=&quot;https://wishket.com/project/free-consulting/?utm_source=blog_webflow&amp;amp;utm_medium=cta_banner&amp;amp;utm_campaign=260414_outsourcing-client-role-guide-sme&quot; style=&quot;display:inline-block;background:#fff;color:#2477F3;font-size:15px;font-weight:800;padding:13px 28px;border-radius:10px;text-decoration:none;&quot;&gt;매니저와 정리하기&lt;/a&gt;&lt;/div&gt;
+&lt;/div&gt;</pre></div>
+
+
+  <h3 style="font-size:18px;font-weight:600;margin:32px 0 12px 0;">JSON-LD (Custom Code에 붙여넣기)</h3>
+<pre style="background:#1E293B;color:#E2E8F0;padding:16px;border-radius:8px;overflow-x:auto;font-size:12px;line-height:1.5;white-space:pre-wrap;">&lt;script type="application/ld+json"&gt;
+{
+  &quot;@context&quot;: &quot;https://schema.org&quot;,
+  &quot;@type&quot;: &quot;BlogPosting&quot;,
+  &quot;headline&quot;: &quot;개발팀 없는 중소기업이 외주 개발 중에 해야 할 3가지 역할&quot;,
+  &quot;description&quot;: &quot;외주 개발 중 클라이언트가 해야 할 역할은 요구사항 전달, 중간 확인, 최종 검수 세 가지입니다. 개발사 탓이 아니라 중간 확인 부재에서 분쟁이 생깁니다.&quot;,
+  &quot;datePublished&quot;: &quot;2026-04-14&quot;,
+  &quot;dateModified&quot;: &quot;2026-04-14&quot;,
+  &quot;author&quot;: {
+    &quot;@type&quot;: &quot;Person&quot;,
+    &quot;name&quot;: &quot;조가은&quot;
+  },
+  &quot;publisher&quot;: {
+    &quot;@type&quot;: &quot;Organization&quot;,
+    &quot;name&quot;: &quot;위시켓&quot;,
+    &quot;url&quot;: &quot;https://www.wishket.com&quot;
+  },
+  &quot;mainEntityOfPage&quot;: {
+    &quot;@type&quot;: &quot;WebPage&quot;
+  },
+  &quot;keywords&quot;: &quot;개발외주&quot;,
+  &quot;articleSection&quot;: &quot;IT 아웃소싱&quot;,
+  &quot;hasPart&quot;: [
+    {
+      &quot;@type&quot;: &quot;WebPageElement&quot;,
+      &quot;name&quot;: &quot;외주 개발이 시작되면 클라이언트는 무엇을 해야 하나요?&quot;,
+      &quot;url&quot;: &quot;#외주-개발이-시작되면-클라이언트는-무엇을-해야-하나요&quot;
+    },
+    {
+      &quot;@type&quot;: &quot;WebPageElement&quot;,
+      &quot;name&quot;: &quot;중간 결과물을 확인할 때 무엇을 어떻게 봐야 하나요?&quot;,
+      &quot;url&quot;: &quot;#중간-결과물을-확인할-때-무엇을-어떻게-봐야-하나요&quot;
+    },
+    {
+      &quot;@type&quot;: &quot;WebPageElement&quot;,
+      &quot;name&quot;: &quot;최종 검수는 어떻게 하고, 언제 완료라고 판단하나요?&quot;,
+      &quot;url&quot;: &quot;#최종-검수는-어떻게-하고-언제-완료라고-판단하나요&quot;
+    }
+  ]
+}
+&lt;/script&gt;
+&lt;script type="application/ld+json"&gt;
+{
+  &quot;@context&quot;: &quot;https://schema.org&quot;,
+  &quot;@type&quot;: &quot;FAQPage&quot;,
+  &quot;mainEntity&quot;: [
+    {
+      &quot;@type&quot;: &quot;Question&quot;,
+      &quot;name&quot;: &quot;개발이 진행되는 동안 중간 확인을 얼마나 자주 해야 하나요?&quot;,
+      &quot;acceptedAnswer&quot;: {
+        &quot;@type&quot;: &quot;Answer&quot;,
+        &quot;text&quot;: &quot;2개월 이내 프로젝트라면 격주 1회, 3개월 이상이면 주 1회가 현실적인 기준입니다. 중간 확인 일정은 계약 직후 개발사에 먼저 물어봐서 잡아두는 것이 좋아요. 일정이 정해져 있지 않으면 문제가 커진 뒤에야 발견하게 되는 경우가 많습니다. 위시켓에서 진행 중이라면 매니저가 소통 채널 설정을 처음 단계에서 같이 잡아줍니다.&quot;
+      }
+    },
+    {
+      &quot;@type&quot;: &quot;Question&quot;,
+      &quot;name&quot;: &quot;비개발자인데 중간 결과물을 어떻게 평가해야 하나요?&quot;,
+      &quot;acceptedAnswer&quot;: {
+        &quot;@type&quot;: &quot;Answer&quot;,
+        &quot;text&quot;: &quot;코드나 기술 구조를 평가하는 게 아닙니다. 처음 요청한 기능 목록을 꺼내서 각 기능이 실제로 동작하는지 직접 사용해보는 것이 전부예요. 기능 단위 버그 수정은 개발사 책임이지만, &#x27;회원가입에서 결제까지 이어지는 흐름이 기대대로 되는가&#x27;를 테스트하는 것은 서비스를 기획한 클라이언트만 할 수 있는 역할입니다. 피드백은 &#x27;이 화면에서 이 버튼을 눌렀는데 다음 화면으로 넘어가지 않는다&#x27;처럼 구체적으로 적어야 개발사가 빠르게 수정할 수 있어요.&quot;
+      }
+    },
+    {
+      &quot;@type&quot;: &quot;Question&quot;,
+      &quot;name&quot;: &quot;하자보수 기간에 기능을 추가하거나 변경할 수 있나요?&quot;,
+      &quot;acceptedAnswer&quot;: {
+        &quot;@type&quot;: &quot;Answer&quot;,
+        &quot;text&quot;: &quot;하자보수는 개발사 귀책 버그만 무상으로 수정하는 것이고, 기능 추가나 변경은 별도 유지보수 계약이 필요합니다. 납품 후 &#x27;이 기능도 있으면 좋겠다&#x27;는 생각이 들면 그건 유상 유지보수 대상이에요. 이 구분이 계약서에 명시되어 있지 않으면 납품 후 분쟁이 생기는 가장 흔한 원인이 됩니다. 하자보수 기간과 범위가 계약서에 적혀 있는지 서명 전에 확인해두는 것이 중요합니다.&quot;
+      }
+    },
+    {
+      &quot;@type&quot;: &quot;Question&quot;,
+      &quot;name&quot;: &quot;최종 검수를 마쳤는데 며칠 후에 버그가 생기면 어떻게 하나요?&quot;,
+      &quot;acceptedAnswer&quot;: {
+        &quot;@type&quot;: &quot;Answer&quot;,
+        &quot;text&quot;: &quot;검수 승인 후에도 하자보수 기간 내에 개발사 귀책 버그가 발생하면 무상 수정을 요청할 수 있습니다. 계약서에 명시된 하자보수 기간(통상 납품 후 3~6개월)을 확인해두고, 버그가 발생하면 어디서 어떻게 재현되는지 구체적으로 기록해서 전달하면 됩니다. 단, 검수 후 새로 요청한 기능이나 운영상 변경 사항은 하자보수 범위가 아니라 별도 유지보수 계약 대상입니다.&quot;
+      }
+    }
+  ]
+}
+&lt;/script&gt;</pre>
+
+</div>
+
+<script>
+// contenteditable 변경 감지 + localStorage 자동저장
+var content = document.getElementById('cms-content');
+var status = document.getElementById('edit-status');
+var saveTimer;
+var STORAGE_KEY = 'wishket_draft_' + document.title.replace(/[^a-zA-Z0-9가-힣]/g, '_').substring(0, 60);
+var VERSION_KEY = STORAGE_KEY + '_ver';
+var CURRENT_VERSION = '2026-04-14';
+
+window.addEventListener('load', function() {
+  var saved = localStorage.getItem(STORAGE_KEY);
+  var savedVer = localStorage.getItem(VERSION_KEY);
+  if (saved && savedVer === CURRENT_VERSION) { content.innerHTML = saved; }
+  else { localStorage.removeItem(STORAGE_KEY); }
+  attachLinkHandlers();
+});
+
+content.addEventListener('input', function() {
+  status.textContent = '편집 중 (미저장)';
+  status.className = 'modified';
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(function() {
+    localStorage.setItem(STORAGE_KEY, content.innerHTML);
+    localStorage.setItem(VERSION_KEY, CURRENT_VERSION);
+    status.textContent = '자동저장됨';
+    status.className = '';
+  }, 3000);
+});
+
+function attachLinkHandlers() {
+  document.querySelectorAll('[contenteditable] a').forEach(function(a) {
+    a.addEventListener('click', function(e) {
+      if (e.metaKey || e.ctrlKey) { window.open(a.href, '_blank'); }
+    });
+    if (a.title.indexOf('Cmd+클릭') === -1) {
+      a.title = (a.title || '') + ' (Cmd+클릭으로 열기)';
+    }
+  });
+}
+
+function copyContent() {
+  var clone = content.cloneNode(true);
+  clone.querySelectorAll('.image-guide, table.image-guide, table.guide-box').forEach(function(el) { el.remove(); });
+  var text = clone.innerText;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(function() {
+      var btn = document.getElementById('copy-btn');
+      btn.textContent = '복사됨!';
+      setTimeout(function() { btn.textContent = '본문 복사'; }, 2000);
+    });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    var btn = document.getElementById('copy-btn');
+    btn.textContent = '복사됨!';
+    setTimeout(function() { btn.textContent = '본문 복사'; }, 2000);
+  }
+}
+
+function copyCodeBlock(btn) {
+  var pre = btn.parentElement.nextElementSibling;
+  if (!pre) return;
+  var text = pre.textContent;
+  navigator.clipboard.writeText(text).then(function() {
+    btn.textContent = '복사됨!';
+    setTimeout(function() { btn.textContent = '복사'; }, 2000);
+  });
+}
+
+window.addEventListener('beforeunload', function(e) {
+  if (status.className === 'modified') {
+    e.preventDefault();
+    e.returnValue = '';
+  }
+});
+</script>
+
+</body>
+</html>
