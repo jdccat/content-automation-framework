@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>웹서비스 외주 비용, 기능 범위별 실제 예산 차이</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+    font-size: 17px;
+    line-height: 2.0;
+    color: #1a1a1a;
+    background: #fff;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Toolbar (편집용) ── */
+  #toolbar {
+    position: fixed; top: 0; left: 0; right: 0;
+    background: #1E293B; color: #fff;
+    padding: 10px 20px;
+    display: flex; align-items: center; gap: 16px;
+    z-index: 9999; font-size: 14px;
+  }
+  #toolbar button {
+    background: #2477F3; color: #fff; border: none;
+    padding: 6px 16px; border-radius: 6px; cursor: pointer;
+    font-size: 13px; font-weight: 600;
+  }
+  #toolbar button:hover { background: #1B5FD1; }
+  #edit-status { color: #94A3B8; font-size: 12px; }
+  #edit-status.modified { color: #FBBF24; }
+
+  /* ── Layout ── */
+  .page-wrap {
+    max-width: 720px;
+    margin: 80px auto 80px;
+    padding: 0 20px;
+  }
+
+  /* ── Header ── */
+  .article-header { margin-bottom: 32px; }
+  .article-category {
+    font-size: 12px; font-weight: 600; color: #2477F3;
+    letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 12px;
+  }
+  h1 {
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 800; line-height: 1.35;
+    letter-spacing: -0.5px; color: #0d0d0d;
+    margin: 0 0 16px 0;
+  }
+  .article-meta { font-size: 13px; color: #999; }
+
+  /* ── Typography ── */
+  h2 {
+    font-size: 21px; font-weight: 700; color: #2477F3;
+    margin: 48px 0 16px 0; padding-bottom: 10px;
+    border-bottom: 2px solid #E5E7EB;
+    letter-spacing: -0.3px;
+  }
+  h3 {
+    font-size: 17px; font-weight: 700; color: #2477F3;
+    margin: 28px 0 10px 0;
+  }
+  p { margin: 0 0 30px 0; }
+  a { color: #2477F3; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  strong { font-weight: 700; }
+
+  /* ── Lists ── */
+  ul, ol { margin: 0 0 30px 0; padding-left: 22px; }
+  li { margin-bottom: 6px; line-height: 2.5; }
+  li::marker { color: #999; }
+
+  hr { border: none; border-top: 1px solid #e8e8e8; margin: 40px 0; }
+
+  /* ── GEO Table ── */
+  .tbl-wrap {
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    margin: 30px 0; border: 1px solid #e0e0e5;
+    border-radius: 12px; background: #fff;
+  }
+  table.geo {
+    width: 100%; border-collapse: collapse; border-spacing: 0;
+    font-size: 14.5px; line-height: 1.65; table-layout: fixed;
+  }
+  table.geo caption {
+    position: absolute; width: 1px; height: 1px;
+    overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap;
+  }
+  table.geo thead th {
+    padding: 12px 18px; font-size: 12.5px; font-weight: 700;
+    letter-spacing: 0.01em; text-align: left;
+    border-bottom: 1px solid #d1d1d9; background: #f6f6f9; vertical-align: bottom;
+  }
+  table.geo thead th:first-child { color: #82828e; border-right: 1px solid #d1d1d9; }
+  table.geo thead th:not(:first-child) { color: #1a1a23; }
+  table.geo tbody th[scope="row"] {
+    padding: 14px 18px; font-size: 14px; font-weight: 600; color: #1a1a23;
+    text-align: left; border-bottom: 1px solid #ececf0; border-right: 1px solid #ececf0;
+    background: #fff; vertical-align: top; word-break: keep-all;
+  }
+  table.geo tbody td {
+    padding: 14px 18px; color: #3a3a47;
+    border-bottom: 1px solid #ececf0; vertical-align: top; word-break: keep-all;
+  }
+  table.geo tbody tr:nth-child(even) td,
+  table.geo tbody tr:nth-child(even) th[scope="row"] { background: #f9f9fb; }
+  table.geo tbody tr:hover td,
+  table.geo tbody tr:hover th[scope="row"] { background: #f0f0f5; }
+  table.geo tfoot td {
+    padding: 9px 18px; font-size: 12px; color: #9ca3af;
+    border-top: 1px solid #ececf0; background: #f9f9fb;
+  }
+
+  /* ── TLDR (핵심 요약) ── */
+  .summary-box {
+    background: #F5F5F5;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 30px;
+  }
+  .summary-box p:first-child {
+    font-size: 13px; font-weight: 700; color: #1A1A1A;
+    margin-bottom: 8px; letter-spacing: 0.3px;
+  }
+  .summary-box p:not(:first-child) {
+    font-size: 15.5px; color: #1A1A1A; line-height: 1.75;
+  }
+  .summary-box p:last-child { margin-bottom: 0; }
+
+  /* ── FAQ ── */
+  .faq-list {
+    display: flex; flex-direction: column; gap: 0;
+    margin: 20px 0 24px; border: 1px solid #E5E7EB;
+    border-radius: 14px; overflow: hidden;
+  }
+  .faq-item { border-bottom: 1px solid #ebebeb; background: #fff; }
+  .faq-item:last-child { border-bottom: none; }
+  .faq-q {
+    font-size: 15px; font-weight: 700; color: #0d0d0d;
+    padding: 18px 20px 8px; display: flex; gap: 10px;
+  }
+  .faq-q .q-mark { color: #2477F3; font-weight: 800; font-size: 16px; flex-shrink: 0; }
+  .faq-a {
+    font-size: 14.5px; color: #444; line-height: 1.75;
+    padding: 0 20px 18px 44px;
+  }
+
+  /* ── Related ── */
+  .related-section { margin: 32px 0; }
+  .related-section h3 { font-size: 16px; font-weight: 700; margin-bottom: 12px; }
+  .related-section ul { list-style: none; padding: 0; }
+  .related-section li {
+    padding: 10px 0; border-bottom: 1px solid #f0f0f0;
+  }
+  .related-section li:last-child { border-bottom: none; }
+  .related-section a { font-size: 15px; font-weight: 500; }
+
+  /* ── Image guide box ── */
+  .image-guide, table.guide-box {
+    background: #FAFAFA; border: 2px solid #E5E7EB;
+    border-radius: 12px; padding: 16px 24px; margin: 30px -20px;
+  }
+
+  /* ── CMS meta area ── */
+  .cms-meta-area { background: #f9fafb; border-radius: 12px; padding: 20px; margin-top: 40px; }
+
+  /* ── Contenteditable ── */
+  [contenteditable="true"]:focus { outline: 2px solid #2477F3; outline-offset: 2px; border-radius: 4px; }
+  [contenteditable="true"]:hover { outline: 1px dashed #CBD5E1; outline-offset: 2px; border-radius: 4px; }
+  [contenteditable="true"]:focus:hover { outline: 2px solid #2477F3; outline-offset: 2px; }
+
+  /* ── Responsive ── */
+  @media (max-width: 640px) {
+    .page-wrap { padding: 0 16px; margin-top: 60px; }
+    h1 { font-size: 22px; }
+    h2 { font-size: 19px; }
+    table.geo { table-layout: auto; }
+    table.geo thead th, table.geo tbody th[scope="row"], table.geo tbody td {
+      padding: 11px 14px; font-size: 13px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- toolbar -->
+<div id="toolbar">
+  <button id="copy-btn" onclick="copyContent()">본문 복사</button>
+  <span id="edit-status">저장됨</span>
+</div>
+
+<div class="page-wrap">
+
+  <div class="article-header">
+    <h1 contenteditable="true">웹서비스 외주 비용, 기능 범위별 실제 예산 차이</h1>
+    <div class="article-meta"><time datetime="2026-04-16">2026-04-16</time></div>
+  </div>
+
+  <div id="cms-content" contenteditable="true" style="outline:none;">
+
+  <div class="summary-box">
+<p>💡 핵심 요약</p>
+<p>웹서비스 외주 견적이 업체마다 크게 차이 나는 건 기능 범위가 다르기 때문입니다. 회사 소개 페이지와 거래가 일어나는 매칭 플랫폼은 이름만 같을 뿐, 개발에 드는 인력과 기간이 완전히 달라서 비용도 함께 달라집니다. 내 프로젝트가 정보 제공형인지, 서비스형인지, 플랫폼형인지 먼저 파악하고, 견적서에 기획·디자인·서버가 포함됐는지 확인하면 금액 차이의 이유가 보입니다.</p>
+</div>
+
+  <p>웹서비스 외주 견적을 받아보면 숫자가 너무 다릅니다. 어떤 곳은 500만 원, 어떤 곳은 3,000만 원. 같은 웹서비스를 의뢰했는데 왜 이렇게 차이가 나는 건지, 우리 프로젝트는 도대체 얼마를 잡아야 하는 건지 기준이 안 잡히죠.</p>
+<p>업체가 바가지를 씌우는 게 아닙니다. 같은 '웹서비스'라는 단어 안에 전혀 다른 규모의 프로젝트가 섞여 있기 때문이에요. 회사 소개 페이지와 거래가 일어나는 매칭 플랫폼은 이름만 같을 뿐 만드는 데 드는 공수가 완전히 다릅니다. 비용을 가늠하려면 먼저 내 프로젝트가 어디에 해당하는지부터 파악해야 합니다.</p>
+<h2 id="웹서비스-외주-비용이-왜-이렇게-차이-나는-건가요">웹서비스 외주 비용이 왜 이렇게 차이 나는 건가요?</h2>
+<p>웹서비스 외주 비용은 기능 하나가 추가될 때마다 개발 인력과 기간이 늘어나는 구조입니다. '웹서비스 비용'이라는 단일 숫자 자체가 존재하지 않아요.</p>
+<p>회사 소개와 문의 폼만 있는 사이트를 생각해보세요. 페이지 몇 장에 데이터베이스 연동도 거의 없습니다. 반면 회원가입, 로그인, 결제, 관리자 화면이 필요한 서비스는 각 기능이 서로 연결되어야 하기 때문에 구조 자체가 복잡해지죠.</p>
+<p>기능 범위에 따라 웹서비스를 크게 세 가지 유형으로 나눌 수 있습니다.</p>
+<div class="tbl-wrap"><table class="geo"><caption>웹서비스 외주 비용이 왜 이렇게 차이 나는 건가요? — 유형 · 포함 기능 · 예시</caption><colgroup><col style="width:22%"/><col style="width:39%"/><col style="width:39%"/></colgroup><thead><tr><th scope="col">유형</th><th scope="col">포함 기능</th><th scope="col">예시</th></tr></thead><tbody><tr><th scope="row">정보 제공형</th><td>회사 소개, 문의 폼, 갤러리</td><td>기업 홈페이지, 포트폴리오 사이트</td></tr><tr><th scope="row">서비스형</th><td>회원가입, 로그인, 콘텐츠 관리, 결제</td><td>쇼핑몰, 커뮤니티, 예약 서비스</td></tr><tr><th scope="row">플랫폼형</th><td>양방향 매칭, 실시간 처리, 관리자 대시보드</td><td>중개 플랫폼, 매칭 서비스</td></tr></tbody><tfoot><tr><td colspan="3">2025년 위시켓 등록 웹 신규 개발 프로젝트 1,800건 이상 기준 · 클라이언트 희망 예산이며 실제 계약 금액과 다를 수 있습니다</td></tr></tfoot></table></div>
+<p>정보 제공형에서 플랫폼형으로 갈수록 개발 인력이 늘어나고 기간이 길어집니다. 2025년 위시켓에 등록된 웹 신규 개발 프로젝트 1,800건 이상의 데이터를 보면, 하위 25%는 600만 원 이하이고 상위 25%는 4,000만 원 이상이에요. 같은 '웹서비스'인데 하위와 상위가 6배 이상 벌어지는 겁니다. 업체 간 가격 차이가 아니라 기능 범위가 만드는 차이입니다.</p>
+<p>업체 3곳에 견적을 받았을 때 금액이 크게 다르다면, 업체마다 다른 기능 범위를 가정했을 가능성이 높습니다.</p>
+<h2 id="견적서-항목을-같은-조건으로-비교하려면-뭘-확인해야-하나요">견적서 항목을 같은 조건으로 비교하려면 뭘 확인해야 하나요?</h2>
+<p>견적서를 비교할 때 가장 먼저 확인할 것은 기획과 디자인이 포함되어 있는지 여부입니다. 이 항목의 포함 여부만으로 같은 기능 범위인데도 견적이 두 배 이상 벌어질 수 있어요.</p>
+<p>견적 A는 기획, 디자인, 개발을 전부 포함한 3,000만 원이고, 견적 B는 개발만 포함한 1,500만 원이라고 해보죠. 숫자만 보면 B가 훨씬 싸 보입니다. 하지만 B를 선택하면 기획과 디자인을 따로 맡기거나 직접 해야 해요. 최종적으로 쓰는 돈은 비슷하거나 오히려 더 나갈 수 있습니다.</p>
+<ul>
+<li>[ ] 기획 포함 여부: 화면 설계, 기능 명세가 견적에 포함되어 있는가?</li>
+<li>[ ] 디자인 포함 여부: UI 디자인이 포함되어 있는가, 아니면 개발만인가?</li>
+<li>[ ] 서버 설정 포함 여부: 초기 서버 세팅이 견적에 포함되어 있는가?</li>
+<li>[ ] 견적 외 별도 비용: 서버 월 운영비, 도메인 비용, 외부 API 연동비가 별도인가?</li>
+</ul>
+<p>개발비만 비교하면 안 되는 이유가 여기에 있습니다. 서버 운영비는 매달 나가고, 도메인 비용이나 외부 기능 연동비도 별도로 발생하거든요. 견적서에 이 항목들이 빠져 있다면 내가 쓰게 될 총비용은 견적 금액보다 큽니다.</p>
+<div style="background:#F0F6FF;border-left:3px solid #2E6BAA;border-radius:0 14px 14px 0;padding:18px 20px;margin:30px 0;">
+<div style="font-size:13px;font-weight:700;color:#1A1A1A;margin-bottom:10px;display:flex;align-items:center;gap:6px;">📌 위시켓 매니저 Tip</div>
+<div style="font-size:14.5px;color:#1A1A1A;line-height:2.0;"><span style="font-weight:700;color:#1A1A1A;">견적서 2~3장을 받았을 때:</span> 금액을 비교하기 전에 각 견적서의 기획·디자인·서버 설정 포함 여부부터 확인하세요. 포함 범위가 다른 견적서끼리 금액만 비교하면 잘못된 판단으로 이어집니다. 위시켓 매니저에게 항목 비교를 요청하면 같은 조건인지 정리하는 것부터 도와드립니다.</div>
+</div><div style="background:linear-gradient(135deg,#5E9ADE 0%,#7BB2E8 100%);border-radius:14px;padding:20px 24px;margin:30px 0;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+<p style="font-size:15px;color:#fff;line-height:1.65;margin:0;flex:1;">견적서 항목 비교, 매니저에게 확인 요청하세요.</p>
+<a href="https://wishket.com/project/free-consulting/?utm_source=blog_webflow&amp;utm_medium=inline_cta&amp;utm_campaign=260416_web-service-outsourcing-cost-by-feature" style="display:inline-block;background:#fff;color:#2477F3;font-size:14px;font-weight:700;padding:10px 18px;border-radius:10px;white-space:nowrap;text-decoration:none;">비교 도움받기</a>
+</div>
+<h2 id="비슷한-규모의-웹서비스-프로젝트가-실제로-어느-예산에서-진행되나요">비슷한 규모의 웹서비스 프로젝트가 실제로 어느 예산에서 진행되나요?</h2>
+<p>기능이 최소화된 회사 소개 페이지 수준은 수백만 원대에서도 진행되지만, 회원 관리나 결제, 매칭 기능이 들어가면 수천만 원 단위로 올라갑니다. 전체 평균보다 같은 기능 유형의 사례를 직접 보는 게 훨씬 정확해요.</p>
+<p>위시켓에서 진행된 웹 신규 개발 프로젝트 사례를 기능 유형별로 비교하면 이렇습니다.</p>
+<div style="display:flex;flex-direction:column;gap:14px;margin:30px 0;">
+<div style="border:1px solid #E5E7EB;border-radius:14px;padding:18px 20px;background:#fff;">
+<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;">
+<span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;background:#e8f5e9;color:#2e7d32;">저가 사례</span>
+<span style="font-size:15.5px;font-weight:700;color:#0d0d0d;line-height:1.4;">노무법인 대표 홈페이지 구축</span>
+</div>
+<div style="font-size:20px;font-weight:800;color:#2477F3;margin-bottom:4px;">300만 원</div>
+<div style="font-size:12.5px;color:#999;margin-bottom:10px;">웹 · 20일 · 개발</div>
+<div style="font-size:14.5px;color:#444;line-height:2.0;">회사 소개와 문의 기능 중심. 기능이 최소화된 정보 제공형 사이트.</div>
+</div>
+<div style="border:1px solid #E5E7EB;border-radius:14px;padding:18px 20px;background:#fff;">
+<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;">
+<span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;background:#e3f2fd;color:#1565c0;">중가 사례</span>
+<span style="font-size:15.5px;font-weight:700;color:#0d0d0d;line-height:1.4;">출판사 전용 단어장 테스트 웹서비스 구축</span>
+</div>
+<div style="font-size:20px;font-weight:800;color:#2477F3;margin-bottom:4px;">1,500만 원</div>
+<div style="font-size:12.5px;color:#999;margin-bottom:10px;">웹 · 60일 · 기획+개발</div>
+<div style="font-size:14.5px;color:#444;line-height:2.0;">회원 관리, 콘텐츠 제공, 테스트 기능 포함. 전용 기능이 들어가면서 비용이 5배 올라감.</div>
+</div>
+<div style="border:1px solid #E5E7EB;border-radius:14px;padding:18px 20px;background:#fff;">
+<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;">
+<span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;background:#fce4ec;color:#c62828;">고가 사례</span>
+<span style="font-size:15.5px;font-weight:700;color:#0d0d0d;line-height:1.4;">인테리어 견적 매칭 플랫폼 개발</span>
+</div>
+<div style="font-size:20px;font-weight:800;color:#2477F3;margin-bottom:4px;">4,500만 원</div>
+<div style="font-size:12.5px;color:#999;margin-bottom:10px;">웹 · 90일 · 기획+디자인+개발</div>
+<div style="font-size:14.5px;color:#444;line-height:2.0;">양방향 매칭, 견적 비교, 관리자 대시보드 포함. 기능이 복합적인 플랫폼형.</div>
+</div>
+</div>
+<p>같은 '웹서비스'인데 300만 원에서 4,500만 원까지, 15배 차이가 납니다. 홈페이지는 20일이면 끝나지만 매칭 플랫폼은 90일이 걸려요. 기간이 길어지면 인력이 더 투입되고, 비용도 따라 올라가는 구조입니다.</p>
+<div class="tbl-wrap"><table class="geo"><caption>비슷한 규모의 웹서비스 프로젝트가 실제로 어느 예산에서 진행되나요? — 기능 유형 · 예산 범위 · 기간 범위</caption><colgroup><col style="width:22%"/><col style="width:39%"/><col style="width:39%"/></colgroup><thead><tr><th scope="col">기능 유형</th><th scope="col">예산 범위</th><th scope="col">기간 범위</th></tr></thead><tbody><tr><th scope="row">정보 제공형 (홈페이지, 소개 사이트)</th><td>300만~800만 원</td><td>20~40일</td></tr><tr><th scope="row">서비스형 (쇼핑몰, 커뮤니티, 예약)</th><td>600만~2,000만 원</td><td>40~80일</td></tr><tr><th scope="row">플랫폼형 (매칭, 거래, AI 포함)</th><td>4,000만 원 이상</td><td>90일 이상</td></tr></tbody><tfoot><tr><td colspan="3">2025년 위시켓 등록 웹 신규 개발 프로젝트 기준 · 클라이언트 희망 예산이며 실제 계약 금액과 다를 수 있습니다 · 같은 유형이라도 기능 범위와 포함 항목에 따라 실제 예산은 다를 수 있습니다</td></tr></tfoot></table></div>
+<p>이 범위는 2025년 위시켓 데이터 기준입니다. 우리 프로젝트의 핵심 기능이 어떤 유형에 해당하는지 먼저 파악하면, 견적을 받았을 때 그 금액이 적정 범위 안에 있는지 가늠할 수 있습니다.</p>
+<hr/>
+<p>웹서비스 외주 비용은 업체마다 다른 게 아니라 기능 범위마다 다릅니다. 내 프로젝트가 정보 제공형인지, 서비스형인지, 플랫폼형인지를 먼저 파악하고, 견적서를 받으면 포함 항목이 같은 조건인지 확인하세요. 이 두 가지만 짚어도 견적 앞에서 막막하지 않습니다. <a href="https://wishket.com/project/free-consulting/?utm_source=blog_webflow&amp;utm_medium=inline_cta&amp;utm_campaign=260416_web-service-outsourcing-cost-by-feature">위시켓</a>에 프로젝트를 등록하면 매니저가 예산 범위 상담부터 견적 비교까지 함께합니다.</p>
+
+  <div style="background:linear-gradient(135deg,#5E9ADE 0%,#7BB2E8 100%);border-radius:16px;padding:32px 30px;color:#fff;margin:40px 0 0;">
+<div style="font-size:12px;font-weight:600;letter-spacing:0.8px;opacity:0.75;margin-bottom:10px;text-transform:uppercase;">다음 단계</div>
+<h3 style="font-size:20px;font-weight:800;line-height:1.45;margin-bottom:20px;color:#fff;letter-spacing:-0.3px;">기능 범위와 견적 항목, 혼자 가늠하기 어렵다면</h3>
+<div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;"><div style="background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px;font-size:14.5px;line-height:1.65;"><span style="font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;">아직 항목 비교가 막막하다면</span>기획·디자인·서버 포함 여부를 어떻게 확인하는지 모르겠다면, 매니저가 견적 항목을 같은 조건으로 정리하는 것부터 함께합니다.</div>
+<div style="background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px;font-size:14.5px;line-height:1.65;"><span style="font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;">예산 범위는 잡혔는데 등록이 처음이라면</span>프로젝트 등록은 핵심 기능 목록과 예산 상한선만 있으면 시작할 수 있습니다. 매니저가 영업일 24시간 이내에 연락해 요구사항 정리부터 함께합니다.</div></div><div style="text-align:center;"><a href="https://wishket.com/project/free-consulting/?utm_source=blog_webflow&amp;utm_medium=cta_banner&amp;utm_campaign=260416_web-service-outsourcing-cost-by-feature" style="display:inline-block;background:#fff;color:#2477F3;font-size:15px;font-weight:800;padding:13px 28px;border-radius:10px;text-decoration:none;">매니저와 정리하기</a></div>
+</div>
+
+  <div class="related-section">
+  <h3>함께 읽으면 좋은 콘텐츠</h3>
+<ul>
+  <li><a href="https://jdccat.github.io/content-automation-framework/articles/web-service-outsourcing-method-comparison.html">웹서비스 외주, 프리랜서·개발사·플랫폼 중 어디에 맡겨야 할까?</a></li>
+  <li><a href="https://jdccat.github.io/content-automation-framework/articles/sme-web-service-outsourcing-starter-guide.html">개발자 없는 중소기업, 웹서비스 외주 어디서부터 시작할까?</a></li>
+  <li><a href="https://jdccat.github.io/content-automation-framework/articles/web-outsourcing-first-meeting-guide.html">외주 개발 첫 미팅, 비개발자가 준비할 3가지</a></li>
+</ul>
+  </div>
+
+  </div>
+
+  <h2>자주 묻는 질문</h2>
+<div class="faq-list">
+<div class="faq-item">
+  <div class="faq-q"><span class="q-mark">Q.</span>웹서비스 외주 견적이 업체마다 크게 다를 때 어느 쪽이 맞는 건가요?</div>
+  <div class="faq-a">견적 차이는 업체 능력의 차이가 아니라 포함 범위의 차이인 경우가 많습니다. 기획·디자인이 포함된 견적과 개발만 포함된 견적을 금액만 보고 비교하면 저렴해 보이는 쪽이 실제로 더 비쌀 수 있습니다. 기획과 디자인을 따로 맡기거나 직접 해야 하기 때문이죠. 비교 전에 각 견적서에 어떤 항목이 담겨 있는지 먼저 확인해야 합니다.</div>
+</div>
+<div class="faq-item">
+  <div class="faq-q"><span class="q-mark">Q.</span>개발비 외에 별도로 드는 비용이 있나요?</div>
+  <div class="faq-a">서버 운영비는 서비스를 운영하는 한 매달 발생하고, 도메인 비용·외부 결제 API 연동비·앱스토어 등록비도 개발비에 포함되지 않는 경우가 많습니다. 소규모 서비스 기준 서버 운영비만 월 5만~30만 원 수준이고, 외부 API(결제·지도 등) 연동이 필요하면 별도 비용이 추가됩니다. 견적서를 받으면 이 항목들이 포함됐는지 반드시 확인해야 총비용을 정확히 파악할 수 있습니다.</div>
+</div>
+<div class="faq-item">
+  <div class="faq-q"><span class="q-mark">Q.</span>같은 쇼핑몰인데 견적이 500만 원부터 5,000만 원까지 차이 나는 이유가 뭔가요?</div>
+  <div class="faq-a">쇼핑몰이라는 단어 안에 범위가 완전히 다른 프로젝트들이 섞여 있기 때문입니다. 카페24 같은 솔루션 기반 커스터마이징은 수백만 원대에서도 가능하지만, 회원 등급·정기 구독·맞춤 추천 알고리즘 같은 전용 기능이 들어가면 처음부터 개발해야 해서 비용이 수천만 원까지 올라갑니다. 솔루션 기반인지 맞춤 개발인지에 따라 유지보수 구조와 소스코드 귀속도 완전히 달라집니다.</div>
+</div>
+<div class="faq-item">
+  <div class="faq-q"><span class="q-mark">Q.</span>예산이 정해져 있는데 기능을 어떻게 조율해야 하나요?</div>
+  <div class="faq-a">예산이 먼저 정해진 경우에는 기능 우선순위 조율이 필수입니다. 처음부터 모든 기능을 다 구현하려 하면 예산이 부족해 중간에 범위를 줄이게 되고, 이때 분쟁이 발생하는 경우가 많습니다. &#x27;꼭 필요한 기능&#x27;과 &#x27;있으면 좋은 기능&#x27;을 분리해서 1단계는 핵심 기능만 구현하고 이후 단계에서 추가하는 방식이 현실적입니다. 위시켓 매니저에게 예산 범위를 먼저 알려주면 그 범위에서 가능한 기능 범위를 정리하는 상담을 받을 수 있습니다.</div>
+</div>
+</div>
+
+  <div class="cms-meta-area">
+    <h3 style="font-size:16px; font-weight:700; margin:0 0 16px 0; color:#666;">CMS 입력 필드</h3>
+    <table style="width:100%;border-collapse:collapse;margin:16px 0;">
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">써머리</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">같은 웹서비스인데 견적이 왜 이렇게 다른가</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">slug</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">web-service-outsourcing-cost-by-feature</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">날짜</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">2026-04-16</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">카테고리</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">IT 아웃소싱</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">태그</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">웹 개발</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">메타 디스크립션</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">웹서비스 외주 견적이 업체마다 다른 건 기능 범위가 다르기 때문입니다. 정보 제공형·서비스형·플랫폼형으로 구분하고 견적 항목을 맞추면 적정 예산을 가늠할 수 있습니다.</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">Author</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">장수룡 / 컨설팅팀 리드 — 위시켓 컨설팅팀 리드 장수룡입니다. 요구사항 정의부터 기술 설계까지 함께합니다.</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">TLDR</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">웹서비스 외주 견적이 업체마다 크게 차이 나는 건 기능 범위가 다르기 때문입니다. 회사 소개 페이지와 거래가 일어나는 매칭 플랫폼은 이름만 같을 뿐, 개발에 드는 인력과 기간이 완전히 달라서 비용도 함께 달라집니다. 내 프로젝트가 정보 제공형인지, 서비스형인지, 플랫폼형인지 먼저 파악하고, 견적서에 기획·디자인·서버가 포함됐는지 확인하면 금액 차이의 이유가 보입니다.
+</td>
+</tr>
+</table>
+  </div>
+
+  <table class="guide-box" style="width:100%;border:1px solid #D1D5DB;border-collapse:collapse;margin:20px 0;">
+<tr><td style="background:#F9FAFB;padding:16px 20px;border:1px solid #D1D5DB;">
+<p style="margin:0 0 10px 0;font-weight:700;font-size:16px;">🖼 썸네일 제작 가이드</p>
+<p style="margin:0 0 4px 0;"><b>스타일:</b> 단색 배경 + 텍스트</p>
+<p style="margin:0 0 4px 0;"><b>배경색:</b> #1A2B4A</p>
+<p style="margin:0 0 4px 0;"><b>제목 텍스트:</b></p>
+<p style="margin:0 0 4px 0;">　1줄: 웹서비스 외주 비용</p>
+<p style="margin:0 0 4px 0;">　2줄: 기능 범위별 실제 예산 차이</p>
+<p style="margin:0 0 4px 0;"><b>장식 요소:</b> 비용 비교 아이콘, 금액 그래프 장식요소</p>
+<p style="margin:0;"><b>로고:</b> wishket 로고 좌상단</p>
+</td></tr>
+</table>
+
+  <h3 style="font-size:18px;font-weight:600;margin:32px 0 12px 0;">Embed 코드 (붙여넣기용)</h3>
+<div style="margin:16px 0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:14px;font-weight:600;color:#374151;">웹서비스 외주 비용이 왜 이렇게 차이 나는 건가요? — 유형 · 포함 기능 · 예시</span><button onclick="copyCodeBlock(this)" style="background:#2477F3;color:#fff;border:none;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">복사</button></div><pre style="background:#1E293B;color:#E2E8F0;padding:12px;border-radius:8px;overflow-x:auto;font-size:11px;line-height:1.4;white-space:pre-wrap;max-height:200px;overflow-y:auto;">&lt;style&gt;
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:1.5rem 0;border:1px solid #E5E7EB;border-radius:12px;background:#fff}
+table.geo{width:100%;border-collapse:collapse;border-spacing:0;font-size:14px;line-height:1.6;table-layout:fixed}
+table.geo caption{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+table.geo thead th{padding:12px 18px;font-size:12.5px;font-weight:700;letter-spacing:.01em;text-align:left;border-bottom:1px solid #D1D1D9;background:#F6F6F9;vertical-align:bottom}
+table.geo thead th:first-child{color:#82828E;border-right:1px solid #D1D1D9}
+table.geo thead th:not(:first-child){color:#1A1A23}
+table.geo tbody th[scope=row]{padding:14px 18px;font-size:14px;font-weight:600;color:#1A1A23;text-align:left;border-bottom:1px solid #ECECF0;border-right:1px solid #ECECF0;background:#fff;vertical-align:top;word-break:keep-all}
+table.geo tbody td{padding:14px 18px;color:#3A3A47;border-bottom:1px solid #ECECF0;vertical-align:top;word-break:keep-all}
+table.geo tbody tr:nth-child(even) td,table.geo tbody tr:nth-child(even) th[scope=row]{background:#F9F9FB}
+table.geo tbody tr:hover td,table.geo tbody tr:hover th[scope=row]{background:#F0F0F5}
+table.geo tfoot td{padding:9px 18px;font-size:12px;color:#9CA3AF;border-top:1px solid #ECECF0;background:#F9F9FB}
+table.geo tfoot time{font-weight:500}
+@media(max-width:640px){table.geo{table-layout:auto}table.geo thead th,table.geo tbody th[scope=row],table.geo tbody td{padding:11px 14px;font-size:13px}table.geo tfoot td{padding:8px 14px}}
+&lt;/style&gt;
+&lt;div class=&quot;tbl-wrap&quot;&gt;&lt;table class=&quot;geo&quot;&gt;&lt;caption&gt;웹서비스 외주 비용이 왜 이렇게 차이 나는 건가요? — 유형 · 포함 기능 · 예시&lt;/caption&gt;&lt;colgroup&gt;&lt;col style=&quot;width:22%&quot;/&gt;&lt;col style=&quot;width:39%&quot;/&gt;&lt;col style=&quot;width:39%&quot;/&gt;&lt;/colgroup&gt;&lt;thead&gt;&lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;유형&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;포함 기능&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;예시&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;정보 제공형&lt;/th&gt;&lt;td&gt;회사 소개, 문의 폼, 갤러리&lt;/td&gt;&lt;td&gt;기업 홈페이지, 포트폴리오 사이트&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;서비스형&lt;/th&gt;&lt;td&gt;회원가입, 로그인, 콘텐츠 관리, 결제&lt;/td&gt;&lt;td&gt;쇼핑몰, 커뮤니티, 예약 서비스&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;플랫폼형&lt;/th&gt;&lt;td&gt;양방향 매칭, 실시간 처리, 관리자 대시보드&lt;/td&gt;&lt;td&gt;중개 플랫폼, 매칭 서비스&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;tfoot&gt;&lt;tr&gt;&lt;td colspan=&quot;3&quot;&gt;2025년 위시켓 등록 웹 신규 개발 프로젝트 1,800건 이상 기준 · 클라이언트 희망 예산이며 실제 계약 금액과 다를 수 있습니다&lt;/td&gt;&lt;/tr&gt;&lt;/tfoot&gt;&lt;/table&gt;&lt;/div&gt;</pre></div>
+<div style="margin:16px 0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:14px;font-weight:600;color:#374151;">비슷한 규모의 웹서비스 프로젝트가 실제로 어느 예산에서 진행되나요? — 기능 유형 · 예산 범위 · 기간 범위</span><button onclick="copyCodeBlock(this)" style="background:#2477F3;color:#fff;border:none;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">복사</button></div><pre style="background:#1E293B;color:#E2E8F0;padding:12px;border-radius:8px;overflow-x:auto;font-size:11px;line-height:1.4;white-space:pre-wrap;max-height:200px;overflow-y:auto;">&lt;style&gt;
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:1.5rem 0;border:1px solid #E5E7EB;border-radius:12px;background:#fff}
+table.geo{width:100%;border-collapse:collapse;border-spacing:0;font-size:14px;line-height:1.6;table-layout:fixed}
+table.geo caption{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+table.geo thead th{padding:12px 18px;font-size:12.5px;font-weight:700;letter-spacing:.01em;text-align:left;border-bottom:1px solid #D1D1D9;background:#F6F6F9;vertical-align:bottom}
+table.geo thead th:first-child{color:#82828E;border-right:1px solid #D1D1D9}
+table.geo thead th:not(:first-child){color:#1A1A23}
+table.geo tbody th[scope=row]{padding:14px 18px;font-size:14px;font-weight:600;color:#1A1A23;text-align:left;border-bottom:1px solid #ECECF0;border-right:1px solid #ECECF0;background:#fff;vertical-align:top;word-break:keep-all}
+table.geo tbody td{padding:14px 18px;color:#3A3A47;border-bottom:1px solid #ECECF0;vertical-align:top;word-break:keep-all}
+table.geo tbody tr:nth-child(even) td,table.geo tbody tr:nth-child(even) th[scope=row]{background:#F9F9FB}
+table.geo tbody tr:hover td,table.geo tbody tr:hover th[scope=row]{background:#F0F0F5}
+table.geo tfoot td{padding:9px 18px;font-size:12px;color:#9CA3AF;border-top:1px solid #ECECF0;background:#F9F9FB}
+table.geo tfoot time{font-weight:500}
+@media(max-width:640px){table.geo{table-layout:auto}table.geo thead th,table.geo tbody th[scope=row],table.geo tbody td{padding:11px 14px;font-size:13px}table.geo tfoot td{padding:8px 14px}}
+&lt;/style&gt;
+&lt;div class=&quot;tbl-wrap&quot;&gt;&lt;table class=&quot;geo&quot;&gt;&lt;caption&gt;비슷한 규모의 웹서비스 프로젝트가 실제로 어느 예산에서 진행되나요? — 기능 유형 · 예산 범위 · 기간 범위&lt;/caption&gt;&lt;colgroup&gt;&lt;col style=&quot;width:22%&quot;/&gt;&lt;col style=&quot;width:39%&quot;/&gt;&lt;col style=&quot;width:39%&quot;/&gt;&lt;/colgroup&gt;&lt;thead&gt;&lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;기능 유형&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;예산 범위&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;기간 범위&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;정보 제공형 (홈페이지, 소개 사이트)&lt;/th&gt;&lt;td&gt;300만~800만 원&lt;/td&gt;&lt;td&gt;20~40일&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;서비스형 (쇼핑몰, 커뮤니티, 예약)&lt;/th&gt;&lt;td&gt;600만~2,000만 원&lt;/td&gt;&lt;td&gt;40~80일&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;플랫폼형 (매칭, 거래, AI 포함)&lt;/th&gt;&lt;td&gt;4,000만 원 이상&lt;/td&gt;&lt;td&gt;90일 이상&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;tfoot&gt;&lt;tr&gt;&lt;td colspan=&quot;3&quot;&gt;2025년 위시켓 등록 웹 신규 개발 프로젝트 기준 · 클라이언트 희망 예산이며 실제 계약 금액과 다를 수 있습니다 · 같은 유형이라도 기능 범위와 포함 항목에 따라 실제 예산은 다를 수 있습니다&lt;/td&gt;&lt;/tr&gt;&lt;/tfoot&gt;&lt;/table&gt;&lt;/div&gt;</pre></div>
+<div style="margin:16px 0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:14px;font-weight:600;color:#374151;">CTA 배너</span><button onclick="copyCodeBlock(this)" style="background:#2477F3;color:#fff;border:none;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">복사</button></div><pre style="background:#1E293B;color:#E2E8F0;padding:12px;border-radius:8px;overflow-x:auto;font-size:11px;line-height:1.4;white-space:pre-wrap;max-height:200px;overflow-y:auto;">&lt;div style=&quot;background:linear-gradient(135deg,#5E9ADE 0%,#7BB2E8 100%);border-radius:16px;padding:32px 30px;color:#fff;margin:40px 0 0;&quot;&gt;
+&lt;div style=&quot;font-size:12px;font-weight:600;letter-spacing:0.8px;opacity:0.75;margin-bottom:10px;text-transform:uppercase;&quot;&gt;다음 단계&lt;/div&gt;
+&lt;h3 style=&quot;font-size:20px;font-weight:800;line-height:1.45;margin-bottom:20px;color:#fff;letter-spacing:-0.3px;&quot;&gt;기능 범위와 견적 항목, 혼자 가늠하기 어렵다면&lt;/h3&gt;
+&lt;div style=&quot;display:flex;flex-direction:column;gap:12px;margin-bottom:24px;&quot;&gt;&lt;div style=&quot;background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px;font-size:14.5px;line-height:1.65;&quot;&gt;&lt;span style=&quot;font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;&quot;&gt;아직 항목 비교가 막막하다면&lt;/span&gt;기획·디자인·서버 포함 여부를 어떻게 확인하는지 모르겠다면, 매니저가 견적 항목을 같은 조건으로 정리하는 것부터 함께합니다.&lt;/div&gt;
+&lt;div style=&quot;background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px;font-size:14.5px;line-height:1.65;&quot;&gt;&lt;span style=&quot;font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;&quot;&gt;예산 범위는 잡혔는데 등록이 처음이라면&lt;/span&gt;프로젝트 등록은 핵심 기능 목록과 예산 상한선만 있으면 시작할 수 있습니다. 매니저가 영업일 24시간 이내에 연락해 요구사항 정리부터 함께합니다.&lt;/div&gt;&lt;/div&gt;&lt;div style=&quot;text-align:center;&quot;&gt;&lt;a href=&quot;https://wishket.com/project/free-consulting/?utm_source=blog_webflow&amp;amp;utm_medium=cta_banner&amp;amp;utm_campaign=260416_web-service-outsourcing-cost-by-feature&quot; style=&quot;display:inline-block;background:#fff;color:#2477F3;font-size:15px;font-weight:800;padding:13px 28px;border-radius:10px;text-decoration:none;&quot;&gt;매니저와 정리하기&lt;/a&gt;&lt;/div&gt;
+&lt;/div&gt;</pre></div>
+
+
+  <h3 style="font-size:18px;font-weight:600;margin:32px 0 12px 0;">JSON-LD (Custom Code에 붙여넣기)</h3>
+<pre style="background:#1E293B;color:#E2E8F0;padding:16px;border-radius:8px;overflow-x:auto;font-size:12px;line-height:1.5;white-space:pre-wrap;">&lt;script type="application/ld+json"&gt;
+{
+  &quot;@context&quot;: &quot;https://schema.org&quot;,
+  &quot;@type&quot;: &quot;BlogPosting&quot;,
+  &quot;headline&quot;: &quot;웹서비스 외주 비용, 기능 범위별 실제 예산 차이&quot;,
+  &quot;description&quot;: &quot;웹서비스 외주 견적이 업체마다 다른 건 기능 범위가 다르기 때문입니다. 정보 제공형·서비스형·플랫폼형으로 구분하고 견적 항목을 맞추면 적정 예산을 가늠할 수 있습니다.&quot;,
+  &quot;datePublished&quot;: &quot;2026-04-16&quot;,
+  &quot;dateModified&quot;: &quot;2026-04-16&quot;,
+  &quot;author&quot;: {
+    &quot;@type&quot;: &quot;Person&quot;,
+    &quot;name&quot;: &quot;장수룡&quot;
+  },
+  &quot;publisher&quot;: {
+    &quot;@type&quot;: &quot;Organization&quot;,
+    &quot;name&quot;: &quot;위시켓&quot;,
+    &quot;url&quot;: &quot;https://www.wishket.com&quot;
+  },
+  &quot;mainEntityOfPage&quot;: {
+    &quot;@type&quot;: &quot;WebPage&quot;
+  },
+  &quot;keywords&quot;: &quot;웹 개발&quot;,
+  &quot;articleSection&quot;: &quot;IT 아웃소싱&quot;,
+  &quot;hasPart&quot;: [
+    {
+      &quot;@type&quot;: &quot;WebPageElement&quot;,
+      &quot;name&quot;: &quot;웹서비스 외주 비용이 왜 이렇게 차이 나는 건가요?&quot;,
+      &quot;url&quot;: &quot;#웹서비스-외주-비용이-왜-이렇게-차이-나는-건가요&quot;
+    },
+    {
+      &quot;@type&quot;: &quot;WebPageElement&quot;,
+      &quot;name&quot;: &quot;견적서 항목을 같은 조건으로 비교하려면 뭘 확인해야 하나요?&quot;,
+      &quot;url&quot;: &quot;#견적서-항목을-같은-조건으로-비교하려면-뭘-확인해야-하나요&quot;
+    },
+    {
+      &quot;@type&quot;: &quot;WebPageElement&quot;,
+      &quot;name&quot;: &quot;비슷한 규모의 웹서비스 프로젝트가 실제로 어느 예산에서 진행되나요?&quot;,
+      &quot;url&quot;: &quot;#비슷한-규모의-웹서비스-프로젝트가-실제로-어느-예산에서-진행되나요&quot;
+    }
+  ]
+}
+&lt;/script&gt;
+&lt;script type="application/ld+json"&gt;
+{
+  &quot;@context&quot;: &quot;https://schema.org&quot;,
+  &quot;@type&quot;: &quot;FAQPage&quot;,
+  &quot;mainEntity&quot;: [
+    {
+      &quot;@type&quot;: &quot;Question&quot;,
+      &quot;name&quot;: &quot;웹서비스 외주 견적이 업체마다 크게 다를 때 어느 쪽이 맞는 건가요?&quot;,
+      &quot;acceptedAnswer&quot;: {
+        &quot;@type&quot;: &quot;Answer&quot;,
+        &quot;text&quot;: &quot;견적 차이는 업체 능력의 차이가 아니라 포함 범위의 차이인 경우가 많습니다. 기획·디자인이 포함된 견적과 개발만 포함된 견적을 금액만 보고 비교하면 저렴해 보이는 쪽이 실제로 더 비쌀 수 있습니다. 기획과 디자인을 따로 맡기거나 직접 해야 하기 때문이죠. 비교 전에 각 견적서에 어떤 항목이 담겨 있는지 먼저 확인해야 합니다.&quot;
+      }
+    },
+    {
+      &quot;@type&quot;: &quot;Question&quot;,
+      &quot;name&quot;: &quot;개발비 외에 별도로 드는 비용이 있나요?&quot;,
+      &quot;acceptedAnswer&quot;: {
+        &quot;@type&quot;: &quot;Answer&quot;,
+        &quot;text&quot;: &quot;서버 운영비는 서비스를 운영하는 한 매달 발생하고, 도메인 비용·외부 결제 API 연동비·앱스토어 등록비도 개발비에 포함되지 않는 경우가 많습니다. 소규모 서비스 기준 서버 운영비만 월 5만~30만 원 수준이고, 외부 API(결제·지도 등) 연동이 필요하면 별도 비용이 추가됩니다. 견적서를 받으면 이 항목들이 포함됐는지 반드시 확인해야 총비용을 정확히 파악할 수 있습니다.&quot;
+      }
+    },
+    {
+      &quot;@type&quot;: &quot;Question&quot;,
+      &quot;name&quot;: &quot;같은 쇼핑몰인데 견적이 500만 원부터 5,000만 원까지 차이 나는 이유가 뭔가요?&quot;,
+      &quot;acceptedAnswer&quot;: {
+        &quot;@type&quot;: &quot;Answer&quot;,
+        &quot;text&quot;: &quot;쇼핑몰이라는 단어 안에 범위가 완전히 다른 프로젝트들이 섞여 있기 때문입니다. 카페24 같은 솔루션 기반 커스터마이징은 수백만 원대에서도 가능하지만, 회원 등급·정기 구독·맞춤 추천 알고리즘 같은 전용 기능이 들어가면 처음부터 개발해야 해서 비용이 수천만 원까지 올라갑니다. 솔루션 기반인지 맞춤 개발인지에 따라 유지보수 구조와 소스코드 귀속도 완전히 달라집니다.&quot;
+      }
+    },
+    {
+      &quot;@type&quot;: &quot;Question&quot;,
+      &quot;name&quot;: &quot;예산이 정해져 있는데 기능을 어떻게 조율해야 하나요?&quot;,
+      &quot;acceptedAnswer&quot;: {
+        &quot;@type&quot;: &quot;Answer&quot;,
+        &quot;text&quot;: &quot;예산이 먼저 정해진 경우에는 기능 우선순위 조율이 필수입니다. 처음부터 모든 기능을 다 구현하려 하면 예산이 부족해 중간에 범위를 줄이게 되고, 이때 분쟁이 발생하는 경우가 많습니다. &#x27;꼭 필요한 기능&#x27;과 &#x27;있으면 좋은 기능&#x27;을 분리해서 1단계는 핵심 기능만 구현하고 이후 단계에서 추가하는 방식이 현실적입니다. 위시켓 매니저에게 예산 범위를 먼저 알려주면 그 범위에서 가능한 기능 범위를 정리하는 상담을 받을 수 있습니다.&quot;
+      }
+    }
+  ]
+}
+&lt;/script&gt;</pre>
+
+</div>
+
+<script>
+// contenteditable 변경 감지 + localStorage 자동저장
+var content = document.getElementById('cms-content');
+var status = document.getElementById('edit-status');
+var saveTimer;
+var STORAGE_KEY = 'wishket_draft_' + document.title.replace(/[^a-zA-Z0-9가-힣]/g, '_').substring(0, 60);
+var VERSION_KEY = STORAGE_KEY + '_ver';
+var CURRENT_VERSION = '2026-04-16';
+
+window.addEventListener('load', function() {
+  var saved = localStorage.getItem(STORAGE_KEY);
+  var savedVer = localStorage.getItem(VERSION_KEY);
+  if (saved && savedVer === CURRENT_VERSION) { content.innerHTML = saved; }
+  else { localStorage.removeItem(STORAGE_KEY); }
+  attachLinkHandlers();
+});
+
+content.addEventListener('input', function() {
+  status.textContent = '편집 중 (미저장)';
+  status.className = 'modified';
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(function() {
+    localStorage.setItem(STORAGE_KEY, content.innerHTML);
+    localStorage.setItem(VERSION_KEY, CURRENT_VERSION);
+    status.textContent = '자동저장됨';
+    status.className = '';
+  }, 3000);
+});
+
+function attachLinkHandlers() {
+  document.querySelectorAll('[contenteditable] a').forEach(function(a) {
+    a.addEventListener('click', function(e) {
+      if (e.metaKey || e.ctrlKey) { window.open(a.href, '_blank'); }
+    });
+    if (a.title.indexOf('Cmd+클릭') === -1) {
+      a.title = (a.title || '') + ' (Cmd+클릭으로 열기)';
+    }
+  });
+}
+
+function copyContent() {
+  var clone = content.cloneNode(true);
+  clone.querySelectorAll('.image-guide, table.image-guide, table.guide-box').forEach(function(el) { el.remove(); });
+  var text = clone.innerText;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(function() {
+      var btn = document.getElementById('copy-btn');
+      btn.textContent = '복사됨!';
+      setTimeout(function() { btn.textContent = '본문 복사'; }, 2000);
+    });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    var btn = document.getElementById('copy-btn');
+    btn.textContent = '복사됨!';
+    setTimeout(function() { btn.textContent = '본문 복사'; }, 2000);
+  }
+}
+
+function copyCodeBlock(btn) {
+  var pre = btn.parentElement.nextElementSibling;
+  if (!pre) return;
+  var text = pre.textContent;
+  navigator.clipboard.writeText(text).then(function() {
+    btn.textContent = '복사됨!';
+    setTimeout(function() { btn.textContent = '복사'; }, 2000);
+  });
+}
+
+window.addEventListener('beforeunload', function(e) {
+  if (status.className === 'modified') {
+    e.preventDefault();
+    e.returnValue = '';
+  }
+});
+</script>
+
+</body>
+</html>

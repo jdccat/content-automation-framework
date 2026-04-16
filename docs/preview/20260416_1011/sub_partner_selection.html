@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>외주 업체 비교가 안 될 때, 개발자 없는 팀의 파트너 선정 기준</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+    font-size: 17px;
+    line-height: 2.0;
+    color: #1a1a1a;
+    background: #fff;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Toolbar (편집용) ── */
+  #toolbar {
+    position: fixed; top: 0; left: 0; right: 0;
+    background: #1E293B; color: #fff;
+    padding: 10px 20px;
+    display: flex; align-items: center; gap: 16px;
+    z-index: 9999; font-size: 14px;
+  }
+  #toolbar button {
+    background: #2477F3; color: #fff; border: none;
+    padding: 6px 16px; border-radius: 6px; cursor: pointer;
+    font-size: 13px; font-weight: 600;
+  }
+  #toolbar button:hover { background: #1B5FD1; }
+  #edit-status { color: #94A3B8; font-size: 12px; }
+  #edit-status.modified { color: #FBBF24; }
+
+  /* ── Layout ── */
+  .page-wrap {
+    max-width: 720px;
+    margin: 80px auto 80px;
+    padding: 0 20px;
+  }
+
+  /* ── Header ── */
+  .article-header { margin-bottom: 32px; }
+  .article-category {
+    font-size: 12px; font-weight: 600; color: #2477F3;
+    letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 12px;
+  }
+  h1 {
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 800; line-height: 1.35;
+    letter-spacing: -0.5px; color: #0d0d0d;
+    margin: 0 0 16px 0;
+  }
+  .article-meta { font-size: 13px; color: #999; }
+
+  /* ── Typography ── */
+  h2 {
+    font-size: 21px; font-weight: 700; color: #2477F3;
+    margin: 48px 0 16px 0; padding-bottom: 10px;
+    border-bottom: 2px solid #E5E7EB;
+    letter-spacing: -0.3px;
+  }
+  h3 {
+    font-size: 17px; font-weight: 700; color: #2477F3;
+    margin: 28px 0 10px 0;
+  }
+  p { margin: 0 0 30px 0; }
+  a { color: #2477F3; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  strong { font-weight: 700; }
+
+  /* ── Lists ── */
+  ul, ol { margin: 0 0 30px 0; padding-left: 22px; }
+  li { margin-bottom: 6px; line-height: 2.5; }
+  li::marker { color: #999; }
+
+  hr { border: none; border-top: 1px solid #e8e8e8; margin: 40px 0; }
+
+  /* ── GEO Table ── */
+  .tbl-wrap {
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    margin: 30px 0; border: 1px solid #e0e0e5;
+    border-radius: 12px; background: #fff;
+  }
+  table.geo {
+    width: 100%; border-collapse: collapse; border-spacing: 0;
+    font-size: 14.5px; line-height: 1.65; table-layout: fixed;
+  }
+  table.geo caption {
+    position: absolute; width: 1px; height: 1px;
+    overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap;
+  }
+  table.geo thead th {
+    padding: 12px 18px; font-size: 12.5px; font-weight: 700;
+    letter-spacing: 0.01em; text-align: left;
+    border-bottom: 1px solid #d1d1d9; background: #f6f6f9; vertical-align: bottom;
+  }
+  table.geo thead th:first-child { color: #82828e; border-right: 1px solid #d1d1d9; }
+  table.geo thead th:not(:first-child) { color: #1a1a23; }
+  table.geo tbody th[scope="row"] {
+    padding: 14px 18px; font-size: 14px; font-weight: 600; color: #1a1a23;
+    text-align: left; border-bottom: 1px solid #ececf0; border-right: 1px solid #ececf0;
+    background: #fff; vertical-align: top; word-break: keep-all;
+  }
+  table.geo tbody td {
+    padding: 14px 18px; color: #3a3a47;
+    border-bottom: 1px solid #ececf0; vertical-align: top; word-break: keep-all;
+  }
+  table.geo tbody tr:nth-child(even) td,
+  table.geo tbody tr:nth-child(even) th[scope="row"] { background: #f9f9fb; }
+  table.geo tbody tr:hover td,
+  table.geo tbody tr:hover th[scope="row"] { background: #f0f0f5; }
+  table.geo tfoot td {
+    padding: 9px 18px; font-size: 12px; color: #9ca3af;
+    border-top: 1px solid #ececf0; background: #f9f9fb;
+  }
+
+  /* ── TLDR (핵심 요약) ── */
+  .summary-box {
+    background: #F5F5F5;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 30px;
+  }
+  .summary-box p:first-child {
+    font-size: 13px; font-weight: 700; color: #1A1A1A;
+    margin-bottom: 8px; letter-spacing: 0.3px;
+  }
+  .summary-box p:not(:first-child) {
+    font-size: 15.5px; color: #1A1A1A; line-height: 1.75;
+  }
+  .summary-box p:last-child { margin-bottom: 0; }
+
+  /* ── FAQ ── */
+  .faq-list {
+    display: flex; flex-direction: column; gap: 0;
+    margin: 20px 0 24px; border: 1px solid #E5E7EB;
+    border-radius: 14px; overflow: hidden;
+  }
+  .faq-item { border-bottom: 1px solid #ebebeb; background: #fff; }
+  .faq-item:last-child { border-bottom: none; }
+  .faq-q {
+    font-size: 15px; font-weight: 700; color: #0d0d0d;
+    padding: 18px 20px 8px; display: flex; gap: 10px;
+  }
+  .faq-q .q-mark { color: #2477F3; font-weight: 800; font-size: 16px; flex-shrink: 0; }
+  .faq-a {
+    font-size: 14.5px; color: #444; line-height: 1.75;
+    padding: 0 20px 18px 44px;
+  }
+
+  /* ── Related ── */
+  .related-section { margin: 32px 0; }
+  .related-section h3 { font-size: 16px; font-weight: 700; margin-bottom: 12px; }
+  .related-section ul { list-style: none; padding: 0; }
+  .related-section li {
+    padding: 10px 0; border-bottom: 1px solid #f0f0f0;
+  }
+  .related-section li:last-child { border-bottom: none; }
+  .related-section a { font-size: 15px; font-weight: 500; }
+
+  /* ── Image guide box ── */
+  .image-guide, table.guide-box {
+    background: #FAFAFA; border: 2px solid #E5E7EB;
+    border-radius: 12px; padding: 16px 24px; margin: 30px -20px;
+  }
+
+  /* ── CMS meta area ── */
+  .cms-meta-area { background: #f9fafb; border-radius: 12px; padding: 20px; margin-top: 40px; }
+
+  /* ── Contenteditable ── */
+  [contenteditable="true"]:focus { outline: 2px solid #2477F3; outline-offset: 2px; border-radius: 4px; }
+  [contenteditable="true"]:hover { outline: 1px dashed #CBD5E1; outline-offset: 2px; border-radius: 4px; }
+  [contenteditable="true"]:focus:hover { outline: 2px solid #2477F3; outline-offset: 2px; }
+
+  /* ── Responsive ── */
+  @media (max-width: 640px) {
+    .page-wrap { padding: 0 16px; margin-top: 60px; }
+    h1 { font-size: 22px; }
+    h2 { font-size: 19px; }
+    table.geo { table-layout: auto; }
+    table.geo thead th, table.geo tbody th[scope="row"], table.geo tbody td {
+      padding: 11px 14px; font-size: 13px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- toolbar -->
+<div id="toolbar">
+  <button id="copy-btn" onclick="copyContent()">본문 복사</button>
+  <span id="edit-status">저장됨</span>
+</div>
+
+<div class="page-wrap">
+
+  <div class="article-header">
+    <h1 contenteditable="true">외주 업체 비교가 안 될 때, 개발자 없는 팀의 파트너 선정 기준</h1>
+    <div class="article-meta"><time datetime="2026-04-16">2026-04-16</time></div>
+  </div>
+
+  <div id="cms-content" contenteditable="true" style="outline:none;">
+
+  <div class="summary-box">
+<p>💡 핵심 요약</p>
+<p>업체 비교가 막히는 건 기술을 몰라서가 아니라, 가격만으로 비교하고 있기 때문입니다. 포함 범위가 다른 견적을 금액만 놓고 보면 판단이 틀릴 수밖에 없고, 포트폴리오를 봐도 좋은 건지 알기 어렵습니다. IT를 모르는 상태에서도 쓸 수 있는 비교 기준은 세 가지 행동입니다. 비슷한 프로젝트를 해봤는지, 요구사항을 들었을 때 구체적인 질문이 돌아오는지, 견적서에 포함 항목이 명확한지를 같은 조건으로 비교하면 기준이 생깁니다. 계약 단계에서는 소스코드 귀속, 하자보수 기간, 서버·도메인 명의 세 가지만 계약서에서 확인하면 됩니다.</p>
+</div>
+
+  <p>업체 2~3곳에 견적을 받아봤는데 항목도 다르고, 금액도 다르고, 어떤 업체가 더 잘할 것 같은지 판단이 안 섭니다. 포트폴리오를 열어봐도 좋은 건지 나쁜 건지 모르겠고요. 결국 가장 저렴한 곳으로 기울고 있다면, 그 판단 방식 자체가 문제일 수 있습니다.</p>
+<p>개발을 모른다고 비교가 불가능한 건 아닙니다. 기술 능력을 직접 평가하려고 하면 막히지만, 업체의 '행동'을 보면 개발 지식 없이도 꽤 정확하게 걸러낼 수 있거든요.</p>
+<h2 id="개발을-모르는데-업체를-비교할-기준이-있나요">개발을 모르는데 업체를 비교할 기준이 있나요?</h2>
+<p>업체 비교가 막히는 가장 큰 이유는 가격으로 비교하고 있기 때문입니다. 견적서 3장을 놓고 숫자만 보면 당연히 싼 쪽이 좋아 보이죠. 그런데 업체 A는 기획과 디자인이 포함된 견적이고, 업체 B는 개발만 넣은 견적이라면 이 두 숫자를 비교하는 건 의미가 없습니다. 2025년 위시켓에 등록된 웹 신규 개발 프로젝트 1,800건 이상의 데이터를 봐도, 같은 '웹서비스'인데 기능 범위와 포함 항목에 따라 예산이 수배에서 수십 배까지 벌어져요. 가격 차이 대부분은 업체 실력이 아니라 견적에 담긴 범위가 다르기 때문입니다.</p>
+<p>IT를 모르는 클라이언트가 쓸 수 있는 비교 기준은 기술 능력이 아니라 세 가지 행동입니다.</p>
+<ul>
+<li><strong>비슷한 프로젝트를 해본 경험이 있는가</strong> — "다 할 수 있다"고만 하는 업체와 "이런 프로젝트를 이런 방식으로 진행했다"고 답하는 업체의 차이가 큽니다</li>
+<li><strong>요구사항을 듣고 되묻는 질문이 돌아오는가</strong> — 기능 목록을 보여줬을 때 "네, 가능합니다"로 끝나는 업체보다 "이 기능에서 사용자가 몇 명 정도 예상되나요?"처럼 구체적으로 물어보는 업체가 범위를 정확하게 파악하고 있을 가능성이 높습니다</li>
+<li><strong>견적서에 포함 항목이 명확한가</strong> — 기획, 디자인, 개발, 서버 세팅, QA(테스트) 중 어디까지 포함인지가 적혀 있어야 비교가 됩니다</li>
+</ul>
+<p>이 세 가지를 같은 조건으로 비교하면 기술 지식 없이도 판단 근거가 생깁니다. 포트폴리오 화면이 예쁜지를 보는 것보다 훨씬 실질적이에요.</p>
+<h2 id="미팅에서-업체에게-어떤-질문을-해야-하나요">미팅에서 업체에게 어떤 질문을 해야 하나요?</h2>
+<p>기술을 몰라도 미팅에서 역량을 확인할 수 있는 질문이 있습니다. 핵심은 '정답을 맞히는 질문'이 아니라 '응답의 구체성을 보는 질문'이에요.</p>
+<p>미팅 전에 아래 세 가지를 메모해 가세요. 업체마다 같은 질문을 던지고 응답 내용을 기록하면, 비교가 눈에 보이기 시작합니다.</p>
+<div class="tbl-wrap"><table class="geo"><caption>미팅에서 업체에게 어떤 질문을 해야 하나요? — 질문 · 왜 이 질문이 중요한가</caption><colgroup><col style="width:25%"/><col style="width:75%"/></colgroup><thead><tr><th scope="col">질문</th><th scope="col">왜 이 질문이 중요한가</th></tr></thead><tbody><tr><th scope="row">"이 프로젝트에서 가장 어려운 부분이 어떤 기능이라고 보시나요?"</th><td>구체적으로 답하는 업체와 모호하게 넘어가는 업체의 차이가 실력 차이입니다. "어렵진 않습니다"라고만 하는 곳은 경계하세요</td></tr><tr><th scope="row">"중간 결과물은 어떤 방식으로 보여주시나요?"</th><td>답이 없거나 "다 만들어서 보여드리겠습니다"라면, 중간에 방향이 어긋나도 최종 납품 전까지 확인할 방법이 없다는 뜻입니다</td></tr><tr><th scope="row">"비슷한 프로젝트에서 일정이 늘어난 적 있으셨나요? 이유가 뭐였나요?"</th><td>"그런 적 없습니다"보다 "클라이언트 요구사항이 중간에 바뀌면서 2주 늘어난 적 있다"고 말하는 곳이 현실적이고 신뢰도가 높습니다</td></tr></tbody></table></div>
+<p>"다 할 수 있다"면서 되묻는 질문이 하나도 없었던 업체가 있다면, 그게 가장 큰 경고 신호입니다. 위시켓에서 수만 건의 프로젝트를 봐온 매니저들도 같은 이야기를 해요. 잘하는 파트너일수록 모르는 부분을 적극적으로 물어본다고요. 클라이언트의 요구를 정확하게 이해해야 정확한 견적과 일정이 나오기 때문이죠.</p>
+<div style="background:#F0F6FF;border-left:3px solid #2E6BAA;border-radius:0 14px 14px 0;padding:18px 20px;margin:30px 0;">
+<div style="font-size:13px;font-weight:700;color:#1A1A1A;margin-bottom:10px;display:flex;align-items:center;gap:6px;">📌 위시켓 매니저 Tip</div>
+<div style="font-size:14.5px;color:#1A1A1A;line-height:2.0;"><span style="font-weight:700;color:#1A1A1A;">미팅 전:</span> 위 세 가지 질문을 메모지에 적어 가세요. 업체별로 응답을 같은 형식으로 기록하면 미팅 후 비교가 훨씬 쉬워집니다. 위시켓을 통해 진행하면 매니저가 미팅에 함께 참여해, 클라이언트가 놓치기 쉬운 범위와 조건을 짚어줍니다.</div>
+</div><div style="background:linear-gradient(135deg,#5E9ADE 0%,#7BB2E8 100%);border-radius:14px;padding:20px 24px;margin:30px 0;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+<p style="font-size:15px;color:#fff;line-height:1.65;margin:0;flex:1;">미팅 전 준비가 막막하다면 매니저와 함께 정리해보세요.</p>
+<a href="https://wishket.com/project/free-consulting/?utm_source=blog_webflow&amp;utm_medium=inline_cta&amp;utm_campaign=260416_web-outsourcing-partner-selection-criteria" style="display:inline-block;background:#fff;color:#2477F3;font-size:14px;font-weight:700;padding:10px 18px;border-radius:10px;white-space:nowrap;text-decoration:none;">미팅 준비 요청</a>
+</div>
+<h2 id="계약서에서-꼭-확인해야-할-부분은-뭔가요">계약서에서 꼭 확인해야 할 부분은 뭔가요?</h2>
+<p>업체를 한 곳으로 좁히고 계약서를 받았는데 내용이 많아서 어디를 봐야 할지 모를 수 있습니다. 전부 이해할 필요는 없어요. 개발자 없는 팀이 가장 많이 놓치는 항목 세 가지만 확인하면 됩니다.</p>
+<div style="background:#F0F6FF;border-left:3px solid #2E6BAA;border-radius:0 14px 14px 0;padding:18px 20px;margin:30px 0;">
+<div style="font-size:13px;font-weight:700;color:#1A1A1A;margin-bottom:10px;display:flex;align-items:center;gap:6px;">✅ 계약 전 필수 확인 체크리스트</div>
+<div style="font-size:14.5px;color:#1A1A1A;line-height:2.0;"><ul><li>[ ] 소스코드를 포함한 지재권(지적재산권)이 우리 회사에 양도된다는 조항이 있는가</li><li>[ ] 하자보수 기간과 범위가 명확하게 적혀 있는가 (몇 개월, 어떤 문제까지)</li><li>[ ] 서버와 도메인이 우리 회사 명의로 만들어지는가</li></ul></div>
+</div>
+<p>소스코드는 당연히 받는 거 아닌가 싶겠지만, 계약서에 명시가 없으면 추가 비용을 요구받거나 아예 받지 못하는 경우가 있습니다. "당연한 것"이 계약서에 없으면 당연하지 않게 돼요.</p>
+<p>하자보수와 유지보수도 자주 혼동되는 부분입니다. <strong>하자보수는 개발사가 만든 버그를 무상으로 고쳐주는 것</strong>이고, <strong>유지보수는 기능을 바꾸거나 추가하는 것으로 별도 비용</strong>입니다. "납품 후 수정해주신다고 했잖아요"라는 분쟁이 이 구분이 없을 때 생기죠.</p>
+<p>서버와 도메인도 마찬가지입니다. 개발사 명의로 만들어지면 나중에 관계가 끝났을 때 통제권을 가져오기 어려울 수 있어요. 우리 회사 명의로 만들어달라고 반드시 요청해야 합니다.</p>
+<p>이 세 가지가 계약서에 없거나 모호하게 적혀 있다면, 사인하기 전에 명시해달라고 요청하세요. 위시켓을 통해 계약하면 표준계약서에 하자보수, 지재권 양도, 대금보호 조항이 포함되어 있어 하나씩 찾아볼 필요 없이 확인할 수 있습니다.</p>
+<h2 id="비교-기준이-생기면-선택은-어렵지-않습니다">비교 기준이 생기면 선택은 어렵지 않습니다</h2>
+<p>업체 비교가 막막했던 건 개발을 몰라서가 아닙니다. 비교 기준이 '가격'뿐이었기 때문이에요.</p>
+<p>경험, 응답의 구체성, 견적 항목의 명확성. 이 세 가지로 업체를 비교하고, 미팅에서 같은 질문을 던지고, 계약서에서 세 가지를 확인하면 첫 외주라도 잘못된 선택을 피할 수 있는 기준이 갖춰집니다. <a href="https://wishket.com/project/free-consulting/?utm_source=blog_webflow&amp;utm_medium=inline_cta&amp;utm_campaign=260416_web-outsourcing-partner-selection-criteria">위시켓</a>에서 프로젝트를 등록하면 매니저가 파트너 비교부터 계약 조건 확인까지 함께하기 때문에, 혼자서 처음부터 해결하지 않아도 됩니다.</p>
+
+  <div style="background:linear-gradient(135deg,#5E9ADE 0%,#7BB2E8 100%);border-radius:16px;padding:32px 30px;color:#fff;margin:40px 0 0;">
+<div style="font-size:12px;font-weight:600;letter-spacing:0.8px;opacity:0.75;margin-bottom:10px;text-transform:uppercase;">다음 단계</div>
+<h3 style="font-size:20px;font-weight:800;line-height:1.45;margin-bottom:20px;color:#fff;letter-spacing:-0.3px;">비교 기준이 생기면 선택은 어렵지 않습니다</h3>
+<div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;"><div style="background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px;font-size:14.5px;line-height:1.65;"><span style="font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;">업체를 좁혔는데 최종 선택이 아직 어렵다면</span>매니저가 파트너 비교부터 계약 조건 확인까지 함께합니다. 프로젝트 등록과 상담은 무료입니다.</div>
+<div style="background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px;font-size:14.5px;line-height:1.65;"><span style="font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;">계약서를 받아 검토 단계까지 왔다면</span>위시켓 표준계약서로 진행하면 소스코드 귀속·하자보수·대금보호 항목을 하나씩 찾아볼 필요 없이 확인할 수 있습니다.</div></div><div style="text-align:center;"><a href="https://wishket.com/project/free-consulting/?utm_source=blog_webflow&amp;utm_medium=cta_banner&amp;utm_campaign=260416_web-outsourcing-partner-selection-criteria" style="display:inline-block;background:#fff;color:#2477F3;font-size:15px;font-weight:800;padding:13px 28px;border-radius:10px;text-decoration:none;">상담 요청하기</a></div>
+</div>
+
+  <div class="related-section">
+  <h3>함께 읽으면 좋은 콘텐츠</h3>
+<ul>
+  <li><a href="https://blog.wishket.com/blog/how-to-choose-software-development-company">개발 외주 업체, 어떻게 골라야 할까? 현장에서 검증한 5가지 기준!</a></li>
+  <li><a href="https://blog.wishket.com/blog/outsourcing-development-risks-solutions">외주 개발, 어떤 리스크가 있을까? 자주 발생하는 4가지 문제와 해결법</a></li>
+  <li><a href="https://blog.wishket.com/blog/outsourcing-development-complete-guide">개발 외주 가이드 : 비개발자를 위한 단계별 완전 정리!</a></li>
+</ul>
+  </div>
+
+  </div>
+
+  <h2>자주 묻는 질문</h2>
+<div class="faq-list">
+<div class="faq-item">
+  <div class="faq-q"><span class="q-mark">Q.</span>외주 업체 포트폴리오는 어떻게 봐야 하나요?</div>
+  <div class="faq-a">화면이 예쁜지보다 우리 프로젝트와 기능 범위가 비슷한 사례가 있는지를 먼저 봐야 합니다. 예를 들어 회원 가입·결제·매칭 기능이 필요한 서비스라면, 포트폴리오에 단순 홈페이지만 있는 업체는 적합하지 않을 수 있어요. &#x27;이 포트폴리오 프로젝트에서 어떤 기능이 가장 구현하기 어려웠나요?&#x27;라고 물어봤을 때 구체적으로 답하는 업체가 실제 경험이 있는 곳입니다. IT를 모르는 상태에서 기술적 유사성을 직접 판단하기보다, 비슷한 규모와 기능의 사례를 직접 물어보는 방식이 더 현실적입니다.</div>
+</div>
+<div class="faq-item">
+  <div class="faq-q"><span class="q-mark">Q.</span>업체마다 견적 항목이 달라서 비교가 안 될 때 어떻게 해야 하나요?</div>
+  <div class="faq-a">견적서 금액보다 먼저 포함 항목을 맞춰야 합니다. 기획·디자인·서버 설정·QA(테스트)가 포함됐는지 업체별로 체크하면, 같은 기능 범위인데도 견적이 두 배 이상 벌어지는 이유가 보입니다. 항목을 맞춘 뒤에도 금액 차이가 크다면, &#x27;이 기능에서 추가 비용이 생길 수 있는 상황이 있나요?&#x27;라고 물어보세요. 조건을 솔직하게 설명하는 업체가 나중에 범위 분쟁이 덜 생깁니다. 위시켓 매니저에게 견적 항목 비교 지원을 요청할 수도 있습니다.</div>
+</div>
+<div class="faq-item">
+  <div class="faq-q"><span class="q-mark">Q.</span>계약서에서 하자보수 기간이 길수록 유리한 건가요?</div>
+  <div class="faq-a">기간보다 범위가 더 중요합니다. 하자보수는 개발사가 실수로 만든 버그를 무상으로 고쳐주는 것이고, 기능을 바꾸거나 새로 추가하는 것은 유지보수로 별도 비용입니다. 계약서에 &#x27;납품 후 수정 지원&#x27;이라고만 적혀 있으면 범위가 모호해 분쟁이 생길 수 있어요. 하자보수 기간과 함께 &#x27;어떤 범위의 문제를 무상으로 처리하는지&#x27;가 명확히 적혀 있는지 확인해야 합니다. 위시켓 표준계약서는 하자보수 범위를 개발사 귀책 버그로 명시하고 있어 이 혼동을 줄일 수 있습니다.</div>
+</div>
+<div class="faq-item">
+  <div class="faq-q"><span class="q-mark">Q.</span>개발사가 프로젝트 도중 이탈하면 어떻게 해야 하나요?</div>
+  <div class="faq-a">계약 전에 두 가지를 확인하면 이탈 피해를 줄일 수 있습니다. 하나는 서버·도메인·소스코드를 우리 회사 명의와 계정으로 관리하도록 계약서에 명시하는 것입니다. 개발사 계정으로 만들어두면 관계가 끊겼을 때 통제권을 가져오기 어렵습니다. 다른 하나는 대금을 단계별로 지급하는 구조로 협의하는 것입니다. 전체를 선금으로 지급하면 이탈 시 회수가 어렵습니다. 위시켓에서 계약한 프로젝트는 대금이 에스크로 방식으로 보관되어 검수 승인 후 파트너에게 지급되기 때문에 이런 리스크를 줄일 수 있습니다.</div>
+</div>
+</div>
+
+  <div class="cms-meta-area">
+    <h3 style="font-size:16px; font-weight:700; margin:0 0 16px 0; color:#666;">CMS 입력 필드</h3>
+    <table style="width:100%;border-collapse:collapse;margin:16px 0;">
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">써머리</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">기술 지식 없이도 외주 업체를 가려내는 3가지 행동 기준</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">slug</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">web-outsourcing-partner-selection-criteria</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">날짜</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">2026-04-16</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">카테고리</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">IT 아웃소싱</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">태그</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">개발외주</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">메타 디스크립션</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">개발 지식 없이도 외주 업체를 비교하는 기준이 있습니다. 경험·응답 구체성·견적 항목으로 업체를 가려내고, 미팅 질문 3가지로 역량을 확인한 뒤 계약서 세 항목만 짚으면 됩니다.</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">Author</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">박민재 / 운영팀 리드 — 위시켓 운영팀 리드 박민재입니다. 기업과 IT 전문가의 최적 매칭을 설계합니다.</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">TLDR</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">업체 비교가 막히는 건 기술을 몰라서가 아니라, 가격만으로 비교하고 있기 때문입니다. 포함 범위가 다른 견적을 금액만 놓고 보면 판단이 틀릴 수밖에 없고, 포트폴리오를 봐도 좋은 건지 알기 어렵습니다. IT를 모르는 상태에서도 쓸 수 있는 비교 기준은 세 가지 행동입니다. 비슷한 프로젝트를 해봤는지, 요구사항을 들었을 때 구체적인 질문이 돌아오는지, 견적서에 포함 항목이 명확한지를 같은 조건으로 비교하면 기준이 생깁니다. 계약 단계에서는 소스코드 귀속, 하자보수 기간, 서버·도메인 명의 세 가지만 계약서에서 확인하면 됩니다.
+</td>
+</tr>
+</table>
+  </div>
+
+  <table class="guide-box" style="width:100%;border:1px solid #D1D5DB;border-collapse:collapse;margin:20px 0;">
+<tr><td style="background:#F9FAFB;padding:16px 20px;border:1px solid #D1D5DB;">
+<p style="margin:0 0 10px 0;font-weight:700;font-size:16px;">🖼 썸네일 제작 가이드</p>
+<p style="margin:0 0 4px 0;"><b>스타일:</b> 단색 배경 + 텍스트</p>
+<p style="margin:0 0 4px 0;"><b>배경색:</b> #1A3A6B</p>
+<p style="margin:0 0 4px 0;"><b>제목 텍스트:</b></p>
+<p style="margin:0 0 4px 0;">　1줄: 개발 몰라도 업체 고르는</p>
+<p style="margin:0 0 4px 0;">　2줄: 파트너 선정 3가지 기준</p>
+<p style="margin:0 0 4px 0;"><b>장식 요소:</b> 우측 하단 체크마크 모티프 장식</p>
+<p style="margin:0;"><b>로고:</b> wishket 로고 좌상단</p>
+</td></tr>
+</table>
+
+  <h3 style="font-size:18px;font-weight:600;margin:32px 0 12px 0;">Embed 코드 (붙여넣기용)</h3>
+<div style="margin:16px 0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:14px;font-weight:600;color:#374151;">미팅에서 업체에게 어떤 질문을 해야 하나요? — 질문 · 왜 이 질문이 중요한가</span><button onclick="copyCodeBlock(this)" style="background:#2477F3;color:#fff;border:none;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">복사</button></div><pre style="background:#1E293B;color:#E2E8F0;padding:12px;border-radius:8px;overflow-x:auto;font-size:11px;line-height:1.4;white-space:pre-wrap;max-height:200px;overflow-y:auto;">&lt;style&gt;
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:1.5rem 0;border:1px solid #E5E7EB;border-radius:12px;background:#fff}
+table.geo{width:100%;border-collapse:collapse;border-spacing:0;font-size:14px;line-height:1.6;table-layout:fixed}
+table.geo caption{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+table.geo thead th{padding:12px 18px;font-size:12.5px;font-weight:700;letter-spacing:.01em;text-align:left;border-bottom:1px solid #D1D1D9;background:#F6F6F9;vertical-align:bottom}
+table.geo thead th:first-child{color:#82828E;border-right:1px solid #D1D1D9}
+table.geo thead th:not(:first-child){color:#1A1A23}
+table.geo tbody th[scope=row]{padding:14px 18px;font-size:14px;font-weight:600;color:#1A1A23;text-align:left;border-bottom:1px solid #ECECF0;border-right:1px solid #ECECF0;background:#fff;vertical-align:top;word-break:keep-all}
+table.geo tbody td{padding:14px 18px;color:#3A3A47;border-bottom:1px solid #ECECF0;vertical-align:top;word-break:keep-all}
+table.geo tbody tr:nth-child(even) td,table.geo tbody tr:nth-child(even) th[scope=row]{background:#F9F9FB}
+table.geo tbody tr:hover td,table.geo tbody tr:hover th[scope=row]{background:#F0F0F5}
+table.geo tfoot td{padding:9px 18px;font-size:12px;color:#9CA3AF;border-top:1px solid #ECECF0;background:#F9F9FB}
+table.geo tfoot time{font-weight:500}
+@media(max-width:640px){table.geo{table-layout:auto}table.geo thead th,table.geo tbody th[scope=row],table.geo tbody td{padding:11px 14px;font-size:13px}table.geo tfoot td{padding:8px 14px}}
+&lt;/style&gt;
+&lt;div class=&quot;tbl-wrap&quot;&gt;&lt;table class=&quot;geo&quot;&gt;&lt;caption&gt;미팅에서 업체에게 어떤 질문을 해야 하나요? — 질문 · 왜 이 질문이 중요한가&lt;/caption&gt;&lt;colgroup&gt;&lt;col style=&quot;width:25%&quot;/&gt;&lt;col style=&quot;width:75%&quot;/&gt;&lt;/colgroup&gt;&lt;thead&gt;&lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;질문&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;왜 이 질문이 중요한가&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;&quot;이 프로젝트에서 가장 어려운 부분이 어떤 기능이라고 보시나요?&quot;&lt;/th&gt;&lt;td&gt;구체적으로 답하는 업체와 모호하게 넘어가는 업체의 차이가 실력 차이입니다. &quot;어렵진 않습니다&quot;라고만 하는 곳은 경계하세요&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;&quot;중간 결과물은 어떤 방식으로 보여주시나요?&quot;&lt;/th&gt;&lt;td&gt;답이 없거나 &quot;다 만들어서 보여드리겠습니다&quot;라면, 중간에 방향이 어긋나도 최종 납품 전까지 확인할 방법이 없다는 뜻입니다&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;&quot;비슷한 프로젝트에서 일정이 늘어난 적 있으셨나요? 이유가 뭐였나요?&quot;&lt;/th&gt;&lt;td&gt;&quot;그런 적 없습니다&quot;보다 &quot;클라이언트 요구사항이 중간에 바뀌면서 2주 늘어난 적 있다&quot;고 말하는 곳이 현실적이고 신뢰도가 높습니다&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;</pre></div>
+<div style="margin:16px 0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:14px;font-weight:600;color:#374151;">CTA 배너</span><button onclick="copyCodeBlock(this)" style="background:#2477F3;color:#fff;border:none;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">복사</button></div><pre style="background:#1E293B;color:#E2E8F0;padding:12px;border-radius:8px;overflow-x:auto;font-size:11px;line-height:1.4;white-space:pre-wrap;max-height:200px;overflow-y:auto;">&lt;div style=&quot;background:linear-gradient(135deg,#5E9ADE 0%,#7BB2E8 100%);border-radius:16px;padding:32px 30px;color:#fff;margin:40px 0 0;&quot;&gt;
+&lt;div style=&quot;font-size:12px;font-weight:600;letter-spacing:0.8px;opacity:0.75;margin-bottom:10px;text-transform:uppercase;&quot;&gt;다음 단계&lt;/div&gt;
+&lt;h3 style=&quot;font-size:20px;font-weight:800;line-height:1.45;margin-bottom:20px;color:#fff;letter-spacing:-0.3px;&quot;&gt;비교 기준이 생기면 선택은 어렵지 않습니다&lt;/h3&gt;
+&lt;div style=&quot;display:flex;flex-direction:column;gap:12px;margin-bottom:24px;&quot;&gt;&lt;div style=&quot;background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px;font-size:14.5px;line-height:1.65;&quot;&gt;&lt;span style=&quot;font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;&quot;&gt;업체를 좁혔는데 최종 선택이 아직 어렵다면&lt;/span&gt;매니저가 파트너 비교부터 계약 조건 확인까지 함께합니다. 프로젝트 등록과 상담은 무료입니다.&lt;/div&gt;
+&lt;div style=&quot;background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px;font-size:14.5px;line-height:1.65;&quot;&gt;&lt;span style=&quot;font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;&quot;&gt;계약서를 받아 검토 단계까지 왔다면&lt;/span&gt;위시켓 표준계약서로 진행하면 소스코드 귀속·하자보수·대금보호 항목을 하나씩 찾아볼 필요 없이 확인할 수 있습니다.&lt;/div&gt;&lt;/div&gt;&lt;div style=&quot;text-align:center;&quot;&gt;&lt;a href=&quot;https://wishket.com/project/free-consulting/?utm_source=blog_webflow&amp;amp;utm_medium=cta_banner&amp;amp;utm_campaign=260416_web-outsourcing-partner-selection-criteria&quot; style=&quot;display:inline-block;background:#fff;color:#2477F3;font-size:15px;font-weight:800;padding:13px 28px;border-radius:10px;text-decoration:none;&quot;&gt;상담 요청하기&lt;/a&gt;&lt;/div&gt;
+&lt;/div&gt;</pre></div>
+
+
+  <h3 style="font-size:18px;font-weight:600;margin:32px 0 12px 0;">JSON-LD (Custom Code에 붙여넣기)</h3>
+<pre style="background:#1E293B;color:#E2E8F0;padding:16px;border-radius:8px;overflow-x:auto;font-size:12px;line-height:1.5;white-space:pre-wrap;">&lt;script type="application/ld+json"&gt;
+{
+  &quot;@context&quot;: &quot;https://schema.org&quot;,
+  &quot;@type&quot;: &quot;BlogPosting&quot;,
+  &quot;headline&quot;: &quot;외주 업체 비교가 안 될 때, 개발자 없는 팀의 파트너 선정 기준&quot;,
+  &quot;description&quot;: &quot;개발 지식 없이도 외주 업체를 비교하는 기준이 있습니다. 경험·응답 구체성·견적 항목으로 업체를 가려내고, 미팅 질문 3가지로 역량을 확인한 뒤 계약서 세 항목만 짚으면 됩니다.&quot;,
+  &quot;datePublished&quot;: &quot;2026-04-16&quot;,
+  &quot;dateModified&quot;: &quot;2026-04-16&quot;,
+  &quot;author&quot;: {
+    &quot;@type&quot;: &quot;Person&quot;,
+    &quot;name&quot;: &quot;박민재&quot;
+  },
+  &quot;publisher&quot;: {
+    &quot;@type&quot;: &quot;Organization&quot;,
+    &quot;name&quot;: &quot;위시켓&quot;,
+    &quot;url&quot;: &quot;https://www.wishket.com&quot;
+  },
+  &quot;mainEntityOfPage&quot;: {
+    &quot;@type&quot;: &quot;WebPage&quot;
+  },
+  &quot;keywords&quot;: &quot;개발외주&quot;,
+  &quot;articleSection&quot;: &quot;IT 아웃소싱&quot;,
+  &quot;hasPart&quot;: [
+    {
+      &quot;@type&quot;: &quot;WebPageElement&quot;,
+      &quot;name&quot;: &quot;개발을 모르는데 업체를 비교할 기준이 있나요?&quot;,
+      &quot;url&quot;: &quot;#개발을-모르는데-업체를-비교할-기준이-있나요&quot;
+    },
+    {
+      &quot;@type&quot;: &quot;WebPageElement&quot;,
+      &quot;name&quot;: &quot;미팅에서 업체에게 어떤 질문을 해야 하나요?&quot;,
+      &quot;url&quot;: &quot;#미팅에서-업체에게-어떤-질문을-해야-하나요&quot;
+    },
+    {
+      &quot;@type&quot;: &quot;WebPageElement&quot;,
+      &quot;name&quot;: &quot;계약서에서 꼭 확인해야 할 부분은 뭔가요?&quot;,
+      &quot;url&quot;: &quot;#계약서에서-꼭-확인해야-할-부분은-뭔가요&quot;
+    },
+    {
+      &quot;@type&quot;: &quot;WebPageElement&quot;,
+      &quot;name&quot;: &quot;비교 기준이 생기면 선택은 어렵지 않습니다&quot;,
+      &quot;url&quot;: &quot;#비교-기준이-생기면-선택은-어렵지-않습니다&quot;
+    }
+  ]
+}
+&lt;/script&gt;
+&lt;script type="application/ld+json"&gt;
+{
+  &quot;@context&quot;: &quot;https://schema.org&quot;,
+  &quot;@type&quot;: &quot;FAQPage&quot;,
+  &quot;mainEntity&quot;: [
+    {
+      &quot;@type&quot;: &quot;Question&quot;,
+      &quot;name&quot;: &quot;외주 업체 포트폴리오는 어떻게 봐야 하나요?&quot;,
+      &quot;acceptedAnswer&quot;: {
+        &quot;@type&quot;: &quot;Answer&quot;,
+        &quot;text&quot;: &quot;화면이 예쁜지보다 우리 프로젝트와 기능 범위가 비슷한 사례가 있는지를 먼저 봐야 합니다. 예를 들어 회원 가입·결제·매칭 기능이 필요한 서비스라면, 포트폴리오에 단순 홈페이지만 있는 업체는 적합하지 않을 수 있어요. &#x27;이 포트폴리오 프로젝트에서 어떤 기능이 가장 구현하기 어려웠나요?&#x27;라고 물어봤을 때 구체적으로 답하는 업체가 실제 경험이 있는 곳입니다. IT를 모르는 상태에서 기술적 유사성을 직접 판단하기보다, 비슷한 규모와 기능의 사례를 직접 물어보는 방식이 더 현실적입니다.&quot;
+      }
+    },
+    {
+      &quot;@type&quot;: &quot;Question&quot;,
+      &quot;name&quot;: &quot;업체마다 견적 항목이 달라서 비교가 안 될 때 어떻게 해야 하나요?&quot;,
+      &quot;acceptedAnswer&quot;: {
+        &quot;@type&quot;: &quot;Answer&quot;,
+        &quot;text&quot;: &quot;견적서 금액보다 먼저 포함 항목을 맞춰야 합니다. 기획·디자인·서버 설정·QA(테스트)가 포함됐는지 업체별로 체크하면, 같은 기능 범위인데도 견적이 두 배 이상 벌어지는 이유가 보입니다. 항목을 맞춘 뒤에도 금액 차이가 크다면, &#x27;이 기능에서 추가 비용이 생길 수 있는 상황이 있나요?&#x27;라고 물어보세요. 조건을 솔직하게 설명하는 업체가 나중에 범위 분쟁이 덜 생깁니다. 위시켓 매니저에게 견적 항목 비교 지원을 요청할 수도 있습니다.&quot;
+      }
+    },
+    {
+      &quot;@type&quot;: &quot;Question&quot;,
+      &quot;name&quot;: &quot;계약서에서 하자보수 기간이 길수록 유리한 건가요?&quot;,
+      &quot;acceptedAnswer&quot;: {
+        &quot;@type&quot;: &quot;Answer&quot;,
+        &quot;text&quot;: &quot;기간보다 범위가 더 중요합니다. 하자보수는 개발사가 실수로 만든 버그를 무상으로 고쳐주는 것이고, 기능을 바꾸거나 새로 추가하는 것은 유지보수로 별도 비용입니다. 계약서에 &#x27;납품 후 수정 지원&#x27;이라고만 적혀 있으면 범위가 모호해 분쟁이 생길 수 있어요. 하자보수 기간과 함께 &#x27;어떤 범위의 문제를 무상으로 처리하는지&#x27;가 명확히 적혀 있는지 확인해야 합니다. 위시켓 표준계약서는 하자보수 범위를 개발사 귀책 버그로 명시하고 있어 이 혼동을 줄일 수 있습니다.&quot;
+      }
+    },
+    {
+      &quot;@type&quot;: &quot;Question&quot;,
+      &quot;name&quot;: &quot;개발사가 프로젝트 도중 이탈하면 어떻게 해야 하나요?&quot;,
+      &quot;acceptedAnswer&quot;: {
+        &quot;@type&quot;: &quot;Answer&quot;,
+        &quot;text&quot;: &quot;계약 전에 두 가지를 확인하면 이탈 피해를 줄일 수 있습니다. 하나는 서버·도메인·소스코드를 우리 회사 명의와 계정으로 관리하도록 계약서에 명시하는 것입니다. 개발사 계정으로 만들어두면 관계가 끊겼을 때 통제권을 가져오기 어렵습니다. 다른 하나는 대금을 단계별로 지급하는 구조로 협의하는 것입니다. 전체를 선금으로 지급하면 이탈 시 회수가 어렵습니다. 위시켓에서 계약한 프로젝트는 대금이 에스크로 방식으로 보관되어 검수 승인 후 파트너에게 지급되기 때문에 이런 리스크를 줄일 수 있습니다.&quot;
+      }
+    }
+  ]
+}
+&lt;/script&gt;</pre>
+
+</div>
+
+<script>
+// contenteditable 변경 감지 + localStorage 자동저장
+var content = document.getElementById('cms-content');
+var status = document.getElementById('edit-status');
+var saveTimer;
+var STORAGE_KEY = 'wishket_draft_' + document.title.replace(/[^a-zA-Z0-9가-힣]/g, '_').substring(0, 60);
+var VERSION_KEY = STORAGE_KEY + '_ver';
+var CURRENT_VERSION = '2026-04-16';
+
+window.addEventListener('load', function() {
+  var saved = localStorage.getItem(STORAGE_KEY);
+  var savedVer = localStorage.getItem(VERSION_KEY);
+  if (saved && savedVer === CURRENT_VERSION) { content.innerHTML = saved; }
+  else { localStorage.removeItem(STORAGE_KEY); }
+  attachLinkHandlers();
+});
+
+content.addEventListener('input', function() {
+  status.textContent = '편집 중 (미저장)';
+  status.className = 'modified';
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(function() {
+    localStorage.setItem(STORAGE_KEY, content.innerHTML);
+    localStorage.setItem(VERSION_KEY, CURRENT_VERSION);
+    status.textContent = '자동저장됨';
+    status.className = '';
+  }, 3000);
+});
+
+function attachLinkHandlers() {
+  document.querySelectorAll('[contenteditable] a').forEach(function(a) {
+    a.addEventListener('click', function(e) {
+      if (e.metaKey || e.ctrlKey) { window.open(a.href, '_blank'); }
+    });
+    if (a.title.indexOf('Cmd+클릭') === -1) {
+      a.title = (a.title || '') + ' (Cmd+클릭으로 열기)';
+    }
+  });
+}
+
+function copyContent() {
+  var clone = content.cloneNode(true);
+  clone.querySelectorAll('.image-guide, table.image-guide, table.guide-box').forEach(function(el) { el.remove(); });
+  var text = clone.innerText;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(function() {
+      var btn = document.getElementById('copy-btn');
+      btn.textContent = '복사됨!';
+      setTimeout(function() { btn.textContent = '본문 복사'; }, 2000);
+    });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    var btn = document.getElementById('copy-btn');
+    btn.textContent = '복사됨!';
+    setTimeout(function() { btn.textContent = '본문 복사'; }, 2000);
+  }
+}
+
+function copyCodeBlock(btn) {
+  var pre = btn.parentElement.nextElementSibling;
+  if (!pre) return;
+  var text = pre.textContent;
+  navigator.clipboard.writeText(text).then(function() {
+    btn.textContent = '복사됨!';
+    setTimeout(function() { btn.textContent = '복사'; }, 2000);
+  });
+}
+
+window.addEventListener('beforeunload', function(e) {
+  if (status.className === 'modified') {
+    e.preventDefault();
+    e.returnValue = '';
+  }
+});
+</script>
+
+</body>
+</html>
