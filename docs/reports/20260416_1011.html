@@ -779,7 +779,7 @@ tr.vol-low td{color:var(--text-dim)}tr.vol-low td:first-child{font-weight:400}
   <div class="hero-stats">
     <div class="hero-stat"><div class="hero-stat-value" style="color:var(--hub)">1</div><div class="hero-stat-label">Hub</div></div>
     <div class="hero-stat"><div class="hero-stat-value" style="color:var(--sub1)">3</div><div class="hero-stat-label">Sub</div></div>
-    <div class="hero-stat"><div class="hero-stat-value" style="color:var(--accent)">14</div><div class="hero-stat-label">총 섹션</div></div>
+    <div class="hero-stat"><div class="hero-stat-value" style="color:var(--accent)">12</div><div class="hero-stat-label">총 섹션</div></div>
     <div class="hero-stat"><div class="hero-stat-value" style="color:var(--sub2)">8</div><div class="hero-stat-label">페인포인트</div></div>
   </div>
 </div>
@@ -812,7 +812,7 @@ tr.vol-low td{color:var(--text-dim)}tr.vol-low td:first-child{font-weight:400}
 <div class="inner-tabs">
   <button class="inner-tab active" data-color="hub" onclick="switchInner('jm-hub',this)">Hub: 개발자가 없는 중소기업이 웹서비스 외...</button>
   
-  <button class="inner-tab" data-color="sub1" onclick="switchInner('jm-sub1',this)">Sub 1: 웹서비스 외주를 프리랜서·에이전시...</button>
+  <button class="inner-tab" data-color="sub1" onclick="switchInner('jm-sub1',this)">Sub 1: 웹서비스 외주를 맡길 때, 누구에...</button>
   
   <button class="inner-tab" data-color="sub2" onclick="switchInner('jm-sub2',this)">Sub 2: 웹서비스 외주 비용이 왜 차이나고...</button>
   
@@ -829,62 +829,52 @@ tr.vol-low td{color:var(--text-dim)}tr.vol-low td:first-child{font-weight:400}
         <div class="stb-overline" style="color:var(--hub)">Hub &mdash; 메인 콘텐츠</div>
         <div class="stb-question">개발자가 없는 중소기업이 웹서비스 외주를 처음 시작할 때, 기획서 없이 어디서부터 무엇을 준비해야 하나요?</div>
         <div class="stb-tags">
-          <span class="stb-tag" style="background:var(--hub-light);color:var(--hub)">5 steps</span>
+          <span class="stb-tag" style="background:var(--hub-light);color:var(--hub)">3 steps</span>
           <span class="stb-tag" style="background:var(--hub-light);color:var(--hub)">&rarr; sub_route_comparison</span><span class="stb-tag" style="background:var(--hub-light);color:var(--hub)">&rarr; sub_budget_data</span>
         </div>
       </div>
     </div>
     
-    <div class="reasoning-box rb-hub"><div class="rb-label">Flow Reasoning</div><div class="rb-text">독자의 첫 막힘은 '기획서가 없는데 시작할 수 있는가'이다. 이 장벽이 해소되어야 다음 단계(어떤 경로로, 얼마가 드는지, 누구에게)로 넘어갈 수 있다. AI 3개가 공통으로 요구사항 정의를 첫 번째로 제시하고, 경쟁글도 기획 부재 장벽 해소를 앞부분에 배치한다는 점에서 h1 배치는 데이터와 독자 흐름이 일치한다. 그 다음은 '어떤 방식(경로)으로 진행하느냐'가 예산 이해보다 앞에 와야 한다 — 경로를 이해해야 예산 단위와 관리 방식이 달라지기 때문이다. AI 응답이 예산을 경로보다 먼저 제시하지만, context.json의 dont 규칙('예산 구간별로 방식을 단정하지 않는다')에 따라 경로 이해 후 예산 기준점을 잡는 순서가 더 올바르다. 파트너 선정 기준은 경로를 정한 뒤 실행 단계에서 나오는 질문이고, 계약 조항은 선정 이후의 마지막 막힘이다. 마지막 노드는 정보 격차가 아니라 '이 업체를 믿고 계약해도 되는가'라는 감정적 장벽을 다루며, 소스코드 지재권·하자보수·서버 명의 3가지를 클라이언트가 직접 확인할 수 있는 수준으로 구체화한다.</div></div>
+    <div class="reasoning-box rb-hub"><div class="rb-label">Flow Reasoning</div><div class="rb-text">독자의 첫 막힘은 '기획서가 없는데 시작할 수 있는가'이다. 이 장벽이 해소되어야 다음 단계로 넘어갈 수 있다. AI 3개가 공통으로 요구사항 정의를 첫 번째로 제시하고, 경쟁글도 기획 부재 장벽 해소를 앞부분에 배치한다는 점에서 h1 배치는 데이터와 독자 흐름이 일치한다. 두 번째 막힘은 '어디에 맡겨야 하는가'인데, 마케터 피드백에 따라 이를 '주체(프리랜서 vs 에이전시)'와 '계약 방식(직접 계약 vs 플랫폼을 통한 계약)'이라는 두 가지 독립 축으로 이해시키는 방향으로 재구성했다. 이 두 축은 별개라는 것을 먼저 알아야 실제 선택이 가능하다. Gemini가 3회 모두 외주 경로 비교를 핵심 단계로 제시하고, 경쟁글 missing_angle에서 '예산·리스크 축 비교 콘텐츠가 없다'고 지목한다는 점이 h2 독립 노드의 필요성을 뒷받침한다. 세 번째 노드(h3)는 마케터 요청에 따라 비용 중심이 아니라 '선택지를 정했을 때 실제 진행이 어떻게 흘러가는지, 그 시작에서 무엇을 준비해야 하는지'로 방향을 잡았다. 비용·파트너 선정·계약은 진행 흐름 안에서 자연스럽게 언급하는 수준으로 처리한다. 이 구조는 기존 h4(파트너 선정)와 h5(계약 조항)를 독립 노드로 유지하지 않고 h3 흐름 안에서 녹이는 방식이다.</div></div>
     
   </div>
 
-  <div class="section-scroll"><div class="map-grid c-hub" style="grid-template-columns:var(--row-label-w) repeat(5,var(--col-w))">
+  <div class="section-scroll"><div class="map-grid c-hub" style="grid-template-columns:var(--row-label-w) repeat(3,var(--col-w))">
   
   <div class="rl" style="min-height:auto">&#x1F3F7;&#xFE0F; Stage</div>
-  <div class="stage-cell"><div class="stage-pill">H1</div></div><div class="stage-cell"><div class="stage-pill">H2</div></div><div class="stage-cell"><div class="stage-pill">H3</div></div><div class="stage-cell"><div class="stage-pill">H4</div></div><div class="stage-cell"><div class="stage-pill">H5</div></div>
+  <div class="stage-cell"><div class="stage-pill">H1</div></div><div class="stage-cell"><div class="stage-pill">H2</div></div><div class="stage-cell"><div class="stage-pill">H3</div></div>
   <div class="rl" style="min-height:auto">&#x1F4C8; 감정</div>
-  <div class="emotion-strip"><svg class="emotion-svg" viewBox="0 0 1300 150" preserveAspectRatio="none">
+  <div class="emotion-strip"><svg class="emotion-svg" viewBox="0 0 780 150" preserveAspectRatio="none">
 <rect x="0" y="0" width="260" height="150" fill="rgba(231,76,60,.04)" rx="4"/>
 <rect x="260" y="0" width="260" height="150" fill="rgba(243,156,18,.04)" rx="4"/>
-<rect x="520" y="0" width="260" height="150" fill="rgba(243,156,18,.04)" rx="4"/>
-<rect x="780" y="0" width="260" height="150" fill="rgba(231,76,60,.04)" rx="4"/>
-<rect x="1040" y="0" width="260" height="150" fill="rgba(46,204,113,.04)" rx="4"/>
+<rect x="520" y="0" width="260" height="150" fill="rgba(46,204,113,.04)" rx="4"/>
 <text x="130" y="90" text-anchor="middle" style="font-size:18px">😯</text>
 <circle cx="130" cy="110" r="6" fill="var(--emotion-low)"/>
 <text x="130" y="128" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-low)">막막</text>
 <text x="130" y="146" text-anchor="middle" class="emotion-sublabel">기획서가 없어도?</text>
 <text x="390" y="55" text-anchor="middle" style="font-size:18px">🤔</text>
 <circle cx="390" cy="75" r="6" fill="var(--emotion-mid)"/>
-<text x="390" y="93" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-mid)">답답</text>
-<text x="390" y="146" text-anchor="middle" class="emotion-sublabel">웹서비스 외주를?</text>
-<text x="650" y="55" text-anchor="middle" style="font-size:18px">🤔</text>
-<circle cx="650" cy="75" r="6" fill="var(--emotion-mid)"/>
-<text x="650" y="93" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-mid)">갈팡질팡</text>
-<text x="650" y="146" text-anchor="middle" class="emotion-sublabel">웹서비스 외주 ?</text>
-<text x="910" y="90" text-anchor="middle" style="font-size:18px">😯</text>
-<circle cx="910" cy="110" r="6" fill="var(--emotion-low)"/>
-<text x="910" y="128" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-low)">불안</text>
-<text x="910" y="146" text-anchor="middle" class="emotion-sublabel">개발자 없이 파?</text>
-<text x="1170" y="20" text-anchor="middle" style="font-size:18px">😌</text>
-<circle cx="1170" cy="40" r="6" fill="var(--emotion-high)"/>
-<text x="1170" y="58" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-high)">안심</text>
-<text x="1170" y="146" text-anchor="middle" class="emotion-sublabel">계약 전에 반드?</text>
+<text x="390" y="93" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-mid)">관망</text>
+<text x="390" y="146" text-anchor="middle" class="emotion-sublabel">프리랜서와 에이?</text>
+<text x="650" y="20" text-anchor="middle" style="font-size:18px">😌</text>
+<circle cx="650" cy="40" r="6" fill="var(--emotion-high)"/>
+<text x="650" y="58" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-high)">안심</text>
+<text x="650" y="146" text-anchor="middle" class="emotion-sublabel">외주 방식을 정?</text>
 </svg></div>
   <div class="rl">&#x1F4AD; 상태</div>
-  <div class="dc state-cell">사업에 필요한 웹서비스를 만들어야 한다는 건 알겠는데, 기획서 하나 없이 업체에 연락하는 게 맞는 건지 몰라서 아무것도 못 하고 막막한 상태다</div><div class="dc state-cell">핵심 기능 목록은 어느 정도 정리했는데, 프리랜서에게 맡길지 개발사에 줄지 위시켓 같은 플랫폼을 쓸지 — 어떤 경로가 있는지도, 내 상황에 어떤 게 맞는지도 모르겠다</div><div class="dc state-cell">경로는 어느 정도 방향을 잡았는데, 우리 프로젝트에 예산을 얼마나 잡아야 하는지 기준점이 없어서 내부 보고나 예산 책정이 안 된다</div><div class="dc state-cell">예산 범위는 어느 정도 잡았는데, 포트폴리오를 봐도 좋은 건지 나쁜 건지 판단이 안 서고, 미팅에서 무엇을 물어봐야 할지도 몰라서 결국 '느낌이 좋아서' 고르게 될 것 같아 불안하다</div><div class="dc state-cell">파트너는 한 곳으로 좁혔는데, 계약서를 받아보니 이게 맞는 건지 모르겠고 특히 소스코드를 받을 수 있는지, 나중에 문제가 생기면 어떻게 되는지가 불안하다</div>
+  <div class="dc state-cell">사업에 필요한 웹서비스를 만들어야 한다는 건 알겠는데, 기획서 하나 없이 업체에 연락하는 게 맞는 건지 몰라서 아무것도 못 하고 막막한 상태다</div><div class="dc state-cell">핵심 기능 목록은 어느 정도 정리했는데, 누구에게 맡겨야 하는지(프리랜서인지 에이전시인지)와 어떤 방식으로 계약하는지(직접 찾는지 플랫폼을 통하는지)가 별개 문제라는 걸 몰라서 '업체 종류'를 하나의 축으로만 생각하고 있다</div><div class="dc state-cell">어떤 조합으로 갈지 방향을 잡았는데, 그 다음에 실제로 어떤 순서로 일이 진행되는지, 지금 당장 내가 무엇을 준비해야 하는지 흐름이 안 보인다</div>
   <div class="rl q-label">&#x2753; 질문</div>
-  <div class="dc q">기획서가 없어도 외주 업체에 연락할 수 있나요?</div><div class="dc q">웹서비스 외주를 맡길 때 어떤 경로가 있고 어떤 기준으로 골라야 하나요?</div><div class="dc q">웹서비스 외주 비용이 얼마나 드는지 어떻게 가늠하나요?</div><div class="dc q">개발자 없이 파트너를 고를 때 무엇을 기준으로 판단해야 하나요?</div><div class="dc q">계약 전에 반드시 확인해야 할 조항이 뭔가요?</div>
+  <div class="dc q">기획서가 없어도 외주 업체에 연락할 수 있나요?</div><div class="dc q">프리랜서와 에이전시 중 누구에게 맡기는지, 직접 계약하는지 플랫폼을 통하는지는 서로 다른 선택인가요?</div><div class="dc q">외주 방식을 정했으면 그 다음에 어떻게 진행이 이루어지나요? 내가 준비해야 할 것은 무엇인가요?</div>
   <div class="rl">&#x1F4A1; 핵심 답변</div>
-  <div class="dc">기획서가 없어도 핵심 기능 3~5개와 참고할 서비스 URL만 있으면 첫 미팅이 가능하다. 정식 기획서(와이어프레임, 화면 설계서)는 미팅 이후 파트너와 함께 구체화하는 것이지, 미팅에 들어가기 위한 입장권이 아니다. 단, 아무 준비 없이 '만들고 싶다'만 가져가면 업체마다 다른 범위를 가정해 비교 불가능한 견적이 나오므로, 핵심 기능 목록과 예산 상한선은 미리 정리해 가야 한다.</div><div class="dc">외주 경로는 크게 프리랜서, 개발 에이전시, IT 특화 매칭 플랫폼 세 가지로 나뉜다. 프리랜서는 단순한 기능 구현에 빠르고 유연하지만 인력 한 명에 의존하는 구조라 관리 여력이 없으면 리스크가 크다. 에이전시는 팀 단위로 체계적이지만 소통 구조가 복잡하고 비용이 높은 편이다. IT 특화 플랫폼은 파트너 풀이 크고 계약·대금 보호 체계가 있어 외주 경험이 없는 팀에 적합하다. 선택 기준은 예산이 아니라 내부 관리 역량과 외주 경험이다 — 처음이라면 플랫폼을 통해 매니저 지원을 받으면서 진행하는 방식이 리스크를 낮추는 첫 번째 방법이다.</div><div class="dc">웹서비스 외주 비용은 '기능 복잡도 × 투입 인력 × 개발 기간'으로 결정되기 때문에 절대적인 정답이 없다. 다만 비슷한 규모의 프로젝트가 어느 범위에서 진행됐는지를 기준점으로 삼을 수 있다. 중요한 것은 개발비가 전부가 아니라는 점이다 — 서버 운영비, 도메인, 외부 기능 연동비, 유지보수비가 별도로 발생하며, 이 항목들이 견적에 포함됐는지 반드시 확인해야 한다.</div><div class="dc">파트너를 고를 때 기술 역량을 직접 평가하려 하면 tech_foggy 독자는 판단이 불가능하다. 대신 비슷한 유형의 프로젝트를 해봤는지, 미팅에서 요구사항을 들었을 때 질문이 구체적인지, 커뮤니케이션 응답 속도가 빠른지를 본다. 이 세 가지는 기술 지식 없이도 확인할 수 있는 기준이다. 판단이 어려우면 IT 특화 플랫폼에서 매니저 상담을 통해 적합한 파트너를 추천받는 방법이 가장 현실적이다.</div><div class="dc">개발자 없는 팀이 계약 시 가장 많이 놓치는 것은 세 가지다. 첫째, 소스코드를 포함한 지재권이 우리 쪽으로 양도되는지 — 이것이 빠지면 나중에 파트너 없이는 아무것도 할 수 없다. 둘째, 하자보수 기간이 얼마이고 어떤 경우에 해당하는지 — 하자보수는 개발사 귀책 버그에만 해당하고, 기능 변경은 유지보수(유상)로 별도 계약이다. 셋째, 서버·도메인이 우리 회사 명의로 생성되는지 — 파트너 명의로 만들어지면 관계가 끝날 때 통제권을 잃는다. 위시켓 표준계약서는 이 세 가지 조항이 포함되어 있어, 계약 시 표준계약서 사용 여부를 확인하는 것이 가장 빠른 방법이다.</div>
+  <div class="dc">기획서가 없어도 핵심 기능 3~5개와 참고할 서비스 URL만 있으면 첫 미팅이 가능하다. 정식 기획서(와이어프레임, 화면 설계서)는 미팅 이후 파트너와 함께 구체화하는 것이지, 미팅에 들어가기 위한 입장권이 아니다. 단, 아무 준비 없이 '만들고 싶다'만 가져가면 업체마다 다른 범위를 가정해 비교 불가능한 견적이 나오므로, 핵심 기능 목록과 예산 상한선은 미리 정리해 가야 한다.</div><div class="dc">외주를 결정할 때 두 가지 축이 따로 존재한다. 하나는 누구에게 맡길지 — 프리랜서(개인)인지, 여러 사람이 팀을 이룬 개발 에이전시인지. 다른 하나는 어떤 방식으로 연결할지 — 직접 찾아서 계약하는지, IT 매칭 플랫폼을 통해 계약하는지. 이 두 축은 별개이기 때문에 '플랫폼을 통해 에이전시와 계약'할 수도 있고 '직접 찾은 프리랜서와 계약'할 수도 있다. 두 축의 차이를 이해하고 나면, 내 상황에 어떤 조합이 맞는지를 기준으로 고를 수 있다.</div><div class="dc">외주 진행은 크게 '의뢰 → 파트너 탐색·선정 → 계약 → 개발 진행 → 검수·인수인계'의 흐름으로 이루어진다. 시작 단계에서 클라이언트가 준비해야 할 것은 핵심 기능 목록, 참고 서비스, 예산 상한선 — 이 세 가지다. 파트너를 고를 때는 기술 역량을 직접 평가하려 하기보다, 비슷한 프로젝트 경험이 있는지와 요구사항을 들었을 때 구체적인 질문이 돌아오는지를 확인하면 된다. 계약 시에는 소스코드 지재권 양도, 하자보수 범위(개발사 귀책 버그에 한해 무상, 기능 변경은 별도 유상), 서버·도메인의 클라이언트 명의 생성 — 이 세 항목이 계약서에 명시되어 있는지 반드시 확인한다. 플랫폼을 통해 진행하면 매니저가 의뢰 접수부터 계약까지 함께하기 때문에, 이 흐름 전체를 혼자 처리하지 않아도 된다.</div>
   <div class="rl">&#x25B6;&#xFE0F; 도전</div>
-  <div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 만들고 싶은 웹서비스의 핵심 기능을 메모지에 3~5개 적고, 참고하고 싶은 서비스 주소를 2~3개 찾아본다</div></div><div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 세 가지 경로의 특징을 정리해보고 우리 팀의 관리 역량(외주 경험, 내부 담당자 여부)에 비춰 한 가지를 고른다</div></div><div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 비슷한 기능을 가진 프로젝트 사례를 찾아보고 우리 프로젝트의 예산 범위를 어림잡아 본다</div></div><div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 파트너 후보 2~3곳에 '비슷한 프로젝트를 해보신 적 있나요?', '개발 중 진행 상황은 어떻게 공유해주시나요?'라고 물어본다</div></div><div class="dc try-row"><span style="color:var(--text-dim);font-size:11px">&mdash;</span></div>
+  <div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 만들고 싶은 웹서비스의 핵심 기능을 메모지에 3~5개 적고, 참고하고 싶은 서비스 주소를 2~3개 찾아본다</div></div><div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 프리랜서와 에이전시의 차이, 직접 계약과 플랫폼 계약의 차이를 각각 정리해보고 우리 팀이 어느 조합에서 더 안전하게 진행할 수 있을지 생각해본다</div></div><div class="dc try-row"><span style="color:var(--text-dim);font-size:11px">&mdash;</span></div>
   <div class="rl">&#x2716; 다음 문제</div>
-  <div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 기능 목록을 쓰려고 해봤는데 어디까지가 핵심이고 어디부터가 부수적인지 구분이 안 되고, 쓰다 보면 기능이 너무 많아지거나 너무 막연해진다</div></div><div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 경로는 정했는데, 그래서 실제로 비용이 얼마나 드는지 감이 없다 — 같은 웹서비스인데도 업체마다 금액이 천차만별이고 어떤 게 적정인지 모르겠다</div></div><div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 사례를 찾아봤는데 우리 프로젝트가 어느 규모에 해당하는지 판단이 안 서고, 예산을 정했더라도 그게 맞는 파트너를 어떻게 찾는지도 모르겠다</div></div><div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 미팅을 했는데 파트너가 '다 할 수 있다'고 하면서도 질문이 거의 없었다 — 이게 좋은 건지 나쁜 건지 판단이 안 서고, 계약 전에 마지막으로 꼭 확인해야 할 것이 뭔지 모르겠다</div></div><div class="dc block-row"><span style="color:var(--text-dim);font-size:11px">&mdash;</span></div>
+  <div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 기능 목록을 쓰려고 해봤는데 어디까지가 핵심이고 어디서부터가 부수적인지 구분이 안 되고, 쓰다 보면 기능이 너무 많아지거나 너무 막연해진다</div></div><div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 두 축의 차이는 이해했는데, 그래서 첫 외주에 개발자도 없는 우리 팀에 어떤 조합이 실제로 맞는지, 각 선택에서 일이 어떻게 흘러가는지 구체적인 그림이 없다</div></div><div class="dc block-row"><span style="color:var(--text-dim);font-size:11px">&mdash;</span></div>
   <div class="rl basis-label">&#x1F4CE; 근거</div>
-  <div class="dc basis-cell">포인트 질문이 '어디서부터 시작'으로 시작하므로 이 막힘이 첫 노드다. AI 3개 공통으로 요구사항 정의를 1단계에 배치하고, 경쟁글도 기획 부재 장벽 해소를 앞부분에 배치한다. context.json의 독자 오해 1번이 '기획서를 완성해야 업체를 찾을 수 있다'이므로 이 노드에서 먼저 해소해야 다음으로 넘어갈 수 있다.</div><div class="dc basis-cell">기능 목록을 정리한 독자가 다음으로 부딪히는 것은 '어디에 맡겨야 하는가'다. 이 결정이 예산 규모와 관리 방식을 결정하기 때문에 예산 노드(h3) 앞에 온다. Gemini가 3회 모두 외주 경로 3가지 비교를 핵심 단계로 제시하고, 경쟁글 missing_angle에서 '예산·리스크 축 비교 콘텐츠가 없다'고 지목한다는 점이 이 노드의 독립적 위치를 뒷받침한다.</div><div class="dc basis-cell">경로를 정한 뒤에 자연스럽게 나오는 질문이 '얼마가 드는가'이다. PAA에서 '비용은 어떻게 산정되나요'가 상위 질문으로 등장하고, AI 3개 모두 예산 수립을 초기 단계에 포함한다. context.json의 confusion_pair '개발비 ≠ 총비용'이 이 노드에서 반드시 다뤄져야 할 내용이다.</div><div class="dc basis-cell">파트너 선정은 예산 범위를 잡은 뒤에 실행하는 단계다. AI 3개 모두 포트폴리오·커뮤니케이션을 선정 기준으로 나열하지만, context.json의 dont 규칙('비개발자에게 아키텍처·기술 스택 확인을 권유하지 않는다')에 따라 비개발자가 실행 가능한 기준으로 재구성한다. AI missing_angle 3개 공통으로 '비개발자의 내부 의사결정 역할 설정'이 누락되어 있으나, 이 글의 범위는 계약 전까지이므로 깊이 있는 관리 역할 설정은 기발행 글(클라이언트 역할 편)로 연결한다.</div><div class="dc basis-cell">파트너 선정 후 남는 마지막 장벽은 계약 리스크에 대한 불안이다. 이 노드는 정보 격차가 아니라 '이 계약을 믿고 사인해도 되는가'라는 감정적 막힘을 해소한다. context.json의 confusion_pair '하자보수 ≠ 유지보수', reader_misconception '소스코드는 당연히 받을 수 있다', dont 규칙 '서버·도메인을 개발사가 세팅해주는 것이 일반적이라고 쓰지 않는다'가 모두 이 노드에서 다뤄져야 할 내용으로 수렴한다.</div>
+  <div class="dc basis-cell">포인트 질문이 '어디서부터 시작'으로 시작하므로 이 막힘이 첫 노드다. AI 3개 공통으로 요구사항 정의를 1단계에 배치하고, 경쟁글도 기획 부재 장벽 해소를 앞부분에 배치한다. context.json의 독자 오해 1번이 '기획서를 완성해야 업체를 찾을 수 있다'이므로 이 노드에서 먼저 해소해야 다음으로 넘어갈 수 있다.</div><div class="dc basis-cell">기능 목록을 정리한 독자가 다음으로 부딪히는 것은 '어디에 맡겨야 하는가'이다. Gemini가 3회 모두 외주 형태 비교를 핵심 단계로 제시하고, 경쟁글 missing_angle에서 '예산·리스크 축 비교 콘텐츠가 없다'고 지목한다. 마케터 피드백에서 주체(프리랜서·에이전시)와 계약 방식(직접·플랫폼)을 별개 축으로 다루는 구조가 더 자연스럽다고 확인했다.</div><div class="dc basis-cell">경로와 방식을 정한 뒤의 자연스러운 다음 질문은 '그래서 실제로 어떻게 되는가'이다. 마케터 피드백에서 h3은 비용 가늠 중심이 아니라 진행 흐름과 준비물 중심으로 방향을 잡고, 파트너 선정·계약 조항은 독립 노드로 깊이 다루기보다 흐름 안에서 자연스럽게 언급하는 방향을 요청했다. AI 3개 모두 진행 절차를 핵심 단계로 제시하고 있으며, context.json의 confusion_pair '하자보수 ≠ 유지보수', reader_misconception '소스코드는 당연히 받을 수 있다', dont 규칙 '서버·도메인을 개발사가 세팅해주는 것이 일반적이라고 쓰지 않는다'가 이 노드 안에서 자연스럽게 처리된다. 마지막 노드로서 '이 구조를 알면 시작할 수 있다'는 안도감으로 마무리되어, 감정적 장벽을 해소한다.</div>
   <div class="rl" style="border-bottom:none">&#x2935;&#xFE0F; 분기</div>
-  <div class="dc branch-cell empty">&mdash;</div><div class="dc branch-cell"><span class="branch-pill" style="background:var(--sub1-light);color:var(--sub1)">&#x2193; sub_route_comparison</span></div><div class="dc branch-cell"><span class="branch-pill" style="background:var(--sub2-light);color:var(--sub2)">&#x2193; sub_budget_data</span></div><div class="dc branch-cell empty">&mdash;</div><div class="dc branch-cell empty">&mdash;</div>
+  <div class="dc branch-cell empty">&mdash;</div><div class="dc branch-cell"><span class="branch-pill" style="background:var(--sub1-light);color:var(--sub1)">&#x2193; sub_route_comparison</span></div><div class="dc branch-cell empty">&mdash;</div>
   </div></div>
 </div>
 
@@ -898,7 +888,7 @@ tr.vol-low td{color:var(--text-dim)}tr.vol-low td:first-child{font-weight:400}
     <span style="color:var(--text-dim)">&rarr;</span>
     <div class="cv-line" style="background:var(--sub1)"></div>
     <span class="cv-label" style="background:#FDF0F0;color:#D94F4F">sub_route_comparison</span>
-    <span class="cv-desc">depth &mdash; 웹서비스 외주를 프리랜서·에이전시·플랫폼 중 어떤 경로로 맡겨야 하나요?</span>
+    <span class="cv-desc">depth &mdash; 웹서비스 외주를 맡길 때, 누구에게 맡길지(프리랜서 vs 에이전시)와 어...</span>
   </div></div>
   
 
@@ -907,7 +897,7 @@ tr.vol-low td{color:var(--text-dim)}tr.vol-low td:first-child{font-weight:400}
       <div class="stb-color" style="background:var(--sub1)"></div>
       <div class="stb-content">
         <div class="stb-overline" style="color:var(--sub1)">Sub Content 1 &mdash; depth from h2</div>
-        <div class="stb-question">웹서비스 외주를 프리랜서·에이전시·플랫폼 중 어떤 경로로 맡겨야 하나요?</div>
+        <div class="stb-question">웹서비스 외주를 맡길 때, 누구에게 맡길지(프리랜서 vs 에이전시)와 어떻게 계약할지(직접 vs 플랫폼)는 어떻게 다른가요?</div>
         <div class="stb-tags">
           <span class="stb-tag" style="background:#FDF0F0;color:#D94F4F">3 steps</span>
           <span class="stb-tag" style="background:#FDF0F0;color:#D94F4F">source: depth</span>
@@ -915,14 +905,14 @@ tr.vol-low td{color:var(--text-dim)}tr.vol-low td:first-child{font-weight:400}
       </div>
     </div>
     
-    <div class="reasoning-box rb-sub1"><div class="rb-label">Selection Reasoning</div><div class="rb-text">hub h2에서 외주 경로 3가지(프리랜서·에이전시·IT 특화 플랫폼)의 선택 기준을 1~2문장으로 요약하는 데 그쳤지만, 실제로 독자가 결정해야 하는 것은 '내 상황에 어떤 경로가 맞는가'라는 판단이다. 관리 역량·외주 경험·프로젝트 규모·예산 상황을 축으로 비교하는 심화 내용은 hub 길이 안에 담기 어렵다. Gemini가 3회 모두 3가지 경로 비교를 핵심 단계로 다뤘고, 경쟁글 missing_angle에서 '예산·리스크 축으로 비교한 콘텐츠가 없다'고 지목한다. 기발행 글에 이 주제 없음을 확인했다.</div></div>
+    <div class="reasoning-box rb-sub1"><div class="rb-label">Selection Reasoning</div><div class="rb-text">hub h2에서 '주체(프리랜서 vs 에이전시)'와 '계약 방식(직접 vs 플랫폼)'이 별개 축이라는 구조를 1~2문장으로 안내하는 데 그쳤지만, 실제로 독자가 결정해야 하는 것은 '내 상황에 어떤 조합이 맞는가'이다. 두 축의 각 선택지가 실제로 어떻게 다른지(인력 규모, 관리 방식, 계약 안전성)를 비교하고, 우리 팀 상황(내부 관리 역량, 외주 경험)에 비춰 조합을 고르는 기준을 심화하는 콘텐츠는 hub 길이 안에 담기 어렵다. Gemini가 3회 모두 경로 비교를 핵심 단계로 다뤘고, 경쟁글 missing_angle에서 '예산·리스크 축 비교 콘텐츠가 없다'고 지목한다. 기발행 글에 이 주제 없음을 확인했다.</div></div>
     
   </div>
 
   <div class="section-scroll"><div class="map-grid c-sub1" style="grid-template-columns:var(--row-label-w) repeat(3,var(--col-w))">
   
   
-  <div class="rl flow-reason-label">흐름 근거</div><div class="dc flow-reason-cell">hub을 읽고 온 독자는 '경로가 세 가지인 건 알겠다'는 상태에서 시작한다. 이 sub의 고유한 막힘은 '그래서 내 상황에 어떤 게 맞는가'다. 판단 기준(관리 역량·프로젝트 규모)을 먼저 이해하고, 각 경로의 실제 진행 경험을 비교하고, 마지막으로 플랫폼 경로에서 위시켓 매니저 지원이 어떻게 판단 부담을 낮추는지로 흐른다. 비개발자가 기술 역량을 스스로 평가하기 어렵다는 capability_limits를 감안해 경로별 비교 기준을 비기술적 언어로 제시한다.</div>
+  <div class="rl flow-reason-label">흐름 근거</div><div class="dc flow-reason-cell">hub을 읽고 온 독자는 '두 축이 별개라는 건 알겠다'는 상태에서 시작한다. 이 sub의 고유 막힘은 '그래서 내 상황에 어느 조합이 맞는가'다. 먼저 프리랜서와 에이전시의 실질 차이(인력 구성, 안정성, 소통 방식)를 이해하고, 다음으로 직접 계약과 플랫폼 계약의 실질 차이(계약 안전성, 매니저 지원, 파트너 풀 접근성)를 비교한다. 마지막으로 두 축의 조합 중 첫 외주 팀에 현실적으로 적합한 선택을 구체적으로 안내한다. context.json의 capability_limits('중간 산출물 검수 불가', '포트폴리오에서 기술적 유사성 판단 불가')를 감안해 관리 역량 기준으로 비교를 구성한다.</div>
   
   <div class="rl" style="min-height:auto">&#x1F3F7;&#xFE0F; Stage</div>
   <div class="stage-cell"><div class="stage-pill">S1_1</div></div><div class="stage-cell"><div class="stage-pill">S1_2</div></div><div class="stage-cell"><div class="stage-pill">S1_3</div></div>
@@ -934,28 +924,28 @@ tr.vol-low td{color:var(--text-dim)}tr.vol-low td:first-child{font-weight:400}
 <text x="130" y="90" text-anchor="middle" style="font-size:18px">😯</text>
 <circle cx="130" cy="110" r="6" fill="var(--emotion-low)"/>
 <text x="130" y="128" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-low)">불안</text>
-<text x="130" y="126" text-anchor="middle" class="emotion-sublabel">프리랜서·에이전?</text>
+<text x="130" y="126" text-anchor="middle" class="emotion-sublabel">프리랜서와 에이?</text>
 <text x="390" y="55" text-anchor="middle" style="font-size:18px">🤔</text>
 <circle cx="390" cy="75" r="6" fill="var(--emotion-mid)"/>
 <text x="390" y="93" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-mid)">관망</text>
-<text x="390" y="126" text-anchor="middle" class="emotion-sublabel">각 경로에서 실?</text>
+<text x="390" y="126" text-anchor="middle" class="emotion-sublabel">직접 개발사를 ?</text>
 <text x="650" y="20" text-anchor="middle" style="font-size:18px">😌</text>
 <circle cx="650" cy="40" r="6" fill="var(--emotion-high)"/>
 <text x="650" y="58" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-high)">안심</text>
 <text x="650" y="126" text-anchor="middle" class="emotion-sublabel">위시켓에 프로젝?</text>
 </svg></div>
   <div class="rl">&#x1F4AD; 상태</div>
-  <div class="dc state-cell">hub에서 경로가 세 가지인 건 알겠는데, 우리 회사 상황에 어느 쪽이 맞는지 판단할 기준이 없어서 결국 '비용이 가장 싼 곳'으로 기울고 있다</div><div class="dc state-cell">담당자가 있어도 개발을 전혀 모르는 상황인데, 경로별로 진행 방식이 어떻게 다른지 — 실제로 어떤 일이 일어나는지 — 를 모르니 선택이 안 된다</div><div class="dc state-cell">위시켓 같은 플랫폼을 통해 진행하기로 방향을 잡았는데, 등록 후 실제로 어떤 순서로 진행되고 매니저가 어디까지 함께하는지 구체적인 그림이 없다</div>
+  <div class="dc state-cell">hub에서 주체와 계약 방식이 별개 축이라는 건 알겠는데, 프리랜서와 에이전시가 실제로 어떻게 다른지 — 우리 팀에 어느 쪽이 맞는지 — 판단할 기준이 없어서 결국 '비용이 싼 곳'으로 기울고 있다</div><div class="dc state-cell">프리랜서와 에이전시의 차이는 어느 정도 이해했는데, 직접 찾아서 계약하는 것과 플랫폼을 통해 계약하는 것이 실제로 어떻게 다른지, 플랫폼을 쓰는 게 더 유리한 상황이 따로 있는지 모르겠다</div><div class="dc state-cell">플랫폼을 통해 진행하기로 방향을 잡았는데, 등록 후 실제로 어떤 순서로 진행되고 매니저가 어디까지 함께하는지 구체적인 그림이 없어서 시작을 못 하고 있다</div>
   <div class="rl q-label">&#x2753; 질문</div>
-  <div class="dc q">프리랜서·에이전시·플랫폼 중 어떤 기준으로 골라야 하나요?</div><div class="dc q">각 경로에서 실제로 어떻게 진행이 이루어지나요?</div><div class="dc q">위시켓에 프로젝트를 등록하면 어떻게 진행되나요?</div>
+  <div class="dc q">프리랜서와 에이전시는 실제로 어떻게 다른가요? 우리 팀에 어느 쪽이 맞는지 어떻게 알 수 있나요?</div><div class="dc q">직접 개발사를 찾아서 계약하는 것과 플랫폼을 통해 계약하는 것은 어떻게 다른가요?</div><div class="dc q">위시켓에 프로젝트를 등록하면 어떻게 진행되나요? 매니저는 어디까지 도와주나요?</div>
   <div class="rl">&#x1F4A1; 핵심 답변</div>
-  <div class="dc">경로 선택의 핵심 기준은 비용이 아니라 내부 관리 역량이다. 외주를 맡기면 내부에서 요구사항을 전달하고, 중간 결과물을 확인하고, 피드백을 주는 역할을 누군가가 맡아야 한다. 이 역할을 담당할 사람이 없거나 외주 경험이 전혀 없다면, 혼자 처리하는 방식(프리랜서)보다 계약·진행 지원이 갖춰진 구조를 선택하는 것이 리스크를 낮추는 첫 번째 판단이다.</div><div class="dc">프리랜서 방식은 개인 한 명과 직접 소통하며 진행하기 때문에 빠르고 유연하지만, 그 사람이 응답하지 않거나 일이 밀리면 클라이언트가 직접 해결해야 한다. 에이전시 방식은 팀이 역할을 나눠 진행하지만 창구가 다층적이어서 소통이 복잡해질 수 있다. IT 특화 플랫폼은 계약·대금 보호 체계가 있어 진행 중 문제가 생기면 매니저가 중재에 들어오는 구조가 있고, 파트너 후보를 비교하면서 선택할 수 있다. 비개발자 팀이 처음 외주를 진행할 때 매니저 지원이 있는 구조를 선택하는 이유가 바로 이 구조적 차이 때문이다.</div><div class="dc">프로젝트를 등록하면 영업일 24시간 이내에 매니저가 연락해 요구사항 정리와 예산 범위 파악을 함께 진행한다. 매니저는 적합한 파트너를 추천하고 미팅에도 함께 참여해 비개발자가 확인하기 어려운 부분을 짚어준다. 계약은 위시켓 표준계약서로 진행되고, 대금은 에스크로 방식으로 보관하다가 검수 완료 후 파트너에게 지급된다. 매니저는 프로젝트 PM이 아니므로 개발 일정·품질 관리는 클라이언트와 파트너의 책임이지만, 계약·대금·분쟁 중재까지 함께하는 구조가 첫 외주 팀에게 실질적인 안전망이 된다.</div>
+  <div class="dc">프리랜서는 개인 한 명이 모든 개발을 담당하기 때문에 소통 창구가 단순하고 일정 조율이 빠르지만, 해당 인력의 기술 범위를 벗어나는 기능이 필요하면 한계가 생기고 중간에 이탈하면 클라이언트가 직접 대응해야 한다. 에이전시는 기획·디자인·개발 역할이 나뉜 팀이 움직이기 때문에 복잡한 기능에 대응하기 유리하지만 소통 구조가 다층적이어서 요구사항이 정확하게 전달되지 않을 수 있다. 선택 기준은 비용이 아니라 프로젝트의 기능 복잡도와 내부 관리 역량이다 — 기능이 단순하고 내부 담당자가 직접 소통을 주도할 수 있으면 프리랜서가, 기능 범위가 복잡하거나 내부 관리 역량이 없으면 팀 단위 에이전시가 더 적합하다.</div><div class="dc">직접 계약은 비용 협상의 유연성이 있지만, 파트너의 신뢰도를 스스로 검증해야 하고 계약서 작성·대금 관리를 처음부터 클라이언트가 주도해야 한다. 플랫폼을 통한 계약은 파트너 풀에서 비교해서 고를 수 있고, 계약·대금 보호 체계가 갖춰져 있으며, 진행 중 문제가 생겼을 때 매니저 중재를 받을 수 있다는 구조적 차이가 있다. 외주 경험이 없는 팀이 플랫폼을 선택하는 가장 큰 이유는 계약서 검토와 대금 보호를 혼자 처리하지 않아도 된다는 점이다.</div><div class="dc">프로젝트를 등록하면 영업일 24시간 이내에 매니저가 연락해 핵심 기능 목록과 예산 범위를 함께 정리하고 적합한 파트너를 추천해준다. 매니저는 미팅에도 함께 참여해 비개발자가 놓치기 쉬운 범위·조건 확인을 지원하고, 계약은 위시켓 표준계약서로 진행되며 대금은 에스크로 방식으로 보관하다가 검수 완료 후 파트너에게 지급된다. 매니저는 개발 일정과 품질 관리를 대신해주는 PM이 아니므로 개발 중 진행 관리는 클라이언트와 파트너의 책임이지만, 계약부터 대금까지 함께하는 구조가 첫 외주 팀에게 실질적인 안전망이 된다.</div>
   <div class="rl">&#x25B6;&#xFE0F; 도전</div>
-  <div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 우리 팀에서 외주 프로젝트를 담당할 사람이 있는지, 그 사람이 개발 진행 중 피드백을 줄 수 있는지를 먼저 확인해본다</div></div><div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 세 가지 경로 중 내부 관리 역량과 프로젝트 규모를 기준으로 우리 상황에 맞는 경로를 한 가지로 좁혀본다</div></div><div class="dc try-row"><span style="color:var(--text-dim);font-size:11px">&mdash;</span></div>
+  <div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 우리 프로젝트의 핵심 기능 목록을 보고, 이 기능들이 한 사람이 구현 가능한 수준인지 아니면 기획·디자인·개발 분업이 필요한 수준인지를 먼저 판단해본다</div></div><div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 우리 팀의 외주 경험과 내부 계약서 검토 역량을 솔직하게 점검해보고, 직접 계약과 플랫폼 계약 중 어느 쪽이 더 안전하게 시작할 수 있는 방식인지 판단해본다</div></div><div class="dc try-row"><span style="color:var(--text-dim);font-size:11px">&mdash;</span></div>
   <div class="rl">&#x2716; 다음 문제</div>
-  <div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 담당자가 있기는 한데, 이 사람이 개발 용어도 모르고 결과물을 어떻게 확인해야 할지도 모른다 — 이런 상황에서도 직접 진행이 가능한 건지 모르겠다</div></div><div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 플랫폼 경로로 기울었는데, 위시켓 같은 플랫폼에 등록하면 실제로 어떤 과정이 진행되는지, 매니저가 어디까지 해주는지 구체적으로 모르겠다</div></div><div class="dc block-row"><span style="color:var(--text-dim);font-size:11px">&mdash;</span></div>
+  <div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 기능 범위 판단은 어느 정도 됐는데, 직접 프리랜서나 에이전시를 찾아서 계약하는 것과 플랫폼을 통해서 계약하는 것의 차이가 뭔지 모르겠다 — 플랫폼을 꼭 써야 하는 이유가 있나요?</div></div><div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 플랫폼 방향으로 기울었는데, 플랫폼에 등록하면 실제로 어떤 순서로 진행이 되고 매니저가 어디까지 함께하는지 구체적인 그림이 없다</div></div><div class="dc block-row"><span style="color:var(--text-dim);font-size:11px">&mdash;</span></div>
   <div class="rl basis-label" style="border-bottom:none">&#x1F4CE; 근거</div>
-  <div class="dc basis-cell" style="border-bottom:none">hub h2에서 경로 개요를 안 독자의 다음 막힘은 '그래서 내 상황에 어느 게 맞는가'이다. context.json의 capability_limits에서 '중간 산출물 검수 불가'가 명시되어 있어 관리 역량이 경로 선택의 핵심 기준임을 뒷받침한다.</div><div class="dc basis-cell" style="border-bottom:none">진행 방식을 알아야 비교가 가능하다. AI 3개 공통으로 '외주 경로 선택 → 실제 진행 과정 이해'의 흐름을 제시하고 있으며, context.json의 confusion_pair '위시켓 매니저의 역할 ≠ PM'을 이 노드에서 선제적으로 다뤄야 한다.</div><div class="dc basis-cell" style="border-bottom:none">경로를 플랫폼으로 좁힌 독자의 마지막 질문은 '그래서 실제로 어떻게 되는가'이다. context.json의 can_claim 항목(매니저 연락, 표준계약서, 에스크로)과 cannot_claim 항목(PM 역할 불가)을 이 노드에서 정확하게 전달해야 하며, terminology의 '위시켓이 프로젝트를 관리합니다 → 위시켓 매니저가 계약까지 함께합니다'가 stance에 반영되어야 한다.</div>
+  <div class="dc basis-cell" style="border-bottom:none">hub h2에서 두 축이 별개임을 안 독자의 다음 막힘은 '그래서 주체 선택 기준이 구체적으로 뭔가'이다. context.json의 capability_limits에서 '포트폴리오에서 기술적 유사성 판단 불가', '중간 산출물 검수 불가'가 명시되어 있어 기술 역량이 아닌 관리 역량 기준으로 비교하는 순서가 적절하다.</div><div class="dc basis-cell" style="border-bottom:none">주체 선택 기준을 이해한 뒤의 자연스러운 다음 막힘은 '계약 방식의 실질 차이'다. context.json의 confusion_pair '위시켓 매니저의 역할 ≠ PM'과 can_claim '계약·대금 보호'가 이 노드에서 자연스럽게 다뤄져야 한다.</div><div class="dc basis-cell" style="border-bottom:none">계약 방식을 플랫폼으로 좁힌 독자의 마지막 막힘은 '실제로 어떻게 되는가'이다. context.json의 can_claim 항목(매니저 연락, 표준계약서, 에스크로)과 cannot_claim 항목(PM 역할 불가)을 이 노드에서 정확하게 전달해야 하며, terminology '위시켓이 프로젝트를 관리합니다 → 위시켓 매니저가 계약까지 함께합니다'가 stance에 반영된다.</div>
   </div></div>
 </div>
 
@@ -984,14 +974,14 @@ tr.vol-low td{color:var(--text-dim)}tr.vol-low td:first-child{font-weight:400}
       </div>
     </div>
     
-    <div class="reasoning-box rb-sub2"><div class="rb-label">Selection Reasoning</div><div class="rb-text">hub h3에서 '비용은 기능 복잡도 × 투입 인력 × 기간으로 결정된다'는 구조를 안내하고 예산 기준점을 잡는 방향을 제시하지만, '우리 프로젝트가 어느 범위에 해당하는지'를 독자가 스스로 대입할 수 있는 사례 데이터가 부족하다. context.json의 data_angles에서 '기능 범위별 예산 격차(사례 카드)'와 '규모별 예산 범위 분포'가 확보되어 있어 hub이 안 쓴 데이터로 별도 글을 구성할 수 있다. 기발행 글에 이 주제 없음을 확인했다.</div></div>
+    <div class="reasoning-box rb-sub2"><div class="rb-label">Selection Reasoning</div><div class="rb-text">hub h3에서 진행 흐름과 준비물을 안내하는 과정에서 비용 구조는 흐름 안에서 간략히 언급하는 수준으로 처리된다. 그러나 '내 프로젝트가 어느 예산 범위에 해당하는지'를 독자가 스스로 대입할 수 있는 사례 데이터는 hub 길이 안에 담기 어렵다. context.json의 data_angles에서 '기능 범위별 예산 격차(사례 카드)'와 '규모별 예산 범위 분포'가 확보되어 있어 hub이 안 쓴 데이터로 별도 글을 구성할 수 있다. 기발행 글에 이 주제 없음을 확인했다.</div></div>
     
   </div>
 
   <div class="section-scroll"><div class="map-grid c-sub2" style="grid-template-columns:var(--row-label-w) repeat(3,var(--col-w))">
   
   
-  <div class="rl flow-reason-label">흐름 근거</div><div class="dc flow-reason-cell">hub을 읽고 온 독자는 '비용이 범위에 따라 다르다는 건 알겠는데, 우리 프로젝트가 어느 범위에 해당하는지 모르겠다'는 상태에서 시작한다. 이 sub의 고유 막힘은 '내 프로젝트의 예산 범위를 어떻게 가늠하는가'다. 먼저 기능 범위가 예산을 어떻게 결정하는지 사례로 보여주고, 다음으로 개발비 외 총비용 구조를 안내하며, 마지막으로 독자가 자기 프로젝트를 특정 범위에 대입할 수 있는 기준을 제시한다.</div>
+  <div class="rl flow-reason-label">흐름 근거</div><div class="dc flow-reason-cell">hub을 읽고 온 독자는 '진행 흐름은 알겠는데, 우리 프로젝트에 예산을 얼마나 잡아야 하는지 감이 없다'는 상태에서 시작한다. 이 sub의 고유 막힘은 '내 프로젝트의 예산 범위를 어떻게 가늠하는가'다. 먼저 기능 범위가 예산을 어떻게 결정하는지 사례로 보여주고, 다음으로 개발비 외 총비용 구조를 안내하며, 마지막으로 독자가 자기 프로젝트를 특정 범위에 대입할 수 있는 기준을 제시한다.</div>
   
   <div class="rl" style="min-height:auto">&#x1F3F7;&#xFE0F; Stage</div>
   <div class="stage-cell"><div class="stage-pill">S2_1</div></div><div class="stage-cell"><div class="stage-pill">S2_2</div></div><div class="stage-cell"><div class="stage-pill">S2_3</div></div>
@@ -1014,7 +1004,7 @@ tr.vol-low td{color:var(--text-dim)}tr.vol-low td:first-child{font-weight:400}
 <text x="650" y="126" text-anchor="middle" class="emotion-sublabel">비슷한 규모의 ?</text>
 </svg></div>
   <div class="rl">&#x1F4AD; 상태</div>
-  <div class="dc state-cell">hub에서 비용은 범위에 따라 다르다는 건 알겠는데, 같은 '웹서비스'라고 해도 견적이 어떤 프로젝트는 300만 원, 어떤 프로젝트는 수천만 원이라 우리 프로젝트가 어디에 해당하는지 전혀 감이 안 잡힌다</div><div class="dc state-cell">기능 유형을 어느 정도 구분했는데, 같은 유형 안에서도 항목 포함 여부가 달라 견적서를 비교할 수가 없고, 어디까지가 개발비고 어디서부터 별도 비용인지 모르겠다</div><div class="dc state-cell">항목은 맞췄는데 금액 자체가 적정한지 모르겠다 — 실제로 비슷한 프로젝트들이 어느 범위에서 진행됐는지 구체적인 기준이 있었으면 한다</div>
+  <div class="dc state-cell">hub에서 진행 흐름은 이해했는데, 같은 '웹서비스'라고 해도 견적이 어떤 프로젝트는 300만 원, 어떤 프로젝트는 수천만 원이라 우리 프로젝트가 어디에 해당하는지 전혀 감이 안 잡힌다</div><div class="dc state-cell">기능 유형을 어느 정도 구분했는데, 같은 유형 안에서도 항목 포함 여부가 달라 견적서를 비교할 수가 없고, 어디까지가 개발비고 어디서부터 별도 비용인지 모르겠다</div><div class="dc state-cell">항목은 맞췄는데 금액 자체가 적정한지 모르겠다 — 실제로 비슷한 프로젝트들이 어느 범위에서 진행됐는지 구체적인 기준이 있었으면 한다</div>
   <div class="rl q-label">&#x2753; 질문</div>
   <div class="dc q">웹서비스 외주 비용이 왜 이렇게 차이나는 건가요?</div><div class="dc q">견적서 항목을 같은 조건으로 비교하려면 뭘 확인해야 하나요?</div><div class="dc q">비슷한 규모의 웹서비스 프로젝트가 실제로 어느 예산 범위에서 진행되나요?</div>
   <div class="rl">&#x1F4A1; 핵심 답변</div>
@@ -1024,7 +1014,7 @@ tr.vol-low td{color:var(--text-dim)}tr.vol-low td:first-child{font-weight:400}
   <div class="rl">&#x2716; 다음 문제</div>
   <div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 기능 범위 유형을 구분했는데, 같은 유형 안에서도 업체마다 견적 차이가 크고, 어떤 항목이 포함되어 있는지도 달라서 단순 비교가 안 된다</div></div><div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 항목을 맞춰봤는데, 같은 항목인데도 업체별 금액이 다르다 — 어느 쪽이 적정한지 판단할 시장 기준이 없어서 결국 '싼 쪽'으로 기울게 된다</div></div><div class="dc block-row"><span style="color:var(--text-dim);font-size:11px">&mdash;</span></div>
   <div class="rl basis-label" style="border-bottom:none">&#x1F4CE; 근거</div>
-  <div class="dc basis-cell" style="border-bottom:none">hub h3에서 비용 결정 구조를 안 독자의 다음 막힘은 '그래서 내 프로젝트는 얼마인가'이다. context.json의 data_angles '기능 범위별 예산 격차'와 validated_samples 14건이 이 노드의 사례 데이터로 활용된다. comparison_warning에서 '같은 웹서비스라도 직접 비교가 성립하지 않는다'고 명시되어 있어 기능 유형을 먼저 구분하는 순서가 올바르다.</div><div class="dc basis-cell" style="border-bottom:none">기능 유형을 구분한 뒤 다음 막힘은 '견적서를 어떻게 비교하는가'이다. context.json의 confusion_pair '개발비 ≠ 총비용'이 이 노드에서 반드시 다뤄져야 한다. capability_limits에서 '견적 항목 간 범위 차이 식별 불가'가 명시되어 있어 매니저 지원 연결이 자연스럽다.</div><div class="dc basis-cell" style="border-bottom:none">항목 비교를 마친 독자의 마지막 막힘은 '금액이 적정한가'라는 기준점 부재다. context.json validated_stats에서 웹 신규 개발 중위값·Q1·Q3 데이터가 확보되어 있고, data_angles '규모별 예산 범위 분포'가 이 노드의 근거 데이터다. comparison_warning에 따라 단일 기준점으로 제시하지 않고 '기능 유형을 먼저 파악한 뒤 대입'하는 방식으로 제시한다.</div>
+  <div class="dc basis-cell" style="border-bottom:none">hub h3에서 진행 흐름을 안 독자가 예산 가늠이라는 별도 막힘을 갖는다. context.json의 data_angles '기능 범위별 예산 격차'와 validated_samples 14건이 이 노드의 사례 데이터로 활용된다. comparison_warning에서 '같은 웹서비스라도 직접 비교가 성립하지 않는다'고 명시되어 있어 기능 유형을 먼저 구분하는 순서가 올바르다.</div><div class="dc basis-cell" style="border-bottom:none">기능 유형을 구분한 뒤 다음 막힘은 '견적서를 어떻게 비교하는가'이다. context.json의 confusion_pair '개발비 ≠ 총비용'이 이 노드에서 반드시 다뤄져야 한다. capability_limits에서 '견적 항목 간 범위 차이 식별 불가'가 명시되어 있어 매니저 지원 연결이 자연스럽다.</div><div class="dc basis-cell" style="border-bottom:none">항목 비교를 마친 독자의 마지막 막힘은 '금액이 적정한가'라는 기준점 부재다. context.json validated_stats에서 웹 신규 개발 중위값·Q1·Q3 데이터가 확보되어 있고, data_angles '규모별 예산 범위 분포'가 이 노드의 근거 데이터다. comparison_warning에 따라 단일 기준점으로 제시하지 않고 '기능 유형을 먼저 파악한 뒤 대입'하는 방식으로 제시한다.</div>
   </div></div>
 </div>
 
@@ -1056,7 +1046,7 @@ tr.vol-low td{color:var(--text-dim)}tr.vol-low td:first-child{font-weight:400}
   <div class="section-scroll"><div class="map-grid c-sub3" style="grid-template-columns:var(--row-label-w) repeat(3,var(--col-w))">
   
   
-  <div class="rl flow-reason-label">흐름 근거</div><div class="dc flow-reason-cell">이 sub의 독자는 업체 2~3곳에 이미 연락했고 견적을 받았지만, 비교 기준이 없어 판단이 막혀 있다. 먼저 비개발자가 사용할 수 있는 비교 기준을 이해하고, 미팅에서 확인해야 할 질문 목록을 파악하며, 마지막으로 선택 후 계약 전에 한 번 더 짚어야 할 지점으로 흐른다. hub 독자보다 진행 단계가 앞서 있지만, 계약서 확인 노드는 hub h5와 겹치지 않게 '미팅 이후 선택 결정 단계'에 집중한다.</div>
+  <div class="rl flow-reason-label">흐름 근거</div><div class="dc flow-reason-cell">이 sub의 독자는 업체 2~3곳에 이미 연락했고 견적을 받았지만, 비교 기준이 없어 판단이 막혀 있다. 먼저 비개발자가 사용할 수 있는 비교 기준을 이해하고, 미팅에서 확인해야 할 질문 목록을 파악하며, 마지막으로 선택 후 계약 전에 한 번 더 짚어야 할 지점으로 흐른다. hub 독자보다 진행 단계가 앞서 있지만, 계약서 확인 노드는 hub h3와 겹치지 않게 '미팅 이후 선택 결정 단계'에 집중한다.</div>
   
   <div class="rl" style="min-height:auto">&#x1F3F7;&#xFE0F; Stage</div>
   <div class="stage-cell"><div class="stage-pill">S3_1</div></div><div class="stage-cell"><div class="stage-pill">S3_2</div></div><div class="stage-cell"><div class="stage-pill">S3_3</div></div>
@@ -1089,7 +1079,7 @@ tr.vol-low td{color:var(--text-dim)}tr.vol-low td:first-child{font-weight:400}
   <div class="rl">&#x2716; 다음 문제</div>
   <div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 동일한 질문을 했는데 업체마다 답변 스타일이 달라서 어느 쪽이 더 좋은 건지 판단이 안 된다 — 특히 '다 할 수 있다'고만 하고 역질문이 없었던 업체가 걱정된다</div></div><div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 미팅은 했는데 두 업체가 모두 괜찮아 보여서 한 곳으로 좁히기가 어렵다 — 최종 선택 전에 계약 조건에서 확인해야 할 것이 있는지 모르겠다</div></div><div class="dc block-row"><span style="color:var(--text-dim);font-size:11px">&mdash;</span></div>
   <div class="rl basis-label" style="border-bottom:none">&#x1F4CE; 근거</div>
-  <div class="dc basis-cell" style="border-bottom:none">이 sub의 독자는 hub 진입 이전 단계에서 출발하지만 판단 막힘은 hub h4와 겹친다. hub h4보다 한 단계 앞에서 시작해 비교 기준 자체를 먼저 이해하는 흐름이 필요하다. context.json의 capability_limits '포트폴리오에서 기술적 유사성 판단 불가'가 이 노드의 필요성을 직접 지목한다.</div><div class="dc basis-cell" style="border-bottom:none">비교 기준을 이해한 뒤 다음 막힘은 '실제 미팅에서 어떻게 확인하는가'이다. context.json의 dont 규칙 '비개발자에게 아키텍처 확인을 권유하지 않는다'에 따라 비기술적 질문으로만 구성한다. AI missing_angle 3개 공통 '첫 미팅 전 비개발자가 준비해야 할 구체적 질문 목록'이 이 노드의 위치를 뒷받침한다.</div><div class="dc basis-cell" style="border-bottom:none">파트너를 좁힌 뒤의 마지막 장벽은 계약 리스크다. context.json의 confusion_pair '하자보수 ≠ 유지보수', reader_misconception '소스코드는 당연히 받을 수 있다', dont 규칙 '서버·도메인을 개발사가 세팅해주는 것이 일반적이라고 쓰지 않는다'가 이 노드에서 수렴한다. hub h5와 같은 주제이지만, 이 sub 독자는 특정 업체를 이미 고른 상태에서 계약서를 검토하는 단계에 있어 접근 방식이 다르다.</div>
+  <div class="dc basis-cell" style="border-bottom:none">이 sub의 독자는 hub 진입 이전 단계에서 출발하지만 판단 막힘은 hub의 파트너 선정 맥락과 겹친다. 비교 기준 자체를 먼저 이해하는 흐름이 필요하다. context.json의 capability_limits '포트폴리오에서 기술적 유사성 판단 불가'가 이 노드의 필요성을 직접 지목한다.</div><div class="dc basis-cell" style="border-bottom:none">비교 기준을 이해한 뒤 다음 막힘은 '실제 미팅에서 어떻게 확인하는가'이다. context.json의 dont 규칙 '비개발자에게 아키텍처 확인을 권유하지 않는다'에 따라 비기술적 질문으로만 구성한다. AI missing_angle 3개 공통 '첫 미팅 전 비개발자가 준비해야 할 구체적 질문 목록'이 이 노드의 위치를 뒷받침한다.</div><div class="dc basis-cell" style="border-bottom:none">파트너를 좁힌 뒤의 마지막 장벽은 계약 리스크다. context.json의 confusion_pair '하자보수 ≠ 유지보수', reader_misconception '소스코드는 당연히 받을 수 있다', dont 규칙 '서버·도메인을 개발사가 세팅해주는 것이 일반적이라고 쓰지 않는다'가 이 노드에서 수렴한다. hub h3에서 계약 항목을 흐름 안에서 간략히 언급하지만, 이 sub 독자는 특정 업체를 이미 고른 상태에서 계약서를 검토하는 단계에 있어 접근 방식이 다르다.</div>
   </div></div>
 </div>
 
