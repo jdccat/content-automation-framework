@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>블로그 전략 보고서</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Pretendard:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F6F5F1;--surface:#FFF;--border:#E2E0DB;--border-light:#EDECEA;--text:#1A1A1A;--text-secondary:#555;--text-muted:#999;--text-dim:#BBB;--hub:#1B7F79;--hub-light:#E6F5F4;--hub-bg:#F0FAF9;--sub1:#D94F4F;--sub1-light:#FDF0F0;--sub1-bg:#FEF6F6;--sub2:#C68A1D;--sub2-light:#FFF8EB;--sub2-bg:#FFFBF2;--sub3:#6C5CE7;--sub3-light:#F3F1FE;--sub3-bg:#F8F7FF;--emotion-high:#2ECC71;--emotion-mid:#F39C12;--emotion-low:#E74C3C;--basis-bg:#FAFAF8;--basis-border:#E8E7E3;--try-color:#1B7F79;--block-color:#D94F4F;--accent:#7C3AED;--accent-light:#EDE9FE;--radius:10px;--font:'Pretendard','Noto Sans KR',sans-serif;--font-mono:'JetBrains Mono',monospace;--col-w:260px;--row-label-w:88px}
+*{margin:0;padding:0;box-sizing:border-box}body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.7;-webkit-font-smoothing:antialiased;font-size:13.5px}
+.page-header{padding:48px 48px 0;max-width:1200px;margin:0 auto}.header-top{display:flex;align-items:flex-end;gap:16px;margin-bottom:10px;flex-wrap:wrap}.header-top h1{font-size:26px;font-weight:700;letter-spacing:-.5px;line-height:1.3}.header-badge{font-family:var(--font-mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);background:var(--accent-light);padding:4px 12px;border-radius:100px;margin-bottom:4px;flex-shrink:0}.header-desc{font-size:14px;color:var(--text-secondary);margin-bottom:8px;word-break:keep-all;line-height:1.7}.header-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}.meta-chip{font-family:var(--font-mono);font-size:10px;letter-spacing:.5px;color:var(--text-muted);background:var(--surface);border:1px solid var(--border);padding:3px 10px;border-radius:100px}
+.top-tabs{display:flex;gap:0;border-bottom:2px solid var(--border);max-width:1200px;margin:0 auto;padding:0 48px}.top-tab{padding:14px 24px;font-size:13px;font-weight:600;color:var(--text-muted);background:none;border:none;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .15s;letter-spacing:-.2px}.top-tab.active{color:var(--accent);border-bottom-color:var(--accent)}.top-tab:hover:not(.active){color:var(--text-secondary)}.top-tab .tab-num{font-family:var(--font-mono);font-size:10px;background:var(--border-light);color:var(--text-muted);padding:1px 6px;border-radius:4px;margin-left:6px}.top-tab.active .tab-num{background:var(--accent-light);color:var(--accent)}
+.tab-panel{display:none;max-width:1200px;margin:0 auto;padding:32px 48px 72px}.tab-panel.active{display:block}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px 26px;margin-bottom:18px}.card-title{font-family:var(--font-mono);font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);margin-bottom:12px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.badge{display:inline-flex;align-items:center;padding:2px 9px;border-radius:100px;font-family:var(--font-mono);font-size:10px;font-weight:500;letter-spacing:.3px;white-space:nowrap;margin:1px 2px}.b-purple{background:var(--accent-light);color:var(--accent);border:1px solid rgba(124,58,237,.2)}.b-hub{background:var(--hub-light);color:var(--hub);border:1px solid rgba(27,127,121,.2)}.b-sub1{background:var(--sub1-light);color:var(--sub1);border:1px solid rgba(217,79,79,.2)}.b-sub2{background:var(--sub2-light);color:var(--sub2);border:1px solid rgba(198,138,29,.2)}.b-sub3{background:var(--sub3-light);color:var(--sub3);border:1px solid rgba(108,92,231,.2)}.b-green{background:#E6F5F4;color:#1B7F79;border:1px solid rgba(27,127,121,.2)}.b-amber{background:#FEF3C7;color:#92400E;border:1px solid #FDE68A}.b-red{background:#FEE2E2;color:#DC2626;border:1px solid rgba(220,38,38,.2)}.b-gray{background:var(--border-light);color:var(--text-muted);border:1px solid var(--border)}
+.pill{display:inline-block;padding:3px 10px;border-radius:6px;font-size:11px;background:var(--border-light);color:var(--text-secondary);border:1px solid var(--border);margin:2px}
+table{width:100%;border-collapse:collapse}th{background:var(--basis-bg);text-align:left;padding:11px 16px;font-family:var(--font-mono);font-size:10px;font-weight:600;letter-spacing:.5px;color:var(--text-muted);border-bottom:1px solid var(--border)}td{padding:12px 16px;border-bottom:1px solid var(--border-light);font-size:12.5px;vertical-align:top;line-height:1.75;color:var(--text-secondary)}tr:last-child td{border-bottom:none}tr:hover td{background:rgba(0,0,0,.01)}.td-num{text-align:right;font-family:var(--font-mono);font-weight:600;font-variant-numeric:tabular-nums;color:var(--text)}
+td:first-child{color:var(--text);font-weight:500}
+ul.bullet{list-style:none;padding:0;margin:0}ul.bullet li{position:relative;padding:5px 0 5px 16px;font-size:12.5px;color:var(--text-secondary);line-height:1.75}ul.bullet li::before{content:"";position:absolute;left:0;top:12px;width:5px;height:5px;border-radius:50%;background:var(--border)}
+ul.bullet li strong{color:var(--text);font-weight:600}
+.dist-item{display:flex;align-items:center;margin-bottom:10px;font-size:12px}.dist-label{min-width:120px;color:var(--text-secondary);font-weight:500}.dist-bar-wrap{flex:1;height:6px;background:var(--border-light);border-radius:3px;margin:0 10px;overflow:hidden}.dist-bar-fill{height:100%;border-radius:3px}.dist-count{font-family:var(--font-mono);font-size:11px;font-weight:600;color:var(--text);min-width:36px;text-align:right}
+.correction{background:#F0FDF4;border:1px solid #BBF7D0;border-left:3px solid var(--hub);border-radius:0 6px 6px 0;padding:16px 20px;margin:10px 0;font-size:12.5px;line-height:1.75}.correction .claim{font-family:var(--font-mono);font-size:11px;color:var(--text-dim);margin-bottom:5px;font-style:italic}.correction .fix{color:#166534;font-weight:400}
+.warn-card{background:#FFF7ED;border:1px solid #FED7AA;border-left:3px solid #C2410C;border-radius:0 6px 6px 0;padding:16px 20px;margin:12px 0}.warn-card .lbl{font-family:var(--font-mono);font-size:9px;font-weight:600;letter-spacing:1px;color:#C2410C;margin-bottom:6px}.warn-card .txt{font-size:12px;color:#92400E;line-height:1.75}
+.reasoning-box{background:var(--basis-bg);border:1px solid var(--basis-border);border-left:3px solid var(--text-dim);border-radius:0 6px 6px 0;padding:16px 20px;margin-top:14px}.reasoning-box.rb-hub{border-left-color:var(--hub)}.reasoning-box.rb-sub1{border-left-color:var(--sub1)}.reasoning-box.rb-sub2{border-left-color:var(--sub2)}.reasoning-box.rb-sub3{border-left-color:var(--sub3)}.rb-label{font-family:var(--font-mono);font-size:9px;letter-spacing:1.2px;text-transform:uppercase;color:var(--text-dim);margin-bottom:6px}.rb-text{font-size:12px;color:var(--text-muted);word-break:keep-all;line-height:1.75}
+ul.check-list{list-style:none;padding:0;margin:0}ul.check-list li{position:relative;padding:6px 0 6px 24px;font-size:12.5px;color:var(--text-secondary);line-height:1.7}ul.check-list li::before{content:"";position:absolute;left:0;top:12px;width:10px;height:10px;border-radius:50%;border:2px solid var(--border)}ul.check-list li.ok::before{background:var(--hub);border-color:var(--hub)}ul.check-list li.no::before{background:var(--sub1);border-color:var(--sub1)}
+.hero{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px 30px;margin-bottom:24px;display:grid;grid-template-columns:1fr auto;gap:24px;align-items:start}.hero-body{min-width:0}.hero-title{font-size:16px;font-weight:700;color:var(--text);margin-bottom:8px;letter-spacing:-.3px}.hero-desc{font-size:13px;color:var(--text-muted);line-height:1.75;word-break:keep-all}.hero-stats{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start}.hero-stat{text-align:center;min-width:60px}.hero-stat-value{font-family:var(--font-mono);font-size:22px;font-weight:700;line-height:1.1}.hero-stat-label{font-family:var(--font-mono);font-size:9px;letter-spacing:.8px;text-transform:uppercase;color:var(--text-muted);margin-top:2px}
+.serp-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}.serp-header{padding:16px 20px 12px;border-bottom:1px solid var(--border-light);display:flex;align-items:center;gap:10px}.serp-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0}.serp-header-text{flex:1}.serp-header-title{font-size:13px;font-weight:700;color:var(--text)}.serp-header-sub{font-size:11px;color:var(--text-muted)}.serp-body{padding:16px 20px}.serp-item{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--border-light);font-size:12px;line-height:1.55}.serp-item:last-child{border-bottom:none}.serp-rank{font-family:var(--font-mono);font-size:10px;font-weight:600;color:var(--text-dim);min-width:20px;padding-top:2px}.serp-title{flex:1;color:var(--text-secondary)}.serp-date{font-family:var(--font-mono);font-size:10px;color:var(--text-dim);white-space:nowrap;opacity:.7}.serp-link{font-size:11px;color:var(--accent);text-decoration:none;flex-shrink:0;margin-left:6px;opacity:.7;transition:all .15s;background:var(--accent-light);padding:1px 5px;border-radius:4px}.serp-link:hover{opacity:1;background:var(--accent);color:#fff}.serp-insight{background:var(--basis-bg);border-top:1px solid var(--border-light);padding:16px 20px}.serp-insight-title{font-family:var(--font-mono);font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px}
+.serp-item:nth-child(n+6){opacity:.65}
+.ai-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:18px}.ai-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}.ai-card-header{padding:14px 18px 10px;display:flex;align-items:center;gap:8px}.ai-card-logo{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}.ai-card-name{font-size:13px;font-weight:700;color:var(--text)}.ai-card-status{font-family:var(--font-mono);font-size:10px;padding:2px 8px;border-radius:100px;margin-left:auto}.ai-card-body{padding:0 18px 16px}
+.section-title-bar{margin-top:36px}.stb-head{display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap}.stb-color{width:4px;height:48px;border-radius:2px;margin-top:2px;flex-shrink:0}.stb-content{flex:1;min-width:200px}.stb-overline{font-family:var(--font-mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px}.stb-question{font-size:19px;font-weight:700;line-height:1.4;word-break:keep-all;letter-spacing:-.3px}.stb-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.stb-tag{font-family:var(--font-mono);font-size:10px;letter-spacing:.5px;padding:3px 10px;border-radius:100px}
+.section-scroll{overflow-x:auto;margin-top:24px}.section-scroll::-webkit-scrollbar{height:5px}.section-scroll::-webkit-scrollbar-track{background:var(--border-light);border-radius:3px}.section-scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+.map-grid{display:grid;gap:0;min-width:fit-content;margin-bottom:8px}
+.rl{display:flex;align-items:center;justify-content:flex-end;padding-right:14px;font-family:var(--font-mono);font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);min-height:44px;border-right:2px solid var(--border)}.stage-cell{display:flex;align-items:center;justify-content:center;padding:6px 8px;position:relative}.stage-pill{color:#fff;padding:11px 0;border-radius:26px;font-size:13px;font-weight:600;text-align:center;width:100%;position:relative;z-index:2}.stage-id{font-family:var(--font-mono);font-size:10px;opacity:.7;margin-right:3px}.stage-cell:not(:last-child)::after{content:'';position:absolute;right:-4px;top:50%;transform:translateY(-50%);width:0;height:0;border-top:7px solid transparent;border-bottom:7px solid transparent;z-index:3;opacity:.45}
+.c-hub .stage-pill{background:var(--hub)}.c-hub .stage-cell:not(:last-child)::after{border-left:9px solid var(--hub)}.c-sub1 .stage-pill{background:var(--sub1)}.c-sub1 .stage-cell:not(:last-child)::after{border-left:9px solid var(--sub1)}.c-sub1 .rl{border-right-color:rgba(217,79,79,.25)}.c-sub2 .stage-pill{background:var(--sub2)}.c-sub2 .stage-cell:not(:last-child)::after{border-left:9px solid var(--sub2)}.c-sub2 .rl{border-right-color:rgba(198,138,29,.25)}.c-sub3 .stage-pill{background:var(--sub3)}.c-sub3 .stage-cell:not(:last-child)::after{border-left:9px solid var(--sub3)}.c-sub3 .rl{border-right-color:rgba(108,92,231,.25)}
+.emotion-strip{grid-column:2/-1;position:relative;height:150px;margin:0 8px}.emotion-strip.short{height:130px}.emotion-svg{width:100%;height:100%}.emotion-label{font-family:var(--font);font-size:11px;font-weight:600}.emotion-sublabel{font-family:var(--font);font-size:9px;fill:var(--text-muted)}
+.dc{padding:14px 16px;border-right:1px dashed var(--border-light);border-bottom:1px solid var(--border-light);font-size:12.5px;color:var(--text-secondary);word-break:keep-all;line-height:1.75}.dc:last-child{border-right:none}.dc.q{font-weight:600;color:var(--text);font-size:13.5px}
+.dc strong{color:var(--text);font-weight:600}.c-hub .dc.q{background:var(--hub-bg);border-bottom-color:var(--hub-light)}.c-hub .rl.q-label{background:var(--hub-bg)}.c-sub1 .dc.q{background:var(--sub1-bg);border-bottom-color:rgba(217,79,79,.12)}.c-sub1 .rl.q-label{background:var(--sub1-bg)}.c-sub2 .dc.q{background:var(--sub2-bg);border-bottom-color:rgba(198,138,29,.12)}.c-sub2 .rl.q-label{background:var(--sub2-bg)}.c-sub3 .dc.q{background:var(--sub3-bg);border-bottom-color:rgba(108,92,231,.12)}.c-sub3 .rl.q-label{background:var(--sub3-bg)}
+.dc.state-cell{font-size:11.5px;color:var(--text-muted);border-top:1px solid var(--border);line-height:1.7;font-style:italic}.dc.try-cell{font-size:11.5px;line-height:1.7}.try-line,.block-line{display:flex;align-items:flex-start;gap:6px;line-height:1.65}.try-line+.block-line{margin-top:8px}.try-ico{color:var(--try-color);font-size:8px;margin-top:5px;flex-shrink:0}.block-ico{color:var(--block-color);font-size:9px;margin-top:4px;flex-shrink:0;font-weight:700}.dc.basis-cell{background:var(--basis-bg);border-bottom-color:var(--basis-border);font-size:11px;color:var(--text-dim);line-height:1.7;padding:10px 16px}.rl.basis-label{background:var(--basis-bg)}.dc.flow-reason-cell{grid-column:2/-1;background:var(--basis-bg);border:1px solid var(--basis-border);border-left:none;font-size:11.5px;color:var(--text-dim);line-height:1.75;padding:12px 16px}.rl.flow-reason-label{background:var(--basis-bg);border-bottom:1px solid var(--basis-border)}.dc.branch-cell{text-align:center;border-bottom:none;padding:6px 12px}.branch-pill{font-family:var(--font-mono);font-size:10px;padding:3px 10px;border-radius:100px;display:inline-block}.dc.branch-cell.empty{color:var(--text-dim);font-size:11px}
+.hub-sub-connector{margin:32px 0 0}.connector-visual{display:flex;align-items:center;gap:10px;padding:20px 0 0;flex-wrap:wrap}.cv-line{height:2px;width:40px;border-radius:1px}.cv-label{font-family:var(--font-mono);font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:3px 12px;border-radius:100px}.cv-desc{font-size:11px;color:var(--text-muted);margin-left:4px}
+.legend-panel{margin:20px 0 0}.legend-panel details{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}.legend-panel summary{padding:14px 20px;font-family:var(--font-mono);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);cursor:pointer;user-select:none;list-style:none;display:flex;align-items:center;gap:8px}.legend-panel summary::before{content:'&#x25B8;';font-size:10px;transition:transform .2s}.legend-panel details[open] summary::before{transform:rotate(90deg)}.legend-panel summary::-webkit-details-marker{display:none}.lp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1px;background:var(--border-light);border-top:1px solid var(--border-light)}.lp-group{background:var(--surface);padding:16px 20px}.lp-group-title{font-family:var(--font-mono);font-size:9px;letter-spacing:1.2px;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px}.lp-item{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:12px;color:var(--text-secondary)}.lp-swatch{width:14px;height:14px;border-radius:3px;flex-shrink:0}.lp-swatch.circle{border-radius:50%}.lp-desc{color:var(--text-muted);font-size:11px}
+.inner-tabs{display:flex;gap:0;border-bottom:2px solid var(--border);margin:24px 0 0;position:sticky;top:0;z-index:10;background:var(--bg);padding-top:4px}.inner-tab{padding:10px 18px;font-size:12px;font-weight:600;color:var(--text-muted);background:none;border:none;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .15s;white-space:nowrap}.inner-tab.active{border-bottom-color:var(--hub);color:var(--hub)}.inner-tab[data-color="sub1"].active{border-bottom-color:var(--sub1);color:var(--sub1)}.inner-tab[data-color="sub2"].active{border-bottom-color:var(--sub2);color:var(--sub2)}.inner-tab[data-color="sub3"].active{border-bottom-color:var(--sub3);color:var(--sub3)}.inner-tab:hover:not(.active){color:var(--text-secondary)}.inner-panel{display:none}.inner-panel.active{display:block}
+/* SECTION HEADING */
+.sec-heading{display:flex;align-items:center;gap:10px;margin:28px 0 14px}.sec-heading-icon{font-size:16px;line-height:1}.sec-heading-text{font-size:14px;font-weight:700;color:var(--text);letter-spacing:-.2px}.sec-heading:first-child{margin-top:0}
+
+/* LOW VOLUME ROW */
+tr.vol-low td{color:var(--text-dim)}tr.vol-low td:first-child{font-weight:400}
+
+/* DATA ANGLE BOX */
+.angle-box{background:var(--basis-bg);border:1px solid var(--basis-border);border-radius:var(--radius);padding:18px 22px;margin-top:14px}
+.angle-item{margin-bottom:10px;font-size:12.5px;line-height:1.7}.angle-item:last-child{margin-bottom:0}
+.angle-item strong{color:var(--text);font-weight:600}.angle-item span{color:var(--text-muted)}
+
+/* FANOUT CARD */
+.fanout-grid{display:grid;gap:12px}.fanout-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px}
+.fanout-top{display:flex;align-items:flex-start;gap:12px;margin-bottom:8px}.fanout-q{flex:1;font-size:13px;font-weight:600;color:var(--text);line-height:1.5}
+.fanout-reason{font-size:11px;color:var(--text-dim);line-height:1.6}
+
+/* MISCONCEPTION ROW */
+.mis-row{display:flex;align-items:baseline;gap:0;padding:10px 0;border-bottom:1px solid var(--border-light)}
+.mis-row:last-child{border-bottom:none}
+.mis-belief-inline{flex:0 0 32%;font-size:12px;color:var(--text-muted);line-height:1.65;padding-right:12px}
+.mis-arrow-inline{flex-shrink:0;color:var(--text-dim);font-size:14px;margin:0 10px}
+.mis-reality-inline{flex:1;font-size:12.5px;color:var(--text);line-height:1.7;font-weight:500}
+
+/* KP CORRECTION */
+.kp-correction{display:flex;gap:0;margin-bottom:10px;border-radius:8px;overflow:hidden;border:1px solid var(--border-light)}
+.kp-correction:last-child{margin-bottom:0}
+.kp-claim{flex:0 0 40%;background:#FEF2F2;padding:12px 16px;font-size:11.5px;color:#991B1B;line-height:1.65;border-right:1px solid #FECACA}
+.kp-fix{flex:1;background:#F0FDF4;padding:12px 16px;font-size:12px;color:#166534;line-height:1.7}
+
+/* GUARDRAIL CARD */
+.gr-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;margin-bottom:10px}
+.gr-rule{font-size:13px;font-weight:600;color:var(--text);line-height:1.6;margin-bottom:6px}
+.gr-alt{font-size:11.5px;color:var(--text-muted);line-height:1.65;padding-left:14px;border-left:2px solid var(--border-light)}
+
+/* JOURNEY GRID OVERRIDES */
+.dc.try-row{border-bottom:1px dashed var(--border-light)}
+.dc.block-row{font-size:11.5px;color:var(--text-muted)}
+.block-row .block-line{gap:6px}
+
+.page-footer{padding:32px 48px 48px;max-width:1200px;margin:0 auto;font-family:var(--font-mono);font-size:10px;color:var(--text-dim);letter-spacing:.5px;border-top:1px solid var(--border)}
+@media(max-width:900px){.page-header,.top-tabs,.tab-panel{padding-left:24px;padding-right:24px}.two-col{grid-template-columns:1fr}.ai-grid{grid-template-columns:1fr}:root{--col-w:220px;--row-label-w:72px}.inner-tabs{overflow-x:auto}.hero{grid-template-columns:1fr}.hero-stats{margin-top:12px}}
+</style>
+</head>
+<body>
+
+
+<div class="page-header">
+  <div class="header-top">
+    <h1>ERP외주개발업체를고를때가장중요하게봐를 &mdash; 블로그 전략 보고서</h1>
+    <span class="header-badge">Strategy Report</span>
+  </div>
+  <div class="header-desc"><strong>포인트 질문:</strong> ERP 외주 개발 업체를 고를 때 가장 중요하게 봐야 할 기준은 무엇인가요?</div>
+  <div class="header-meta">
+    <span class="meta-chip">2026-04-16</span>
+    <span class="meta-chip">Hub 1 + Sub 3</span>
+    <span class="meta-chip">위시켓 데이터 33건</span>
+    <span class="meta-chip">Persona: advisor</span>
+  </div>
+</div>
+
+
+<div class="top-tabs">
+  <button class="top-tab active" onclick="switchView('research')">리서치 분석<span class="tab-num">1</span></button>
+  <button class="top-tab" onclick="switchView('context')">방향 &amp; 제한사항<span class="tab-num">2</span></button>
+  <button class="top-tab" onclick="switchView('journey')">콘텐츠 기획 구조<span class="tab-num">3</span></button>
+</div>
+
+
+
+
+<div class="tab-panel active" id="view-research">
+
+<div class="hero">
+  <div class="hero-body">
+    <div class="hero-desc">이 질문을 검색하는 사람들이 어디서 정보를 찾고 있는지, AI는 어떤 답을 주고 있는지, 경쟁 콘텐츠는 무엇을 다루고 무엇을 빠뜨렸는지, 위시켓 데이터에서 어떤 인사이트를 뽑을 수 있는지를 정리합니다.</div>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="hero-stat-value" style="color:var(--hub)">10</div><div class="hero-stat-label">키워드</div></div>
+    <div class="hero-stat"><div class="hero-stat-value" style="color:var(--accent)">6</div><div class="hero-stat-label">PAA</div></div>
+    <div class="hero-stat"><div class="hero-stat-value" style="color:var(--sub1)">16</div><div class="hero-stat-label">SERP 결과</div></div>
+    <div class="hero-stat"><div class="hero-stat-value" style="color:var(--sub2)">33</div><div class="hero-stat-label">위시켓 데이터</div></div>
+  </div>
+</div>
+
+<div class="sec-heading"><span class="sec-heading-icon">&#x1F50D;</span><span class="sec-heading-text">검색 환경</span></div>
+
+<div class="two-col">
+  <div class="card">
+    <div class="card-title">검색량 (월간, 네이버 검색광고)</div>
+    <table><tr><th>키워드</th><th style="text-align:right">월간</th></tr>
+    <tr><td>ERP</td><td class="td-num">28200</td></tr><tr><td>더존ERP</td><td class="td-num">2970</td></tr><tr><td>스마트공장</td><td class="td-num">2080</td></tr><tr><td>ERP프로그램</td><td class="td-num">2030</td></tr><tr><td>생산관리</td><td class="td-num">1330</td></tr><tr><td>ERP 구축</td><td class="td-num">110</td></tr><tr><td>ERP 시스템 개발</td><td class="td-num">21</td></tr><tr class="vol-low"><td>ERP 개발 외주</td><td class="td-num">2</td></tr><tr class="vol-low"><td>ERP 외주 비용</td><td class="td-num">2</td></tr><tr class="vol-low"><td>ERP 외주 업체 선정</td><td class="td-num">2</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <div class="card-title">PAA (People Also Ask) &mdash; 6건</div>
+    <ul class="bullet"><li>ERP 외주 업체를 선정할 때 고려해야 할 주요 요소는 무엇인가요?</li><li>ERP 외주 업체 선정 시 발생할 수 있는 일반적인 문제점은 무엇인가요?</li><li>ERP 외주 업체를 선정하는 데 드는 평균 비용은 얼마인가요?</li><li>ERP 외주 업체 선정 과정에서 발생할 수 있는 위험 요소는 무엇인가요?</li><li>ERP 외주 업체 선정 시 내부 개발과 외주 개발의 장단점은 무엇인가요?</li><li>ERP 외주 업체 선정 시 계약서에 포함해야 할 주요 항목은 무엇인가요?</li></ul>
+    
+    <div style="margin-top:14px">
+      <div class="card-title">Google 자동완성</div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px"><span class="pill">erp 외주 가격</span><span class="pill">외주 업체 선정</span><span class="pill">외주 업체 선정 기준</span><span class="pill">외주업체 선정 프로세스</span></div>
+    </div>
+    
+  </div>
+</div>
+
+<div class="sec-heading"><span class="sec-heading-icon">&#x1F4CA;</span><span class="sec-heading-text">SERP 분석</span></div>
+
+<div style="display:flex;gap:8px;margin:0 0 14px">
+  <span class="badge b-green">스마트블록 노출</span>
+  <span class="badge b-gray">지식 스니펫 없음</span>
+</div>
+
+<div class="two-col" style="margin-bottom:14px">
+  
+  <div class="serp-card">
+    <div class="serp-header">
+      <div class="serp-icon" style="background:#03C75A">N</div>
+      <div class="serp-header-text"><div class="serp-header-title">네이버 블로그 SERP</div><div class="serp-header-sub">상위 10건</div></div>
+    </div>
+    <div class="serp-body">
+      
+      <div class="serp-item"><div class="serp-rank">1</div><div class="serp-title">ERP 개발, 외주 맡겨도 괜찮을까요? 업체 선정 및 성공 전략의...</div><div class="serp-date">2025.06</div><a href="https://blog.naver.com/coralpinky/223886290620" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">2</div><div class="serp-title">개발외주 ERP, '이것' 하나 모르고 맡기면 100% 후회합니다</div><div class="serp-date">2026.01</div><a href="https://blog.naver.com/qwejl05689/224157274690" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">3</div><div class="serp-title">ERP 외주 개발 동종 업계 개발 경험이 실패를 막아줍니다</div><div class="serp-date">2026.01</div><a href="https://blog.naver.com/love__jjoo/224137434194" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">4</div><div class="serp-title">비개발자도 걱정 없는 ERP 개발 외주, 의뢰부터 계약까지!</div><div class="serp-date">2024.04</div><a href="https://blog.naver.com/kmongteam/223418408082" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">5</div><div class="serp-title">개발 업체 선정 전 필독! 외주 개발 계약서보다 중요한 '안전...</div><div class="serp-date">2026.02</div><a href="https://blog.naver.com/kimbugger/224191304755" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">6</div><div class="serp-title">성공적인 ERP 개발 프로젝트, 최적의 ERP 개발 업체 선정이...</div><div class="serp-date">2024.05</div><a href="https://blog.naver.com/kmongteam/223465076139" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">7</div><div class="serp-title">ERP 구축 가이드, 최적의 ERP 개발 업체 선정을 위한 실전 팁</div><div class="serp-date">2024.06</div><a href="https://blog.naver.com/kmongteam/223467840295" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">8</div><div class="serp-title">ERP공급사 선정</div><div class="serp-date">2011.06</div><a href="https://blog.naver.com/nexesolution/60131807719" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">9</div><div class="serp-title">생산·품질·공정관리로 성과를 내는 외주생산업체 선정하는 기준</div><div class="serp-date">2025.04</div><a href="https://blog.naver.com/hanul_tech/223841263809" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">10</div><div class="serp-title">키오스크 개발 가이드 : 비용·외주 업체 선택까지 총정리</div><div class="serp-date">2025.07</div><a href="https://blog.naver.com/wishket/223946656718" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+    </div>
+  </div>
+  
+  <div class="serp-card">
+    <div class="serp-header">
+      <div class="serp-icon" style="background:#4285F4">G</div>
+      <div class="serp-header-text"><div class="serp-header-title">Google SERP</div><div class="serp-header-sub">상위 6건</div></div>
+    </div>
+    <div class="serp-body">
+      
+      <div class="serp-item"><div class="serp-rank">1</div><div class="serp-title">외주 개발 업체 선택 방법: PM·기술 리더 인터뷰로 본 선정 기준</div><div class="serp-date">gridge.co.kr</div><a href="https://blog.gridge.co.kr/outsourcing-development-company-selection/" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">2</div><div class="serp-title">홈페이지 제작 외주업체 선정의 3가지 기준 | 가비아 라이브러리</div><div class="serp-date">library.gabia.com</div><a href="https://library.gabia.com/contents/domain/2581/" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">3</div><div class="serp-title">프로그램 외주 개발 사례 분석: 성공 프로젝트의 공통 조건</div><div class="serp-date">gridge.co.kr</div><a href="https://blog.gridge.co.kr/program-outsourcing-development/" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">4</div><div class="serp-title">네이티브 앱 외주 개발사 선정 기준 5가지 - 크몽 고객센터</div><div class="serp-date">support.kmong.com</div><a href="https://support.kmong.com/hc/ko/articles/10296032871321" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">5</div><div class="serp-title">국내 ERP 업체 순위 Top5 및 글로벌 ERP 회사 5곳 2025 | 한국ERP</div><div class="serp-date">korea-erp.com</div><a href="https://korea-erp.com/erp-company-top5/" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">6</div><div class="serp-title">국내외 대표 ERP 시스템 5종 주요 기능 비교 및 무료 분석 리포트</div><div class="serp-date">reviewinsight.blog</div><a href="https://reviewinsight.blog/2024/04/16/erp-system-comparison/" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+    </div>
+  </div>
+</div>
+
+
+<div class="card">
+  <div class="two-col">
+    <div>
+      <div class="card-title">경쟁글 공통 관찰</div>
+      <ul class="bullet"><li>경쟁글 10건 중 다수가 '동종 업계 구축 경험(도메인 이해도)'을 핵심 선정 기준으로 다룸</li><li>경쟁글 2건(크몽, gridge)이 '프로젝트 관리 체계 및 소통 방식'을 별도 기준으로 분리하여 다룸</li><li>네이버 블로그 결과 다수가 크몽 엔터프라이즈 홍보 목적의 플랫폼 유도형 구성을 채택</li><li>구글 상위 결과(gridge)는 실패 원인 분석 및 계약 전 체크리스트를 포함하는 실무 Q&A형 구성</li><li>2026년 게시된 블로그(3건)는 비즈니스 로직 설계 역량과 업무 자산화를 강조하는 방향으로 작성됨</li><li>사후 유지보수·전담팀 유무가 경쟁글 절반 이상에서 확인 항목으로 등장</li></ul>
+    </div>
+    <div>
+      <div class="card-title">경쟁글에서 빠진 각도 (우리 기회)</div>
+      <ul class="bullet"><li>업체 유형별(소형 개발사·중견·대형·프리랜서팀) 선정 기준 차이를 다룬 글 없음</li><li>RFP 작성 수준에 따른 업체 응답 품질 차이 분석 없음</li><li>계약 구조(선급금·단계별 지급·에스크로 활용) 관점의 리스크 관리 내용 없음</li><li>플랫폼(위시켓 등) 활용 시 검증 절차와 직접 발굴의 차이를 실증적으로 비교한 글 없음</li><li>비개발자 담당자가 미팅 전 준비해야 할 질문 리스트 형태의 실용 가이드 부재</li></ul>
+    </div>
+  </div>
+</div>
+
+<div class="sec-heading"><span class="sec-heading-icon">&#x1F916;</span><span class="sec-heading-text">AI 검색 응답 분석</span></div>
+
+<div class="ai-grid">
+  
+  <div class="ai-card" style="border-bottom:3px solid #10A37F;opacity:1">
+    <div class="ai-card-header">
+      <div class="ai-card-logo" style="background:#10A37F">C</div>
+      <div class="ai-card-name">ChatGPT</div>
+      <span class="ai-card-status" style="background:#D1FAE5;color:#059669">수집 완료</span>
+    </div>
+    <div class="ai-card-body">
+      <p style="font-size:11.5px;color:var(--text-secondary);line-height:1.5">
+        7~8개 기준 번호 나열형 (경험·기술력·레퍼런스·프로젝트관리·커스터마이징·사후지원·비용·보안 순서로 등장, 회차별 구성 동일)
+      </p>
+      <div style="font-size:11px;color:var(--text-muted);margin-top:4px">인용 2건 &middot; 위시켓 <span style="color:var(--sub1);font-weight:600">미언급</span></div>
+    </div>
+  </div>
+  
+  <div class="ai-card" style="border-bottom:3px solid #D4A574;opacity:1">
+    <div class="ai-card-header">
+      <div class="ai-card-logo" style="background:#D4A574">A</div>
+      <div class="ai-card-name">Claude</div>
+      <span class="ai-card-status" style="background:#D1FAE5;color:#059669">수집 완료</span>
+    </div>
+    <div class="ai-card-body">
+      <p style="font-size:11.5px;color:var(--text-secondary);line-height:1.5">
+        3개 대분류 기준 나열형 (프로젝트관리·경험검증·도메인이해도 순), 실제 실패 통계 인용 포함, 출처 URL 다수 첨부
+      </p>
+      <div style="font-size:11px;color:var(--text-muted);margin-top:4px">인용 5건 &middot; 위시켓 <span style="color:var(--hub);font-weight:600">언급됨</span></div>
+    </div>
+  </div>
+  
+  <div class="ai-card" style="border-bottom:3px solid #4285F4;opacity:1">
+    <div class="ai-card-header">
+      <div class="ai-card-logo" style="background:#4285F4">G</div>
+      <div class="ai-card-name">Gemini</div>
+      <span class="ai-card-status" style="background:#D1FAE5;color:#059669">수집 완료</span>
+    </div>
+    <div class="ai-card-body">
+      <p style="font-size:11.5px;color:var(--text-secondary);line-height:1.5">
+        5개 핵심 기준 번호 나열형 (도메인이해도→유지보수체계→기술확장성→PM인력→비용투명성 순서로 3회 모두 유사), 각 항목에 체크포인트·위험신호 소항목 포함
+      </p>
+      <div style="font-size:11px;color:var(--text-muted);margin-top:4px">인용 0건 &middot; 위시켓 <span style="color:var(--sub1);font-weight:600">미언급</span></div>
+    </div>
+  </div>
+  
+</div>
+
+
+
+
+
+
+
+<div class="inner-tabs" style="margin-top:12px">
+  
+  <button class="inner-tab active" style="border-bottom-color:#10A37F;color:#10A37F" onclick="switchAiTab('ai-chatgpt',this,'#10A37F')">ChatGPT</button>
+  
+  <button class="inner-tab" style="" onclick="switchAiTab('ai-claude',this,'#D4A574')">Claude</button>
+  
+  <button class="inner-tab" style="" onclick="switchAiTab('ai-gemini',this,'#4285F4')">Gemini</button>
+  
+</div>
+
+<div class="inner-panel active" id="ai-chatgpt">
+
+<div class="two-col" style="margin-top:14px">
+  <div class="card" style="margin-bottom:0">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+      <div class="card-title" style="margin-bottom:0">ChatGPT 응답</div>
+      <span style="font-size:11px;color:var(--text-muted)">위시켓 <span style="color:var(--sub1);font-weight:600">미언급</span></span>
+    </div>
+    <p style="font-size:11px;color:var(--text-dim);margin-bottom:10px">7~8개 기준 번호 나열형 (경험·기술력·레퍼런스·프로젝트관리·커스터마이징·사후지원·비용·보안 순서로 등장, 회차별 구성 동일)</p>
+    <ul class="bullet"><li>ERP 개발 경험 및 해당 산업 전문성 보유 여부를 포트폴리오로 확인한다고 언급</li><li>기술 스택 역량 및 최신 기술 트렌드 이해도 평가를 강조</li><li>기존 고객 평가·레퍼런스 확인이 업체 신뢰도 판단 수단으로 제시됨</li><li>체계적 프로젝트 관리 프로세스와 일정·예산 관리 능력을 핵심 기준으로 제시</li><li>회사 요구사항에 맞는 커스터마이징 역량 보유 여부를 확인 항목으로 언급</li><li>개발 완료 후 유지보수·사후 지원 서비스 제공 방식을 확인해야 한다고 서술</li><li>가격 대비 품질(가성비) 균형을 중시하며, 최저가 선택이 최선이 아님을 강조</li><li>민감 데이터 처리 특성상 보안 및 데이터 보호 정책 점검을 별도 항목으로 언급(2·3회차)</li></ul>
+  </div>
+  <div>
+    <div class="card" style="margin-bottom:10px">
+      <div class="card-title">인용 소스 (2)</div>
+      
+      <div class="serp-item"><div class="serp-rank">1</div><div class="serp-title">eggcode.co.kr</div><a href="https://www.eggcode.co.kr/" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">2</div><div class="serp-title">gatsbygreen.com</div><a href="https://gatsbygreen.com/pricing" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+    </div>
+    <div class="card" style="margin-bottom:0">
+      <div class="card-title" style="color:var(--sub1)">누락 각도 (4)</div>
+      <ul class="bullet"><li>소스코드 소유권·기술 이전 조건에 대한 언급 없음</li><li>업체 폐업·인력 이탈 리스크(지속 가능성) 미포함</li><li>RFP/요구사항 정의 수준과 업체 역량 매칭 과정 미언급</li><li>플랫폼(위시켓 등) 활용을 통한 업체 검증 방법 미제시</li></ul>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<div class="inner-panel" id="ai-claude">
+
+<div class="two-col" style="margin-top:14px">
+  <div class="card" style="margin-bottom:0">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+      <div class="card-title" style="margin-bottom:0">Claude 응답</div>
+      <span style="font-size:11px;color:var(--text-muted)">위시켓 <span style="color:var(--hub);font-weight:600">언급됨</span></span>
+    </div>
+    <p style="font-size:11px;color:var(--text-dim);margin-bottom:10px">3개 대분류 기준 나열형 (프로젝트관리·경험검증·도메인이해도 순), 실제 실패 통계 인용 포함, 출처 URL 다수 첨부</p>
+    <ul class="bullet"><li>기술력보다 프로젝트 관리 체계·협업 방식·요구사항 관리 구조가 성공률에 더 큰 영향을 준다고 서술</li><li>IT 프로젝트 약 31%가 실패, 50% 이상이 일정 지연·예산 초과를 경험한다는 통계 인용</li><li>포트폴리오 외에 reference check(레퍼런스 실제 확인 전화) 방식을 구체적 검증 수단으로 제시</li><li>ERP는 단순 기술력 외에 도메인 이해도·커뮤니케이션·장기적 운영 안정성까지 포함해야 한다고 서술</li><li>SAP 등 산업별 특화 ERP 솔루션과 커스텀 ERP의 차이를 비교 맥락으로 언급</li><li>위시켓 블로그(개발 외주 비용 글)가 인용 출처에 포함됨</li></ul>
+  </div>
+  <div>
+    <div class="card" style="margin-bottom:10px">
+      <div class="card-title">인용 소스 (5)</div>
+      
+      <div class="serp-item"><div class="serp-rank">1</div><div class="serp-title">blog.gridge.co.kr</div><a href="https://blog.gridge.co.kr/outsourcing-development-company-selection/" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">2</div><div class="serp-title">whereisyourwork.com</div><a href="https://whereisyourwork.com/work-program-outsourcing/" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">3</div><div class="serp-title">blog.wishket.com</div><a href="https://blog.wishket.com/blog/outsourcing-development-cost" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">4</div><div class="serp-title">blog.gridge.co.kr</div><a href="https://blog.gridge.co.kr/llm-build-guide/" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">5</div><div class="serp-title">medium.com</div><a href="https://medium.com/@OrdinaryDeveloper" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+    </div>
+    <div class="card" style="margin-bottom:0">
+      <div class="card-title" style="color:var(--sub1)">누락 각도 (3)</div>
+      <ul class="bullet"><li>계약서 필수 항목(하자보수 기간, 소스코드 귀속 등) 세부 내용 미포함</li><li>비개발자 담당자 관점의 업체 검증 실용 체크리스트 미제시</li><li>ERP 도입 후 내부 운영 담당자 교육·기술 이전 조건 언급 없음</li></ul>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<div class="inner-panel" id="ai-gemini">
+
+<div class="two-col" style="margin-top:14px">
+  <div class="card" style="margin-bottom:0">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+      <div class="card-title" style="margin-bottom:0">Gemini 응답</div>
+      <span style="font-size:11px;color:var(--text-muted)">위시켓 <span style="color:var(--sub1);font-weight:600">미언급</span></span>
+    </div>
+    <p style="font-size:11px;color:var(--text-dim);margin-bottom:10px">5개 핵심 기준 번호 나열형 (도메인이해도→유지보수체계→기술확장성→PM인력→비용투명성 순서로 3회 모두 유사), 각 항목에 체크포인트·위험신호 소항목 포함</p>
+    <ul class="bullet"><li>도메인 이해도(산업군 업무 로직 파악)를 1순위 기준으로 3회 모두 동일하게 제시</li><li>ERP는 오픈(Go-Live)이 시작이므로 유지보수 전담팀 존재 여부와 업체 재무 건전성을 별도 확인해야 한다고 서술</li><li>기존 그룹웨어·국세청·은행 뱅킹 등 외부 시스템 연동 가능성을 체크포인트로 언급</li><li>PM 및 핵심 개발 인력 숙련도를 회사 규모보다 중요하게 보아야 한다고 서술</li><li>'얼마인가'보다 '무엇이 포함되는가'를 먼저 확인해야 한다고 반복 강조</li><li>프리랜서 위주·소수 개발자 업체의 폐업 위험을 위험 신호로 구체적으로 명시</li><li>개발 완료 후 문서화(설계서·매뉴얼)와 내부 인력 교육을 기술 이전 조건으로 언급</li><li>구축형(커스텀) ERP와 일반 앱 개발의 차이로 인해 더 까다로운 선정 기준이 필요하다고 서술</li></ul>
+  </div>
+  <div>
+    <div class="card" style="margin-bottom:10px">
+      <div class="card-title">인용 소스</div>
+      <span style="font-size:11px;color:var(--text-dim)">없음</span>
+    </div>
+    <div class="card" style="margin-bottom:0">
+      <div class="card-title" style="color:var(--sub1)">누락 각도 (4)</div>
+      <ul class="bullet"><li>계약 구조(선급금 비율, 단계별 지급 방식) 관련 언급 없음</li><li>복수 업체 견적 비교 프로세스(RFP 배포 방법 등) 미포함</li><li>플랫폼 기반 업체 검증 서비스(위시켓 등) 활용 방법 미제시</li><li>ERP 도입 실패 사례와 업체 선정 실수 유형 연결 분석 없음</li></ul>
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+<div class="sec-heading"><span class="sec-heading-icon">&#x1F4C8;</span><span class="sec-heading-text">위시켓 데이터 인사이트</span></div>
+
+
+
+
+
+<div class="warn-card" style="margin-bottom:14px">
+  <div class="lbl">DATA NOTE</div>
+  <div class="txt">같은 'ERP 신규 개발'이라도 연동 기능 추가(500만 원/20일)부터 물류 특화 대형 ERP(1억 3,500만 원/180일)까지 범위가 극단적으로 다르다. 사례를 비교할 때 구축 범위(단순 연동 vs 통합 ERP), 도메인(제조·물류·유통), 포함 항목(웹·앱·키오스크 복합 여부)이 전혀 다른 사례를 동일선상에 놓으면 안 된다. 사례는 comparable_group이 유사한 것끼리만 비교 가능하다. 이 데이터는 발주자의 예산 제시 기준이며 실제 계약 금액이 아니다.</div>
+</div>
+
+
+
+<div class="two-col" style="margin-bottom:14px">
+  <div>
+    
+    <div class="card" style="margin-bottom:0">
+      <div class="card-title" style="color:var(--hub)">&#x1F4A1; 데이터 활용 각도</div>
+      
+      <div style="font-size:12.5px;line-height:1.7;margin-bottom:10px"><strong style="color:var(--text)">구축 범위별 예산 분포</strong><br><span style="color:var(--text-muted);font-size:12px">'연동·자동화 추가'(500만~2,000만) vs '단일 업무 통합 ERP'(2,000만~5,000만) vs '다업무 통합+앱 연동'(5,000만~1억 이상) 구간을 comparable_group 기준으로 범위감으로 제시 가능. 구축 범위가 예산의 핵심 결정 요인임을 보여주는 데 활용</span></div>
+      
+      <div style="font-size:12.5px;line-height:1.7;margin-bottom:0"><strong style="color:var(--text)">도메인 특화 여부와 기간 관계</strong><br><span style="color:var(--text-muted);font-size:12px">제조·물류·유통 특화 ERP 사례와 범용 ERP 사례의 개발 기간 차이를 사례 카드로 보여줄 수 있다. 도메인 이해도가 왜 중요한지 설명하는 근거로 활용</span></div>
+      
+    </div>
+    
+  </div>
+  <div>
+    
+    <div class="card" style="margin-bottom:0">
+      <div class="card-title">예산 분포 (33건)</div>
+      <table><tr><th>구분</th><th style="text-align:right">Q1</th><th style="text-align:right">Q3</th></tr>
+      <tr><td><strong>전체</strong></td><td class="td-num">2,000만</td><td class="td-num">8,000만</td></tr>
+      </table>
+      <p style="font-size:10px;color:var(--text-dim);margin-top:8px">* 10~49건 구간이므로 집계 통계(중위값·Q1/Q3)를 콘텐츠에 직접 인용하지 않는다. 개별 사례만 사용한다. '2025년 위시켓에 등록된 ERP 신규 개발 프로젝트 약 30건'처럼 규모감 언급 수준은 허용. 이 데...</p>
+    </div>
+    
+    
+  </div>
+</div>
+
+
+
+<div class="card">
+  <div class="card-title">&#x1F4CB; 프로젝트 사례 (15건)</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px">
+    
+    <div style="background:var(--basis-bg);border:1px solid var(--basis-border);border-radius:8px;padding:14px 16px">
+      <div style="font-size:12.5px;font-weight:600;color:var(--text);line-height:1.5;margin-bottom:8px">기존 ERP 데이터 연동 웹 리포트 생성 및 인쇄 기능 개발</div>
+      <div style="display:flex;gap:12px;font-family:var(--font-mono);font-size:12px">
+        <span style="color:var(--hub);font-weight:600">500만 원</span>
+        <span style="color:var(--text-muted)">20일</span>
+      </div>
+      <div style="font-size:10px;color:var(--text-dim);margin-top:6px">ERP 연동 기능 추가 (소형)</div>
+    </div>
+    
+    <div style="background:var(--basis-bg);border:1px solid var(--basis-border);border-radius:8px;padding:14px 16px">
+      <div style="font-size:12.5px;font-weight:600;color:var(--text);line-height:1.5;margin-bottom:8px">스마트스토어-ERP 연동 재고관리 자동화 개발</div>
+      <div style="display:flex;gap:12px;font-family:var(--font-mono);font-size:12px">
+        <span style="color:var(--hub);font-weight:600">1,000만 원</span>
+        <span style="color:var(--text-muted)">30일</span>
+      </div>
+      <div style="font-size:10px;color:var(--text-dim);margin-top:6px">ERP 연동 자동화 (소형)</div>
+    </div>
+    
+    <div style="background:var(--basis-bg);border:1px solid var(--basis-border);border-radius:8px;padding:14px 16px">
+      <div style="font-size:12.5px;font-weight:600;color:var(--text);line-height:1.5;margin-bottom:8px">안드로이드 기반 장례 ERP 전용 셋탑박스 개발</div>
+      <div style="display:flex;gap:12px;font-family:var(--font-mono);font-size:12px">
+        <span style="color:var(--hub);font-weight:600">1,600만 원</span>
+        <span style="color:var(--text-muted)">60일</span>
+      </div>
+      <div style="font-size:10px;color:var(--text-dim);margin-top:6px">도메인 특화 ERP 신규 개발 (소형)</div>
+    </div>
+    
+    <div style="background:var(--basis-bg);border:1px solid var(--basis-border);border-radius:8px;padding:14px 16px">
+      <div style="font-size:12.5px;font-weight:600;color:var(--text);line-height:1.5;margin-bottom:8px">1인 무역 실무자를 위한 맞춤형 경량 ERP 개발</div>
+      <div style="display:flex;gap:12px;font-family:var(--font-mono);font-size:12px">
+        <span style="color:var(--hub);font-weight:600">2,000만 원</span>
+        <span style="color:var(--text-muted)">90일</span>
+      </div>
+      <div style="font-size:10px;color:var(--text-dim);margin-top:6px">경량 맞춤 ERP (소형)</div>
+    </div>
+    
+    <div style="background:var(--basis-bg);border:1px solid var(--basis-border);border-radius:8px;padding:14px 16px">
+      <div style="font-size:12.5px;font-weight:600;color:var(--text);line-height:1.5;margin-bottom:8px">자사 ERP 시스템 구축 Java/Spring Boot 백엔드 개발 지원</div>
+      <div style="display:flex;gap:12px;font-family:var(--font-mono);font-size:12px">
+        <span style="color:var(--hub);font-weight:600">2,000만 원</span>
+        <span style="color:var(--text-muted)">120일</span>
+      </div>
+      <div style="font-size:10px;color:var(--text-dim);margin-top:6px">ERP 백엔드 부분 개발 (소형)</div>
+    </div>
+    
+    <div style="background:var(--basis-bg);border:1px solid var(--basis-border);border-radius:8px;padding:14px 16px">
+      <div style="font-size:12.5px;font-weight:600;color:var(--text);line-height:1.5;margin-bottom:8px">Odoo 기반 ERP 구축</div>
+      <div style="display:flex;gap:12px;font-family:var(--font-mono);font-size:12px">
+        <span style="color:var(--hub);font-weight:600">2,000만 원</span>
+        <span style="color:var(--text-muted)">20일</span>
+      </div>
+      <div style="font-size:10px;color:var(--text-dim);margin-top:6px">오픈소스 기반 ERP 구축 (패키지+커스터마이징 경계)</div>
+    </div>
+    
+    <div style="background:var(--basis-bg);border:1px solid var(--basis-border);border-radius:8px;padding:14px 16px">
+      <div style="font-size:12.5px;font-weight:600;color:var(--text);line-height:1.5;margin-bottom:8px">무인 매장 관리를 위한 안드로이드 키오스크 및 웹 ERP 개발</div>
+      <div style="display:flex;gap:12px;font-family:var(--font-mono);font-size:12px">
+        <span style="color:var(--hub);font-weight:600">4,000만 원</span>
+        <span style="color:var(--text-muted)">120일</span>
+      </div>
+      <div style="font-size:10px;color:var(--text-dim);margin-top:6px">도메인 특화 ERP + 키오스크 연동 (중형)</div>
+    </div>
+    
+    <div style="background:var(--basis-bg);border:1px solid var(--basis-border);border-radius:8px;padding:14px 16px">
+      <div style="font-size:12.5px;font-weight:600;color:var(--text);line-height:1.5;margin-bottom:8px">사내 생산/재고/매출 통합 관리 ERP 시스템 구축</div>
+      <div style="display:flex;gap:12px;font-family:var(--font-mono);font-size:12px">
+        <span style="color:var(--hub);font-weight:600">4,000만 원</span>
+        <span style="color:var(--text-muted)">90일</span>
+      </div>
+      <div style="font-size:10px;color:var(--text-dim);margin-top:6px">제조·유통 통합 ERP (중형)</div>
+    </div>
+    
+    <div style="background:var(--basis-bg);border:1px solid var(--basis-border);border-radius:8px;padding:14px 16px">
+      <div style="font-size:12.5px;font-weight:600;color:var(--text);line-height:1.5;margin-bottom:8px">통합 업무관리 CRM/ERP 웹 시스템 구축</div>
+      <div style="display:flex;gap:12px;font-family:var(--font-mono);font-size:12px">
+        <span style="color:var(--hub);font-weight:600">5,000만 원</span>
+        <span style="color:var(--text-muted)">90일</span>
+      </div>
+      <div style="font-size:10px;color:var(--text-dim);margin-top:6px">CRM 연동 통합 ERP (중형)</div>
+    </div>
+    
+    <div style="background:var(--basis-bg);border:1px solid var(--basis-border);border-radius:8px;padding:14px 16px">
+      <div style="font-size:12.5px;font-weight:600;color:var(--text);line-height:1.5;margin-bottom:8px">유통업체 전용 커스텀 ERP 시스템 구축</div>
+      <div style="display:flex;gap:12px;font-family:var(--font-mono);font-size:12px">
+        <span style="color:var(--hub);font-weight:600">5,000만 원</span>
+        <span style="color:var(--text-muted)">150일</span>
+      </div>
+      <div style="font-size:10px;color:var(--text-dim);margin-top:6px">유통 특화 맞춤 ERP (중형)</div>
+    </div>
+    
+    <div style="background:var(--basis-bg);border:1px solid var(--basis-border);border-radius:8px;padding:14px 16px">
+      <div style="font-size:12.5px;font-weight:600;color:var(--text);line-height:1.5;margin-bottom:8px">저작물/정산/회원 관리 ERP 구축</div>
+      <div style="display:flex;gap:12px;font-family:var(--font-mono);font-size:12px">
+        <span style="color:var(--hub);font-weight:600">7,000만 원</span>
+        <span style="color:var(--text-muted)">150일</span>
+      </div>
+      <div style="font-size:10px;color:var(--text-dim);margin-top:6px">정산·회원 관리 통합 ERP (중형)</div>
+    </div>
+    
+    <div style="background:var(--basis-bg);border:1px solid var(--basis-border);border-radius:8px;padding:14px 16px">
+      <div style="font-size:12.5px;font-weight:600;color:var(--text);line-height:1.5;margin-bottom:8px">웹 기반 ERP DB 연동 업무자동화 시스템 구축</div>
+      <div style="display:flex;gap:12px;font-family:var(--font-mono);font-size:12px">
+        <span style="color:var(--hub);font-weight:600">7,000만 원</span>
+        <span style="color:var(--text-muted)">120일</span>
+      </div>
+      <div style="font-size:10px;color:var(--text-dim);margin-top:6px">업무자동화 연동 ERP (중형)</div>
+    </div>
+    
+    <div style="background:var(--basis-bg);border:1px solid var(--basis-border);border-radius:8px;padding:14px 16px">
+      <div style="font-size:12.5px;font-weight:600;color:var(--text);line-height:1.5;margin-bottom:8px">웹 발주 사이트 및 ERP 구축</div>
+      <div style="display:flex;gap:12px;font-family:var(--font-mono);font-size:12px">
+        <span style="color:var(--hub);font-weight:600">9,000만 원</span>
+        <span style="color:var(--text-muted)">150일</span>
+      </div>
+      <div style="font-size:10px;color:var(--text-dim);margin-top:6px">발주 시스템 + ERP 통합 구축 (중대형)</div>
+    </div>
+    
+    <div style="background:var(--basis-bg);border:1px solid var(--basis-border);border-radius:8px;padding:14px 16px">
+      <div style="font-size:12.5px;font-weight:600;color:var(--text);line-height:1.5;margin-bottom:8px">지게차/물류장비 판매/임대 업체 ERP 구축</div>
+      <div style="display:flex;gap:12px;font-family:var(--font-mono);font-size:12px">
+        <span style="color:var(--hub);font-weight:600">1억 3,500만 원</span>
+        <span style="color:var(--text-muted)">180일</span>
+      </div>
+      <div style="font-size:10px;color:var(--text-dim);margin-top:6px">물류 특화 ERP + 모바일 앱 (대형)</div>
+    </div>
+    
+    <div style="background:var(--basis-bg);border:1px solid var(--basis-border);border-radius:8px;padding:14px 16px">
+      <div style="font-size:12.5px;font-weight:600;color:var(--text);line-height:1.5;margin-bottom:8px">식품 판매 재고관리 시스템 구축 및 ERP 연동</div>
+      <div style="display:flex;gap:12px;font-family:var(--font-mono);font-size:12px">
+        <span style="color:var(--hub);font-weight:600">2억 5,000만 원</span>
+        <span style="color:var(--text-muted)">210일</span>
+      </div>
+      <div style="font-size:10px;color:var(--text-dim);margin-top:6px">식품·유통 대규모 시스템 + ERP 연동 (대형)</div>
+    </div>
+    
+  </div>
+</div>
+
+
+
+
+<div class="sec-heading"><span class="sec-heading-icon">&#x1F33F;</span><span class="sec-heading-text">팬아웃 제안 (추가 콘텐츠 후보)</span></div>
+
+
+<div class="fanout-grid">
+  
+  <div class="fanout-item">
+    <div class="fanout-top">
+      <div class="fanout-q">ERP 외주 미팅 전 비개발자가 준비해야 할 질문 리스트는 무엇인가요?</div>
+      <span class="badge b-purple">ERP 외주 개발 업체 미팅</span>
+    </div>
+    <div class="fanout-reason">PAA에서 '선정 과정 위험 요소'와 '계약서 항목'이 등장, Gemini·Claude 모두 PM 인터뷰·reference check 실용 과정을 언급했으나 경쟁글에서 구체적 질문 리스트 형태로 다룬 글 없음(축2+축3)</div>
+  </div>
+  
+  <div class="fanout-item">
+    <div class="fanout-top">
+      <div class="fanout-q">ERP 외주 계약서에 반드시 넣어야 할 항목은 무엇인가요?</div>
+      <span class="badge b-purple">ERP 외주 계약서</span>
+    </div>
+    <div class="fanout-reason">PAA에서 '계약서에 포함해야 할 주요 항목' 직접 질문 등장, 경쟁글(gridge) H2에 '계약 전 확인 사항' 항목 존재하나 ERP 특화 계약서 내용으로 독립 작성된 글 없음(축1+축3)</div>
+  </div>
+  
+  <div class="fanout-item">
+    <div class="fanout-top">
+      <div class="fanout-q">ERP 외주 개발 실패 사례, 어떤 업체 선택이 문제였나요?</div>
+      <span class="badge b-purple">ERP 외주 실패</span>
+    </div>
+    <div class="fanout-reason">Claude 응답에 'IT 프로젝트 31% 실패' 통계 등장, 네이버 블로그 상위 결과 제목 2건이 실패·후회 키워드 포함, 경쟁글이 실패 원인을 기준 나열 방식으로 처리해 스토리 기반 실패 분석 공백(축2+축3)</div>
+  </div>
+  
+  <div class="fanout-item">
+    <div class="fanout-top">
+      <div class="fanout-q">ERP 구축, 패키지 솔루션과 외주 개발 중 어느 쪽이 나을까요?</div>
+      <span class="badge b-purple">ERP 구축 패키지 외주 비교</span>
+    </div>
+    <div class="fanout-reason">Claude 응답에서 SAP 등 패키지 ERP vs 커스텀 ERP 비교 맥락 언급, 'ERP 구축' 키워드 월간 110건 검색량 확인, 경쟁글에서 패키지·커스텀 선택 기준을 독립 주제로 다룬 글 없음(축1+축2+축3)</div>
+  </div>
+  
+  <div class="fanout-item">
+    <div class="fanout-top">
+      <div class="fanout-q">위시켓에서 ERP 외주 업체를 찾을 때 어떻게 비교하면 되나요?</div>
+      <span class="badge b-purple">위시켓 ERP 외주</span>
+    </div>
+    <div class="fanout-reason">Claude analytical 인용 출처에 위시켓 블로그 포함(위시켓 언급됨), 경쟁글 모두 크몽·자체 플랫폼 유도형이며 위시켓 활용 가이드 공백, 기존 블로그 3건과 차별화된 플랫폼 활용법 각도 제안(축2+축4)</div>
+  </div>
+  
+</div>
+
+
+</div>
+
+
+
+
+
+<div class="tab-panel" id="view-context">
+
+<div class="hero">
+  <div class="hero-body">
+    <div class="hero-desc">콘텐츠를 쓸 때 지켜야 할 방향과 넘지 말아야 할 선을 정의합니다.</div>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="hero-stat-value" style="color:var(--sub1)">6</div><div class="hero-stat-label">독자 오해</div></div>
+    <div class="hero-stat"><div class="hero-stat-value" style="color:var(--accent)">6</div><div class="hero-stat-label">용어 규칙</div></div>
+    <div class="hero-stat"><div class="hero-stat-value" style="color:var(--sub2)">9</div><div class="hero-stat-label">Don'ts</div></div>
+    <div class="hero-stat"><div class="hero-stat-value" style="color:var(--hub)">6</div><div class="hero-stat-label">AI 교정</div></div>
+  </div>
+</div>
+
+
+<div class="sec-heading"><span class="sec-heading-icon">&#x1F4A1;</span><span class="sec-heading-text">독자 오해 교정</span></div>
+<div class="card">
+  
+  <div class="mis-row">
+    <div class="mis-belief-inline">ERP 개발 경험이 많은 업체가 곧 잘하는 업체다</div>
+    <div class="mis-arrow-inline">&rarr;</div>
+    <div class="mis-reality-inline">ERP 경험이라도 물류 ERP와 제조 ERP는 업무 로직이 완전히 다르다. 도메인(업종·업무 로직) 이해도와 프로젝트 관리 역량이 기술 역량만큼 중요하다</div>
+  </div>
+  
+  <div class="mis-row">
+    <div class="mis-belief-inline">포트폴리오 화면이 비슷하면 우리 ERP도 잘 만들 수 있을 것이다</div>
+    <div class="mis-arrow-inline">&rarr;</div>
+    <div class="mis-reality-inline">화면(UI)이 비슷해도 내부 업무 로직은 완전히 다를 수 있다. 비개발자가 포트폴리오에서 기술적 유사성을 판단하기는 어렵다</div>
+  </div>
+  
+  <div class="mis-row">
+    <div class="mis-belief-inline">개발이 완료되면 버그 수정·기능 수정을 무상으로 받을 수 있다</div>
+    <div class="mis-arrow-inline">&rarr;</div>
+    <div class="mis-reality-inline">하자보수(귀책 버그 무상 수정)와 유지보수(기능 변경·추가 유상)는 구분된다. ERP는 Go-Live 후 업무 변화에 따른 수정 수요가 필연적이므로 유지보수 비용을 별도로 계획해야 한다</div>
+  </div>
+  
+  <div class="mis-row">
+    <div class="mis-belief-inline">소스코드는 납품받는 것이 당연하다</div>
+    <div class="mis-arrow-inline">&rarr;</div>
+    <div class="mis-reality-inline">계약서에 지재권 조항이 없으면 소스코드를 넘겨받지 못하거나 추가 비용을 요구받는 사례가 있다. 계약 전에 명시적으로 요구해야 한다</div>
+  </div>
+  
+  <div class="mis-row">
+    <div class="mis-belief-inline">업체를 직접 찾아서 계약하는 것과 플랫폼을 통하는 것은 결과가 같다</div>
+    <div class="mis-arrow-inline">&rarr;</div>
+    <div class="mis-reality-inline">직접 계약 시 대금보호·표준계약서·분쟁 중재 구조가 없어 리스크를 전적으로 클라이언트가 부담한다</div>
+  </div>
+  
+  <div class="mis-row">
+    <div class="mis-belief-inline">가장 상세한 제안서를 낸 업체가 실력이 있다</div>
+    <div class="mis-arrow-inline">&rarr;</div>
+    <div class="mis-reality-inline">소규모·중규모 ERP에서 상세 제안서를 내는 업체는 드물다. 미팅 구두 협의가 일반적이며, 제안서 분량이 실력을 대변하지 않는다</div>
+  </div>
+  
+</div>
+
+
+<div class="sec-heading"><span class="sec-heading-icon">&#x1F4DD;</span><span class="sec-heading-text">용어 규칙 &amp; 서비스 경계</span></div>
+<div class="two-col">
+  
+  <div class="card">
+    <div class="card-title">용어 교정</div>
+    <table><tr><th style="color:var(--sub1)">사용 금지</th><th style="color:var(--hub)">올바른 표현</th></tr>
+    <tr><td>외주 업체</td><td>파트너 (위시켓 맥락) / 개발사 (일반 문맥)</td></tr><tr><td>하자보수 기간에 기능 수정</td><td>하자보수(버그 수정) vs 유지보수(기능 변경·추가)</td></tr><tr><td>ERP 솔루션 개발</td><td>ERP 맞춤 개발 / ERP 커스텀 개발 (처음부터 개발), ERP 패키지 도입 / ERP 솔루션 도입 (기존 제품)</td></tr><tr><td>위시켓 PM이 관리해줍니다</td><td>위시켓 매니저가 계약·대금·미팅을 함께합니다</td></tr><tr><td>플랫폼 수수료</td><td>프로젝트 대금 (클라이언트 추가 이용료 없음)</td></tr><tr><td>자동 매칭 / AI 매칭</td><td>매니저가 프로젝트에 적합한 파트너를 추천합니다</td></tr>
+    </table>
+  </div>
+  
+  <div class="card">
+    
+    <div class="card-title" style="color:var(--hub)">&#x2705; 주장 가능</div>
+    <ul class="check-list"><li class="ok">위시켓에 프로젝트를 등록하면 매니저가 영업일 24시간 이내에 연락하고, 적정 예산·기간을 무료로 상담해준다</li><li class="ok">위시켓 매니저가 파트너 미팅에 직접 참여하여 협의 사항을 확인한다</li><li class="ok">14만 명 이상의 IT 전문 파트너가 활동하며, 파트너 등급·포트폴리오·이전 프로젝트 평가를 비교할 수 있다</li><li class="ok">법무법인이 검토한 IT 아웃소싱 특화 표준계약서를 제공한다 (하자보수·지재권·대금보호 포함)</li><li class="ok">에스크로 방식의 대금보호시스템으로 클라이언트 예치금을 프로젝트 완료까지 위시켓이 보관한다</li><li class="ok">프로젝트 진행 중 문제 발생 시 매니저가 중재에 나선다 (안심중재솔루션)</li><li class="ok">프로젝트 등록·매니저 상담·파트너 모집·비교까지 클라이언트 추가 비용 없음</li><li class="ok">ERP·영업·정산·주문 시스템, 제조·물류 특화 프로젝트에 위시켓 엔터프라이즈 서비스가 있다 (전담 PMO + 소스코드 품질 진단)</li><li class="ok">위시켓 엔터프라이즈는 도메인 전문성·신용·규모·수행 이력 기반으로 최적 개발사를 제안한다</li><li class="ok">위시켓 엔터프라이즈 클라이언트 수수료 0%</li></ul>
+    
+    
+    <div class="card-title" style="margin-top:20px;color:var(--sub1)">&#x26D4; 주장 불가</div>
+    <ul class="check-list"><li class="no">위시켓이 프로젝트를 관리해준다</li><li class="no">대금보호로 프로젝트 성공을 보장한다 / 위험 없이 진행할 수 있다</li><li class="no">모든 파트너가 검증되었고 실력이 보장된다</li><li class="no">법적 분쟁을 완전히 예방한다</li><li class="no">위시켓이 외부에서 진행 중인 ERP 프로젝트의 분쟁을 중재해준다</li><li class="no">AI 매칭 / 자동 매칭으로 즉시 업체를 연결해준다</li></ul>
+    
+  </div>
+</div>
+
+
+<div class="sec-heading"><span class="sec-heading-icon">&#x1F6A7;</span><span class="sec-heading-text">집필 가드레일</span></div>
+
+<div class="gr-card">
+  <div class="gr-rule">&#x2716; '기술 스택을 확인하세요', '아키텍처를 물어보세요' 같은 전문가 행동을 독자에게 권유하지 않는다</div>
+  <div class="gr-alt">&#x2192; '비슷한 업종(제조·유통 등)의 ERP를 개발해본 경험이 있는지, 결과물을 보여줄 수 있는지 물어보세요'</div>
+</div>
+
+<div class="gr-card">
+  <div class="gr-rule">&#x2716; 레퍼런스 기업에 직접 연락해 검증하라고 권유하지 않는다</div>
+  <div class="gr-alt">&#x2192; 포트폴리오에서 유사 업종·업무 범위 경험을 확인하고, 미팅에서 구체적 질문으로 검증한다</div>
+</div>
+
+<div class="gr-card">
+  <div class="gr-rule">&#x2716; '개발 완료 후 무상으로 수정받을 수 있습니다', '하자보수 기간에 기능 개선을 요청하세요' 등 무상 범위를 확대 해석하는 서술을 하지 않는다</div>
+  <div class="gr-alt">&#x2192; '하자보수는 버그만 해당됩니다. ERP 기능 개선·사용자 요청 수정은 별도 유지보수 계약이 필요합니다'</div>
+</div>
+
+<div class="gr-card">
+  <div class="gr-rule">&#x2716; '소스코드는 당연히 받을 수 있습니다'라고 전제하지 않는다</div>
+  <div class="gr-alt">&#x2192; '계약 시 소스코드를 포함한 지재권 일체 양도를 명시해야 합니다'</div>
+</div>
+
+<div class="gr-card">
+  <div class="gr-rule">&#x2716; '유지보수를 최초 계약에 포함하세요'라고 권유하지 않는다</div>
+  <div class="gr-alt">&#x2192; '유지보수 대응이 가능한 업체인지, 담당 팀이 있는지만 미리 확인해두세요'</div>
+</div>
+
+<div class="gr-card">
+  <div class="gr-rule">&#x2716; '변경관리 절차를 계약서에 넣으세요'라고 구체적 조항으로 권유하지 않는다</div>
+  <div class="gr-alt">&#x2192; '범위가 바뀌면 비용·일정이 달라진다는 점을 업체와 미리 확인해두세요'</div>
+</div>
+
+<div class="gr-card">
+  <div class="gr-rule">&#x2716; '개발사가 QA까지 해줍니다'라고 서술하지 않는다</div>
+  <div class="gr-alt">&#x2192; '기능별 테스트는 개발사가, 실제 업무 흐름대로 전체를 확인하는 검수는 클라이언트가 해야 합니다'</div>
+</div>
+
+<div class="gr-card">
+  <div class="gr-rule">&#x2716; 솔루션(패키지) ERP 관련 조언을 맞춤 개발에 동일하게 적용하지 않는다</div>
+  <div class="gr-alt">&#x2192; 독자 상황이 패키지인지 맞춤 개발인지 먼저 구분하고, 해당 유형에 맞는 조언만 제공한다</div>
+</div>
+
+<div class="gr-card">
+  <div class="gr-rule">&#x2716; '서버·인프라는 개발사가 세팅해줍니다'처럼 서버 소유권을 개발사에 두게 만드는 서술을 하지 않는다</div>
+  <div class="gr-alt">&#x2192; '서버·도메인 계정은 우리 회사 명의로 만들어달라고 요청하세요'</div>
+</div>
+
+
+
+
+<div class="sec-heading"><span class="sec-heading-icon">&#x1F527;</span><span class="sec-heading-text">AI 응답 교정</span></div>
+<div class="card" style="padding:16px 20px">
+  
+  <div class="kp-correction">
+    <div class="kp-claim">ChatGPT 응답: '기존 고객 평가·레퍼런스 확인이 업체 신뢰도 판단 수단으로 제시됨'</div>
+    <div class="kp-fix">레퍼런스 기업에 직접 연락하여 후기를 얻는 것은 현실에서 거의 불가능하다. 비개발자 독자에게 이 행동을 권유하면 안 된다. '포트폴리오에서 유사 업종 경험을 확인하세요'로 대체해야 한다</div>
+  </div>
+  
+  <div class="kp-correction">
+    <div class="kp-claim">Claude 응답: 'reference check(레퍼런스 실제 확인 전화) 방식을 구체적 검증 수단으로 제시'</div>
+    <div class="kp-fix">제3자가 프로젝트 후기를 외부인에게 공유하지 않으므로 사실상 불가능한 행동이다. 비개발자 독자 가이드에서 이 방법을 권유하면 안 된다</div>
+  </div>
+  
+  <div class="kp-correction">
+    <div class="kp-claim">ChatGPT 응답: '기술 스택 역량 및 최신 기술 트렌드 이해도 평가를 강조'</div>
+    <div class="kp-fix">비개발자는 기술 스택 질문을 만들 수 없고 답변을 이해하지도 못한다. '어떤 방식으로 개발하는지, 유지보수가 가능한지 확인하세요' 수준으로 낮춰야 한다</div>
+  </div>
+  
+  <div class="kp-correction">
+    <div class="kp-claim">경쟁글(공통): '동종 업계 구축 경험(도메인 이해도)'을 핵심 선정 기준으로 제시하면서 클라이언트가 직접 기술 검증을 해야 하는 것처럼 서술</div>
+    <div class="kp-fix">도메인 이해도는 맞는 기준이지만, 비개발자가 기술적으로 검증하는 것은 불가능하다. '어떤 업종의 어떤 업무 프로세스를 개발했는지 미팅에서 직접 질문하고, 업체가 우리 업무를 이해하며 역제안하는지를 보세요'처럼 비개발자가 실행 가능한 수준으로 구체화해야 한다</div>
+  </div>
+  
+  <div class="kp-correction">
+    <div class="kp-claim">Gemini 응답: '기술적 확장성: 기존 그룹웨어·국세청·은행 뱅킹 등 외부 시스템 연동 가능성을 체크포인트로 언급'</div>
+    <div class="kp-fix">외부 시스템 연동 가능성은 중요하지만, 이것을 '기술적으로 평가하라'는 수준으로 제시하면 비개발자가 실행 불가능한 과제가 된다. '어떤 외부 시스템과 연동한 경험이 있는지 물어보세요'처럼 질문 형태로 낮춰야 한다</div>
+  </div>
+  
+  <div class="kp-correction">
+    <div class="kp-claim">연구 전반: '개발 완료 후 유지보수·사후 지원 서비스 제공 방식을 확인해야 한다'고 서술하면서 계약 포함을 암시</div>
+    <div class="kp-fix">유지보수를 최초 계약에 포함하는 경우는 거의 없다. '유지보수 대응 가능 여부를 미리 확인하세요'(존재 확인)와 '런칭 후 별도 계약이 일반적입니다'(시기 안내)로 구분해야 한다</div>
+  </div>
+  
+</div>
+
+
+</div>
+
+
+
+
+
+<div class="tab-panel" id="view-journey">
+
+<div class="hero">
+  <div class="hero-body">
+    <div class="hero-desc">독자가 누구인지, 어떤 감정 상태에서 이 질문을 검색하는지를 먼저 정의하고, 그 독자의 사고 흐름에 맞춘 콘텐츠 기획을 저니맵 형태로 보여줍니다.</div>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="hero-stat-value" style="color:var(--hub)">1</div><div class="hero-stat-label">Hub</div></div>
+    <div class="hero-stat"><div class="hero-stat-value" style="color:var(--sub1)">3</div><div class="hero-stat-label">Sub</div></div>
+    <div class="hero-stat"><div class="hero-stat-value" style="color:var(--accent)">14</div><div class="hero-stat-label">총 섹션</div></div>
+    <div class="hero-stat"><div class="hero-stat-value" style="color:var(--sub2)">10</div><div class="hero-stat-label">페인포인트</div></div>
+  </div>
+</div>
+
+
+<div class="two-col">
+  <div class="card">
+    <div class="card-title">독자 프로필</div>
+    <p style="font-size:13px;color:var(--text);line-height:1.7;margin-bottom:14px">ERP 맞춤 개발을 결정했거나 검토 중인 비개발자 담당자로, 업체 선정 경험이 없어 어떤 기준을 써야 실패를 피할 수 있는지 알지 못하는 상태</p>
+    
+    <div class="card-title">독자 세그먼트</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px"><span class="badge b-gray">size_small</span><span class="badge b-gray">size_mid</span><span class="badge b-gray">size_large</span><span class="badge b-gray">exp_first</span><span class="badge b-gray">exp_some</span><span class="badge b-gray">stage_ready</span><span class="badge b-gray">stage_explore</span></div>
+    
+    
+    <div class="reasoning-box rb-hub" style="margin-top:14px">
+      <div class="rb-label">Reader Profile Reasoning</div>
+      <div class="rb-text">자동완성에서 '외주 업체 선정 기준', '외주 업체 선정 프로세스'가 상위에 등장하고, AI 검색(ChatGPT·Claude·Gemini) 3개 모두 신규 도입을 전제로 선정 기준 프레임워크를 첫 번째로 제시한다. PAA 첫 번째 질문이 '고려해야 할 주요 요소'이고, 경쟁글 다수가 IT 비전문 독자를 대상으로 한다. context.json의 knowledge_level이 tech_foggy이며, 3개 상황 가설 모두 '맞춤 개발 검토 중 + 판단 기준 없음'을 공통으로 가지므로 이를 상위 프로필로 잡았다.</div>
+    </div>
+    
+  </div>
+  <div class="card">
+    
+    <div class="card-title">페인포인트</div>
+    <ul class="bullet"><li>업체마다 제안서·견적이 완전히 달라서 어떤 게 맞는 건지 판단이 안 됨</li><li>ERP가 뭔지는 알겠는데 개발 방식·복잡도가 달라서 어느 업체가 잘하는지 모르겠음</li><li>도메인(제조·물류·유통 등) 경험 있는 업체를 어떻게 검증해야 할지 모름</li><li>포트폴리오를 봐도 우리 업무와 유사한지 판단하기가 어려움</li><li>개발이 끝나면 관리는 어디서 받아야 하나, 업체가 사라지면 어쩌나 불안</li><li>가격 차이가 너무 커서(작은 것에서 수억까지) 어디에 맞춰야 할지 모름</li><li>미팅에서 업체가 하는 말을 제대로 이해하지 못하고 그냥 끄덕이게 됨</li><li>계약서에 뭘 넣어야 나중에 분쟁이 없는지 모름</li><li>소스코드나 시스템 권한을 제대로 넘겨받을 수 있는지 확인이 어려움</li><li>내부에 IT팀이 없어서 개발이 끝난 후 운영을 어떻게 해야 할지 막막함</li></ul>
+    
+  </div>
+</div>
+
+
+<div class="inner-tabs">
+  <button class="inner-tab active" data-color="hub" onclick="switchInner('jm-hub',this)">Hub: ERP 외주 개발 업체를 처음 고르는...</button>
+  
+  <button class="inner-tab" data-color="sub1" onclick="switchInner('jm-sub1',this)">Sub 1: ERP 업체 미팅 전에 무엇을 준...</button>
+  
+  <button class="inner-tab" data-color="sub2" onclick="switchInner('jm-sub2',this)">Sub 2: ERP 외주 계약서에서 소스코드·...</button>
+  
+  <button class="inner-tab" data-color="sub3" onclick="switchInner('jm-sub3',this)">Sub 3: 기존 ERP를 새 시스템으로 교체...</button>
+  
+</div>
+
+
+<div class="inner-panel active" id="jm-hub">
+  <div class="section-title-bar">
+    <div class="stb-head">
+      <div class="stb-color" style="background:var(--hub)"></div>
+      <div class="stb-content">
+        <div class="stb-overline" style="color:var(--hub)">Hub &mdash; 메인 콘텐츠</div>
+        <div class="stb-question">ERP 외주 개발 업체를 처음 고르는 비개발자가, 기술을 몰라도 실패를 피하기 위해 확인해야 할 기준이 무엇인가요?</div>
+        <div class="stb-tags">
+          <span class="stb-tag" style="background:var(--hub-light);color:var(--hub)">4 steps</span>
+          <span class="stb-tag" style="background:var(--hub-light);color:var(--hub)">&rarr; sub_meeting_checklist</span><span class="stb-tag" style="background:var(--hub-light);color:var(--hub)">&rarr; sub_contract_checklist</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="reasoning-box rb-hub"><div class="rb-label">Flow Reasoning</div><div class="rb-text">독자는 ERP 맞춤 개발을 결정하고 업체를 탐색 중인 비개발자다. '어떤 기준으로 골라야 하는가'가 막막한 출발 상태에서, 가장 먼저 해소해야 할 것은 '기술력' 이전에 '우리 업무를 아는가'라는 도메인 이해도 프레임이다. AI 검색(Gemini)이 도메인 이해도를 3회 모두 1순위로 제시하고, 경쟁글 다수가 동종 업계 경험을 핵심 기준으로 다룬다는 점이 이 순서를 뒷받침한다. 이후 포트폴리오만으로 판단이 안 된다는 막힘을 풀기 위해 미팅에서 실제로 검증하는 방법(역제안·질문), 역량 확인 후 남는 프로젝트 관리 체계 불안, 마지막으로 계약 단계의 리스크 관리 순으로 흐름을 잡았다. 마지막 노드는 '정보 부족'이 아닌 '소스코드·유지보수 조건 등 계약 리스크' 즉 감정 장벽(잘못 고르면 돈만 날린다는 불안)을 해소하는 구조로 마무리한다. Claude 응답이 프로젝트 관리를 1순위로 제시했지만, context.json 교정에 따라 '비개발자가 기술 검증 전에 먼저 할 수 있는 것'인 도메인 이해도 확인을 앞에 배치했다.</div></div>
+    
+  </div>
+
+  <div class="section-scroll"><div class="map-grid c-hub" style="grid-template-columns:var(--row-label-w) repeat(4,var(--col-w))">
+  
+  <div class="rl" style="min-height:auto">&#x1F3F7;&#xFE0F; Stage</div>
+  <div class="stage-cell"><div class="stage-pill">H1</div></div><div class="stage-cell"><div class="stage-pill">H2</div></div><div class="stage-cell"><div class="stage-pill">H3</div></div><div class="stage-cell"><div class="stage-pill">H4</div></div>
+  <div class="rl" style="min-height:auto">&#x1F4C8; 감정</div>
+  <div class="emotion-strip"><svg class="emotion-svg" viewBox="0 0 1040 150" preserveAspectRatio="none">
+<rect x="0" y="0" width="260" height="150" fill="rgba(231,76,60,.04)" rx="4"/>
+<rect x="260" y="0" width="260" height="150" fill="rgba(243,156,18,.04)" rx="4"/>
+<rect x="520" y="0" width="260" height="150" fill="rgba(231,76,60,.04)" rx="4"/>
+<rect x="780" y="0" width="260" height="150" fill="rgba(46,204,113,.04)" rx="4"/>
+<text x="130" y="90" text-anchor="middle" style="font-size:18px">😯</text>
+<circle cx="130" cy="110" r="6" fill="var(--emotion-low)"/>
+<text x="130" y="128" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-low)">당혹</text>
+<text x="130" y="146" text-anchor="middle" class="emotion-sublabel">ERP 개발 업?</text>
+<text x="390" y="55" text-anchor="middle" style="font-size:18px">🤔</text>
+<circle cx="390" cy="75" r="6" fill="var(--emotion-mid)"/>
+<text x="390" y="93" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-mid)">답답</text>
+<text x="390" y="146" text-anchor="middle" class="emotion-sublabel">미팅에서 업체의?</text>
+<text x="650" y="90" text-anchor="middle" style="font-size:18px">😯</text>
+<circle cx="650" cy="110" r="6" fill="var(--emotion-low)"/>
+<text x="650" y="128" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-low)">불안</text>
+<text x="650" y="146" text-anchor="middle" class="emotion-sublabel">개발이 시작된 ?</text>
+<text x="910" y="20" text-anchor="middle" style="font-size:18px">😌</text>
+<circle cx="910" cy="40" r="6" fill="var(--emotion-high)"/>
+<text x="910" y="58" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-high)">안심</text>
+<text x="910" y="146" text-anchor="middle" class="emotion-sublabel">ERP 외주 계?</text>
+</svg></div>
+  <div class="rl">&#x1F4AD; 상태</div>
+  <div class="dc state-cell">업체 2~3곳의 포트폴리오와 견적을 훑어봤는데, 화면이 비슷해 보이거나 금액이 업체마다 달라서 어떤 기준으로 골라야 할지 갈피를 못 잡고 당혹스럽다</div><div class="dc state-cell">포트폴리오를 봐도 화면 사진만 있어서 이 업체가 우리 업무를 실제로 이해하는지 판단이 서지 않고, 미팅을 잡기 전에 어떻게 확인해야 할지 모르겠다</div><div class="dc state-cell">도메인 경험도 확인했고 미팅에서 좋은 인상을 받았는데, 개발이 시작되면 일정이 밀리거나 중간에 소통이 잘 안 되는 상황을 어떻게 예방할 수 있는지 불안하다</div><div class="dc state-cell">업체를 좁혀가고 있는데, 계약서에 소스코드 귀속이나 하자보수 범위 같은 조항을 어떻게 넣어야 하는지 몰라서 나중에 분쟁이 생길까봐 불안하다</div>
+  <div class="rl q-label">&#x2753; 질문</div>
+  <div class="dc q">ERP 개발 업체를 고를 때 가장 먼저 무엇을 봐야 하나요?</div><div class="dc q">미팅에서 업체의 도메인 이해도를 어떻게 확인할 수 있나요?</div><div class="dc q">개발이 시작된 후 프로젝트가 제대로 진행되는지 어떻게 확인할 수 있나요?</div><div class="dc q">ERP 외주 계약서에서 꼭 확인해야 할 조항은 무엇인가요?</div>
+  <div class="rl">&#x1F4A1; 핵심 답변</div>
+  <div class="dc">기술력보다 먼저 확인해야 할 것은 '우리 업종의 업무를 개발해본 경험이 있는가'다. 물류 ERP와 제조 ERP는 화면이 비슷해 보여도 내부 업무 로직이 완전히 다르기 때문에, 비슷한 화면을 만든 경험이 우리 시스템을 잘 만들 수 있다는 보장이 되지 않는다. 포트폴리오에서 어떤 업종의 어떤 업무를 개발했는지를 먼저 확인하는 것이 출발점이다.</div><div class="dc">미팅에서 업체가 우리 업무 프로세스를 먼저 물어보고 그에 맞는 기능을 제안하는지를 보는 것이 가장 실질적인 확인 방법이다. 업체가 기능 목록을 일방적으로 나열하기만 한다면, 우리 업무를 이해하지 못한 채 일반 ERP 템플릿으로 접근하고 있다는 신호일 수 있다. 미팅 전에 '어떤 업종의 ERP를 개발해봤는지, 그 프로젝트에서 어떤 업무를 자동화했는지' 두 가지 질문을 준비해두면 미팅 중 판단 근거가 생긴다.</div><div class="dc">개발 시작 전에 중간 보고 방식과 산출물 납품 구조를 미리 확인하는 것이 현실적인 예방 방법이다. 전담 PM이 있는지, 진행 상황을 어떤 주기로 공유하는지, 개발 단계별로 무엇을 납품받는지를 미팅에서 확인해두면 개발 중 소통 공백을 줄일 수 있다. 이 구조가 명확하지 않은 업체는 개발이 시작된 후 연락이 뜸해지거나 일정 변경이 일방 통보로 이루어지는 패턴으로 이어질 수 있다.</div><div class="dc">ERP 외주 계약에서 나중에 분쟁이 생기는 지점은 대부분 세 가지에 집중된다. 소스코드를 포함한 지재권이 우리 회사 명의로 귀속되는지, 하자보수(개발사 귀책 버그의 무상 수정)와 유지보수(기능 추가·변경의 유상 계약)가 명확히 구분되어 있는지, 서버·도메인 계정이 우리 명의로 개설되는지가 계약 전에 확인해야 할 핵심이다. 이 세 가지가 계약서에 명시되어 있지 않으면 개발 완료 후 업체와의 관계가 끝나도 시스템을 온전히 통제하지 못하는 상황이 생길 수 있다. 위시켓 표준계약서에는 하자보수·지재권·대금보호 조항이 포함되어 있어 직접 계약할 때의 공백을 줄일 수 있다.</div>
+  <div class="rl">&#x25B6;&#xFE0F; 도전</div>
+  <div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 업체 포트폴리오에서 우리 업종(제조·유통·물류 등)과 유사한 프로젝트가 있는지 찾아보고, 어떤 업무 기능을 개발했는지 설명된 내용을 확인해본다</div></div><div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 미팅에서 '저희 업종에서 비슷한 ERP를 개발해본 적 있으신가요? 그때 어떤 업무를 개발하셨나요?'라고 질문하고, 업체가 우리 업무 흐름을 물어보며 제안하는지 관찰해본다</div></div><div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 업체에 '개발 기간 동안 진행 상황을 어떻게 공유해주시나요? 중간 산출물을 언제 받을 수 있나요?'라고 물어보고, 담당 PM 유무와 보고 주기를 확인해본다</div></div><div class="dc try-row"><span style="color:var(--text-dim);font-size:11px">&mdash;</span></div>
+  <div class="rl">&#x2716; 다음 문제</div>
+  <div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 포트폴리오 사례가 있긴 한데, 화면 사진만 있고 어떤 업무 프로세스를 개발했는지 설명이 없어서 실제로 우리 업무와 유사한지 판단이 안 된다</div></div><div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 도메인 경험이 있고 미팅도 잘 된 것 같은데, 실제 개발이 시작되면 일정이 지연되거나 소통이 끊기는 경우가 있다고 들었는데 그걸 미팅에서 미리 확인할 수 있는 방법이 있는지 모르겠다</div></div><div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 프로젝트 관리 체계까지 확인했는데, 계약서에 무엇을 넣어야 나중에 분쟁이 없는지, 소스코드를 제대로 넘겨받을 수 있는지 판단이 안 선다</div></div><div class="dc block-row"><span style="color:var(--text-dim);font-size:11px">&mdash;</span></div>
+  <div class="rl basis-label">&#x1F4CE; 근거</div>
+  <div class="dc basis-cell">primary_context의 핵심 고민('어떤 기준으로 골라야 하는가')에서 자연스럽게 나오는 첫 번째 질문이다. AI 검색(Gemini)이 도메인 이해도를 3회 모두 1순위 기준으로 제시했고, 경쟁글 다수도 동종 업계 구축 경험을 핵심 선정 기준으로 공통으로 다루므로 첫 노드로 배치했다. context.json 교정에서 '도메인 이해도는 맞는 기준이지만 비개발자가 기술적으로 검증하는 것은 불가능하므로 실행 가능한 수준으로 구체화해야 한다'는 방향을 따랐다.</div><div class="dc basis-cell">포트폴리오로 판단이 안 된다는 h1의 block이 이 state를 만든다. 비개발자가 기술 역량을 직접 검증하는 것은 불가능하므로 미팅에서 관찰 가능한 신호로 대체하는 접근이 필요하다. PAA에서 '선정 과정에서 발생할 수 있는 위험 요소'가 등장하고, AI 검색(Gemini)이 'PM 및 핵심 개발 인력 숙련도를 회사 규모보다 중요하게 보아야 한다'고 제시해 미팅 검증 방법 노드의 필요성을 뒷받침한다.</div><div class="dc basis-cell">미팅 인상이 좋아도 개발 중 소통 공백 리스크가 남는다는 h2의 block이 이 state를 만든다. AI 검색(Claude)이 '프로젝트 관리 체계와 협업 방식이 성공률에 더 큰 영향을 준다'고 강조했고, AI 검색(Gemini)도 'PM 및 핵심 인력 숙련도를 중요하게 봐야 한다'고 제시해 이 노드를 독립 배치하는 근거가 된다.</div><div class="dc basis-cell">프로젝트 관리 체계까지 확인한 후에도 계약 리스크라는 감정 장벽(잘못 고르면 돈만 날린다는 불안)이 마지막으로 남는다. context.json의 reader_misconceptions에서 '소스코드 귀속이 당연하다'와 '하자보수로 기능 수정을 무상 받을 수 있다'는 오해가 명시되어 있고, AI 검색(ChatGPT)의 missing_angles도 '소스코드 소유권·기술 이전 조건 미언급'을 지목해 이 노드의 필요성을 뒷받침한다. 마지막 노드가 정보가 아닌 신뢰·안전 확보로 마무리되도록 계약 보호 구조를 해소 경로로 제시했다.</div>
+  <div class="rl" style="border-bottom:none">&#x2935;&#xFE0F; 분기</div>
+  <div class="dc branch-cell empty">&mdash;</div><div class="dc branch-cell"><span class="branch-pill" style="background:var(--sub1-light);color:var(--sub1)">&#x2193; sub_meeting_checklist</span></div><div class="dc branch-cell empty">&mdash;</div><div class="dc branch-cell"><span class="branch-pill" style="background:var(--sub2-light);color:var(--sub2)">&#x2193; sub_contract_checklist</span></div>
+  </div></div>
+</div>
+
+
+
+<div class="inner-panel" id="jm-sub1">
+  
+  <div class="hub-sub-connector"><div class="connector-visual">
+    <div class="cv-line" style="background:var(--hub)"></div>
+    <span class="cv-label" style="background:var(--hub-light);color:var(--hub)">Hub h2</span>
+    <span style="color:var(--text-dim)">&rarr;</span>
+    <div class="cv-line" style="background:var(--sub1)"></div>
+    <span class="cv-label" style="background:#FDF0F0;color:#D94F4F">sub_meeting_checklist</span>
+    <span class="cv-desc">depth &mdash; ERP 업체 미팅 전에 무엇을 준비하고, 미팅 중에 어떤 신호를 봐야 하...</span>
+  </div></div>
+  
+
+  <div class="section-title-bar">
+    <div class="stb-head">
+      <div class="stb-color" style="background:var(--sub1)"></div>
+      <div class="stb-content">
+        <div class="stb-overline" style="color:var(--sub1)">Sub Content 1 &mdash; depth from h2</div>
+        <div class="stb-question">ERP 업체 미팅 전에 무엇을 준비하고, 미팅 중에 어떤 신호를 봐야 하나요?</div>
+        <div class="stb-tags">
+          <span class="stb-tag" style="background:#FDF0F0;color:#D94F4F">3 steps</span>
+          <span class="stb-tag" style="background:#FDF0F0;color:#D94F4F">source: depth</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="reasoning-box rb-sub1"><div class="rb-label">Selection Reasoning</div><div class="rb-text">hub h2는 '미팅에서 도메인 이해도와 프로젝트 관리 체계를 어떻게 확인하는가'를 1~2문장 수준의 stance로 처리한다. 실제로 비개발자가 미팅 전에 무엇을 준비하고, 미팅 중에 어떤 신호를 어떻게 관찰해야 하는지의 실행 단계가 hub에서 다루기에는 너무 구체적이다. 경쟁글 missing_angles에서 '비개발자 담당자가 미팅 전 준비해야 할 질문 리스트 형태의 실용 가이드 부재'가 명시되어 있고, AI 검색(Claude)의 missing_angles도 '비개발자 관점의 업체 검증 실용 체크리스트 미제시'를 지목했다. 미팅 준비부터 미팅 중 관찰 포인트, 미팅 후 비교까지 스텝바이스텝으로 풀면 hub과 명확히 차별화된 실용 콘텐츠가 된다.</div></div>
+    
+  </div>
+
+  <div class="section-scroll"><div class="map-grid c-sub1" style="grid-template-columns:var(--row-label-w) repeat(3,var(--col-w))">
+  
+  
+  <div class="rl flow-reason-label">흐름 근거</div><div class="dc flow-reason-cell">hub에서 '어떤 두 가지 질문을 준비하면 된다'는 stance를 받은 독자가 실제 미팅에 들어갔을 때 부딪히는 문제를 순서대로 따라간다. 미팅 전 준비(무엇을 가져가야 하나) → 미팅 중 관찰(업체가 어떤 반응을 보이면 좋은 신호인가) → 미팅 후 비교(여러 업체를 어떻게 정리해서 판단하나) 순서로 흐름을 잡는다. 미팅 후 비교 단계에서는 비개발자가 보고서로 만들 수 있는 수준의 비교 구조를 제시해 임원 보고 구조까지 커버한다.</div>
+  
+  <div class="rl" style="min-height:auto">&#x1F3F7;&#xFE0F; Stage</div>
+  <div class="stage-cell"><div class="stage-pill">S1_1</div></div><div class="stage-cell"><div class="stage-pill">S1_2</div></div><div class="stage-cell"><div class="stage-pill">S1_3</div></div>
+  <div class="rl" style="min-height:auto">&#x1F4C8; 감정</div>
+  <div class="emotion-strip short"><svg class="emotion-svg" viewBox="0 0 780 130" preserveAspectRatio="none">
+<rect x="0" y="0" width="260" height="130" fill="rgba(231,76,60,.04)" rx="4"/>
+<rect x="260" y="0" width="260" height="130" fill="rgba(243,156,18,.04)" rx="4"/>
+<rect x="520" y="0" width="260" height="130" fill="rgba(46,204,113,.04)" rx="4"/>
+<text x="130" y="90" text-anchor="middle" style="font-size:18px">😯</text>
+<circle cx="130" cy="110" r="6" fill="var(--emotion-low)"/>
+<text x="130" y="128" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-low)">막막</text>
+<text x="130" y="126" text-anchor="middle" class="emotion-sublabel">ERP 업체 미?</text>
+<text x="390" y="55" text-anchor="middle" style="font-size:18px">🤔</text>
+<circle cx="390" cy="75" r="6" fill="var(--emotion-mid)"/>
+<text x="390" y="93" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-mid)">관망</text>
+<text x="390" y="126" text-anchor="middle" class="emotion-sublabel">미팅에서 어떤 ?</text>
+<text x="650" y="20" text-anchor="middle" style="font-size:18px">😌</text>
+<circle cx="650" cy="40" r="6" fill="var(--emotion-high)"/>
+<text x="650" y="58" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-high)">안심</text>
+<text x="650" y="126" text-anchor="middle" class="emotion-sublabel">미팅 후 여러 ?</text>
+</svg></div>
+  <div class="rl">&#x1F4AD; 상태</div>
+  <div class="dc state-cell">hub에서 미팅에서 업체를 확인하는 방법을 알았는데, 막상 미팅 일정을 잡고 나니 어떤 내용을 가져가야 할지, 어떤 질문을 해야 할지 준비가 막막하다</div><div class="dc state-cell">업무 현황을 가져갔는데, 미팅에서 업체가 하는 말이 어렵고 어떤 반응이 좋은 신호인지, 어떤 반응이 나쁜 신호인지 판단이 안 된다</div><div class="dc state-cell">미팅을 2~3군데 마쳤는데, 각 업체에 대한 인상과 메모가 흩어져 있어서 어떤 기준으로 비교해 정리해야 대표나 임원에게 판단 근거를 설명할 수 있을지 모르겠다</div>
+  <div class="rl q-label">&#x2753; 질문</div>
+  <div class="dc q">ERP 업체 미팅 전에 무엇을 준비해야 하나요?</div><div class="dc q">미팅에서 어떤 반응을 보이는 업체가 믿을 만한 업체인가요?</div><div class="dc q">미팅 후 여러 업체를 어떻게 비교해서 정리해야 하나요?</div>
+  <div class="rl">&#x1F4A1; 핵심 답변</div>
+  <div class="dc">업체가 우리 업무를 이해하려면 우리가 먼저 업무를 설명할 수 있어야 한다. 현재 어떤 업무를 어떻게 처리하고 있는지, 가장 불편하거나 시간이 많이 걸리는 업무가 무엇인지를 메모 수준으로 정리해서 미팅에 가져가면, 업체가 우리 상황에 맞게 제안하는지 아닌지를 관찰할 수 있는 기준이 생긴다. 완성도 높은 문서가 아니어도 된다.</div><div class="dc">비개발자가 기술 역량을 직접 평가할 수는 없지만, 미팅 태도에서 신뢰 신호를 읽을 수 있다. 우리 업무를 먼저 물어보고 그에 맞는 기능을 제안하는 업체, 구체적인 구현 방법을 우리 언어로 설명하는 업체가 도메인을 이해하고 있다는 신호다. 반대로 모든 업체에게 같은 제안서를 꺼내놓거나 '다 가능합니다'만 반복하는 업체는 우리 업무를 파악하지 않은 채 영업하는 방식일 수 있다.</div><div class="dc">미팅 후 비교는 느낌이 아닌 확인한 항목을 나란히 두는 방식이 유효하다. 도메인 이해도(우리 업무를 얼마나 물어봤는가), 유사 프로젝트 경험 유무, 개발 기간과 비용, PM 유무와 보고 방식, 하자보수 조건 — 이 다섯 가지 항목을 업체별로 정리하면 비교표가 된다. 항목별 정리가 있으면 최종 판단을 임원에게 설명하기도 쉬워진다. 비교 과정에서 정보가 부족한 항목은 업체에 추가로 물어보면 된다.</div>
+  <div class="rl">&#x25B6;&#xFE0F; 도전</div>
+  <div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 현재 처리 중인 주요 업무 3~5가지와 가장 불편한 점을 A4 한 장 분량으로 정리해서 미팅 전날 완성해둔다</div></div><div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 미팅 후 '이 업체는 우리 업무를 얼마나 이해했는가'와 '설명이 우리 수준에서 이해됐는가'를 메모해두고, 여러 업체 미팅 후 나란히 비교해본다</div></div><div class="dc try-row"><span style="color:var(--text-dim);font-size:11px">&mdash;</span></div>
+  <div class="rl">&#x2716; 다음 문제</div>
+  <div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 업무 현황은 정리했는데, 미팅에서 업체가 하는 말을 제대로 이해하지 못한 채 끄덕이게 될 것 같고, 어떤 답변이 좋은 신호인지 판단이 안 된다</div></div><div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 미팅 인상을 메모했는데, 여러 업체를 비교해서 결과를 정리하고 싶은데 어떤 기준으로 나란히 두어야 대표나 임원에게 설명하기 쉬운 형태가 될지 모르겠다</div></div><div class="dc block-row"><span style="color:var(--text-dim);font-size:11px">&mdash;</span></div>
+  <div class="rl basis-label" style="border-bottom:none">&#x1F4CE; 근거</div>
+  <div class="dc basis-cell" style="border-bottom:none">hub h2 stance를 실행하려는 독자가 첫 번째로 부딪히는 막힘이 '준비 방법 모름'이다. context.json의 capability_limits에서 '기능 요구사항을 구조화된 문서로 작성하기 어려움'이 명시되어 있고, responsibility_map에서 '도메인 업무 로직 설명이 클라이언트 책임'이라는 점이 이 노드를 sub 첫 번째로 배치하는 근거가 된다.</div><div class="dc basis-cell" style="border-bottom:none">미팅 준비를 했어도 미팅 중 판단 기준이 없으면 인상에만 의존하게 된다는 h1의 block이 이 state를 만든다. context.json의 reader_misconceptions에서 '가장 상세한 제안서를 낸 업체가 실력이 있다'는 오해를 '미팅에서 역제안과 구체적 질문이 오는 업체를 신뢰 신호로 제시해야 한다'로 교정한 내용이 이 노드의 stance 방향을 뒷받침한다.</div><div class="dc basis-cell" style="border-bottom:none">미팅 후 비교 정리가 안 되면 최종 판단이 인상에 의존하게 된다는 s1_2의 block이 이 state를 만든다. context.json의 possible_decision_structures에서 '담당자가 추려 임원에게 보고하는 구조'가 명시되어 있어, 보고 가능한 형태로 정리하는 것이 독자의 실제 과제임을 확인했다. 마지막 노드로 비교표를 제공하면 sub가 실용 도구로 마무리된다.</div>
+  </div></div>
+</div>
+
+<div class="inner-panel" id="jm-sub2">
+  
+  <div class="hub-sub-connector"><div class="connector-visual">
+    <div class="cv-line" style="background:var(--hub)"></div>
+    <span class="cv-label" style="background:var(--hub-light);color:var(--hub)">Hub h4</span>
+    <span style="color:var(--text-dim)">&rarr;</span>
+    <div class="cv-line" style="background:var(--sub2)"></div>
+    <span class="cv-label" style="background:#FFF8EB;color:#C68A1D">sub_contract_checklist</span>
+    <span class="cv-desc">depth &mdash; ERP 외주 계약서에서 소스코드·하자보수·서버 소유권을 어떻게 확인해야 ...</span>
+  </div></div>
+  
+
+  <div class="section-title-bar">
+    <div class="stb-head">
+      <div class="stb-color" style="background:var(--sub2)"></div>
+      <div class="stb-content">
+        <div class="stb-overline" style="color:var(--sub2)">Sub Content 2 &mdash; depth from h4</div>
+        <div class="stb-question">ERP 외주 계약서에서 소스코드·하자보수·서버 소유권을 어떻게 확인해야 분쟁을 줄일 수 있나요?</div>
+        <div class="stb-tags">
+          <span class="stb-tag" style="background:#FFF8EB;color:#C68A1D">4 steps</span>
+          <span class="stb-tag" style="background:#FFF8EB;color:#C68A1D">source: depth</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="reasoning-box rb-sub2"><div class="rb-label">Selection Reasoning</div><div class="rb-text">hub h4는 소스코드 귀속·하자보수/유지보수 구분·서버 소유권을 세 줄로 나열하는 수준에서 처리한다. 각 항목이 계약서에 실제로 어떻게 적혀 있어야 하는지, 빠졌을 때 어떤 분쟁이 생기는지, 확인 방법이 무엇인지는 hub에서 다루기 어렵다. AI 검색(ChatGPT)의 missing_angles에서 '소스코드 소유권·기술 이전 조건 미언급'이, PAA에서 '계약서에 포함해야 할 주요 항목'이 직접 질문으로 등장했다. 경쟁글(gridge)에서 계약 전 체크 항목을 별도 H2로 다루고 있으나 ERP 특화 조항까지 구체화된 글은 없어, 이 각도를 ERP 특화 계약서 가이드로 풀면 경쟁글 대비 깊이 있는 콘텐츠가 된다.</div></div>
+    
+  </div>
+
+  <div class="section-scroll"><div class="map-grid c-sub2" style="grid-template-columns:var(--row-label-w) repeat(4,var(--col-w))">
+  
+  
+  <div class="rl flow-reason-label">흐름 근거</div><div class="dc flow-reason-cell">hub에서 '세 가지 항목을 확인해야 한다'는 stance를 받은 독자가 실제 계약서를 앞에 두고 부딪히는 문제를 순서대로 따라간다. 지재권/소스코드 귀속(가장 먼저 확인해야 하는 이유와 확인 방법) → 하자보수와 유지보수 구분(ERP에서 특히 중요한 이유와 실제 계약 구조) → 서버·도메인 소유권(잘 모르고 지나치기 쉬운 항목) 순서로 각 항목을 풀고, 마지막으로 계약서를 혼자 검토하기 어려울 때의 현실적 선택지로 마무리한다.</div>
+  
+  <div class="rl" style="min-height:auto">&#x1F3F7;&#xFE0F; Stage</div>
+  <div class="stage-cell"><div class="stage-pill">S2_1</div></div><div class="stage-cell"><div class="stage-pill">S2_2</div></div><div class="stage-cell"><div class="stage-pill">S2_3</div></div><div class="stage-cell"><div class="stage-pill">S2_4</div></div>
+  <div class="rl" style="min-height:auto">&#x1F4C8; 감정</div>
+  <div class="emotion-strip tall"><svg class="emotion-svg" viewBox="0 0 1040 150" preserveAspectRatio="none">
+<rect x="0" y="0" width="260" height="150" fill="rgba(231,76,60,.04)" rx="4"/>
+<rect x="260" y="0" width="260" height="150" fill="rgba(231,76,60,.04)" rx="4"/>
+<rect x="520" y="0" width="260" height="150" fill="rgba(243,156,18,.04)" rx="4"/>
+<rect x="780" y="0" width="260" height="150" fill="rgba(46,204,113,.04)" rx="4"/>
+<text x="130" y="90" text-anchor="middle" style="font-size:18px">😯</text>
+<circle cx="130" cy="110" r="6" fill="var(--emotion-low)"/>
+<text x="130" y="128" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-low)">막막</text>
+<text x="130" y="146" text-anchor="middle" class="emotion-sublabel">계약서에서 소스?</text>
+<text x="390" y="90" text-anchor="middle" style="font-size:18px">😯</text>
+<circle cx="390" cy="110" r="6" fill="var(--emotion-low)"/>
+<text x="390" y="128" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-low)">막막</text>
+<text x="390" y="146" text-anchor="middle" class="emotion-sublabel">하자보수 기간에?</text>
+<text x="650" y="55" text-anchor="middle" style="font-size:18px">🤔</text>
+<circle cx="650" cy="75" r="6" fill="var(--emotion-mid)"/>
+<text x="650" y="93" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-mid)">갈팡질팡</text>
+<text x="650" y="146" text-anchor="middle" class="emotion-sublabel">서버와 도메인이?</text>
+<text x="910" y="20" text-anchor="middle" style="font-size:18px">😌</text>
+<circle cx="910" cy="40" r="6" fill="var(--emotion-high)"/>
+<text x="910" y="58" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-high)">안심</text>
+<text x="910" y="146" text-anchor="middle" class="emotion-sublabel">계약서를 혼자 ?</text>
+</svg></div>
+  <div class="rl">&#x1F4AD; 상태</div>
+  <div class="dc state-cell">hub에서 소스코드 귀속·하자보수·서버 소유권 세 가지를 확인해야 한다는 것을 알았는데, 계약서를 받아보니 어떤 조항이 어디에 있는지, 어떻게 적혀 있어야 하는지 판단이 안 된다</div><div class="dc state-cell">계약서에 하자보수 기간이 명시되어 있는데, 이 기간 동안 요청하는 기능 수정이나 추가가 무상인지 유상인지 구분이 안 되고, 런칭 후 유지보수를 어떻게 처리해야 하는지 막막하다</div><div class="dc state-cell">서버와 도메인을 어떻게 설정해야 하는지 막연했는데, 잘못하면 개발사 명의로 생성되어 나중에 통제권을 잃을 수 있다는 것을 알고 어떻게 확인해야 할지 모르겠다</div><div class="dc state-cell">소스코드·하자보수·서버 소유권까지 확인해야 한다는 건 알겠는데, 계약서를 혼자 검토하다 보니 놓친 게 있을 것 같고 법적 표현을 어떻게 읽어야 하는지 어렵다</div>
+  <div class="rl q-label">&#x2753; 질문</div>
+  <div class="dc q">계약서에서 소스코드 귀속 조항을 어떻게 확인하나요?</div><div class="dc q">하자보수 기간에 기능 수정을 요청하면 무상인가요, 유상인가요?</div><div class="dc q">서버와 도메인이 우리 회사 명의로 만들어지는지 어떻게 확인하나요?</div><div class="dc q">계약서를 혼자 검토하기 어려울 때 어떻게 하면 되나요?</div>
+  <div class="rl">&#x1F4A1; 핵심 답변</div>
+  <div class="dc">ERP 외주 계약에서 소스코드를 포함한 지재권 일체가 납품 시 클라이언트에게 양도된다는 내용이 계약서에 명시되어 있는지를 먼저 확인해야 한다. 이 조항이 없으면 개발 완료 후 업체가 소스코드 제공을 거부하거나 추가 비용을 요구하는 사례가 생긴다. 조항이 있더라도 '납품물 일체'처럼 모호하게 적혀 있으면 소스코드가 포함되는지 불명확할 수 있으므로 '소스코드 일체를 포함한 지재권 양도'처럼 명확하게 명시되어 있어야 한다.</div><div class="dc">하자보수는 계약 기간 내 개발사 귀책으로 발생한 버그만 무상 수정 대상이다. 기능 추가나 화면 변경처럼 처음 개발 범위에 없던 것은 하자보수 기간이더라도 유상으로 처리된다. ERP는 Go-Live 후 실제 업무에 쓰다 보면 추가 요청이 필연적으로 생기므로, 런칭 후 유지보수를 어디서 받을 수 있는지를 계약 전에 미리 확인해두는 것이 중요하다. '유지보수 대응이 가능한 팀이 있는지'만 확인하면 되고, 유지보수를 최초 계약에 포함하는 경우는 거의 없다.</div><div class="dc">서버, 도메인, 클라우드 계정이 우리 회사 명의로 개설되는지를 개발 시작 전에 업체와 확인해야 한다. 개발사 명의로 생성하면 업체와 관계가 끝났을 때 접근 권한을 회수하기 어렵고, 이를 빌미로 추가 비용을 요구받는 사례가 생긴다. 계약서에 '서버·도메인 계정은 클라이언트 명의로 생성하고 접근 정보 일체를 납품한다'는 내용을 명시하거나, 미팅에서 명시적으로 확인해두는 것이 가장 현실적인 방법이다.</div><div class="dc">계약서 법적 표현을 비개발자 혼자 검토하는 데는 한계가 있다. 위시켓의 IT 아웃소싱 특화 표준계약서는 하자보수·지재권·대금보호 조항이 포함되어 있어 계약서를 처음 검토하는 담당자가 누락 항목을 줄이는 데 참고로 활용할 수 있다. 위시켓에 프로젝트를 등록하면 매니저가 계약 과정에 함께하면서 주요 항목을 짚어주고, 에스크로 방식의 대금보호 구조로 개발 완료 전 금액이 보호된다.</div>
+  <div class="rl">&#x25B6;&#xFE0F; 도전</div>
+  <div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 계약서에서 '지재권', '저작권', '소스코드' 키워드를 찾아 해당 조항이 있는지, 클라이언트 귀속으로 명시되어 있는지 확인해본다</div></div><div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 업체에 '런칭 후 기능 추가나 수정이 생기면 어디서 어떻게 처리되나요? 유지보수 대응이 가능한 팀이 있나요?'라고 확인해본다</div></div><div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 업체에 '서버와 도메인 계정을 저희 회사 명의로 만들어주실 수 있나요?'라고 확인하고, 계약서에서 관련 조항이 있는지 찾아본다</div></div><div class="dc try-row"><span style="color:var(--text-dim);font-size:11px">&mdash;</span></div>
+  <div class="rl">&#x2716; 다음 문제</div>
+  <div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 소스코드 조항은 찾았는데, 하자보수 기간에 기능 수정을 요청하면 무상으로 되는 건지, 유상인지 계약서 내용만으로 구분이 안 된다</div></div><div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 유지보수 체계는 확인했는데, 서버와 도메인을 누구 명의로 만드는지는 생각해본 적이 없었는데 이게 나중에 문제가 될 수 있는 것인지 모르겠다</div></div><div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 확인해야 할 항목이 많은데, 계약서를 혼자 검토하다 보니 빠진 게 있는 것 같고 이 과정을 구조적으로 도움받고 싶다</div></div><div class="dc block-row"><span style="color:var(--text-dim);font-size:11px">&mdash;</span></div>
+  <div class="rl basis-label" style="border-bottom:none">&#x1F4CE; 근거</div>
+  <div class="dc basis-cell" style="border-bottom:none">hub h4 stance를 실행하는 독자가 계약서를 처음 펼쳤을 때 가장 먼저 막히는 지점이 소스코드 조항 확인이다. context.json의 reader_misconceptions에서 '소스코드는 납품받는 것이 당연하다'는 오해가 명시되어 있고, dont에서 '소스코드는 당연히 받을 수 있다고 전제하지 않는다'는 교정이 이 노드를 sub 첫 번째로 배치하는 근거가 된다.</div><div class="dc basis-cell" style="border-bottom:none">소스코드 조항을 찾고 나면 하자보수/유지보수 구분이 다음 막힘으로 자연스럽게 등장한다. context.json의 confusion_pairs에서 '하자보수 ≠ 유지보수'가 명시되어 있고, reader_misconceptions에서 '개발 완료 후 버그 수정·기능 수정을 무상으로 받을 수 있다'는 오해가 별도 항목으로 지목되어 이 노드의 필요성을 뒷받침한다.</div><div class="dc basis-cell" style="border-bottom:none">서버 소유권은 독자가 쉽게 놓치는 항목이라는 점에서 s2_2 이후 자연스럽게 등장한다. context.json의 dont에서 '서버·인프라는 개발사가 세팅해줍니다처럼 서버 소유권을 개발사에 두게 만드는 서술을 하지 않는다'가 명시되어 있어 이 노드를 포함할 근거가 된다.</div><div class="dc basis-cell" style="border-bottom:none">계약서 항목을 개인이 모두 검토하기 어렵다는 s2_3의 block이 이 state를 만든다. 마지막 노드는 정보 제공이 아니라 구조적 안전망(위시켓 표준계약서·매니저 동행)을 제시해 감정 장벽(혼자 다 짊어져야 한다는 부담)을 해소하는 구조로 마무리한다. service_boundaries의 can_claim에서 '법무법인 검토 표준계약서 제공', '매니저가 계약 과정 함께함', '에스크로 대금보호'가 명시되어 있어 이 내용을 활용할 수 있다.</div>
+  </div></div>
+</div>
+
+<div class="inner-panel" id="jm-sub3">
+  
+  <div class="hub-sub-connector"><div class="connector-visual">
+    <span class="cv-label" style="background:#F3F1FE;color:#6C5CE7">sub_legacy_migration</span>
+    <span class="cv-desc">독립 Branch &mdash; 기존 ERP를 새 시스템으로 교체할 때 업체 선정에서 추가로 확인해야 할...</span>
+  </div></div>
+  
+
+  <div class="section-title-bar">
+    <div class="stb-head">
+      <div class="stb-color" style="background:var(--sub3)"></div>
+      <div class="stb-content">
+        <div class="stb-overline" style="color:var(--sub3)">Sub Content 3 &mdash; branch Independent Branch</div>
+        <div class="stb-question">기존 ERP를 새 시스템으로 교체할 때 업체 선정에서 추가로 확인해야 할 기준은 무엇인가요?</div>
+        <div class="stb-tags">
+          <span class="stb-tag" style="background:#F3F1FE;color:#6C5CE7">3 steps</span>
+          <span class="stb-tag" style="background:#F3F1FE;color:#6C5CE7">source: branch</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="reasoning-box rb-sub3"><div class="rb-label">Selection Reasoning</div><div class="rb-text">hub은 ERP 맞춤 개발을 처음 발주하는 비개발자를 전제로 한다. 기존 시스템(더존·SAP 패키지 ERP 또는 자체 개발 레거시)을 교체하려는 독자는 다른 출발점을 가진다. 이 독자에게 '어떤 업체를 골라야 하는가'는 마이그레이션 경험, 기존 데이터 구조 분석 능력, 이중 운영 기간 관리 방식이 핵심 기준이 된다. hub h1의 '도메인 이해도부터 확인하라'는 흐름은 맞지만, 앞에 '기존 시스템 데이터를 어떻게 옮길 것인가'라는 선행 질문이 있어 flow가 달라진다. AI 검색(Gemini)에서 기존 시스템 연동을 별도 체크포인트로 언급했고, 경쟁글에서 교체·전환 상황을 독립 주제로 다룬 글이 없어 차별화 여지가 있다.</div></div>
+    
+  </div>
+
+  <div class="section-scroll"><div class="map-grid c-sub3" style="grid-template-columns:var(--row-label-w) repeat(3,var(--col-w))">
+  
+  
+  <div class="rl flow-reason-label">흐름 근거</div><div class="dc flow-reason-cell">기존 시스템 교체 맥락의 독자는 'ERP가 뭔지 모름'이 아니라 '기존 데이터를 잃지 않고 어떻게 넘어가는가'가 핵심 고민이다. 기존 시스템 데이터 마이그레이션 가능 여부 확인 → 업체가 우리 기존 구조를 분석할 수 있는지 검증 → 이중 운영 기간 및 전환 계획 확인 순서로 흐름을 잡는다. 마지막으로 전환 과정에서 업무 중단을 최소화하는 현실적 접근으로 마무리한다.</div>
+  
+  <div class="rl" style="min-height:auto">&#x1F3F7;&#xFE0F; Stage</div>
+  <div class="stage-cell"><div class="stage-pill">S3_1</div></div><div class="stage-cell"><div class="stage-pill">S3_2</div></div><div class="stage-cell"><div class="stage-pill">S3_3</div></div>
+  <div class="rl" style="min-height:auto">&#x1F4C8; 감정</div>
+  <div class="emotion-strip short"><svg class="emotion-svg" viewBox="0 0 780 130" preserveAspectRatio="none">
+<rect x="0" y="0" width="260" height="130" fill="rgba(231,76,60,.04)" rx="4"/>
+<rect x="260" y="0" width="260" height="130" fill="rgba(243,156,18,.04)" rx="4"/>
+<rect x="520" y="0" width="260" height="130" fill="rgba(46,204,113,.04)" rx="4"/>
+<text x="130" y="90" text-anchor="middle" style="font-size:18px">😯</text>
+<circle cx="130" cy="110" r="6" fill="var(--emotion-low)"/>
+<text x="130" y="128" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-low)">불안</text>
+<text x="130" y="126" text-anchor="middle" class="emotion-sublabel">기존 ERP 데?</text>
+<text x="390" y="55" text-anchor="middle" style="font-size:18px">🤔</text>
+<circle cx="390" cy="75" r="6" fill="var(--emotion-mid)"/>
+<text x="390" y="93" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-mid)">관망</text>
+<text x="390" y="126" text-anchor="middle" class="emotion-sublabel">마이그레이션 계?</text>
+<text x="650" y="20" text-anchor="middle" style="font-size:18px">😌</text>
+<circle cx="650" cy="40" r="6" fill="var(--emotion-high)"/>
+<text x="650" y="58" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-high)">안심</text>
+<text x="650" y="126" text-anchor="middle" class="emotion-sublabel">시스템 전환 기?</text>
+</svg></div>
+  <div class="rl">&#x1F4AD; 상태</div>
+  <div class="dc state-cell">현재 사용 중인 ERP(패키지 또는 기존 자체 개발)를 새 시스템으로 교체하기로 했는데, 기존 데이터를 그대로 옮길 수 있는 업체를 어떻게 찾아야 할지 모르겠다</div><div class="dc state-cell">마이그레이션 경험이 있다고 하는데, 실제로 우리 기존 데이터를 어떻게 이전할 것인지 구체적인 방법을 설명하는 업체와 그냥 '할 수 있다'고만 하는 업체가 있는데 어떻게 구분해야 하는지 모르겠다</div><div class="dc state-cell">마이그레이션 계획까지 확인했는데, 전환 기간 동안 기존 업무가 멈추는 시간이 있는지, 새 시스템에서 기존 데이터를 바로 쓸 수 있는지 어떻게 확인해야 할지 모르겠다</div>
+  <div class="rl q-label">&#x2753; 질문</div>
+  <div class="dc q">기존 ERP 데이터를 새 시스템으로 옮길 수 있는 업체를 어떻게 선별하나요?</div><div class="dc q">마이그레이션 계획이 구체적인 업체와 아닌 업체를 어떻게 구별하나요?</div><div class="dc q">시스템 전환 기간 동안 업무 중단 없이 넘어갈 수 있나요?</div>
+  <div class="rl">&#x1F4A1; 핵심 답변</div>
+  <div class="dc">ERP 교체에서 업체 선정 기준이 신규 구축과 다른 이유는 기존 데이터 마이그레이션 경험이 있는지가 핵심 조건이 되기 때문이다. 데이터 구조를 분석하지 않고 견적을 내는 업체는 교체 이후 기존 데이터 누락이나 형식 오류를 런칭 후에 발견하는 상황을 만들 수 있다. 업체 탐색 단계에서 '기존 ERP에서 데이터를 이전한 경험이 있는지, 어떤 방식으로 했는지'를 먼저 물어서 경험 유무부터 걸러내는 것이 출발점이다.</div><div class="dc">마이그레이션 실행 능력은 '기존 데이터를 어떻게 분석하겠는가'라는 질문에 대한 답변으로 확인할 수 있다. 실제 경험이 있는 업체는 기존 시스템 데이터 구조를 먼저 파악한 뒤 이전 방식을 제안하고, 데이터 검증 단계를 포함한 일정을 제시한다. '다 가능합니다'만 반복하거나 기존 시스템 구조를 전혀 물어보지 않는 업체는 이전 과정의 복잡도를 과소평가하고 있을 가능성이 있다.</div><div class="dc">ERP 교체에서 업무 중단 없이 전환하는 것은 어렵고, 업체도 완전한 무중단을 보장하기 어렵다. 현실적인 접근은 전환 일정을 업무 비수기에 맞추고, 주요 데이터를 사전에 검증하는 기간을 별도로 두는 방식이다. 미팅에서 '기존 시스템은 언제까지 운영되고, 새 시스템은 어느 시점부터 사용 가능한지'를 구체적인 일정으로 확인하고, 전환 전 데이터 검증 단계가 일정에 포함되어 있는지를 체크하면 된다.</div>
+  <div class="rl">&#x25B6;&#xFE0F; 도전</div>
+  <div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 업체에 초기 문의 시 '기존 시스템에서 데이터를 이전한 프로젝트 경험이 있으신가요?'라고 묻고, 경험이 없는 업체는 후보에서 먼저 제외해본다</div></div><div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 미팅에서 '현재 저희 시스템 데이터를 보여드리면 이전 계획을 먼저 확인해주실 수 있나요?'라고 요청해보고, 데이터를 보기 전에 견적부터 내려는 업체와 구분해본다</div></div><div class="dc try-row"><span style="color:var(--text-dim);font-size:11px">&mdash;</span></div>
+  <div class="rl">&#x2716; 다음 문제</div>
+  <div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 마이그레이션 경험이 있다고 하는데, 실제로 우리 기존 시스템 데이터 구조를 분석할 수 있는지, 어떤 방식으로 이전하는지까지 판단하기 어렵다</div></div><div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 이전 계획까지 확인했는데, 교체 기간 동안 기존 시스템과 새 시스템을 동시에 운영해야 하는지, 업무가 일시적으로 멈추는 구간이 생기는지 판단이 안 된다</div></div><div class="dc block-row"><span style="color:var(--text-dim);font-size:11px">&mdash;</span></div>
+  <div class="rl basis-label" style="border-bottom:none">&#x1F4CE; 근거</div>
+  <div class="dc basis-cell" style="border-bottom:none">기존 시스템 교체 맥락의 독자가 hub h1에 진입하기 전에 먼저 해소해야 하는 선행 질문이다. hub은 신규 도입을 전제로 해서 마이그레이션 관점이 없고, 이 독자가 hub을 읽어도 핵심 고민이 해소되지 않는다. AI 검색(Gemini)이 기존 시스템 연동을 별도 체크포인트로 명시한 것이 이 노드를 sub 첫 번째로 배치하는 근거가 된다.</div><div class="dc basis-cell" style="border-bottom:none">'할 수 있다'고만 하는 업체와 실제 경험이 있는 업체를 구별하는 방법이 없으면 선정이 인상에 의존하게 된다. context.json의 reader_misconceptions 방향에서 포트폴리오 화면보다 실제 업무 프로세스를 확인해야 한다는 원칙이 마이그레이션 맥락에서도 동일하게 적용된다.</div><div class="dc basis-cell" style="border-bottom:none">전환 기간 업무 연속성이 기존 시스템 교체 독자의 마지막 실질적 불안이다. 마이그레이션 계획을 확인해도 전환 과정의 실무 리스크(데이터 누락, 업무 중단)가 해소되지 않으면 최종 판단을 못 내린다. 마지막 노드는 완벽한 해결책이 아니라 현실적인 접근법으로 불안을 낮추는 방향으로 마무리했다.</div>
+  </div></div>
+</div>
+
+
+</div>
+
+
+<div class="page-footer">
+  Strategy Report &middot; ERP외주개발업체를고를때가장중요하게봐를 &middot; 2026-04-16 &middot; 20260416_1741_ERP외주개발업체를고를때가장중요하게봐를
+</div>
+
+<script>
+function switchView(id){
+  document.querySelectorAll('.top-tab').forEach(function(b){b.classList.remove('active')});
+  document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active')});
+  document.getElementById('view-'+id).classList.add('active');
+  var labels={'research':'리서치','context':'방향','journey':'콘텐츠'};
+  document.querySelectorAll('.top-tab').forEach(function(b){if(b.textContent.indexOf(labels[id])!==-1)b.classList.add('active')});
+}
+function switchInner(panelId,btn){
+  var parent=btn.parentElement;
+  parent.querySelectorAll('.inner-tab').forEach(function(b){b.classList.remove('active');b.style.borderBottomColor='';b.style.color=''});
+  var container=parent.parentElement;
+  container.querySelectorAll(':scope > .inner-panel').forEach(function(p){p.classList.remove('active')});
+  btn.classList.add('active');
+  document.getElementById(panelId).classList.add('active');
+}
+function switchAiTab(panelId,btn,color){
+  var parent=btn.parentElement;
+  parent.querySelectorAll('.inner-tab').forEach(function(b){b.classList.remove('active');b.style.borderBottomColor='';b.style.color=''});
+  var panels=[];
+  var sib=parent.nextElementSibling;
+  while(sib&&sib.classList.contains('inner-panel')){panels.push(sib);sib=sib.nextElementSibling}
+  panels.forEach(function(p){p.classList.remove('active')});
+  btn.classList.add('active');
+  btn.style.borderBottomColor=color;
+  btn.style.color=color;
+  document.getElementById(panelId).classList.add('active');
+}
+</script>
+</body>
+</html>
