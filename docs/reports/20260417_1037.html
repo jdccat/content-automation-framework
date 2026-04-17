@@ -825,7 +825,7 @@ tr.vol-low td{color:var(--text-dim)}tr.vol-low td:first-child{font-weight:400}
   <div class="hero-stats">
     <div class="hero-stat"><div class="hero-stat-value" style="color:var(--hub)">1</div><div class="hero-stat-label">Hub</div></div>
     <div class="hero-stat"><div class="hero-stat-value" style="color:var(--sub1)">3</div><div class="hero-stat-label">Sub</div></div>
-    <div class="hero-stat"><div class="hero-stat-value" style="color:var(--accent)">16</div><div class="hero-stat-label">총 섹션</div></div>
+    <div class="hero-stat"><div class="hero-stat-value" style="color:var(--accent)">14</div><div class="hero-stat-label">총 섹션</div></div>
     <div class="hero-stat"><div class="hero-stat-value" style="color:var(--sub2)">8</div><div class="hero-stat-label">페인포인트</div></div>
   </div>
 </div>
@@ -862,7 +862,7 @@ tr.vol-low td{color:var(--text-dim)}tr.vol-low td:first-child{font-weight:400}
   
   <button class="inner-tab" data-color="sub2" onclick="switchInner('jm-sub2',this)">Sub 2: 받은 웹서비스 견적 금액이 내 프...</button>
   
-  <button class="inner-tab" data-color="sub3" onclick="switchInner('jm-sub3',this)">Sub 3: 예산이 빠듯한 중소기업이 웹서비스...</button>
+  <button class="inner-tab" data-color="sub3" onclick="switchInner('jm-sub3',this)">Sub 3: 웹서비스를 외주로 만들 때 솔루션...</button>
   
 </div>
 
@@ -873,69 +873,59 @@ tr.vol-low td{color:var(--text-dim)}tr.vol-low td:first-child{font-weight:400}
       <div class="stb-color" style="background:var(--hub)"></div>
       <div class="stb-content">
         <div class="stb-overline" style="color:var(--hub)">Hub &mdash; 메인 콘텐츠</div>
-        <div class="stb-question">개발자 없는 중소기업이 웹서비스를 외주로 만들 때, 첫 단계부터 개발 진행까지 어디서부터 어떻게 시작해야 하나요?</div>
+        <div class="stb-question">개발자 없는 중소기업이 웹서비스를 외주로 만들 때, 요구사항 정리부터 업체 탐색·계약·개발·검수까지 어떤 흐름으로 시작해야 하나요?</div>
         <div class="stb-tags">
-          <span class="stb-tag" style="background:var(--hub-light);color:var(--hub)">6 steps</span>
+          <span class="stb-tag" style="background:var(--hub-light);color:var(--hub)">4 steps</span>
           <span class="stb-tag" style="background:var(--hub-light);color:var(--hub)">&rarr; sub_req_guide</span><span class="stb-tag" style="background:var(--hub-light);color:var(--hub)">&rarr; sub_compare</span>
         </div>
       </div>
     </div>
     
-    <div class="reasoning-box rb-hub"><div class="rb-label">Flow Reasoning</div><div class="rb-text">독자는 '어디서부터 시작'이라는 질문을 가지고 있지만, 실제 막힘은 '뭘 만들어야 할지조차 정리가 안 된' 상태에서 시작된다. AI 3개가 공통으로 '요구사항 정의'를 첫 단계로 두지만, context.json의 research_corrections와 reader_misconceptions에 따르면 비개발자가 곧바로 RFP·기술 스택·스토리보드를 작성하는 것은 capability_limits를 넘어서는 요구다. 따라서 hub flow는 (1) '업체부터 찾으면 안 되고 먼저 정리가 필요하다'는 현실 인식 → (2) 비개발자 수준에서 가능한 정리 방법 → (3) 어디서 어떻게 업체를 찾고 비교할지 → (4) 계약·진행·검수 시 클라이언트가 실제로 해야 할 역할 순으로 설계했다. 경쟁글과 AI가 다루는 '단계별 가이드' 구조를 유지하되, 각 노드의 stance에서 '혼자 다 해야 한다'는 부담 대신 '매니저가 동반한다'는 해결 구조로 전환했다(journey_mapping.blog_framing).</div></div>
+    <div class="reasoning-box rb-hub"><div class="rb-label">Flow Reasoning</div><div class="rb-text">독자는 '어디서부터 시작'이라는 질문을 가지고 있지만, 실제 막힘은 '뭘 만들어야 할지조차 정리가 안 된' 상태에서 시작된다. AI 3개가 공통으로 '요구사항 정의'를 첫 단계로 두지만, context.json의 research_corrections와 reader_misconceptions에 따르면 비개발자가 곧바로 RFP·기술 스택·스토리보드를 작성하는 것은 capability_limits를 넘어서는 요구다. 따라서 hub flow는 (1) '업체부터 찾으면 안 되고 먼저 정리가 필요하다'는 현실 인식 → (2) 비개발자 수준에서 가능한 정리 방법 → (3) 어디서 어떻게 업체를 찾을지 → (4) 등록·비교·계약·개발·검수로 이어지는 전체 흐름의 짧은 방향성 안내로 4개 노드로 설계했다. 구체적인 견적 해석·계약 조항·진행 관리는 독자의 질문('어디서부터 시작')보다 한 단계 이후의 고민이므로 후속 콘텐츠(sub 또는 별도 글)로 위임하고, hub은 '시작부터 검수까지 어떤 흐름으로 진행되는지' 큰 그림을 짚어주는 범위에서 끝낸다.</div></div>
     
   </div>
 
-  <div class="section-scroll"><div class="map-grid c-hub" style="grid-template-columns:var(--row-label-w) repeat(6,var(--col-w))">
+  <div class="section-scroll"><div class="map-grid c-hub" style="grid-template-columns:var(--row-label-w) repeat(4,var(--col-w))">
   
   <div class="rl" style="min-height:auto">&#x1F3F7;&#xFE0F; Stage</div>
-  <div class="stage-cell"><div class="stage-pill">H1</div></div><div class="stage-cell"><div class="stage-pill">H2</div></div><div class="stage-cell"><div class="stage-pill">H3</div></div><div class="stage-cell"><div class="stage-pill">H4</div></div><div class="stage-cell"><div class="stage-pill">H5</div></div><div class="stage-cell"><div class="stage-pill">H6</div></div>
+  <div class="stage-cell"><div class="stage-pill">H1</div></div><div class="stage-cell"><div class="stage-pill">H2</div></div><div class="stage-cell"><div class="stage-pill">H3</div></div><div class="stage-cell"><div class="stage-pill">H4</div></div>
   <div class="rl" style="min-height:auto">&#x1F4C8; 감정</div>
-  <div class="emotion-strip"><svg class="emotion-svg" viewBox="0 0 1560 150" preserveAspectRatio="none">
+  <div class="emotion-strip"><svg class="emotion-svg" viewBox="0 0 1040 150" preserveAspectRatio="none">
 <rect x="0" y="0" width="260" height="150" fill="rgba(231,76,60,.04)" rx="4"/>
-<rect x="260" y="0" width="260" height="150" fill="rgba(231,76,60,.04)" rx="4"/>
+<rect x="260" y="0" width="260" height="150" fill="rgba(243,156,18,.04)" rx="4"/>
 <rect x="520" y="0" width="260" height="150" fill="rgba(243,156,18,.04)" rx="4"/>
-<rect x="780" y="0" width="260" height="150" fill="rgba(243,156,18,.04)" rx="4"/>
-<rect x="1040" y="0" width="260" height="150" fill="rgba(46,204,113,.04)" rx="4"/>
-<rect x="1300" y="0" width="260" height="150" fill="rgba(46,204,113,.04)" rx="4"/>
+<rect x="780" y="0" width="260" height="150" fill="rgba(46,204,113,.04)" rx="4"/>
 <text x="130" y="90" text-anchor="middle" style="font-size:18px">😯</text>
 <circle cx="130" cy="110" r="6" fill="var(--emotion-low)"/>
 <text x="130" y="128" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-low)">막막</text>
 <text x="130" y="146" text-anchor="middle" class="emotion-sublabel">개발자가 없는 ?</text>
-<text x="390" y="90" text-anchor="middle" style="font-size:18px">😯</text>
-<circle cx="390" cy="110" r="6" fill="var(--emotion-low)"/>
-<text x="390" y="128" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-low)">답답</text>
+<text x="390" y="55" text-anchor="middle" style="font-size:18px">🤔</text>
+<circle cx="390" cy="75" r="6" fill="var(--emotion-mid)"/>
+<text x="390" y="93" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-mid)">답답</text>
 <text x="390" y="146" text-anchor="middle" class="emotion-sublabel">비개발자인데 요?</text>
 <text x="650" y="55" text-anchor="middle" style="font-size:18px">🤔</text>
 <circle cx="650" cy="75" r="6" fill="var(--emotion-mid)"/>
 <text x="650" y="93" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-mid)">갈팡질팡</text>
 <text x="650" y="146" text-anchor="middle" class="emotion-sublabel">준비한 요구사항?</text>
-<text x="910" y="55" text-anchor="middle" style="font-size:18px">🤔</text>
-<circle cx="910" cy="75" r="6" fill="var(--emotion-mid)"/>
-<text x="910" y="93" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-mid)">안심</text>
-<text x="910" y="146" text-anchor="middle" class="emotion-sublabel">같은 요구사항인?</text>
-<text x="1170" y="20" text-anchor="middle" style="font-size:18px">😌</text>
-<circle cx="1170" cy="40" r="6" fill="var(--emotion-high)"/>
-<text x="1170" y="58" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-high)">—</text>
-<text x="1170" y="146" text-anchor="middle" class="emotion-sublabel">개발 외주 계약?</text>
-<text x="1430" y="20" text-anchor="middle" style="font-size:18px">😌</text>
-<circle cx="1430" cy="40" r="6" fill="var(--emotion-high)"/>
-<text x="1430" y="58" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-high)">안심</text>
-<text x="1430" y="146" text-anchor="middle" class="emotion-sublabel">개발 진행 중 ?</text>
+<text x="910" y="20" text-anchor="middle" style="font-size:18px">😌</text>
+<circle cx="910" cy="40" r="6" fill="var(--emotion-high)"/>
+<text x="910" y="58" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-high)">안심</text>
+<text x="910" y="146" text-anchor="middle" class="emotion-sublabel">요구사항 정리와?</text>
 </svg></div>
   <div class="rl">&#x1F4AD; 상태</div>
-  <div class="dc state-cell">사업에 웹서비스가 필요한 건 분명한데, 검색창에 '웹서비스 외주'를 쳐놓고 뭘 먼저 해야 할지 몰라 스크롤만 내리고 있는 상태. 업체부터 찾아서 견적을 받으면 될 것 같은데 막상 막막하다.</div><div class="dc state-cell">메모장에 기능을 적어놨는데, 개발 용어를 몰라서 '이걸 만들어 달라'고 어떻게 전달해야 할지 모르는 상태. RFP니 기획서니 하는 단어는 들어봤지만 본인이 그걸 쓸 수 있을 것 같지 않다.</div><div class="dc state-cell">기능 목록은 준비됐는데, 개발 업체를 '어디서' 찾아야 할지 몰라 네이버 광고만 클릭하고 있는 상태. 광고에 올라오는 업체가 믿을 만한 곳인지, 견적을 받아도 적정 금액인지 판단할 기준이 없다.</div><div class="dc state-cell">견적서가 여러 장 왔는데 500만 원부터 3,000만 원까지 금액이 5~6배 차이 난다. 같은 웹서비스인데 왜 이렇게 차이 나는지, 싼 곳을 고르면 손해 보는 건지 비싼 곳이 그만큼 좋은 건지 기준이 없어 결정 못 한다.</div><div class="dc state-cell">업체는 골랐는데 계약서를 주고받는 단계에서 '이 조항을 넣어달라', '저건 빼달라'라는 대화가 오가는데 뭐가 중요한지 모르고 그냥 사인하려는 순간이 두렵다. 나중에 문제 생기면 책임질 사람은 본인이라는 부담이 크다.</div><div class="dc state-cell">개발이 시작돼서 중간 미팅이 잡히는데 '뭘 확인해야 하는지' 감이 없다. 그냥 '잘 되고 있나요' 물어보고 끝낼 수도 없고, 그렇다고 기술적으로 깊이 들어갈 수도 없어 회의 시간만 흘러간다.</div>
+  <div class="dc state-cell">사업에 웹서비스가 필요한 건 분명한데, 검색창에 '웹서비스 외주'를 쳐놓고 뭘 먼저 해야 할지 몰라 스크롤만 내리고 있는 상태. 업체부터 찾아서 견적을 받으면 될 것 같은데 막상 막막하다.</div><div class="dc state-cell">메모장에 기능을 적어놨는데, 개발 용어를 몰라서 '이걸 만들어 달라'고 어떻게 전달해야 할지 모르는 상태. RFP니 기획서니 하는 단어는 들어봤지만 본인이 그걸 쓸 수 있을 것 같지 않다.</div><div class="dc state-cell">기능 목록은 준비됐는데, 개발 업체를 '어디서' 찾아야 할지 몰라 네이버 광고만 클릭하고 있는 상태. 광고에 올라오는 업체가 믿을 만한 곳인지, 견적을 받아도 적정 금액인지 판단할 기준이 없다.</div><div class="dc state-cell">업체 찾는 경로는 알겠는데, 그 이후에 계약·개발·검수까지 전체적으로 어떤 흐름으로 진행되는지 큰 그림이 없어 첫 발을 떼기가 주저된다. 단계마다 내가 뭘 준비해야 하는지, 어디쯤에서 전문가 도움이 필요한지 감이 없다.</div>
   <div class="rl q-label">&#x2753; 질문</div>
-  <div class="dc q">개발자가 없는 회사인데, 외주는 어디서부터 시작해야 하나요?</div><div class="dc q">비개발자인데 요구사항을 어느 수준까지 정리해야 업체가 견적을 줄 수 있나요?</div><div class="dc q">준비한 요구사항을 가지고 어떤 경로로 업체를 찾고 비교해야 하나요?</div><div class="dc q">같은 요구사항인데 견적이 이렇게 차이 나는 이유는 뭐고, 어떤 기준으로 골라야 하나요?</div><div class="dc q">개발 외주 계약서에서 처음 확인해야 할 조항은 무엇인가요?</div><div class="dc q">개발 진행 중 클라이언트가 실제로 해야 할 일은 뭔가요?</div>
+  <div class="dc q">개발자가 없는 회사인데, 외주는 어디서부터 시작해야 하나요?</div><div class="dc q">비개발자인데 요구사항을 어느 수준까지 정리해야 업체가 견적을 줄 수 있나요?</div><div class="dc q">준비한 요구사항을 가지고 어떤 경로로 업체를 찾고 비교해야 하나요?</div><div class="dc q">요구사항 정리와 업체 탐색 이후에는 어떤 흐름으로 프로젝트가 진행되나요?</div>
   <div class="rl">&#x1F4A1; 핵심 답변</div>
-  <div class="dc">업체를 찾기 전에 '뭘 만들고 싶은지'가 먼저다. 업체에 '얼마예요'라고 물어도 요구사항이 없으면 견적이 나올 수 없고, 업체들도 '먼저 정리해오세요'라며 돌려보낸다. 시작의 첫 단계는 '핵심 기능 목록을 정리하는 것'이고, 이게 어려우면 위시켓 매니저가 등록 단계에서 요구사항 정리를 함께 도와준다.</div><div class="dc">처음부터 전문 문서를 쓸 필요는 없다. 핵심 기능 목록과 참고할 서비스 링크('A 사이트 같은 화면이면 좋겠다') 두 가지면 업체가 초기 견적을 낼 수 있는 최소 조건이 만들어진다. 상세 문서는 미팅 후 협의 과정에서 구체화되고, 이 과정이 막히면 매니저가 등록한 프로젝트에 대해 요구사항을 함께 정리해준다.</div><div class="dc">개발사를 직접 찾아 계약하는 경로와, 위시켓처럼 여러 파트너를 비교할 수 있는 서비스를 이용하는 경로가 있다. 직접 찾는 경로는 검증 부담이 크고 적정 견적 기준이 없는 상태에서 리스크가 크다. 위시켓에 프로젝트를 등록하면 영업일 24시간 이내에 매니저가 연락해 적정 금액·기간 가이드를 제공하고, 검증된 파트너 중에서 비교할 수 있다.</div><div class="dc">견적 차이는 업체가 포함하는 범위(기획, 디자인, 서버 구성 포함 여부)와 투입 인력·기간에 따라 생기는 것이 정상이다. 비싼 곳이 무조건 좋은 것도 아니고 싼 곳이 무조건 위험한 것도 아니다. 비교 기준은 금액이 아니라 '유사 프로젝트 포트폴리오가 있는가, 포함 범위를 동일 조건으로 맞췄는가, 소통 방식이 맞는가'다. 판단이 어려우면 매니저가 적정 범위를 가이드해준다.</div><div class="dc">계약서 전체를 법률 전문가처럼 검토할 필요는 없다. 핵심 3가지만 확인하면 큰 리스크는 막을 수 있다 — 하자보수 기간(보통 1~3개월, 계약 기간 내 개발사 귀책 버그 무상 수정), 소스코드·지재권 귀속 조항(명시하지 않으면 분쟁 가능), 대금 지급 방식과 검수 기준. 위시켓 표준계약서는 법무법인 검토를 거쳐 이 조항들이 기본 반영되어 있고, 매니저가 계약 단계를 동반한다.</div><div class="dc">개발 프로젝트를 PM처럼 관리할 필요는 없다. 클라이언트가 꼭 해야 할 일은 두 가지 — 주기적으로 중간 결과물(화면 시안, 동작 데모)을 확인하고 피드백을 주는 것, 그리고 범위가 변경되면 추가 비용·일정 영향이 있다는 점을 서로 이메일이나 메신저로 재확인하는 것이다. 세부 공정 관리는 파트너 몫이고, 위시켓으로 진행한 경우 매니저가 미팅에 함께 참여해 진행 상황을 짚어준다.</div>
+  <div class="dc">업체를 찾기 전에 '뭘 만들고 싶은지'가 먼저다. 업체에 '얼마예요'라고 물어도 요구사항이 없으면 견적이 나올 수 없고, 업체들도 '먼저 정리해오세요'라며 돌려보낸다. 시작의 첫 단계는 업체 탐색이 아니라 '핵심 기능 목록을 정리하는 것'이다.</div><div class="dc">처음부터 전문 문서를 쓸 필요는 없다. 핵심 기능 목록과 참고할 서비스 링크('A 사이트 같은 화면이면 좋겠다') 두 가지면 업체가 초기 견적을 낼 수 있는 최소 조건이 만들어진다. 상세 문서는 미팅 후 협의 과정에서 구체화되고, 이 과정이 막히면 위시켓에 프로젝트를 등록했을 때 매니저가 요구사항을 함께 정리해준다.</div><div class="dc">개발사를 직접 찾아 계약하는 경로와, 위시켓처럼 여러 파트너를 비교할 수 있는 서비스를 이용하는 경로가 있다. 직접 찾는 경로는 검증 부담이 크고 적정 견적 기준이 없는 상태에서 리스크가 크다. 위시켓에 프로젝트를 등록하면 영업일 24시간 이내에 매니저가 연락해 적정 금액·기간 가이드를 제공하고, 검증된 파트너 중에서 비교할 수 있다.</div><div class="dc">개발자 없는 중소기업이 외주 프로젝트를 진행하는 흐름은 '등록·탐색 → 견적 비교 → 계약 → 개발 → 검수' 순이다. 견적 비교에서는 금액보다 포함 범위와 유사 프로젝트 경험을, 계약에서는 하자보수 기간·지재권 귀속·대금 지급 방식 세 가지를, 개발 중에는 주기적으로 중간 결과물을 확인하는 피드백을, 검수에서는 실제 업무 시나리오로 동작 확인을 챙기면 된다. 각 단계마다 깊이 파고드는 체크리스트는 별도로 공부해야 하지만, 전체 흐름을 이 순서로 인지하고 있으면 첫 발을 뗄 수 있다. 단계마다 혼자 판단이 어려우면 위시켓 매니저가 미팅·계약·진행 단계를 동반한다.</div>
   <div class="rl">&#x25B6;&#xFE0F; 도전</div>
-  <div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 일단 머릿속에 있는 기능들을 메모장에 적어본다</div></div><div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 참고할 만한 서비스 링크 2~3개를 모으고, 원하는 기능을 일상어로 10개 정도 나열한다</div></div><div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 위시켓에 프로젝트를 등록하거나 네이버에서 개발사를 검색해 견적 요청을 보낸다</div></div><div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 업체별로 포함 범위를 다시 물어보고, 포트폴리오에서 유사 서비스 경험을 확인한다</div></div><div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 받은 계약서에서 하자보수·지재권·대금 조항을 찾아 밑줄을 긋고 빠진 항목은 추가 요청한다</div></div><div class="dc try-row"><span style="color:var(--text-dim);font-size:11px">&mdash;</span></div>
+  <div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 일단 머릿속에 있는 기능들을 메모장에 적어본다</div></div><div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 참고할 만한 서비스 링크 2~3개를 모으고, 원하는 기능을 일상어로 10개 정도 나열한다</div></div><div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 위시켓에 프로젝트를 등록하거나 네이버에서 개발사를 검색해 견적 요청을 보낸다</div></div><div class="dc try-row"><span style="color:var(--text-dim);font-size:11px">&mdash;</span></div>
   <div class="rl">&#x2716; 다음 문제</div>
-  <div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 적긴 적었는데, 이게 업체에 보여줘도 되는 수준인지, 뭐가 빠졌는지 판단이 안 선다</div></div><div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 기능 목록은 대강 완성했는데, 이제 어디에 등록하고 어떤 업체에 보여야 할지 모르겠다</div></div><div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 견적 3~4개가 돌아왔는데 금액 차이가 너무 커서 어떤 기준으로 판단해야 할지 모르겠다</div></div><div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 비교 기준은 잡았는데, 이제 계약서를 쓰려니 뭘 넣어달라고 해야 할지 막막하다</div></div><div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 계약이 끝나고 개발이 시작됐는데, 중간에 내가 뭘 해야 하는지, 언제 확인해야 하는지 모르겠다</div></div><div class="dc block-row"><span style="color:var(--text-dim);font-size:11px">&mdash;</span></div>
+  <div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 적긴 적었는데, 이게 업체에 보여줘도 되는 수준인지, 뭐가 빠졌는지 판단이 안 선다</div></div><div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 기능 목록은 대강 완성했는데, 이제 어디에 등록하고 어떤 업체에 보여야 할지 모르겠다</div></div><div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 업체를 찾고 견적까지 받는 경로는 잡혔는데, 그 이후에 계약·개발·검수까지 어떤 흐름으로 진행되는지 전체 그림이 없어 여전히 불안하다</div></div><div class="dc block-row"><span style="color:var(--text-dim);font-size:11px">&mdash;</span></div>
   <div class="rl basis-label">&#x1F4CE; 근거</div>
-  <div class="dc basis-cell">독자가 '업체 찾기'부터 시작하려 하지만 실제로는 요구사항 정리가 선행이라는 업계 현실(industry_context.dont §1)이 첫 막힘의 원인이다. AI 3개 모두 요구사항 정의를 첫 단계로 제시하고, PAA 상위 '외주 개발이란 무엇인가요'가 이 출발점을 뒷받침한다.</div><div class="dc basis-cell">h1에서 '적긴 적었는데 수준이 맞는지 모르겠다'는 막힘이 '어느 정도까지 쓰면 되는가'로 이어진다. research_corrections에서 RFP·스토리보드·기술 스택 요구는 비개발자 capability_limits를 넘어선다고 교정되어 있어, 이 노드에서 현실적 수준을 제시해야 독자가 다음 단계로 넘어갈 수 있다.</div><div class="dc basis-cell">h2에서 요구사항 정리가 끝난 독자가 자연스럽게 마주하는 '어디에 뿌릴지' 질문. 연관 검색 '외주개발업체' 볼륨(2)과 PAA '업체 선정 기준'이 이 노드를 뒷받침하며, AI 3개 모두 '업체 탐색 방법'을 별도 단계로 배치한다.</div><div class="dc basis-cell">h3의 block '견적 차이가 너무 커서 판단 불가'가 이 state를 만든다. reader_misconceptions '비쌀수록 좋다'가 이 노드의 필요성을 지목하고, 경쟁글 2건 모두 '업체 선정 기준'을 독립 섹션으로 다룬다.</div><div class="dc basis-cell">h4에서 업체를 고른 뒤 자연스럽게 다음 장벽인 계약으로 이어진다. industry_context.responsibility_map의 '소스코드·지재권은 계약서 명시에 따라 달라짐', confusion_pairs의 '하자보수 ≠ 유지보수'가 이 노드의 핵심 3조항 선정 근거다. 독자가 할 수 있는 수준(research_corrections '핵심 3가지만 확인')으로 단순화했다.</div><div class="dc basis-cell">h5에서 계약을 마친 뒤 남는 마지막 장벽은 '실행 중 뭘 해야 하는가'라는 역할 불안이다. research_corrections의 '비개발자가 PM처럼 관리하는 것은 비현실적 요구'와 responsibility_map의 '중간 검수는 클라이언트 책임'이 결합해 이 노드의 stance가 된다. reader_misconceptions '개발사가 알아서 다 해준다'는 감정 장벽을 해소하는 마지막 노드로 배치했다.</div>
+  <div class="dc basis-cell">독자가 '업체 찾기'부터 시작하려 하지만 실제로는 요구사항 정리가 선행이라는 업계 현실(industry_context.dont §1)이 첫 막힘의 원인이다. AI 3개 모두 요구사항 정의를 첫 단계로 제시하고, PAA 상위 '외주 개발이란 무엇인가요'가 이 출발점을 뒷받침한다. 글의 첫 노드이므로 원칙 제시에 집중하고 서비스 안내는 다음 노드로 미룬다.</div><div class="dc basis-cell">h1에서 '적긴 적었는데 수준이 맞는지 모르겠다'는 막힘이 '어느 정도까지 쓰면 되는가'로 이어진다. research_corrections에서 RFP·스토리보드·기술 스택 요구는 비개발자 capability_limits를 넘어선다고 교정되어 있어, 이 노드에서 현실적 수준을 제시해야 독자가 다음 단계로 넘어갈 수 있다. 서비스 안내(매니저 동반)는 h1이 아닌 이 노드에서 자연스럽게 등장시킨다.</div><div class="dc basis-cell">h2에서 요구사항 정리가 끝난 독자가 자연스럽게 마주하는 '어디에 뿌릴지' 질문. 연관 검색 '외주개발업체' 볼륨(2)과 PAA '업체 선정 기준'이 이 노드를 뒷받침하며, AI 3개 모두 '업체 탐색 방법'을 별도 단계로 배치한다. 견적 비교 자체의 깊이는 별도 sub(sub_compare)에서 다룬다.</div><div class="dc basis-cell">h3의 block '경로는 잡혔는데 이후 전체 그림이 없다'는 감정 장벽을 마지막 노드에서 해소한다. 독자 질문('어디서부터 시작')의 범위는 '시작'이므로 견적 해석·계약 조항·진행 관리의 상세 깊이는 이 글의 범위를 넘어선다 — hub은 전체 흐름을 짚어주는 방향성 안내로 끝내고, 깊이 있는 내용은 후속 콘텐츠로 위임한다. reader_misconceptions '개발사가 알아서 다 해준다'와 research_corrections '비개발자가 PM처럼 관리하는 것은 비현실적'이 이 노드의 tone을 결정: 각 단계를 완벽히 관리하는 것이 아니라 '이런 흐름이 온다'는 인지 수준에서 끝낸다.</div>
   <div class="rl" style="border-bottom:none">&#x2935;&#xFE0F; 분기</div>
-  <div class="dc branch-cell empty">&mdash;</div><div class="dc branch-cell"><span class="branch-pill" style="background:var(--sub1-light);color:var(--sub1)">&#x2193; sub_req_guide</span></div><div class="dc branch-cell empty">&mdash;</div><div class="dc branch-cell"><span class="branch-pill" style="background:var(--sub2-light);color:var(--sub2)">&#x2193; sub_compare</span></div><div class="dc branch-cell empty">&mdash;</div><div class="dc branch-cell empty">&mdash;</div>
+  <div class="dc branch-cell empty">&mdash;</div><div class="dc branch-cell"><span class="branch-pill" style="background:var(--sub1-light);color:var(--sub1)">&#x2193; sub_req_guide</span></div><div class="dc branch-cell"><span class="branch-pill" style="background:var(--sub2-light);color:var(--sub2)">&#x2193; sub_compare</span></div><div class="dc branch-cell empty">&mdash;</div>
   </div></div>
 </div>
 
@@ -1014,7 +1004,7 @@ tr.vol-low td{color:var(--text-dim)}tr.vol-low td:first-child{font-weight:400}
   
   <div class="hub-sub-connector"><div class="connector-visual">
     <div class="cv-line" style="background:var(--hub)"></div>
-    <span class="cv-label" style="background:var(--hub-light);color:var(--hub)">Hub h4</span>
+    <span class="cv-label" style="background:var(--hub-light);color:var(--hub)">Hub h3</span>
     <span style="color:var(--text-dim)">&rarr;</span>
     <div class="cv-line" style="background:var(--sub2)"></div>
     <span class="cv-label" style="background:#FFF8EB;color:#C68A1D">sub_compare</span>
@@ -1026,7 +1016,7 @@ tr.vol-low td{color:var(--text-dim)}tr.vol-low td:first-child{font-weight:400}
     <div class="stb-head">
       <div class="stb-color" style="background:var(--sub2)"></div>
       <div class="stb-content">
-        <div class="stb-overline" style="color:var(--sub2)">Sub Content 2 &mdash; example from h4</div>
+        <div class="stb-overline" style="color:var(--sub2)">Sub Content 2 &mdash; example from h3</div>
         <div class="stb-question">받은 웹서비스 견적 금액이 내 프로젝트 유형에 비해 합리적인지 어떻게 판단하나요?</div>
         <div class="stb-tags">
           <span class="stb-tag" style="background:#FFF8EB;color:#C68A1D">3 steps</span>
@@ -1035,14 +1025,14 @@ tr.vol-low td{color:var(--text-dim)}tr.vol-low td:first-child{font-weight:400}
       </div>
     </div>
     
-    <div class="reasoning-box rb-sub2"><div class="rb-label">Selection Reasoning</div><div class="rb-text">hub h4는 '금액이 아니라 범위·포트폴리오·소통으로 비교하라'는 관점을 제시했지만, 독자가 '그래서 내 프로젝트 견적이 시장 기준 어디쯤인지'를 가늠할 실제 데이터가 없다. context.json의 validated_stats(웹 신규 개발 1,812건, 중위값 1,600만, Q1 600만 ~ Q3 4,000만)와 validated_samples 15건이 이 수요를 채울 수 있다. data_angles의 '서비스 유형별 예산 범위 차이'가 hub과 다른 각도다 — hub은 '비교 기준'을 다뤘고, sub는 '내 프로젝트가 어느 유형이고 예산 범위는 어디쯤인가'로 데이터로 해부한다. 기발행 예산 가이드(web-service-outsourcing-budget-guide)는 예산 전반을 다루므로 중복 주의가 필요하지만, 이 sub는 '견적 비교 상황에 특화'해 차별화한다.</div></div>
+    <div class="reasoning-box rb-sub2"><div class="rb-label">Selection Reasoning</div><div class="rb-text">hub h3은 '업체를 찾는 경로'를 제시했지만, 실제로 여러 곳에서 견적을 받아본 독자가 '금액 차이가 왜 이렇게 크고, 내 프로젝트는 어느 구간인지'를 가늠할 데이터가 없다. context.json의 validated_stats(웹 신규 개발 1,812건, 중위값 1,600만, Q1 600만 ~ Q3 4,000만)와 validated_samples 15건이 이 수요를 채울 수 있다. data_angles의 '서비스 유형별 예산 범위 차이'가 hub과 다른 각도다 — hub은 '어디서 찾고 비교하는지' 경로를 다뤘고, sub는 '받은 견적이 시장 기준 어느 위치인지' 데이터로 해부한다. 기발행 예산 가이드(web-service-outsourcing-budget-guide)는 예산 전반을 다루므로 중복 주의가 필요하지만, 이 sub는 '견적 비교 상황에 특화'해 차별화한다.</div></div>
     
   </div>
 
   <div class="section-scroll"><div class="map-grid c-sub2" style="grid-template-columns:var(--row-label-w) repeat(3,var(--col-w))">
   
   
-  <div class="rl flow-reason-label">흐름 근거</div><div class="dc flow-reason-cell">hub h4의 '같은 요구사항이면 범위와 투입 인력 차이'라는 추상 원리를 실제 데이터로 해부한다. (1) 여러 견적을 펼쳐놓고 어느 쪽이 정상인지 몰라 헤매는 상태 → (2) 서비스 유형별로 범위 자체가 다르다는 것을 사례로 보여주기 → (3) 내 프로젝트를 어느 유형에 대입할지 → (4) 대입해봤는데 여전히 판단이 안 설 때의 해결 경로. 마지막 노드에서 혼자 판단의 감정 장벽을 매니저 상담 구조로 해소.</div>
+  <div class="rl flow-reason-label">흐름 근거</div><div class="dc flow-reason-cell">hub h3의 '경로'라는 추상 원리를 받은 독자가 실제 여러 견적을 펼쳐놓고 가늠할 때의 막힘을 분해한다. (1) 여러 견적을 펼쳐놓고 어느 쪽이 정상인지 몰라 헤매는 상태 → (2) 서비스 유형별로 범위 자체가 다르다는 것을 사례로 보여주기 → (3) 내 프로젝트를 어느 유형에 대입할지 → (4) 대입해봤는데 여전히 판단이 안 설 때의 해결 경로. 마지막 노드에서 혼자 판단의 감정 장벽을 매니저 상담 구조로 해소.</div>
   
   <div class="rl" style="min-height:auto">&#x1F3F7;&#xFE0F; Stage</div>
   <div class="stage-cell"><div class="stage-pill">S2_1</div></div><div class="stage-cell"><div class="stage-pill">S2_2</div></div><div class="stage-cell"><div class="stage-pill">S2_3</div></div>
@@ -1065,7 +1055,7 @@ tr.vol-low td{color:var(--text-dim)}tr.vol-low td:first-child{font-weight:400}
 <text x="650" y="126" text-anchor="middle" class="emotion-sublabel">내 프로젝트 유?</text>
 </svg></div>
   <div class="rl">&#x1F4AD; 상태</div>
-  <div class="dc state-cell">hub에서 '금액이 아니라 범위를 보라'는 건 알았는데, 막상 내 견적 3장을 펼쳐놓고 보면 500만·1,500만·3,000만이 각각 어느 범위에 해당하는지 가늠이 안 된다.</div><div class="dc state-cell">서비스 유형이라는 게 있는 건 알겠는데, 단순 홈페이지·솔루션·맞춤 웹서비스·플랫폼의 실제 경계가 어디인지 헷갈린다.</div><div class="dc state-cell">유형 사례를 봤지만 내 프로젝트가 정확히 어느 쪽에 해당하는지 여전히 혼자 판단하기 어렵다. 견적을 보낸 업체 3곳 중 어느 쪽 시각이 맞는지도 확신이 없다.</div>
+  <div class="dc state-cell">hub에서 업체를 찾는 경로는 알았고 견적까지 받았는데, 막상 3장을 펼쳐놓고 보면 500만·1,500만·3,000만이 각각 어느 범위에 해당하는지 가늠이 안 된다.</div><div class="dc state-cell">서비스 유형이라는 게 있는 건 알겠는데, 단순 홈페이지·솔루션·맞춤 웹서비스·플랫폼의 실제 경계가 어디인지 헷갈린다.</div><div class="dc state-cell">유형 사례를 봤지만 내 프로젝트가 정확히 어느 쪽에 해당하는지 여전히 혼자 판단하기 어렵다. 견적을 보낸 업체 3곳 중 어느 쪽 시각이 맞는지도 확신이 없다.</div>
   <div class="rl q-label">&#x2753; 질문</div>
   <div class="dc q">내가 받은 견적 금액이 시장에서 어느 위치인지 가늠할 기준이 있나요?</div><div class="dc q">실제 사례로 유형별 범위가 어떻게 다른지 볼 수 있나요?</div><div class="dc q">내 프로젝트 유형과 적정 예산을 혼자 판단하기 어려울 때는 어떻게 하나요?</div>
   <div class="rl">&#x1F4A1; 핵심 답변</div>
@@ -1075,15 +1065,15 @@ tr.vol-low td{color:var(--text-dim)}tr.vol-low td:first-child{font-weight:400}
   <div class="rl">&#x2716; 다음 문제</div>
   <div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 유형을 정리하려는데 단순 홈페이지와 맞춤 웹서비스 경계가 애매해서 어디 속하는지 모르겠다</div></div><div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 사례 중 완전히 같은 것은 없고, 부분적으로 섞여 있어서 내 프로젝트를 어느 유형으로 봐야 할지 여전히 애매하다</div></div><div class="dc block-row"><span style="color:var(--text-dim);font-size:11px">&mdash;</span></div>
   <div class="rl basis-label" style="border-bottom:none">&#x1F4CE; 근거</div>
-  <div class="dc basis-cell" style="border-bottom:none">hub h4의 관점을 받은 뒤 독자가 실제 견적에 대입할 때 첫 막힘. validated_stats의 '웹 신규 개발 Q1~Q3가 600만~4,000만으로 매우 넓다'가 유형별 분기 필요성을 뒷받침한다.</div><div class="dc basis-cell" style="border-bottom:none">s2_1의 block '유형 경계가 애매'가 이 state를 만든다. validated_samples의 comparable_group('단순 홈페이지형', '솔루션 기반', '중소형 맞춤', '중형 플랫폼')이 이 stance의 사례 구조를 제공한다. data.comparison_warning에 따라 솔루션/맞춤 구분을 명시했다.</div><div class="dc basis-cell" style="border-bottom:none">s2_2의 block '혼자 판단이 여전히 애매'라는 감정 장벽을 service_boundaries.can_claim '90,000건+ 상담 경험 기반 적정 견적 가이드'로 해소. 마지막 노드가 정보 격차가 아닌 신뢰·판단 불안 해소가 되도록 배치했다.</div>
+  <div class="dc basis-cell" style="border-bottom:none">hub h3에서 경로를 잡고 견적까지 받은 독자가 실제 비교할 때 첫 막힘. validated_stats의 '웹 신규 개발 Q1~Q3가 600만~4,000만으로 매우 넓다'가 유형별 분기 필요성을 뒷받침한다.</div><div class="dc basis-cell" style="border-bottom:none">s2_1의 block '유형 경계가 애매'가 이 state를 만든다. validated_samples의 comparable_group('단순 홈페이지형', '솔루션 기반', '중소형 맞춤', '중형 플랫폼')이 이 stance의 사례 구조를 제공한다. data.comparison_warning에 따라 솔루션/맞춤 구분을 명시했다.</div><div class="dc basis-cell" style="border-bottom:none">s2_2의 block '혼자 판단이 여전히 애매'라는 감정 장벽을 service_boundaries.can_claim '90,000건+ 상담 경험 기반 적정 견적 가이드'로 해소. 마지막 노드가 정보 격차가 아닌 신뢰·판단 불안 해소가 되도록 배치했다.</div>
   </div></div>
 </div>
 
 <div class="inner-panel" id="jm-sub3">
   
   <div class="hub-sub-connector"><div class="connector-visual">
-    <span class="cv-label" style="background:#F3F1FE;color:#6C5CE7">sub_nocode</span>
-    <span class="cv-desc">독립 Branch &mdash; 예산이 빠듯한 중소기업이 웹서비스를 노코드로 직접 만들지, 외주를 맡길지...</span>
+    <span class="cv-label" style="background:#F3F1FE;color:#6C5CE7">sub_solution</span>
+    <span class="cv-desc">독립 Branch &mdash; 웹서비스를 외주로 만들 때 솔루션 기반 구축과 직접 구축 중 어느 쪽이 ...</span>
   </div></div>
   
 
@@ -1092,7 +1082,7 @@ tr.vol-low td{color:var(--text-dim)}tr.vol-low td:first-child{font-weight:400}
       <div class="stb-color" style="background:var(--sub3)"></div>
       <div class="stb-content">
         <div class="stb-overline" style="color:var(--sub3)">Sub Content 3 &mdash; branch Independent Branch</div>
-        <div class="stb-question">예산이 빠듯한 중소기업이 웹서비스를 노코드로 직접 만들지, 외주를 맡길지 어떤 기준으로 판단하나요?</div>
+        <div class="stb-question">웹서비스를 외주로 만들 때 솔루션 기반 구축과 직접 구축 중 어느 쪽이 내 사업에 맞는지 어떻게 판단하나요?</div>
         <div class="stb-tags">
           <span class="stb-tag" style="background:#F3F1FE;color:#6C5CE7">4 steps</span>
           <span class="stb-tag" style="background:#F3F1FE;color:#6C5CE7">source: branch</span>
@@ -1100,52 +1090,52 @@ tr.vol-low td{color:var(--text-dim)}tr.vol-low td:first-child{font-weight:400}
       </div>
     </div>
     
-    <div class="reasoning-box rb-sub3"><div class="rb-label">Selection Reasoning</div><div class="rb-text">AI 검색(ChatGPT·Gemini)이 공통 missing_angle로 지적한 '노코드·로우코드와 외주 개발 비교'와 경쟁글 missing_angles 동일 지적에서 도출. hub은 '외주로 만들어야 한다고 결론 난 독자'를 전제하지만, problem_contexts[1]은 외주 자체가 적절한지를 고민하는 독자다. hub h1에 진입하지 못하는 상태이므로 branch. 기발행 글 2건이 모두 '외주 시작' 주제라 이 각도는 공백이며 차별화가 명확하다.</div></div>
+    <div class="reasoning-box rb-sub3"><div class="rb-label">Selection Reasoning</div><div class="rb-text">AI 검색(ChatGPT·Gemini)이 공통 missing_angle로 지적한 '솔루션 활용 vs 맞춤 개발 비교'와 경쟁글 missing_angles 동일 지적에서 도출. hub은 '외주로 만들어야 한다고 결론 난 독자'를 '업체 탐색·요구사항 정리' 경로로 안내하지만, problem_contexts[1]은 외주는 결정했어도 '솔루션 기반으로 만들지, 직접 구축으로 갈지' 방식 축에서 갈라진 독자다. context.json의 confusion_pairs '솔루션 납품 ≠ 맞춤 제작'이 유지보수·비용 구조·소스코드 귀속이 완전히 다름을 교정 사항으로 명시하고 있어, 두 방식의 차이를 정확히 설명하는 것이 업계 현실 반영의 핵심이다. validated_samples의 워드프레스·cafe24 기반 구축 사례(600~1,000만)와 중소형 맞춤 웹서비스 사례(1,500~1,700만)가 실제 금액대 차이의 근거가 된다. 기발행 글 2건이 모두 '외주 시작' 주제라 이 각도는 공백이다.</div></div>
     
   </div>
 
   <div class="section-scroll"><div class="map-grid c-sub3" style="grid-template-columns:var(--row-label-w) repeat(4,var(--col-w))">
   
   
-  <div class="rl flow-reason-label">흐름 근거</div><div class="dc flow-reason-cell">외주 vs 노코드 판단 기준을 찾는 독자가 가장 먼저 막히는 것은 '노코드로 할 수 있는 일의 한계'와 '외주가 필요한 시점'의 경계다. (1) 두 방법 중 뭘 골라야 할지 몰라 저울질 → (2) 노코드로 가능한 범위와 한계 → (3) 외주로 가야 하는 시점의 신호 → (4) 지금 내 상황에서 어느 쪽을 먼저 시도할지 판단 기준. hub의 독자보다 지식 수준이 낮을 수 있어 기술 용어 최소화하고 일상어 비유 중심으로 설계했다.</div>
+  <div class="rl flow-reason-label">흐름 근거</div><div class="dc flow-reason-cell">솔루션 활용과 직접 구축 사이에서 저울질하는 독자가 가장 먼저 막히는 것은 '두 방식이 본질적으로 뭐가 다른가'와 '내 프로젝트가 어느 쪽에 맞는가'의 경계다. (1) 두 방식 중 뭘 골라야 할지 몰라 저울질 → (2) 솔루션 기반 구축이 뭐고 어떤 경우에 적합한지 → (3) 직접 구축이 필요한 시점의 신호 → (4) 내 상황에서 어느 쪽을 선택하고 어떤 외주사에 맡길지 실행 경로. hub의 독자보다 IT 이해도가 약간 더 있는 독자(두 방식의 존재는 인지)일 수 있으나, 여전히 tech_foggy 수준이므로 기술 용어는 최소화하고 사례 중심으로 전개.</div>
   
   <div class="rl" style="min-height:auto">&#x1F3F7;&#xFE0F; Stage</div>
   <div class="stage-cell"><div class="stage-pill">S3_1</div></div><div class="stage-cell"><div class="stage-pill">S3_2</div></div><div class="stage-cell"><div class="stage-pill">S3_3</div></div><div class="stage-cell"><div class="stage-pill">S3_4</div></div>
   <div class="rl" style="min-height:auto">&#x1F4C8; 감정</div>
   <div class="emotion-strip tall"><svg class="emotion-svg" viewBox="0 0 1040 150" preserveAspectRatio="none">
-<rect x="0" y="0" width="260" height="150" fill="rgba(231,76,60,.04)" rx="4"/>
+<rect x="0" y="0" width="260" height="150" fill="rgba(243,156,18,.04)" rx="4"/>
 <rect x="260" y="0" width="260" height="150" fill="rgba(243,156,18,.04)" rx="4"/>
 <rect x="520" y="0" width="260" height="150" fill="rgba(243,156,18,.04)" rx="4"/>
 <rect x="780" y="0" width="260" height="150" fill="rgba(46,204,113,.04)" rx="4"/>
-<text x="130" y="90" text-anchor="middle" style="font-size:18px">😯</text>
-<circle cx="130" cy="110" r="6" fill="var(--emotion-low)"/>
-<text x="130" y="128" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-low)">막막</text>
-<text x="130" y="146" text-anchor="middle" class="emotion-sublabel">노코드 툴로 직?</text>
+<text x="130" y="55" text-anchor="middle" style="font-size:18px">🤔</text>
+<circle cx="130" cy="75" r="6" fill="var(--emotion-mid)"/>
+<text x="130" y="93" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-mid)">혼란</text>
+<text x="130" y="146" text-anchor="middle" class="emotion-sublabel">같은 웹서비스인?</text>
 <text x="390" y="55" text-anchor="middle" style="font-size:18px">🤔</text>
 <circle cx="390" cy="75" r="6" fill="var(--emotion-mid)"/>
 <text x="390" y="93" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-mid)">답답</text>
-<text x="390" y="146" text-anchor="middle" class="emotion-sublabel">노코드 툴로 어?</text>
+<text x="390" y="146" text-anchor="middle" class="emotion-sublabel">솔루션 기반 구?</text>
 <text x="650" y="55" text-anchor="middle" style="font-size:18px">🤔</text>
 <circle cx="650" cy="75" r="6" fill="var(--emotion-mid)"/>
 <text x="650" y="93" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-mid)">갈팡질팡</text>
-<text x="650" y="146" text-anchor="middle" class="emotion-sublabel">일부만 노코드 ?</text>
+<text x="650" y="146" text-anchor="middle" class="emotion-sublabel">일부 기능이 솔?</text>
 <text x="910" y="20" text-anchor="middle" style="font-size:18px">😌</text>
 <circle cx="910" cy="40" r="6" fill="var(--emotion-high)"/>
 <text x="910" y="58" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-high)">안심</text>
-<text x="910" y="146" text-anchor="middle" class="emotion-sublabel">외주로 가기로 ?</text>
+<text x="910" y="146" text-anchor="middle" class="emotion-sublabel">솔루션 기반과 ?</text>
 </svg></div>
   <div class="rl">&#x1F4AD; 상태</div>
-  <div class="dc state-cell">예산이 빠듯해서 외주로 수천만 원 쓰는 게 맞는지 확신이 없다. 요즘 노코드 툴로 직접 만들 수도 있다고 들었는데 정말 가능한 수준인지, 결국 외주를 맡겨야 하는지 갈피를 못 잡는다.</div><div class="dc state-cell">템플릿은 봤는데 '이 기능은 되고 저 기능은 안 된다'는 경계가 모호하다. 노코드가 실제로 할 수 있는 일과 할 수 없는 일이 뭔지 구체적으로 알고 싶다.</div><div class="dc state-cell">5개 중 3개는 노코드, 2개는 커스텀이 필요한 혼합 상태. 이 경우에 노코드로 일단 시작할지, 처음부터 외주로 갈지 판단이 안 선다.</div><div class="dc state-cell">외주로 가야 한다는 판단은 섰는데, 이제 처음부터 어디서 시작해야 할지 막막한 상태로 돌아왔다. 판단까지는 왔지만 실행 경로가 없다.</div>
+  <div class="dc state-cell">외주로 만들기로 결정은 했는데, '카페24로 만들어달라는 개발사도 있고 처음부터 만들어주겠다는 개발사도 있다'는 말을 듣고 나서 어느 쪽으로 가야 할지 갈피를 못 잡는다. 금액도 방식에 따라 수백만 원 차이가 나서 더 혼란스럽다.</div><div class="dc state-cell">템플릿은 봤는데 '이 기능은 되고 저 기능은 안 된다'는 경계가 모호하다. 솔루션 기반으로 갔을 때 실제로 할 수 있는 범위가 어디까지인지, 맞춤 개발 대비 비용이 왜 저렴한지 구체적으로 알고 싶다.</div><div class="dc state-cell">5개 기능 중 3개는 솔루션으로 되고 2개는 솔루션으로는 어려운 혼합 상태. 솔루션 위에 커스텀을 얹는 방식으로 갈지, 아예 처음부터 직접 구축으로 갈지 판단이 안 선다.</div><div class="dc state-cell">솔루션 기반으로 갈지 직접 구축으로 갈지 방향은 잡았는데, '카페24 전문 개발사'와 '일반 맞춤 개발사' 중 어디에 견적을 요청해야 하고, 어떻게 찾아야 하는지 막막하다.</div>
   <div class="rl q-label">&#x2753; 질문</div>
-  <div class="dc q">노코드 툴로 직접 만드는 것과 외주를 맡기는 것 중 어떻게 골라야 하나요?</div><div class="dc q">노코드 툴로 어디까지 가능하고, 어디부터 외주가 필요한가요?</div><div class="dc q">일부만 노코드 가능하고 일부는 커스텀이 필요할 때는 어떻게 결정하나요?</div><div class="dc q">외주로 가기로 판단했으면 그 다음에는 뭘 해야 하나요?</div>
+  <div class="dc q">같은 웹서비스인데 솔루션 기반으로 만드는 것과 직접 구축하는 것 중 어떻게 골라야 하나요?</div><div class="dc q">솔루션 기반 구축으로는 어디까지 가능하고, 어떤 경우에 적합한가요?</div><div class="dc q">일부 기능이 솔루션으로 어려운 경우, 직접 구축이 필요한 시점은 언제인가요?</div><div class="dc q">솔루션 기반과 직접 구축은 외주사 유형 자체가 다른가요? 어디에 견적을 요청해야 하나요?</div>
   <div class="rl">&#x1F4A1; 핵심 답변</div>
-  <div class="dc">두 방법은 목적이 다르다. 노코드는 '정해진 틀 안에서 빠르게 만들 때' 적합하고, 외주는 '내 사업에 맞춰 맞춤 기능을 만들 때' 적합하다. 둘 중 뭐가 우월한 방법이 아니라 '지금 만들려는 것이 틀 안에 들어가는가'가 기준이다. 틀 밖의 기능이 필요하면 노코드로 시작해도 결국 외주로 넘어가야 하는 시점이 온다.</div><div class="dc">노코드로 가능한 전형적 영역은 쇼핑몰(카페24), 콘텐츠 위주 홈페이지(워드프레스), 예약·신청 폼, 기본 회원 관리다. 반대로 외주가 필요해지는 지점은 '업무 고유 로직'이 들어갈 때다 — 예를 들어 우리 회사만의 계산 로직, 외부 시스템 연동, 사용자 권한 세분화, 대시보드 데이터 집계 같은 영역. 이 경계가 헷갈리면 '템플릿에 내가 원하는 메뉴 3개가 그대로 있는가'를 기준으로 삼으면 된다.</div><div class="dc">혼합 상태에서 결정 기준은 '사업 시작의 긴급도'와 '커스텀 기능이 사업 핵심인가'다. 커스텀이 필요한 기능이 사업의 핵심 경쟁력(예: 우리만의 매칭 로직, 독자 결제 구조)이면 처음부터 외주로 가야 나중에 재개발 비용이 안 든다. 반대로 커스텀 기능이 부가적이고 사업 검증이 먼저 필요한 단계라면, 노코드로 MVP를 만들어 시장 반응을 보고 외주로 본격 개발을 시작하는 순서가 현실적이다.</div><div class="dc">외주 결정이 서면 '업체부터 찾기'가 아니라 '핵심 기능 목록 정리'가 첫 단계다. 일상어로 '사용자가 ~할 수 있어야 한다' 형식의 문장 30~50개면 초기 견적을 받을 수 있는 최소 조건이 만들어진다. 위시켓에 프로젝트를 등록하면 매니저가 요구사항 구체화부터 함께 도와주고, 등록과 상담은 무료다. 이 단계가 막막하면 혼자 완벽히 준비하지 말고 등록부터 하는 것이 빠른 방법이다.</div>
+  <div class="dc">두 방식은 출발점이 다르다. 솔루션 기반 구축은 '이미 만들어진 제품(카페24·워드프레스·이미웹 등) 위에 내 사업에 맞게 커스터마이징'하는 방식이고, 직접 구축은 '요구사항대로 처음부터 맞춤 개발'하는 방식이다. 둘 다 외주로 진행하지만 솔루션 기반은 '해당 솔루션 전문 개발사'에, 직접 구축은 '일반 맞춤 개발사'에 맡긴다는 점에서 견적 요청 대상 자체가 달라진다. 뭐가 우월한 방법이 아니라 '만들려는 서비스가 기존 솔루션의 틀 안에 들어가는가'가 선택 기준이다.</div><div class="dc">솔루션 기반 구축이 잘 맞는 영역은 쇼핑몰(카페24·이미웹), 콘텐츠·회원 관리 중심 홈페이지(워드프레스), 예약·신청 폼 중심 서비스, 기본 결제 연동이 필요한 사이트다. 실제 진행 사례로 보면 워드프레스 기반 와인 직구 쇼핑몰 600만 원대, cafe24 기반 유아복 브랜드 쇼핑몰 1,000만 원대로, 맞춤 개발 대비 금액이 낮다. 비용이 낮은 이유는 핵심 기능이 이미 솔루션에 내장되어 있어 디자인·카테고리 설정·부가 기능 추가만 개발하기 때문이다. 대신 솔루션이 제공하지 않는 기능은 추가 제약이 따르고, 유지보수가 솔루션 제공사의 업데이트 주기에 영향을 받는다.</div><div class="dc">직접 구축으로 넘어가야 하는 신호는 '업무 고유 로직이 사업의 핵심인가'다. 예를 들어 우리만의 매칭 알고리즘, 외부 시스템 연동(ERP·MES·CRM), 사용자 권한 세분화, 대시보드 데이터 집계가 서비스의 차별점이라면 처음부터 직접 구축이 맞다. 솔루션 위에 이런 기능을 억지로 얹으면 커스텀 비용이 계속 늘어나고 나중에 재개발로 가는 경우가 많다. 반대로 커스텀이 필요한 기능이 '있으면 좋은' 수준이고 사업의 핵심이 아니라면, 솔루션 기반으로 빠르게 런칭한 뒤 성장 후 직접 구축으로 전환하는 것도 현실적 선택이다.</div><div class="dc">견적 요청 대상이 완전히 다르다. 솔루션 기반은 '해당 솔루션 전문 개발사'(예: 카페24 공식 제휴 개발사, 워드프레스 전문 팀)에 맡기면 같은 금액이라도 결과물 완성도가 올라간다. 솔루션별 공식 파트너 리스트를 제공하는 경우도 있고, 위시켓에서는 프로젝트 등록 시 '카페24 기반'이라고 명시하면 해당 경험이 있는 파트너를 우선 소개받을 수 있다. 직접 구축은 일반 맞춤 개발사에 요구사항 목록을 보내 견적을 받는 구조로, 이 경우는 hub에서 설명한 표준 경로(요구사항 정리 → 등록 → 매니저 가이드 → 비교)로 진행한다. 혼합 상태라면 매니저 상담 단계에서 '솔루션으로 갈지, 직접 구축으로 갈지' 먼저 정리한 뒤 적합한 파트너 유형을 소개받는 것이 빠르다.</div>
   <div class="rl">&#x25B6;&#xFE0F; 도전</div>
-  <div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 내가 만들려는 서비스를 노코드 템플릿 사이트(예: 카페24, 이미웹)에서 비슷한 것이 있는지 훑어본다</div></div><div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 내 서비스에 필요한 핵심 기능 5개를 적고, 템플릿에서 그 기능이 그대로 있는지 하나씩 체크한다</div></div><div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 내 서비스의 커스텀 기능 2개가 '있으면 좋은 것'인지 '없으면 사업 자체가 안 되는 것'인지 구분한다</div></div><div class="dc try-row"><span style="color:var(--text-dim);font-size:11px">&mdash;</span></div>
+  <div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 카페24·워드프레스·이미웹 같은 솔루션의 템플릿 사이트를 열어 내가 만들려는 서비스와 비슷한 사례가 있는지 훑어본다</div></div><div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 내가 만들려는 서비스의 핵심 기능 5개를 적고, 카페24·워드프레스 같은 솔루션의 기본 기능·플러그인으로 그대로 제공되는지 하나씩 체크한다</div></div><div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 내 서비스의 커스텀이 필요한 기능 2개가 '사업의 핵심 경쟁력'인지 '있으면 좋은 부가 기능'인지 구분한다</div></div><div class="dc try-row"><span style="color:var(--text-dim);font-size:11px">&mdash;</span></div>
   <div class="rl">&#x2716; 다음 문제</div>
-  <div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 비슷한 템플릿이 있는 것 같기도 하고 없는 것 같기도 한데, '틀 안'에 들어가는지 판단이 안 된다</div></div><div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 기능 체크해보니 3개는 되고 2개는 커스터마이징이 필요한 상태인데, 이런 경우에 뭘 먼저 해야 할지 모르겠다</div></div><div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 구분은 했는데, 외주로 가야 한다고 판단이 서면 그 다음엔 뭘 해야 할지 다시 막힌다</div></div><div class="dc block-row"><span style="color:var(--text-dim);font-size:11px">&mdash;</span></div>
+  <div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 비슷한 템플릿이 있는 것 같기도 하고 없는 것 같기도 한데, '틀 안'에 들어가는지 판단이 안 된다</div></div><div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 기능 체크해보니 3개는 솔루션으로 되고 2개는 솔루션으로는 어려워 보이는데, 이런 혼합 상태에서 어느 방식으로 가야 할지 모르겠다</div></div><div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 핵심인지 부가인지 구분은 했는데, 어느 방식으로 갈지 결정이 서도 '누구에게 견적을 요청해야 하는가'를 모르겠다</div></div><div class="dc block-row"><span style="color:var(--text-dim);font-size:11px">&mdash;</span></div>
   <div class="rl basis-label" style="border-bottom:none">&#x1F4CE; 근거</div>
-  <div class="dc basis-cell" style="border-bottom:none">problem_contexts[1]의 출발점(외주 vs 노코드 저울질)에서 시작. AI 공통 missing_angle을 이 독자 수준의 일상어로 풀었다.</div><div class="dc basis-cell" style="border-bottom:none">s3_1의 block '틀 안 여부 판단 불가'가 이 state를 만든다. industry_context.situation_tags 중 'MVP 이후 본격 개발 필요'가 이 독자층의 존재를 뒷받침한다.</div><div class="dc basis-cell" style="border-bottom:none">s3_2의 block '혼합 상태 판단 불가'에서 파생. research_corrections의 '예산 구간 분기 금지' 원칙에 따라 분기 기준을 상황(사업 핵심·긴급도)으로 잡았다.</div><div class="dc basis-cell" style="border-bottom:none">s3_3의 block '외주로 가야 한다는 판단 후 다음이 막막'이라는 감정 장벽을 해소. hub h1~h2의 핵심 메시지를 이 독자의 진입점으로 재포장해 branch sub의 출구로 삼았다. journey_mapping의 '외주 여부 결정 못 한 stage_explore 독자에게는 CTA 강도를 낮추고 인지 수준에 그친다'를 반영.</div>
+  <div class="dc basis-cell" style="border-bottom:none">problem_contexts[1]의 출발점(솔루션 vs 직접 구축 저울질)에서 시작. confusion_pairs '솔루션 납품 ≠ 맞춤 제작'을 독자 수준의 일상어로 풀었다. AI 공통 missing_angle이 이 sub의 존재 근거.</div><div class="dc basis-cell" style="border-bottom:none">s3_1의 block '틀 안 여부 판단 불가'가 이 state를 만든다. validated_samples의 솔루션 기반 사례(워드프레스·cafe24)가 이 stance의 근거이고, data.comparison_warning '솔루션 기반과 맞춤 개발은 비용 구조가 다르다'를 직접 반영했다.</div><div class="dc basis-cell" style="border-bottom:none">s3_2의 block '혼합 상태 판단 불가'에서 파생. industry_context.dont §1-7의 '예산 구간 분기 금지' 원칙에 따라 분기 기준을 상황(사업 핵심·긴급도)으로 잡았다. 중소형 맞춤 웹서비스 사례(1,500~1,700만)와 복합 플랫폼 사례(4,500~8,000만)가 금액 근거.</div><div class="dc basis-cell" style="border-bottom:none">s3_3의 block '결정 후 실행 경로가 막막'이라는 감정 장벽을 해소. hub의 표준 경로와 이 sub의 방식 축 선택을 이 독자의 출구에서 연결해 branch sub의 실행 경로를 완성. journey_mapping의 '외주 여부는 결정했으나 방식이 확정 안 된 독자에게는 인지 수준의 안내'를 반영.</div>
   </div></div>
 </div>
 
