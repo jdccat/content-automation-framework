@@ -987,14 +987,16 @@ _GEO_TABLE_CSS = (
 
 
 def render_embed_code_blocks(content_html: str, cta_banner_html: str) -> str:
-    """Extract tables + CTA from rendered HTML and show as copyable code blocks."""
+    """Extract tables + case cards + inline CTAs + end CTA from rendered HTML
+    and show each as a copyable code block."""
     parts = [
         '<h3 style="font-size:18px;font-weight:600;margin:32px 0 12px 0;">'
         'Embed 코드 (붙여넣기용)</h3>\n'
     ]
 
-    # Tables
     soup = BeautifulSoup(content_html, "html.parser")
+
+    # Tables
     wraps = soup.find_all("div", class_="tbl-wrap")
     for i, wrap in enumerate(wraps, 1):
         table = wrap.find("table")
@@ -1002,13 +1004,33 @@ def render_embed_code_blocks(content_html: str, cta_banner_html: str) -> str:
             continue
         caption = table.find("caption")
         label = caption.get_text(strip=True) if caption else f"표 {i}"
-        # Embed code = <style> + <div.tbl-wrap> as one block
         embed_code = _GEO_TABLE_CSS + str(wrap)
         parts.append(_copyable_block(label, embed_code))
 
-    # CTA banner
+    # Case cards (개별 사례 박스)
+    case_wrap_re = re.compile(r"flex-direction:column;gap:14px;margin:30px 0;")
+    case_title_re = re.compile(r"font-size:15\.5px")
+    card_idx = 0
+    for wrap in soup.find_all("div", style=case_wrap_re):
+        for card in wrap.find_all("div", recursive=False):
+            card_idx += 1
+            title_span = card.find("span", style=case_title_re)
+            label = title_span.get_text(strip=True) if title_span else f"사례 {card_idx}"
+            parts.append(_copyable_block(f"사례: {label}", str(card)))
+
+    # Inline CTAs (gradient + border-radius:14px distinguishes from end CTA)
+    inline_cta_re = re.compile(
+        r"linear-gradient\(135deg,#5E9ADE 0%,#7BB2E8 100%\);border-radius:14px"
+    )
+    for idx, inline in enumerate(soup.find_all("div", style=inline_cta_re), 1):
+        first_p = inline.find("p")
+        raw = first_p.get_text(strip=True) if first_p else ""
+        label = (raw[:40] + "…") if len(raw) > 40 else raw or f"인라인 CTA {idx}"
+        parts.append(_copyable_block(f"인라인 CTA: {label}", str(inline)))
+
+    # End CTA banner
     if cta_banner_html and cta_banner_html.strip():
-        parts.append(_copyable_block("CTA 배너", cta_banner_html.strip()))
+        parts.append(_copyable_block("CTA 배너 (종료)", cta_banner_html.strip()))
 
     return "".join(parts)
 
