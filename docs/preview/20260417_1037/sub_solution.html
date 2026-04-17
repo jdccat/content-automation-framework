@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>솔루션 기반 구축과 직접 구축, 어느 쪽이 내 사업에 맞을까</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+    font-size: 17px;
+    line-height: 2.0;
+    color: #1a1a1a;
+    background: #fff;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Toolbar (편집용) ── */
+  #toolbar {
+    position: fixed; top: 0; left: 0; right: 0;
+    background: #1E293B; color: #fff;
+    padding: 10px 20px;
+    display: flex; align-items: center; gap: 16px;
+    z-index: 9999; font-size: 14px;
+  }
+  #toolbar button {
+    background: #2477F3; color: #fff; border: none;
+    padding: 6px 16px; border-radius: 6px; cursor: pointer;
+    font-size: 13px; font-weight: 600;
+  }
+  #toolbar button:hover { background: #1B5FD1; }
+  #edit-status { color: #94A3B8; font-size: 12px; }
+  #edit-status.modified { color: #FBBF24; }
+
+  /* ── Layout ── */
+  .page-wrap {
+    max-width: 720px;
+    margin: 80px auto 80px;
+    padding: 0 20px;
+  }
+
+  /* ── Header ── */
+  .article-header { margin-bottom: 32px; }
+  .article-category {
+    font-size: 12px; font-weight: 600; color: #2477F3;
+    letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 12px;
+  }
+  h1 {
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 800; line-height: 1.35;
+    letter-spacing: -0.5px; color: #0d0d0d;
+    margin: 0 0 16px 0;
+  }
+  .article-meta { font-size: 13px; color: #999; }
+
+  /* ── Typography ── */
+  h2 {
+    font-size: 21px; font-weight: 700; color: #2477F3;
+    margin: 48px 0 16px 0; padding-bottom: 10px;
+    border-bottom: 2px solid #E5E7EB;
+    letter-spacing: -0.3px;
+  }
+  h3 {
+    font-size: 17px; font-weight: 700; color: #2477F3;
+    margin: 28px 0 10px 0;
+  }
+  p { margin: 0 0 30px 0; }
+  a { color: #2477F3; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  strong { font-weight: 700; }
+
+  /* ── Lists ── */
+  ul, ol { margin: 0 0 30px 0; padding-left: 22px; }
+  li { margin-bottom: 6px; line-height: 2.5; }
+  li::marker { color: #999; }
+
+  hr { border: none; border-top: 1px solid #e8e8e8; margin: 40px 0; }
+
+  /* ── GEO Table ── */
+  .tbl-wrap {
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    margin: 30px 0; border: 1px solid #e0e0e5;
+    border-radius: 12px; background: #fff;
+  }
+  table.geo {
+    width: 100%; border-collapse: collapse; border-spacing: 0;
+    font-size: 14.5px; line-height: 1.65; table-layout: fixed;
+  }
+  table.geo caption {
+    position: absolute; width: 1px; height: 1px;
+    overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap;
+  }
+  table.geo thead th {
+    padding: 12px 18px; font-size: 12.5px; font-weight: 700;
+    letter-spacing: 0.01em; text-align: left;
+    border-bottom: 1px solid #d1d1d9; background: #f6f6f9; vertical-align: bottom;
+  }
+  table.geo thead th:first-child { color: #82828e; border-right: 1px solid #d1d1d9; }
+  table.geo thead th:not(:first-child) { color: #1a1a23; }
+  table.geo tbody th[scope="row"] {
+    padding: 14px 18px; font-size: 14px; font-weight: 600; color: #1a1a23;
+    text-align: left; border-bottom: 1px solid #ececf0; border-right: 1px solid #ececf0;
+    background: #fff; vertical-align: top; word-break: keep-all;
+  }
+  table.geo tbody td {
+    padding: 14px 18px; color: #3a3a47;
+    border-bottom: 1px solid #ececf0; vertical-align: top; word-break: keep-all;
+  }
+  table.geo tbody tr:nth-child(even) td,
+  table.geo tbody tr:nth-child(even) th[scope="row"] { background: #f9f9fb; }
+  table.geo tbody tr:hover td,
+  table.geo tbody tr:hover th[scope="row"] { background: #f0f0f5; }
+  table.geo tfoot td {
+    padding: 9px 18px; font-size: 12px; color: #9ca3af;
+    border-top: 1px solid #ececf0; background: #f9f9fb;
+  }
+
+  /* ── TLDR (핵심 요약) ── */
+  .summary-box {
+    background: #F5F5F5;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 30px;
+  }
+  .summary-box p:first-child {
+    font-size: 13px; font-weight: 700; color: #1A1A1A;
+    margin-bottom: 8px; letter-spacing: 0.3px;
+  }
+  .summary-box p:not(:first-child) {
+    font-size: 15.5px; color: #1A1A1A; line-height: 1.75;
+  }
+  .summary-box p:last-child { margin-bottom: 0; }
+
+  /* ── FAQ ── */
+  .faq-list {
+    display: flex; flex-direction: column; gap: 0;
+    margin: 20px 0 24px; border: 1px solid #E5E7EB;
+    border-radius: 14px; overflow: hidden;
+  }
+  .faq-item { border-bottom: 1px solid #ebebeb; background: #fff; }
+  .faq-item:last-child { border-bottom: none; }
+  .faq-q {
+    font-size: 15px; font-weight: 700; color: #0d0d0d;
+    padding: 18px 20px 8px; display: flex; gap: 10px;
+  }
+  .faq-q .q-mark { color: #2477F3; font-weight: 800; font-size: 16px; flex-shrink: 0; }
+  .faq-a {
+    font-size: 14.5px; color: #444; line-height: 1.75;
+    padding: 0 20px 18px 44px;
+  }
+
+  /* ── Related ── */
+  .related-section { margin: 32px 0; }
+  .related-section h3 { font-size: 16px; font-weight: 700; margin-bottom: 12px; }
+  .related-section ul { list-style: none; padding: 0; }
+  .related-section li {
+    padding: 10px 0; border-bottom: 1px solid #f0f0f0;
+  }
+  .related-section li:last-child { border-bottom: none; }
+  .related-section a { font-size: 15px; font-weight: 500; }
+
+  /* ── Image guide box ── */
+  .image-guide, table.guide-box {
+    background: #FAFAFA; border: 2px solid #E5E7EB;
+    border-radius: 12px; padding: 16px 24px; margin: 30px -20px;
+  }
+
+  /* ── CMS meta area ── */
+  .cms-meta-area { background: #f9fafb; border-radius: 12px; padding: 20px; margin-top: 40px; }
+
+  /* ── Contenteditable ── */
+  [contenteditable="true"]:focus { outline: 2px solid #2477F3; outline-offset: 2px; border-radius: 4px; }
+  [contenteditable="true"]:hover { outline: 1px dashed #CBD5E1; outline-offset: 2px; border-radius: 4px; }
+  [contenteditable="true"]:focus:hover { outline: 2px solid #2477F3; outline-offset: 2px; }
+
+  /* ── Responsive ── */
+  @media (max-width: 640px) {
+    .page-wrap { padding: 0 16px; margin-top: 60px; }
+    h1 { font-size: 22px; }
+    h2 { font-size: 19px; }
+    table.geo { table-layout: auto; }
+    table.geo thead th, table.geo tbody th[scope="row"], table.geo tbody td {
+      padding: 11px 14px; font-size: 13px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- toolbar -->
+<div id="toolbar">
+  <button id="copy-btn" onclick="copyContent()">본문 복사</button>
+  <span id="edit-status">저장됨</span>
+</div>
+
+<div class="page-wrap">
+
+  <div class="article-header">
+    <h1 contenteditable="true">솔루션 기반 구축과 직접 구축, 어느 쪽이 내 사업에 맞을까</h1>
+    <div class="article-meta"><time datetime="2026-04-17">2026-04-17</time></div>
+  </div>
+
+  <div id="cms-content" contenteditable="true" style="outline:none;">
+
+  <div class="summary-box">
+<p>💡 핵심 요약</p>
+<p>카페24·워드프레스 같은 솔루션 위에 올리는 방식과 처음부터 맞춤 개발하는 방식은 비용 차이만 있는 게 아닙니다. 견적을 요청해야 할 개발사 유형 자체가 달라지고, 유지보수 구조와 소스코드 귀속도 완전히 다르거든요. 내가 만들려는 서비스의 핵심 기능 5개를 적고 솔루션으로 대부분 해결되는지 체크해보면 방향이 잡히고, 그래도 애매하면 위시켓 매니저와 먼저 정리해도 됩니다.</p>
+</div>
+
+  <blockquote>
+<p>"카페24로 만들어주시겠다는 곳도 있고, 처음부터 만들어주시겠다는 곳도 있어요. 금액도 두 배 넘게 차이 나고요."</p>
+</blockquote>
+<p>외주로 웹서비스를 만들기로 결정하고 몇 군데 개발사와 이야기를 나누다 보면 생기는 혼란이 있습니다. 어떤 곳은 '카페24나 워드프레스 위에 올려드리면 금방 됩니다'라고 말하고, 어떤 곳은 '요구사항대로 처음부터 만들어드리겠습니다'라고 말하죠. 같은 웹서비스를 만들겠다고 했는데 제안 방식이 완전히 다르고 금액도 수백만 원씩 벌어지니, 어느 쪽을 골라야 할지 판단이 서지 않습니다.</p>
+<p>이 혼란은 사실 한 가지 전제를 놓치고 있어서 생깁니다. <strong>두 방식은 견적을 요청하는 대상 자체가 다르고, 사업의 어느 단계에 맞는지도 다릅니다.</strong> 단순히 '더 싼 쪽', '더 제대로 된 쪽'으로 가를 수 있는 선택지가 아니라는 얘기예요. 위시켓이 12만 건 이상의 외주 프로젝트를 중개해 오면서 반복적으로 확인한 것은, 이 선택을 금액으로 내린 독자들이 나중에 가장 후회한다는 점입니다. 2025년 위시켓에 등록된 실제 웹 개발 프로젝트 사례와 함께 두 방식의 차이와 판단 기준을 정리했습니다.</p>
+<h2 id="같은-웹서비스인데-왜-출발점부터-다를까">같은 웹서비스인데 왜 출발점부터 다를까</h2>
+<p>솔루션 기반 구축과 직접 구축의 차이는 '이미 만들어진 틀을 쓰느냐, 처음부터 짓느냐'입니다. 솔루션 기반은 카페24·워드프레스·이미웹처럼 <strong>이미 완성된 제품 위에 내 사업에 맞는 부분만 맞춰서 얹는 방식</strong>입니다. 쇼핑몰에 필요한 장바구니·결제·회원·상품 관리 같은 기본 기능이 솔루션에 이미 들어가 있으니, 개발사는 디자인을 브랜드에 맞게 바꾸고 카테고리를 정리하고 필요한 부가 기능 몇 개를 붙이는 일을 합니다.</p>
+<p>직접 구축은 이런 틀 없이 <strong>요구사항대로 처음부터 맞춤 개발</strong>하는 쪽입니다. 기능 하나하나를 그 프로젝트에 맞게 설계하고 개발하기 때문에, 어떤 기능이든 원하는 대로 구현할 수 있는 대신 금액과 기간이 올라갑니다.</p>
+<p>두 방식은 비용 차이만 있는 게 아닙니다. 견적을 받는 <strong>대상 자체가 달라지거든요.</strong> 솔루션 기반은 해당 솔루션을 전문으로 다루는 개발사에 맡겨야 결과물의 완성도가 나옵니다. 카페24를 깊이 다뤄본 팀, 워드프레스 플러그인 구조에 익숙한 팀이 따로 있거든요. 직접 구축은 일반 맞춤 개발사에 <a href="https://blog.wishket.com/outsourcing-requirements-document-guide/">요구사항 목록</a>을 넘겨 견적을 받는 구조입니다. 그래서 '뭐가 더 좋은 방식이냐'보다, 만들려는 서비스가 기존 솔루션의 틀 안에 들어가는가가 첫 번째 갈림길이 됩니다.</p>
+<div class="tbl-wrap"><table class="geo"><caption>같은 웹서비스인데 왜 출발점부터 다를까 — 구분 · 솔루션 기반 구축 · 직접 구축</caption><colgroup><col style="width:22%"/><col style="width:39%"/><col style="width:39%"/></colgroup><thead><tr><th scope="col">구분</th><th scope="col">솔루션 기반 구축</th><th scope="col">직접 구축</th></tr></thead><tbody><tr><th scope="row">출발점</th><td>완성된 솔루션 위에 커스터마이징</td><td>요구사항대로 처음부터 개발</td></tr><tr><th scope="row">견적 요청 대상</th><td>해당 솔루션 전문 개발사</td><td>일반 맞춤 개발사</td></tr><tr><th scope="row">소스코드 통제</th><td>솔루션 제공사 기능에 의존</td><td>계약에 따라 전체 확보 가능</td></tr><tr><th scope="row">유지보수</th><td>솔루션 업데이트 주기 영향</td><td>구축한 개발사 또는 별도 팀</td></tr></tbody></table></div>
+<p>우선 만들려는 서비스와 비슷한 것이 카페24·워드프레스·이미웹 같은 솔루션의 템플릿 사이트에 있는지 한 번 훑어보세요. 비슷한 모양이 있다면 솔루션 기반이 후보에 들어오고, 아예 보이지 않는다면 직접 구축으로 넘어가는 게 자연스럽습니다. 다만 '비슷한 것 같기도 하고 아닌 것 같기도 한' 애매한 경우가 가장 많은데, 그때는 한 단계 더 들어가서 판단해야 합니다.</p>
+<h2 id="솔루션-기반이-잘-맞는-영역과-실제-금액대">솔루션 기반이 잘 맞는 영역과 실제 금액대</h2>
+<p>솔루션 기반 구축이 힘을 발휘하는 영역은 비교적 분명합니다. <strong>쇼핑몰(카페24·이미웹), 콘텐츠나 회원 관리가 중심인 홈페이지(워드프레스), 예약·신청 폼 중심 서비스, 기본 결제 연동이 필요한 사이트</strong>가 여기에 해당합니다. 핵심 기능이 솔루션에 이미 내장되어 있거나 플러그인으로 제공되는 경우가 많아서, 개발사가 0부터 만들지 않아도 되거든요.</p>
+<p>금액대를 보면 차이가 체감됩니다. 2025년 위시켓에 등록된 웹 신규 개발 프로젝트 데이터 기준으로, 솔루션 기반 사례 몇 개를 펼쳐 보겠습니다.</p>
+<div style="display:flex;flex-direction:column;gap:14px;margin:30px 0;">
+<div style="border:1px solid #E5E7EB;border-radius:14px;padding:18px 20px;background:#fff;">
+<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;">
+<span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;background:#e8f5e9;color:#2e7d32;">저가 사례</span>
+<span style="font-size:15.5px;font-weight:700;color:#0d0d0d;line-height:1.4;">워드프레스 기반 고급 와인 직구 쇼핑몰 구축</span>
+</div>
+<div style="font-size:20px;font-weight:800;color:#2477F3;margin-bottom:4px;">600만 원</div>
+<div style="font-size:12.5px;color:#999;margin-bottom:10px;">웹 · 40일 · 디자인·구축</div>
+<div style="font-size:14.5px;color:#444;line-height:2.0;">워드프레스에 쇼핑몰 기능이 이미 들어 있어 디자인과 상품 구조 설정에 집중한 프로젝트. 프로젝트 사례</div>
+</div>
+<div style="border:1px solid #E5E7EB;border-radius:14px;padding:18px 20px;background:#fff;">
+<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;">
+<span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;background:#e3f2fd;color:#1565c0;">중가 사례</span>
+<span style="font-size:15.5px;font-weight:700;color:#0d0d0d;line-height:1.4;">cafe24 기반 프리미엄 유아복 브랜드 쇼핑몰 구축</span>
+</div>
+<div style="font-size:20px;font-weight:800;color:#2477F3;margin-bottom:4px;">1,000만 원</div>
+<div style="font-size:12.5px;color:#999;margin-bottom:10px;">웹 · 70일 · 디자인·커스터마이징</div>
+<div style="font-size:14.5px;color:#444;line-height:2.0;">카페24의 쇼핑몰 기본 기능 위에 브랜드 디자인과 일부 기능 커스터마이징을 더한 구조.</div>
+</div>
+</div>
+<p>같은 쇼핑몰을 직접 구축 방식으로 처음부터 만들려고 하면 이 금액대로는 어렵습니다. 장바구니·결제·회원 관리·주문 관리 같은 핵심 기능을 처음부터 설계해야 하니 개발 공수가 훨씬 많아지거든요. 비용이 낮은 이유는 단순합니다. <strong>이미 만들어진 것을 활용하니 만들어야 할 범위가 그만큼 줄어드는 것.</strong></p>
+<p>대신 솔루션 기반은 몇 가지 전제 조건을 안고 갑니다. 솔루션이 제공하지 않는 기능은 추가 개발이 가능하지만 커스터마이징 비용이 올라가고, 유지보수가 솔루션 제공사의 업데이트 정책에 영향을 받습니다. 카페24가 기능을 바꾸면 우리 서비스도 영향을 받는 식이죠. 깊이 있는 커스터마이징을 반복하다 보면 '차라리 처음부터 만들 걸 그랬다'는 생각이 드는 순간이 오기도 합니다.</p>
+<p>그래서 솔루션 기반을 고려할 때 해볼 일은 이렇습니다. 만들려는 서비스의 <strong>핵심 기능 5개를 적어놓고, 카페24·워드프레스 같은 솔루션의 기본 기능이나 플러그인으로 그대로 제공되는지</strong> 하나씩 체크해 보세요. 5개 중 4~5개가 된다면 솔루션 기반으로 빠르고 저렴하게 갈 수 있습니다. 3~4개라면 커스터마이징이 생각보다 많이 붙어 견적이 솔루션 특유의 저렴함을 벗어날 수 있고, 2개 이하면 솔루션이라는 틀 자체가 우리 서비스에 맞지 않는다는 신호입니다.</p>
+<h2 id="직접-구축으로-가야-하는-시점의-신호">직접 구축으로 가야 하는 시점의 신호</h2>
+<p>'5개 중 3개는 되고 2개는 안 되는' 중간 지대가 가장 판단이 어렵습니다. 솔루션 위에 부족한 기능을 커스텀으로 얹을지, 아예 처음부터 직접 구축할지 결정해야 하죠. 이 지점에서 기준이 되는 질문은 하나입니다. <strong>솔루션으로 어려운 그 기능이 우리 사업의 핵심 경쟁력인가, 있으면 좋은 부가 기능인가.</strong></p>
+<p>우리만의 매칭 알고리즘, 외부 시스템 연동(ERP·MES·CRM), 사용자 권한 세분화, 업무 데이터를 다루는 대시보드가 서비스의 차별점이라면 처음부터 직접 구축이 맞습니다. 예를 들어 위시켓에 등록된 '상패·트로피 주문 제작 쇼핑몰 구축 및 MES 연동' 프로젝트는 쇼핑몰 기능 위에 자체 생산 관리 시스템(MES)까지 물려야 했기 때문에, 일반 솔루션으로는 구현이 어려워 3,500만 원대로 맞춤 개발이 진행됐습니다. 이런 기능을 솔루션 위에 억지로 얹으려 하면 커스텀 비용이 계속 쌓이고, 나중에 솔루션이 감당하지 못하는 순간이 와서 재개발로 넘어가는 경우가 많습니다. 처음부터 직접 구축했더라면 한 번에 끝냈을 일을, 솔루션에 억지로 얹었다가 두 번 만드는 셈이죠.</p>
+<p>반대로 커스텀이 필요한 기능이 '있으면 좋은' 수준이고 사업의 핵심이 아니라면, 솔루션 기반으로 빠르게 런칭한 뒤 성장 이후에 직접 구축으로 전환하는 것도 현실적입니다. 처음부터 완성도 높은 서비스를 만들어야 한다는 압박보다, 시장에 빨리 내놓고 반응을 보는 쪽이 더 중요한 사업도 많거든요.</p>
+<p>직접 구축으로 진행된 사례를 보면 금액대의 감이 잡힙니다.</p>
+<div style="display:flex;flex-direction:column;gap:14px;margin:30px 0;">
+<div style="border:1px solid #E5E7EB;border-radius:14px;padding:18px 20px;background:#fff;">
+<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;">
+<span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;background:#e8f5e9;color:#2e7d32;">저가 사례</span>
+<span style="font-size:15.5px;font-weight:700;color:#0d0d0d;line-height:1.4;">출판사 전용 단어장 테스트 웹서비스 구축</span>
+</div>
+<div style="font-size:20px;font-weight:800;color:#2477F3;margin-bottom:4px;">1,500만 원</div>
+<div style="font-size:12.5px;color:#999;margin-bottom:10px;">웹 · 60일 · 맞춤 개발</div>
+<div style="font-size:14.5px;color:#444;line-height:2.0;">특정 도메인(학습) 기능을 처음부터 설계. 솔루션으로는 대체가 어려운 유형. 프로젝트 사례</div>
+</div>
+<div style="border:1px solid #E5E7EB;border-radius:14px;padding:18px 20px;background:#fff;">
+<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;">
+<span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;background:#e3f2fd;color:#1565c0;">중가 사례</span>
+<span style="font-size:15.5px;font-weight:700;color:#0d0d0d;line-height:1.4;">보험 견적 비교 설계사용 웹서비스 구축</span>
+</div>
+<div style="font-size:20px;font-weight:800;color:#2477F3;margin-bottom:4px;">1,700만 원</div>
+<div style="font-size:12.5px;color:#999;margin-bottom:10px;">웹 · 80일 · 맞춤 개발</div>
+<div style="font-size:14.5px;color:#444;line-height:2.0;">업무용 견적 계산 로직과 설계사 전용 기능 포함. 프로젝트 사례</div>
+</div>
+<div style="border:1px solid #E5E7EB;border-radius:14px;padding:18px 20px;background:#fff;">
+<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;">
+<span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;background:#fce4ec;color:#c62828;">고가 사례</span>
+<span style="font-size:15.5px;font-weight:700;color:#0d0d0d;line-height:1.4;">인테리어 견적 매칭 플랫폼 개발</span>
+</div>
+<div style="font-size:20px;font-weight:800;color:#2477F3;margin-bottom:4px;">4,500만 원</div>
+<div style="font-size:12.5px;color:#999;margin-bottom:10px;">웹+앱 · 90일 · 맞춤 개발</div>
+<div style="font-size:14.5px;color:#444;line-height:2.0;">매칭 로직과 웹·앱 동시 구축이 필요한 중형 플랫폼.</div>
+</div>
+</div>
+<p>기능형 맞춤 웹서비스는 대체로 1,500~3,500만 원대, 매칭이나 연동이 붙는 플랫폼급은 4,500만 원 이상부터 시작한다고 보시면 범위감이 잡힙니다. 이 금액이 솔루션 기반 600~1,000만 원대와 배 이상 차이 나는 이유는 단순합니다. <strong>비싸서 그런 게 아니라, 만들어야 할 것의 양 자체가 달라서 생기는 차이.</strong></p>
+<h2 id="방식이-정해지면-견적-요청하는-곳도-달라진다">방식이 정해지면 견적 요청하는 곳도 달라진다</h2>
+<p>솔루션 기반으로 갈지 직접 구축으로 갈지 방향이 잡히면, 이제 실질적인 다음 행동이 바뀝니다. 두 방식은 <strong>견적을 요청해야 할 개발사 유형 자체가 다르거든요.</strong></p>
+<p>솔루션 기반이라면 해당 솔루션 전문 개발사를 찾아야 합니다. 카페24는 카페24 공식 제휴 개발사 리스트를 운영하고, 워드프레스는 플러그인과 테마 커스터마이징에 익숙한 팀이 따로 있습니다. 같은 1,000만 원을 써도 솔루션을 깊이 다뤄본 팀과 그렇지 않은 팀이 내놓는 결과물의 완성도는 크게 차이 납니다. 위시켓에 등록하실 때는 '카페24 기반 쇼핑몰 구축', '워드프레스 기반 사이트 구축'처럼 어떤 솔루션을 쓸 예정인지 명시해 주시면, 해당 경험이 있는 파트너를 우선 소개받을 수 있습니다.</p>
+<p>직접 구축이라면 일반 맞춤 개발사에 요구사항 목록을 보내 견적을 받는 구조입니다. 여기서는 특정 솔루션 경험보다 <strong>우리 서비스와 비슷한 도메인을 다뤄본 경험이 있느냐</strong>가 더 중요합니다. 교육 서비스라면 교육 관련 웹서비스를 만들어본 곳, 매칭 서비스라면 유사한 매칭 로직을 구현해본 곳이 시간을 크게 줄여 줍니다.</p>
+<p>중간 지대에서 판단이 어려우면 혼자 결정하지 마세요. 위시켓에 프로젝트를 등록하시면 매니저가 기능 목록과 사업 맥락을 함께 보면서 '이 정도 범위면 솔루션 기반이 맞습니다', '핵심 기능이 이거라면 직접 구축이 장기적으로 낫습니다'처럼 먼저 방향을 정리해 드립니다. 그 뒤에 해당 방식에 맞는 파트너 유형을 소개받는 순서가 가장 헷갈림이 적습니다. 등록과 매니저 상담은 별도 비용 없이 진행되고, 영업일 24시간 이내에 연락이 갑니다.</p>
+<p>솔루션이냐 직접 구축이냐는 '어느 쪽이 좋다'의 문제보다 '우리 서비스가 어느 쪽 틀에 맞는가'의 문제입니다. 기능 5개를 적고 솔루션으로 되는지 체크해 보고, 안 되는 기능이 사업의 핵심인지 부가인지 구분하는 것만으로도 방향이 꽤 분명해집니다. 거기서 막히는 지점이 생기면 <a href="https://www.wishket.com/">위시켓에 프로젝트 등록</a>으로 매니저에게 물어보세요. 처음부터 완벽히 판단하려고 하지 않아도 됩니다.</p><div style="background:linear-gradient(135deg,#5E9ADE 0%,#7BB2E8 100%);border-radius:14px;padding:20px 24px;margin:30px 0;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+<p style="font-size:15px;color:#fff;line-height:1.65;margin:0;flex:1;">방식이 헷갈린다면 <a href="https://www.wishket.com/project/?utm_source=blog_webflow&amp;utm_medium=inline_cta&amp;utm_campaign=260417_web-outsourcing-solution-vs-custom-build">위시켓</a> 매니저와 먼저 정리해보세요.</p>
+<a href="https://wishket.com/project/free-consulting/?utm_source=blog_webflow&amp;utm_medium=inline_cta&amp;utm_campaign=260417_web-outsourcing-solution-vs-custom-build" style="display:inline-block;background:#fff;color:#2477F3;font-size:14px;font-weight:700;padding:10px 18px;border-radius:10px;white-space:nowrap;text-decoration:none;">방향 정리 요청</a>
+</div>
+
+  <div style="background:linear-gradient(135deg,#5E9ADE 0%,#7BB2E8 100%);border-radius:16px;padding:32px 30px;color:#fff;margin:40px 0 0;">
+<div style="font-size:12px;font-weight:600;letter-spacing:0.8px;opacity:0.75;margin-bottom:10px;text-transform:uppercase;">다음 단계</div>
+<h3 style="font-size:20px;font-weight:800;line-height:1.45;margin-bottom:20px;color:#fff;letter-spacing:-0.3px;">솔루션이냐 직접 구축이냐, 혼자 결정하지 않아도 됩니다</h3>
+<div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;"><div style="background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px;font-size:14.5px;line-height:1.65;"><span style="font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;">어느 방식이 맞는지 아직 막막하다면</span>기능 목록과 사업 맥락을 가져오시면 매니저가 &#x27;이 범위면 솔루션 기반이 맞다&#x27;, &#x27;핵심 기능이 이거라면 직접 구축이 낫다&#x27;를 먼저 정리해 드립니다.</div>
+<div style="background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px;font-size:14.5px;line-height:1.65;"><span style="font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;">방향은 잡았고 이제 개발사를 찾고 있다면</span>솔루션 기반은 해당 솔루션 전문 개발사, 직접 구축은 도메인 경험이 있는 맞춤 개발사로 연결해 드립니다. 등록과 상담은 별도 비용 없이 진행됩니다.</div></div><div style="text-align:center;"><a href="https://wishket.com/project/free-consulting/?utm_source=blog_webflow&amp;utm_medium=cta_banner&amp;utm_campaign=260417_web-outsourcing-solution-vs-custom-build" style="display:inline-block;background:#fff;color:#2477F3;font-size:15px;font-weight:800;padding:13px 28px;border-radius:10px;text-decoration:none;">매니저와 정리하기</a></div>
+</div>
+
+  <div class="related-section">
+  <h3>함께 읽으면 좋은 콘텐츠</h3>
+<ul>
+  <li><a href="https://blog.wishket.com/sme-web-service-outsourcing-starter-guide/">개발자 없는 중소기업, 웹서비스 외주 어디서부터 시작할까?</a></li>
+  <li><a href="https://blog.wishket.com/web-service-outsourcing-budget-guide/">웹서비스 외주 예산, 유형부터 파악해야 기준이 생깁니다</a></li>
+  <li><a href="https://blog.wishket.com/outsourcing-requirements-document-guide/">비개발자를 위한 외주 요구사항 문서 작성법</a></li>
+</ul>
+  </div>
+
+  </div>
+
+  <h2>자주 묻는 질문</h2>
+<div class="faq-list">
+<div class="faq-item">
+  <div class="faq-q"><span class="q-mark">Q.</span>솔루션 기반으로 만든 서비스는 나중에 직접 구축으로 전환할 수 있나요?</div>
+  <div class="faq-a">전환은 가능하지만 사실상 재개발에 가깝습니다. 카페24나 워드프레스 위에 쌓인 커스터마이징 코드는 직접 구축 환경에 그대로 이식되지 않아서, 기능을 처음부터 다시 개발하는 경우가 대부분입니다. 솔루션 기반으로 빠르게 런칭한 뒤 성장 이후 전환하는 전략 자체는 현실적이지만, 전환 시점에는 별도 예산과 기간을 잡아야 합니다. 그래서 처음 방식을 선택할 때 &#x27;2~3년 뒤에도 이 틀이 맞는가&#x27;를 함께 따져두는 것이 좋습니다.</div>
+</div>
+<div class="faq-item">
+  <div class="faq-q"><span class="q-mark">Q.</span>솔루션 기반으로 만들면 소스코드를 받을 수 없나요?</div>
+  <div class="faq-a">솔루션(카페24·워드프레스) 자체의 핵심 코드는 받을 수 없습니다. 개발사가 솔루션 위에 추가로 작성한 커스터마이징 코드는 계약서 지재권 조항에 따라 받을 수도 있지만, 솔루션 플랫폼 자체를 벗어나는 순간 그 코드만으로는 서비스를 운영할 수 없습니다. 직접 구축의 경우 계약서에 지재권 일체 양도를 명시하면 전체 소스코드를 받을 수 있습니다. 소스코드 귀속이 중요한 사업이라면 이 차이를 계약 전에 반드시 확인해야 합니다.</div>
+</div>
+<div class="faq-item">
+  <div class="faq-q"><span class="q-mark">Q.</span>외주 개발 기간은 솔루션 기반과 직접 구축 중 어느 쪽이 더 짧나요?</div>
+  <div class="faq-a">같은 결과물 기준으로는 솔루션 기반이 짧은 경우가 많습니다. 쇼핑몰을 예로 들면 워드프레스 기반은 40일, 카페24 기반은 70일인 반면, 비슷한 기능을 처음부터 만들면 60~90일 이상이 일반적입니다. 다만 기간은 요구사항 범위와 개발사 역량에 따라 크게 달라집니다. &#x27;솔루션이라 무조건 빠르다&#x27;보다 &#x27;핵심 기능이 솔루션에 이미 있으니 개발 범위가 줄어 빨라진다&#x27;는 논리로 이해하는 것이 정확합니다.</div>
+</div>
+<div class="faq-item">
+  <div class="faq-q"><span class="q-mark">Q.</span>솔루션 위에 기능을 커스터마이징할수록 비용이 직접 구축과 비슷해질 수 있나요?</div>
+  <div class="faq-a">맞습니다. 솔루션이 제공하지 않는 기능을 억지로 얹을수록 커스터마이징 비용이 쌓이고, 어느 순간 직접 구축 견적보다 비싸지는 시점이 옵니다. 핵심 기능 5개 중 3개 이상이 솔루션으로 해결이 안 된다면 그 방향에서 멈추고 직접 구축 견적을 함께 받아보는 것이 낫습니다. 특히 사업의 차별점이 되는 기능(매칭 로직, 외부 시스템 연동, 권한 세분화 등)이 솔루션 밖에 있다면 처음부터 직접 구축이 장기적으로 비용 효율이 더 높은 경우가 많습니다.</div>
+</div>
+</div>
+
+  <div class="cms-meta-area">
+    <h3 style="font-size:16px; font-weight:700; margin:0 0 16px 0; color:#666;">CMS 입력 필드</h3>
+    <table style="width:100%;border-collapse:collapse;margin:16px 0;">
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">써머리</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">솔루션과 직접 구축, 내 서비스엔 어느 쪽이 맞을까</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">slug</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">web-outsourcing-solution-vs-custom-build</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">날짜</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">2026-04-17</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">카테고리</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">IT 아웃소싱</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">태그</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">웹 개발</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">메타 디스크립션</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">솔루션 기반 구축(카페24·워드프레스)과 직접 구축은 견적 요청 대상부터 다릅니다. 핵심 기능 5개 체크로 어느 쪽이 내 사업에 맞는지 판단하는 기준을 정리했습니다.</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">Author</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">조가은 / 콘텐츠 마케터 — 위시켓 마케터 조가은입니다. 기업의 쉽고 안전한 IT 의사결정을 돕는 콘텐츠를 만듭니다.</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">TLDR</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">카페24·워드프레스 같은 솔루션 위에 올리는 방식과 처음부터 맞춤 개발하는 방식은 비용 차이만 있는 게 아닙니다. 견적을 요청해야 할 개발사 유형 자체가 달라지고, 유지보수 구조와 소스코드 귀속도 완전히 다르거든요. 내가 만들려는 서비스의 핵심 기능 5개를 적고 솔루션으로 대부분 해결되는지 체크해보면 방향이 잡히고, 그래도 애매하면 위시켓 매니저와 먼저 정리해도 됩니다.
+</td>
+</tr>
+</table>
+  </div>
+
+  <table class="guide-box" style="width:100%;border:1px solid #D1D5DB;border-collapse:collapse;margin:20px 0;">
+<tr><td style="background:#F9FAFB;padding:16px 20px;border:1px solid #D1D5DB;">
+<p style="margin:0 0 10px 0;font-weight:700;font-size:16px;">🖼 썸네일 제작 가이드</p>
+<p style="margin:0 0 4px 0;"><b>스타일:</b> 단색 배경 + 텍스트</p>
+<p style="margin:0 0 4px 0;"><b>배경색:</b> #1A3C6E</p>
+<p style="margin:0 0 4px 0;"><b>제목 텍스트:</b></p>
+<p style="margin:0 0 4px 0;">　1줄: 솔루션 구축 vs 직접 구축</p>
+<p style="margin:0 0 4px 0;">　2줄: 어느 쪽이 내 사업에 맞을까</p>
+<p style="margin:0 0 4px 0;"><b>장식 요소:</b> 우측 하단 구조 분기 아이콘</p>
+<p style="margin:0;"><b>로고:</b> wishket 로고 좌상단</p>
+</td></tr>
+</table>
+
+  <h3 style="font-size:18px;font-weight:600;margin:32px 0 12px 0;">Embed 코드 (붙여넣기용)</h3>
+<div style="margin:16px 0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:14px;font-weight:600;color:#374151;">같은 웹서비스인데 왜 출발점부터 다를까 — 구분 · 솔루션 기반 구축 · 직접 구축</span><button onclick="copyCodeBlock(this)" style="background:#2477F3;color:#fff;border:none;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">복사</button></div><pre style="background:#1E293B;color:#E2E8F0;padding:12px;border-radius:8px;overflow-x:auto;font-size:11px;line-height:1.4;white-space:pre-wrap;max-height:200px;overflow-y:auto;">&lt;style&gt;
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:1.5rem 0;border:1px solid #E5E7EB;border-radius:12px;background:#fff}
+table.geo{width:100%;border-collapse:collapse;border-spacing:0;font-size:14px;line-height:1.6;table-layout:fixed}
+table.geo caption{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+table.geo thead th{padding:12px 18px;font-size:12.5px;font-weight:700;letter-spacing:.01em;text-align:left;border-bottom:1px solid #D1D1D9;background:#F6F6F9;vertical-align:bottom}
+table.geo thead th:first-child{color:#82828E;border-right:1px solid #D1D1D9}
+table.geo thead th:not(:first-child){color:#1A1A23}
+table.geo tbody th[scope=row]{padding:14px 18px;font-size:14px;font-weight:600;color:#1A1A23;text-align:left;border-bottom:1px solid #ECECF0;border-right:1px solid #ECECF0;background:#fff;vertical-align:top;word-break:keep-all}
+table.geo tbody td{padding:14px 18px;color:#3A3A47;border-bottom:1px solid #ECECF0;vertical-align:top;word-break:keep-all}
+table.geo tbody tr:nth-child(even) td,table.geo tbody tr:nth-child(even) th[scope=row]{background:#F9F9FB}
+table.geo tbody tr:hover td,table.geo tbody tr:hover th[scope=row]{background:#F0F0F5}
+table.geo tfoot td{padding:9px 18px;font-size:12px;color:#9CA3AF;border-top:1px solid #ECECF0;background:#F9F9FB}
+table.geo tfoot time{font-weight:500}
+@media(max-width:640px){table.geo{table-layout:auto}table.geo thead th,table.geo tbody th[scope=row],table.geo tbody td{padding:11px 14px;font-size:13px}table.geo tfoot td{padding:8px 14px}}
+&lt;/style&gt;
+&lt;div class=&quot;tbl-wrap&quot;&gt;&lt;table class=&quot;geo&quot;&gt;&lt;caption&gt;같은 웹서비스인데 왜 출발점부터 다를까 — 구분 · 솔루션 기반 구축 · 직접 구축&lt;/caption&gt;&lt;colgroup&gt;&lt;col style=&quot;width:22%&quot;/&gt;&lt;col style=&quot;width:39%&quot;/&gt;&lt;col style=&quot;width:39%&quot;/&gt;&lt;/colgroup&gt;&lt;thead&gt;&lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;구분&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;솔루션 기반 구축&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;직접 구축&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;출발점&lt;/th&gt;&lt;td&gt;완성된 솔루션 위에 커스터마이징&lt;/td&gt;&lt;td&gt;요구사항대로 처음부터 개발&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;견적 요청 대상&lt;/th&gt;&lt;td&gt;해당 솔루션 전문 개발사&lt;/td&gt;&lt;td&gt;일반 맞춤 개발사&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;소스코드 통제&lt;/th&gt;&lt;td&gt;솔루션 제공사 기능에 의존&lt;/td&gt;&lt;td&gt;계약에 따라 전체 확보 가능&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;유지보수&lt;/th&gt;&lt;td&gt;솔루션 업데이트 주기 영향&lt;/td&gt;&lt;td&gt;구축한 개발사 또는 별도 팀&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;</pre></div>
+<div style="margin:16px 0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:14px;font-weight:600;color:#374151;">CTA 배너</span><button onclick="copyCodeBlock(this)" style="background:#2477F3;color:#fff;border:none;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">복사</button></div><pre style="background:#1E293B;color:#E2E8F0;padding:12px;border-radius:8px;overflow-x:auto;font-size:11px;line-height:1.4;white-space:pre-wrap;max-height:200px;overflow-y:auto;">&lt;div style=&quot;background:linear-gradient(135deg,#5E9ADE 0%,#7BB2E8 100%);border-radius:16px;padding:32px 30px;color:#fff;margin:40px 0 0;&quot;&gt;
+&lt;div style=&quot;font-size:12px;font-weight:600;letter-spacing:0.8px;opacity:0.75;margin-bottom:10px;text-transform:uppercase;&quot;&gt;다음 단계&lt;/div&gt;
+&lt;h3 style=&quot;font-size:20px;font-weight:800;line-height:1.45;margin-bottom:20px;color:#fff;letter-spacing:-0.3px;&quot;&gt;솔루션이냐 직접 구축이냐, 혼자 결정하지 않아도 됩니다&lt;/h3&gt;
+&lt;div style=&quot;display:flex;flex-direction:column;gap:12px;margin-bottom:24px;&quot;&gt;&lt;div style=&quot;background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px;font-size:14.5px;line-height:1.65;&quot;&gt;&lt;span style=&quot;font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;&quot;&gt;어느 방식이 맞는지 아직 막막하다면&lt;/span&gt;기능 목록과 사업 맥락을 가져오시면 매니저가 &amp;#x27;이 범위면 솔루션 기반이 맞다&amp;#x27;, &amp;#x27;핵심 기능이 이거라면 직접 구축이 낫다&amp;#x27;를 먼저 정리해 드립니다.&lt;/div&gt;
+&lt;div style=&quot;background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px;font-size:14.5px;line-height:1.65;&quot;&gt;&lt;span style=&quot;font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;&quot;&gt;방향은 잡았고 이제 개발사를 찾고 있다면&lt;/span&gt;솔루션 기반은 해당 솔루션 전문 개발사, 직접 구축은 도메인 경험이 있는 맞춤 개발사로 연결해 드립니다. 등록과 상담은 별도 비용 없이 진행됩니다.&lt;/div&gt;&lt;/div&gt;&lt;div style=&quot;text-align:center;&quot;&gt;&lt;a href=&quot;https://wishket.com/project/free-consulting/?utm_source=blog_webflow&amp;amp;utm_medium=cta_banner&amp;amp;utm_campaign=260417_web-outsourcing-solution-vs-custom-build&quot; style=&quot;display:inline-block;background:#fff;color:#2477F3;font-size:15px;font-weight:800;padding:13px 28px;border-radius:10px;text-decoration:none;&quot;&gt;매니저와 정리하기&lt;/a&gt;&lt;/div&gt;
+&lt;/div&gt;</pre></div>
+
+
+  <h3 style="font-size:18px;font-weight:600;margin:32px 0 12px 0;">JSON-LD (Custom Code에 붙여넣기)</h3>
+<pre style="background:#1E293B;color:#E2E8F0;padding:16px;border-radius:8px;overflow-x:auto;font-size:12px;line-height:1.5;white-space:pre-wrap;">&lt;script type="application/ld+json"&gt;
+{
+  &quot;@context&quot;: &quot;https://schema.org&quot;,
+  &quot;@type&quot;: &quot;BlogPosting&quot;,
+  &quot;headline&quot;: &quot;솔루션 기반 구축과 직접 구축, 어느 쪽이 내 사업에 맞을까&quot;,
+  &quot;description&quot;: &quot;솔루션 기반 구축(카페24·워드프레스)과 직접 구축은 견적 요청 대상부터 다릅니다. 핵심 기능 5개 체크로 어느 쪽이 내 사업에 맞는지 판단하는 기준을 정리했습니다.&quot;,
+  &quot;datePublished&quot;: &quot;2026-04-17&quot;,
+  &quot;dateModified&quot;: &quot;2026-04-17&quot;,
+  &quot;author&quot;: {
+    &quot;@type&quot;: &quot;Person&quot;,
+    &quot;name&quot;: &quot;조가은&quot;
+  },
+  &quot;publisher&quot;: {
+    &quot;@type&quot;: &quot;Organization&quot;,
+    &quot;name&quot;: &quot;위시켓&quot;,
+    &quot;url&quot;: &quot;https://www.wishket.com&quot;
+  },
+  &quot;mainEntityOfPage&quot;: {
+    &quot;@type&quot;: &quot;WebPage&quot;
+  },
+  &quot;keywords&quot;: &quot;웹 개발&quot;,
+  &quot;articleSection&quot;: &quot;IT 아웃소싱&quot;,
+  &quot;hasPart&quot;: [
+    {
+      &quot;@type&quot;: &quot;WebPageElement&quot;,
+      &quot;name&quot;: &quot;같은 웹서비스인데 왜 출발점부터 다를까&quot;,
+      &quot;url&quot;: &quot;#같은-웹서비스인데-왜-출발점부터-다를까&quot;
+    },
+    {
+      &quot;@type&quot;: &quot;WebPageElement&quot;,
+      &quot;name&quot;: &quot;솔루션 기반이 잘 맞는 영역과 실제 금액대&quot;,
+      &quot;url&quot;: &quot;#솔루션-기반이-잘-맞는-영역과-실제-금액대&quot;
+    },
+    {
+      &quot;@type&quot;: &quot;WebPageElement&quot;,
+      &quot;name&quot;: &quot;직접 구축으로 가야 하는 시점의 신호&quot;,
+      &quot;url&quot;: &quot;#직접-구축으로-가야-하는-시점의-신호&quot;
+    },
+    {
+      &quot;@type&quot;: &quot;WebPageElement&quot;,
+      &quot;name&quot;: &quot;방식이 정해지면 견적 요청하는 곳도 달라진다&quot;,
+      &quot;url&quot;: &quot;#방식이-정해지면-견적-요청하는-곳도-달라진다&quot;
+    }
+  ]
+}
+&lt;/script&gt;
+&lt;script type="application/ld+json"&gt;
+{
+  &quot;@context&quot;: &quot;https://schema.org&quot;,
+  &quot;@type&quot;: &quot;FAQPage&quot;,
+  &quot;mainEntity&quot;: [
+    {
+      &quot;@type&quot;: &quot;Question&quot;,
+      &quot;name&quot;: &quot;솔루션 기반으로 만든 서비스는 나중에 직접 구축으로 전환할 수 있나요?&quot;,
+      &quot;acceptedAnswer&quot;: {
+        &quot;@type&quot;: &quot;Answer&quot;,
+        &quot;text&quot;: &quot;전환은 가능하지만 사실상 재개발에 가깝습니다. 카페24나 워드프레스 위에 쌓인 커스터마이징 코드는 직접 구축 환경에 그대로 이식되지 않아서, 기능을 처음부터 다시 개발하는 경우가 대부분입니다. 솔루션 기반으로 빠르게 런칭한 뒤 성장 이후 전환하는 전략 자체는 현실적이지만, 전환 시점에는 별도 예산과 기간을 잡아야 합니다. 그래서 처음 방식을 선택할 때 &#x27;2~3년 뒤에도 이 틀이 맞는가&#x27;를 함께 따져두는 것이 좋습니다.&quot;
+      }
+    },
+    {
+      &quot;@type&quot;: &quot;Question&quot;,
+      &quot;name&quot;: &quot;솔루션 기반으로 만들면 소스코드를 받을 수 없나요?&quot;,
+      &quot;acceptedAnswer&quot;: {
+        &quot;@type&quot;: &quot;Answer&quot;,
+        &quot;text&quot;: &quot;솔루션(카페24·워드프레스) 자체의 핵심 코드는 받을 수 없습니다. 개발사가 솔루션 위에 추가로 작성한 커스터마이징 코드는 계약서 지재권 조항에 따라 받을 수도 있지만, 솔루션 플랫폼 자체를 벗어나는 순간 그 코드만으로는 서비스를 운영할 수 없습니다. 직접 구축의 경우 계약서에 지재권 일체 양도를 명시하면 전체 소스코드를 받을 수 있습니다. 소스코드 귀속이 중요한 사업이라면 이 차이를 계약 전에 반드시 확인해야 합니다.&quot;
+      }
+    },
+    {
+      &quot;@type&quot;: &quot;Question&quot;,
+      &quot;name&quot;: &quot;외주 개발 기간은 솔루션 기반과 직접 구축 중 어느 쪽이 더 짧나요?&quot;,
+      &quot;acceptedAnswer&quot;: {
+        &quot;@type&quot;: &quot;Answer&quot;,
+        &quot;text&quot;: &quot;같은 결과물 기준으로는 솔루션 기반이 짧은 경우가 많습니다. 쇼핑몰을 예로 들면 워드프레스 기반은 40일, 카페24 기반은 70일인 반면, 비슷한 기능을 처음부터 만들면 60~90일 이상이 일반적입니다. 다만 기간은 요구사항 범위와 개발사 역량에 따라 크게 달라집니다. &#x27;솔루션이라 무조건 빠르다&#x27;보다 &#x27;핵심 기능이 솔루션에 이미 있으니 개발 범위가 줄어 빨라진다&#x27;는 논리로 이해하는 것이 정확합니다.&quot;
+      }
+    },
+    {
+      &quot;@type&quot;: &quot;Question&quot;,
+      &quot;name&quot;: &quot;솔루션 위에 기능을 커스터마이징할수록 비용이 직접 구축과 비슷해질 수 있나요?&quot;,
+      &quot;acceptedAnswer&quot;: {
+        &quot;@type&quot;: &quot;Answer&quot;,
+        &quot;text&quot;: &quot;맞습니다. 솔루션이 제공하지 않는 기능을 억지로 얹을수록 커스터마이징 비용이 쌓이고, 어느 순간 직접 구축 견적보다 비싸지는 시점이 옵니다. 핵심 기능 5개 중 3개 이상이 솔루션으로 해결이 안 된다면 그 방향에서 멈추고 직접 구축 견적을 함께 받아보는 것이 낫습니다. 특히 사업의 차별점이 되는 기능(매칭 로직, 외부 시스템 연동, 권한 세분화 등)이 솔루션 밖에 있다면 처음부터 직접 구축이 장기적으로 비용 효율이 더 높은 경우가 많습니다.&quot;
+      }
+    }
+  ]
+}
+&lt;/script&gt;</pre>
+
+</div>
+
+<script>
+// contenteditable 변경 감지 + localStorage 자동저장
+var content = document.getElementById('cms-content');
+var status = document.getElementById('edit-status');
+var saveTimer;
+var STORAGE_KEY = 'wishket_draft_' + document.title.replace(/[^a-zA-Z0-9가-힣]/g, '_').substring(0, 60);
+var VERSION_KEY = STORAGE_KEY + '_ver';
+var CURRENT_VERSION = '20260417_120442';
+
+window.addEventListener('load', function() {
+  var saved = localStorage.getItem(STORAGE_KEY);
+  var savedVer = localStorage.getItem(VERSION_KEY);
+  if (saved && savedVer === CURRENT_VERSION) { content.innerHTML = saved; }
+  else { localStorage.removeItem(STORAGE_KEY); }
+  attachLinkHandlers();
+});
+
+content.addEventListener('input', function() {
+  status.textContent = '편집 중 (미저장)';
+  status.className = 'modified';
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(function() {
+    localStorage.setItem(STORAGE_KEY, content.innerHTML);
+    localStorage.setItem(VERSION_KEY, CURRENT_VERSION);
+    status.textContent = '자동저장됨';
+    status.className = '';
+  }, 3000);
+});
+
+function attachLinkHandlers() {
+  document.querySelectorAll('[contenteditable] a').forEach(function(a) {
+    a.addEventListener('click', function(e) {
+      if (e.metaKey || e.ctrlKey) { window.open(a.href, '_blank'); }
+    });
+    if (a.title.indexOf('Cmd+클릭') === -1) {
+      a.title = (a.title || '') + ' (Cmd+클릭으로 열기)';
+    }
+  });
+}
+
+function copyContent() {
+  var clone = content.cloneNode(true);
+  clone.querySelectorAll('.image-guide, table.image-guide, table.guide-box').forEach(function(el) { el.remove(); });
+  var text = clone.innerText;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(function() {
+      var btn = document.getElementById('copy-btn');
+      btn.textContent = '복사됨!';
+      setTimeout(function() { btn.textContent = '본문 복사'; }, 2000);
+    });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    var btn = document.getElementById('copy-btn');
+    btn.textContent = '복사됨!';
+    setTimeout(function() { btn.textContent = '본문 복사'; }, 2000);
+  }
+}
+
+function copyCodeBlock(btn) {
+  var pre = btn.parentElement.nextElementSibling;
+  if (!pre) return;
+  var text = pre.textContent;
+  navigator.clipboard.writeText(text).then(function() {
+    btn.textContent = '복사됨!';
+    setTimeout(function() { btn.textContent = '복사'; }, 2000);
+  });
+}
+
+window.addEventListener('beforeunload', function(e) {
+  if (status.className === 'modified') {
+    clearTimeout(saveTimer);
+    localStorage.setItem(STORAGE_KEY, content.innerHTML);
+    localStorage.setItem(VERSION_KEY, CURRENT_VERSION);
+    e.preventDefault();
+    e.returnValue = '';
+  }
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>비개발자가 외주 업체에 보낼 요구사항, 이렇게 쓰면 됩니다</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+    font-size: 17px;
+    line-height: 2.0;
+    color: #1a1a1a;
+    background: #fff;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Toolbar (편집용) ── */
+  #toolbar {
+    position: fixed; top: 0; left: 0; right: 0;
+    background: #1E293B; color: #fff;
+    padding: 10px 20px;
+    display: flex; align-items: center; gap: 16px;
+    z-index: 9999; font-size: 14px;
+  }
+  #toolbar button {
+    background: #2477F3; color: #fff; border: none;
+    padding: 6px 16px; border-radius: 6px; cursor: pointer;
+    font-size: 13px; font-weight: 600;
+  }
+  #toolbar button:hover { background: #1B5FD1; }
+  #edit-status { color: #94A3B8; font-size: 12px; }
+  #edit-status.modified { color: #FBBF24; }
+
+  /* ── Layout ── */
+  .page-wrap {
+    max-width: 720px;
+    margin: 80px auto 80px;
+    padding: 0 20px;
+  }
+
+  /* ── Header ── */
+  .article-header { margin-bottom: 32px; }
+  .article-category {
+    font-size: 12px; font-weight: 600; color: #2477F3;
+    letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 12px;
+  }
+  h1 {
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 800; line-height: 1.35;
+    letter-spacing: -0.5px; color: #0d0d0d;
+    margin: 0 0 16px 0;
+  }
+  .article-meta { font-size: 13px; color: #999; }
+
+  /* ── Typography ── */
+  h2 {
+    font-size: 21px; font-weight: 700; color: #2477F3;
+    margin: 48px 0 16px 0; padding-bottom: 10px;
+    border-bottom: 2px solid #E5E7EB;
+    letter-spacing: -0.3px;
+  }
+  h3 {
+    font-size: 17px; font-weight: 700; color: #2477F3;
+    margin: 28px 0 10px 0;
+  }
+  p { margin: 0 0 30px 0; }
+  a { color: #2477F3; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  strong { font-weight: 700; }
+
+  /* ── Lists ── */
+  ul, ol { margin: 0 0 30px 0; padding-left: 22px; }
+  li { margin-bottom: 6px; line-height: 2.5; }
+  li::marker { color: #999; }
+
+  hr { border: none; border-top: 1px solid #e8e8e8; margin: 40px 0; }
+
+  /* ── GEO Table ── */
+  .tbl-wrap {
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    margin: 30px 0; border: 1px solid #e0e0e5;
+    border-radius: 12px; background: #fff;
+  }
+  table.geo {
+    width: 100%; border-collapse: collapse; border-spacing: 0;
+    font-size: 14.5px; line-height: 1.65; table-layout: fixed;
+  }
+  table.geo caption {
+    position: absolute; width: 1px; height: 1px;
+    overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap;
+  }
+  table.geo thead th {
+    padding: 12px 18px; font-size: 12.5px; font-weight: 700;
+    letter-spacing: 0.01em; text-align: left;
+    border-bottom: 1px solid #d1d1d9; background: #f6f6f9; vertical-align: bottom;
+  }
+  table.geo thead th:first-child { color: #82828e; border-right: 1px solid #d1d1d9; }
+  table.geo thead th:not(:first-child) { color: #1a1a23; }
+  table.geo tbody th[scope="row"] {
+    padding: 14px 18px; font-size: 14px; font-weight: 600; color: #1a1a23;
+    text-align: left; border-bottom: 1px solid #ececf0; border-right: 1px solid #ececf0;
+    background: #fff; vertical-align: top; word-break: keep-all;
+  }
+  table.geo tbody td {
+    padding: 14px 18px; color: #3a3a47;
+    border-bottom: 1px solid #ececf0; vertical-align: top; word-break: keep-all;
+  }
+  table.geo tbody tr:nth-child(even) td,
+  table.geo tbody tr:nth-child(even) th[scope="row"] { background: #f9f9fb; }
+  table.geo tbody tr:hover td,
+  table.geo tbody tr:hover th[scope="row"] { background: #f0f0f5; }
+  table.geo tfoot td {
+    padding: 9px 18px; font-size: 12px; color: #9ca3af;
+    border-top: 1px solid #ececf0; background: #f9f9fb;
+  }
+
+  /* ── TLDR (핵심 요약) ── */
+  .summary-box {
+    background: #F5F5F5;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 30px;
+  }
+  .summary-box p:first-child {
+    font-size: 13px; font-weight: 700; color: #1A1A1A;
+    margin-bottom: 8px; letter-spacing: 0.3px;
+  }
+  .summary-box p:not(:first-child) {
+    font-size: 15.5px; color: #1A1A1A; line-height: 1.75;
+  }
+  .summary-box p:last-child { margin-bottom: 0; }
+
+  /* ── FAQ ── */
+  .faq-list {
+    display: flex; flex-direction: column; gap: 0;
+    margin: 20px 0 24px; border: 1px solid #E5E7EB;
+    border-radius: 14px; overflow: hidden;
+  }
+  .faq-item { border-bottom: 1px solid #ebebeb; background: #fff; }
+  .faq-item:last-child { border-bottom: none; }
+  .faq-q {
+    font-size: 15px; font-weight: 700; color: #0d0d0d;
+    padding: 18px 20px 8px; display: flex; gap: 10px;
+  }
+  .faq-q .q-mark { color: #2477F3; font-weight: 800; font-size: 16px; flex-shrink: 0; }
+  .faq-a {
+    font-size: 14.5px; color: #444; line-height: 1.75;
+    padding: 0 20px 18px 44px;
+  }
+
+  /* ── Related ── */
+  .related-section { margin: 32px 0; }
+  .related-section h3 { font-size: 16px; font-weight: 700; margin-bottom: 12px; }
+  .related-section ul { list-style: none; padding: 0; }
+  .related-section li {
+    padding: 10px 0; border-bottom: 1px solid #f0f0f0;
+  }
+  .related-section li:last-child { border-bottom: none; }
+  .related-section a { font-size: 15px; font-weight: 500; }
+
+  /* ── Image guide box ── */
+  .image-guide, table.guide-box {
+    background: #FAFAFA; border: 2px solid #E5E7EB;
+    border-radius: 12px; padding: 16px 24px; margin: 30px -20px;
+  }
+
+  /* ── CMS meta area ── */
+  .cms-meta-area { background: #f9fafb; border-radius: 12px; padding: 20px; margin-top: 40px; }
+
+  /* ── Contenteditable ── */
+  [contenteditable="true"]:focus { outline: 2px solid #2477F3; outline-offset: 2px; border-radius: 4px; }
+  [contenteditable="true"]:hover { outline: 1px dashed #CBD5E1; outline-offset: 2px; border-radius: 4px; }
+  [contenteditable="true"]:focus:hover { outline: 2px solid #2477F3; outline-offset: 2px; }
+
+  /* ── Responsive ── */
+  @media (max-width: 640px) {
+    .page-wrap { padding: 0 16px; margin-top: 60px; }
+    h1 { font-size: 22px; }
+    h2 { font-size: 19px; }
+    table.geo { table-layout: auto; }
+    table.geo thead th, table.geo tbody th[scope="row"], table.geo tbody td {
+      padding: 11px 14px; font-size: 13px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- toolbar -->
+<div id="toolbar">
+  <button id="copy-btn" onclick="copyContent()">본문 복사</button>
+  <span id="edit-status">저장됨</span>
+</div>
+
+<div class="page-wrap">
+
+  <div class="article-header">
+    <h1 contenteditable="true">비개발자가 외주 업체에 보낼 요구사항, 이렇게 쓰면 됩니다</h1>
+    <div class="article-meta"><time datetime="2026-04-17">2026-04-17</time></div>
+  </div>
+
+  <div id="cms-content" contenteditable="true" style="outline:none;">
+
+  <div class="summary-box">
+<p>💡 핵심 요약</p>
+<p>개발 용어를 몰라도 요구사항을 쓸 수 있습니다. &#x27;사용자가 무엇을 할 수 있어야 하는가&#x27;를 일상어 문장으로 30~50개 나열하고, 원하는 화면 느낌에 가까운 서비스 링크를 3~5개 모아두면 업체가 초기 견적을 낼 수 있는 재료가 갖춰집니다. 처음부터 완벽한 문서를 만들 필요는 없고, 이 정도 상태에서 위시켓에 프로젝트를 등록하면 매니저가 빠진 항목을 함께 짚어드립니다.</p>
+</div>
+
+  <blockquote>
+<p>"메모장은 열었는데, 이걸 뭐부터 어떻게 쓰라는 거죠?"</p>
+</blockquote>
+<p>'핵심 기능 목록과 참고 링크만 있으면 된다'는 얘기를 듣고 메모장을 열었는데, 막상 커서가 깜빡이는 빈 화면 앞에서 한 문장도 못 쓰고 앉아 있게 되는 순간이 옵니다. 첫 줄에 뭐라고 써야 할지, 어느 정도 구체적이어야 하는지, '로그인 기능'이라고만 쓰면 너무 성의 없어 보이는 건 아닌지. 개발 용어를 모르는 상태에서 '요구사항 문서'라는 단어가 주는 부담이 생각보다 큽니다.</p>
+<p>위시켓이 중소기업의 첫 외주 상담을 받다 보면 대부분의 막힘이 이 지점에서 생깁니다. 정리의 방향은 알겠는데 실제 문장으로 옮기는 게 안 되는 거죠. 그래서 이번 글에서는 빈 문서 앞에서 멈춰 있는 분들을 위해, '어떤 문장으로 어느 정도 분량을 쓰면 업체가 이해할 수 있는지'를 실제 예시와 함께 정리했습니다. 요구사항 문서가 처음이라면 이 글을 옆에 펼쳐두고 따라 써보셔도 됩니다.</p>
+<h2 id="개발-용어-대신-사용자-시나리오로-쓰세요">개발 용어 대신 '사용자 시나리오'로 쓰세요</h2>
+<p>빈 문서를 연 순간, 대부분의 분들이 먼저 떠올리는 단어는 '로그인 기능', '게시판 기능', '결제 기능' 같은 것들입니다. 그런데 이렇게 한 단어로 끝내버리면 업체 입장에서는 다시 물어볼 것이 수십 가지가 됩니다. 로그인은 이메일인지 카카오인지, 아이디 찾기는 있어야 하는지, 탈퇴하면 데이터는 어떻게 되는지. 결국 이 질문들을 왕복하다가 몇 주가 지나가죠.</p>
+<p>이걸 한 번에 줄이는 방법이 있습니다. <strong>기능의 이름을 적지 말고, 사용자가 그 기능으로 무엇을 할 수 있어야 하는지를 문장으로 적는 것</strong>입니다. 개발 용어를 전혀 쓰지 않아도 되고, 그게 오히려 더 잘 전달됩니다.</p>
+<p>예를 들어 이렇게 바꿔 쓸 수 있습니다.</p>
+<div class="tbl-wrap"><table class="geo"><caption>개발 용어 대신 '사용자 시나리오'로 쓰세요 — 이렇게 쓰면 막힙니다 · 이렇게 쓰면 전달됩니다</caption><colgroup><col style="width:25%"/><col style="width:75%"/></colgroup><thead><tr><th scope="col">이렇게 쓰면 막힙니다</th><th scope="col">이렇게 쓰면 전달됩니다</th></tr></thead><tbody><tr><th scope="row">예약 기능</th><td>고객이 원하는 날짜와 시간대를 선택해서 예약할 수 있어야 한다. 예약 완료 후에는 확인 문자가 자동으로 발송된다</td></tr><tr><th scope="row">상품 등록 기능</th><td>직원이 상품 이름·가격·재고·사진 여러 장을 입력해 새 상품을 등록할 수 있어야 한다. 품절 시 '일시 품절' 상태로 바꿀 수 있다</td></tr><tr><th scope="row">후기 기능</th><td>구매자가 별점과 사진을 포함한 후기를 남길 수 있어야 하고, 관리자는 신고가 들어온 후기를 숨기거나 삭제할 수 있다</td></tr><tr><th scope="row">알림 기능</th><td>주문이 들어오면 담당 직원 이메일과 카카오 알림톡으로 내용이 전달되어야 한다</td></tr></tbody></table></div>
+<p>왼쪽은 '이름표'이고, 오른쪽은 '시나리오'입니다. 업체가 견적을 낼 때 필요한 건 시나리오 쪽입니다. 시나리오가 있으면 "아, 결제 카드사는 몇 개를 붙일까요?", "알림톡은 자동 발송인가요, 수동인가요?"처럼 질문이 구체적으로 돌아옵니다. 반면 이름표만 적혀 있으면 업체도 가장 기본적인 것부터 다시 물어봐야 하고, 그 과정에서 시간과 감정이 소모됩니다.</p>
+<p>문장을 쓸 때 머릿속에 두면 좋은 형식이 있습니다. <strong>"누가 / 무엇을 / 어떻게 할 수 있어야 한다"</strong>, 이 세 조각이면 충분합니다. '누가'는 고객일 수도 있고 우리 직원일 수도 있습니다. '무엇을'은 등록, 조회, 수정, 삭제, 비교, 신청, 결제 같은 동작입니다. '어떻게'는 입력 방식(이메일로, 카드로)이나 상태 변화(배송 완료로 바꿀 수 있다)입니다. 이 틀에 맞춰 떠오르는 기능을 하나씩 풀어보면 의외로 쉽게 문장이 나옵니다.</p>
+<div style="background:#F0F6FF;border-left:3px solid #2E6BAA;border-radius:0 14px 14px 0;padding:18px 20px;margin:30px 0;">
+<div style="font-size:13px;font-weight:700;color:#1A1A1A;margin-bottom:10px;display:flex;align-items:center;gap:6px;">위시켓 매니저 Tip</div>
+<div style="font-size:14.5px;color:#1A1A1A;line-height:2.0;">한 기능을 한 문장에 욱여넣을 필요는 없습니다. '사용자가 예약을 한다'가 하나의 항목이면, 그 아래에 '예약 30분 전 리마인더 문자가 발송된다', '예약은 최대 7일 전까지만 가능하다'처럼 세부 조건을 따로 적어두세요. 업체가 볼 때 '이 기능은 이 정도 범위로군'이 바로 잡힙니다.</div>
+</div>
+<p>분량은 얼마나 써야 할까요. 경험상 <strong>문장 30~50개 정도가 초기 견적이 나오는 최소 구간</strong>입니다. 그보다 적으면 업체도 범위를 못 잡아 금액이 널뛰고, 그보다 훨씬 많으면 문서 자체가 다시 무거워져서 처음부터 정리가 어려워집니다. 우리 서비스의 핵심 기능 5~10개를 꼽고 각각을 3~5개 문장으로 풀어쓴다고 생각하면 자연스럽게 30~50개 사이로 맞춰집니다.</p>
+<h2 id="화면-디자인은-말로-설명하지-말고-링크로-모으세요">화면 디자인은 말로 설명하지 말고 링크로 모으세요</h2>
+<p>기능 문장이 어느 정도 쌓이고 나면 다음 벽이 나타납니다. "그런데 화면은 어떻게 생겨야 하는지, 어디에 뭐가 있어야 하는지는 어떻게 전달하지?" 블로그에는 '스토리보드를 그려야 한다'는 얘기가 보이는데, 그림을 그려본 적도 없고 전용 도구를 쓸 줄도 모르는 상태에서 화면 흐름을 직접 설계하라는 건 사실 불가능한 요구입니다. (더 구체적인 문서 작성 방법이 궁금하다면 <a href="https://blog.wishket.com/outsourcing-requirements-document-guide">비개발자를 위한 외주 요구사항 문서 작성법</a>도 참고해보세요.)</p>
+<p>다행히 훨씬 쉬운 방법이 있습니다. <strong>'이것과 비슷한 느낌이었으면 좋겠다'는 서비스를 찾아 링크로 모으는 것</strong>입니다. 개발 업계에서는 이걸 '레퍼런스'라고 부르는데, 전문 용어로 생각할 필요 없이 '참고할 사이트 모음'이라고 생각하시면 됩니다. 글로 설명하려면 열 문단이 필요한 디자인 방향이, 링크 한 줄로 정리되는 경우가 많거든요.</p>
+<p>참고 링크를 모으실 때는 이런 순서로 해보시면 좋습니다.</p>
+<ol>
+<li>우리가 만들려는 서비스와 비슷한 업종·카테고리의 사이트를 3~5개 찾는다</li>
+<li>각 사이트에서 '이 부분이 마음에 든다', '이 부분은 별로다'를 한 줄씩 메모한다</li>
+<li>사이트 전체가 아니라 '메인 화면 구성', '주문 흐름', '회원가입 페이지'처럼 부분 단위로 참고점을 적는다</li>
+</ol>
+<p>예를 들면 이렇게 정리됩니다. "첫 번째 사이트 - 상단 카테고리 메뉴가 직관적이라 우리도 그 방식으로 가고 싶다. 다만 팝업 광고는 빼고 싶다." "두 번째 사이트 - 예약 흐름이 3단계로 짧아서 좋다. 회원가입 없이도 전화번호 인증만으로 예약이 되면 좋겠다." "세 번째 사이트 - 모바일에서 글자 크기와 버튼이 큼직해서 중장년 고객도 쉽게 쓸 것 같다." 이런 메모가 5~10줄 쌓이면 업체가 디자인 방향을 잡는 데는 충분합니다.</p>
+<p>반대로 피하면 좋은 흔한 실수도 짚어두겠습니다. <strong>"알아서 예쁘게 해주세요"는 요구사항이 되지 못합니다.</strong> '예쁘게'라는 단어는 사람마다 해석이 달라서, 이렇게 말해도 업체는 기준을 잡을 수가 없죠. <strong>"요즘 트렌드에 맞게"나 "대기업 사이트처럼"도 마찬가지입니다.</strong> 트렌드는 매달 바뀌고 '대기업 사이트'도 회사마다 스타일이 완전히 다릅니다. 한 줄짜리 추상어 대신 '어느 사이트의 어느 페이지'라는 구체적인 지시가 10배 더 잘 전달된다고 생각하시면 됩니다.</p>
+<p>참고 링크를 모으다 보면 '우리 경쟁사도 참고해도 되나' 걱정이 생길 수 있는데, 괜찮습니다. 디자인·흐름을 그대로 복제하는 게 아니라 방향성을 참고하는 것이니까요. 업계 내 서비스를 살펴보는 건 오히려 좋습니다. 다만 링크를 보낼 때 "이 서비스랑 똑같이 만들어주세요"가 아니라 "이 부분이 참고점입니다"라고 명시해 두시는 게 중요합니다.</p>
+<p>이 단계를 다 끝내고 나면 손에 쥐게 되는 건 두 묶음입니다. 기능 문장 30~50개, 참고 링크 3~5개와 각각의 메모. 여기까지면 업체가 초기 견적을 낼 수 있는 재료는 다 모인 셈이에요.</p>
+<h2 id="쓰긴-썼는데-이-수준이-맞는지-불안할-때">쓰긴 썼는데 이 수준이 맞는지 불안할 때</h2>
+<p>기능 문장도 쓰고 참고 링크도 모아놓고 나면, 마지막 단계에서 예상하지 못한 벽이 또 하나 기다립니다. "다 썼는데… 이걸 그냥 업체에 보내도 되나?", "빠진 게 있으면 어쩌지?", "이 수준으로 보내면 업체가 비웃는 거 아닌가?" 처음 외주를 맡기는 상황에서 가장 흔히 오는 불안이 이 지점입니다. 혼자 판단할 기준이 없는 상태에서 내가 쓴 문서가 쓸 만한지 스스로 평가하는 건, 구조적으로 어려운 일이죠.</p>
+<p>먼저 드리고 싶은 말씀은, <strong>요구사항 문서는 완성본이 아닙니다.</strong> 처음 업체에 보내는 문서는 '대화를 시작할 수 있는 재료'에 가깝습니다. 실제 외주 진행에서도 초기 요구사항은 미팅과 피드백을 거치면서 계속 다듬어집니다. 그래서 처음부터 빠진 항목 없이 완벽하게 쓰려고 하기보다는, <strong>'이 정도면 대화가 시작될 수 있겠다' 수준에서 일단 넘기고 거기서부터 채워나가는 것</strong>이 훨씬 현실적입니다.</p>
+<p>그래도 보내기 전에 한 번 쓱 훑어보시면 좋은 점검 목록을 정리해 두었습니다.</p>
+<ul>
+<li>[ ] 기능을 '이름'이 아니라 '사용자가 할 수 있는 동작'으로 썼는가?</li>
+<li>[ ] 우리 서비스를 쓰는 사람(고객·직원·관리자)이 누구인지 문서를 보면 알 수 있는가?</li>
+<li>[ ] 참고 링크마다 '어떤 부분이 참고점인지' 한 줄 메모가 붙어 있는가?</li>
+<li>[ ] "알아서 예쁘게"나 "트렌드에 맞게" 같은 추상어로만 쓴 부분은 없는가?</li>
+<li>[ ] 결제, 외부 연동(카카오·네이버 로그인 등)처럼 별도 비용이 발생할 가능성이 있는 기능이 빠져 있지 않은가?</li>
+</ul>
+<p>이 다섯 가지를 통과했다면 업체와 대화를 시작하기에는 충분한 상태입니다. 그리고 여기서 혼자 판단이 어렵다면, 그 자체를 누구에게 물어봐도 괜찮다는 사실도 기억해 주세요. <a href="https://www.wishket.com/project/create/?utm_source=blog_webflow&amp;utm_medium=inline_cta&amp;utm_campaign=260417_non-developer-outsourcing-requirements-guide">위시켓</a>에 프로젝트를 등록하시면 담당 매니저가 문서를 함께 검토합니다. "이런 항목이 빠져 있는 것 같아요", "이 기능은 조금 더 구체적으로 풀어 쓰시면 견적이 정확해집니다", "이 정도 범위라면 예산은 대략 이 수준이 일반적입니다" 같은 피드백을 받으실 수 있죠. 처음 쓰는 분의 문서에서 흔히 빠지는 항목을 매니저가 먼저 짚어드리는 편이라, 문서를 가다듬는 시간이 크게 줄어듭니다.</p>
+<p>프로젝트 등록과 매니저 상담에는 별도 비용이 붙지 않습니다. '완성된 문서를 보내야만 한다'는 부담 없이, 문장 30개와 링크 3개가 모인 대략의 상태 그대로 <a href="https://www.wishket.com/">위시켓에 프로젝트를 등록</a>해 주셔도 괜찮습니다. 혼자 끙끙대며 완벽한 문서를 만들려고 애쓰는 것보다, 매니저와 함께 빈 칸을 채워나가는 쪽이 다음 단계로 훨씬 빠르게 넘어가는 길이거든요.</p>
+<p>외주의 첫 문서는 완성도로 평가받는 과제라기보다, 대화를 열기 위한 초대장에 가깝습니다. 초대장에 반드시 격식을 갖출 필요는 없다는 걸 기억하시면서, 지금 열어둔 그 메모장에 첫 시나리오 문장 하나를 써 보세요. "우리 고객이 ~할 수 있어야 한다." 이 한 줄이 모든 것의 시작입니다.</p><div style="background:linear-gradient(135deg,#5E9ADE 0%,#7BB2E8 100%);border-radius:14px;padding:20px 24px;margin:30px 0;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+<p style="font-size:15px;color:#fff;line-height:1.65;margin:0;flex:1;">요구사항 수준이 맞는지 매니저에게 확인받을 수 있습니다.</p>
+<a href="https://wishket.com/project/free-consulting/?utm_source=blog_webflow&amp;utm_medium=inline_cta&amp;utm_campaign=260417_non-developer-outsourcing-requirements-guide" style="display:inline-block;background:#fff;color:#2477F3;font-size:14px;font-weight:700;padding:10px 18px;border-radius:10px;white-space:nowrap;text-decoration:none;">검토 요청하기</a>
+</div>
+
+  <div style="background:linear-gradient(135deg,#5E9ADE 0%,#7BB2E8 100%);border-radius:16px;padding:32px 30px;color:#fff;margin:40px 0 0;">
+<div style="font-size:12px;font-weight:600;letter-spacing:0.8px;opacity:0.75;margin-bottom:10px;text-transform:uppercase;">다음 단계</div>
+<h3 style="font-size:20px;font-weight:800;line-height:1.45;margin-bottom:20px;color:#fff;letter-spacing:-0.3px;">완벽하지 않아도 괜찮습니다. 지금 쓴 그 문장으로 시작할 수 있습니다.</h3>
+<div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;"><div style="background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px;font-size:14.5px;line-height:1.65;"><span style="font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;">참고 링크까지 모았는데 보내도 되는 수준인지 판단이 안 선다면</span>위시켓에 프로젝트를 등록하면 매니저가 기능 목록을 직접 검토하고 빠진 항목을 짚어드립니다. 등록과 상담은 무료입니다.</div>
+<div style="background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px;font-size:14.5px;line-height:1.65;"><span style="font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;">기능 문장과 링크는 모았지만 업체에 보내는 것이 여전히 불안하다면</span>완벽한 문서가 아니어도 됩니다. 매니저와 함께 기능 목록을 다듬고 맞는 파트너를 찾아드립니다.</div></div><div style="text-align:center;"><a href="https://wishket.com/project/free-consulting/?utm_source=blog_webflow&amp;utm_medium=cta_banner&amp;utm_campaign=260417_non-developer-outsourcing-requirements-guide" style="display:inline-block;background:#fff;color:#2477F3;font-size:15px;font-weight:800;padding:13px 28px;border-radius:10px;text-decoration:none;">매니저와 정리하기</a></div>
+</div>
+
+  <div class="related-section">
+  <h3>함께 읽으면 좋은 콘텐츠</h3>
+<ul>
+  <li><a href="https://blog.wishket.com/sme-web-service-outsourcing-starter-guide">개발자 없는 중소기업, 웹서비스 외주 어디서부터 시작할까?</a></li>
+  <li><a href="https://blog.wishket.com/web-outsourcing-first-meeting-guide">외주 개발 첫 미팅, 비개발자가 준비할 3가지</a></li>
+</ul>
+  </div>
+
+  </div>
+
+  <h2>자주 묻는 질문</h2>
+<div class="faq-list">
+<div class="faq-item">
+  <div class="faq-q"><span class="q-mark">Q.</span>요구사항 문서를 보냈는데 업체마다 견적이 너무 다르게 나오면 어떻게 하나요?</div>
+  <div class="faq-a">견적 차이가 크다면 업체마다 견적에 포함한 항목 범위가 다른 경우가 많습니다. 기획·디자인·서버 구축이 포함인지, 모바일 대응이 기본인지를 각 견적서에서 먼저 확인해야 합니다. 같은 요구사항이라도 업체가 어디까지를 범위로 해석하느냐에 따라 금액이 두 배 이상 벌어질 수 있어요. 위시켓에서는 매니저가 견적서를 함께 검토하면서 포함 범위 기준을 맞춰드립니다.</div>
+</div>
+<div class="faq-item">
+  <div class="faq-q"><span class="q-mark">Q.</span>외주 업체에 요구사항을 보낸 뒤 수정하고 싶으면 비용이 드나요?</div>
+  <div class="faq-a">계약 전 미팅 단계에서의 요구사항 수정은 보통 비용이 발생하지 않습니다. 문제는 계약 후에 범위를 바꿀 때인데, 이 경우 추가 비용과 일정 변경이 생기는 것이 일반적입니다. 처음 요구사항이 불완전해도 괜찮으니 일단 업체와 미팅을 시작해 구체화하는 게 현실적입니다. 변경 내용은 구두가 아닌 이메일이나 메신저로 합의를 남기는 것이 나중에 분쟁을 줄이는 방법입니다.</div>
+</div>
+<div class="faq-item">
+  <div class="faq-q"><span class="q-mark">Q.</span>외주 개발 후 유지보수는 어떤 방식으로 진행되고 비용은 얼마나 드나요?</div>
+  <div class="faq-a">납품 후 개발사가 귀책 사유로 발생한 버그는 하자보수 기간(보통 1~3개월) 내에 무상으로 수정합니다. 그 이후의 기능 추가·개선·OS 업데이트 대응은 별도 계약이 필요하며 유상입니다. 유지보수 계약 방식은 월 정액제(업무 시간 포함)와 건별 청구 방식이 있고, 서비스 복잡도에 따라 월 50만~300만 원대가 일반적입니다. 계약 전에 하자보수 기간과 유지보수 대응 가능 여부를 미리 확인해 두는 것이 좋습니다.</div>
+</div>
+<div class="faq-item">
+  <div class="faq-q"><span class="q-mark">Q.</span>요구사항 문서 없이 업체에 전화해서 대략적인 견적만 먼저 알 수는 없나요?</div>
+  <div class="faq-a">전화로 &#x27;어느 정도 드나요&#x27;라고 물으면 업체는 범위를 특정하지 못해 &#x27;기획부터 함께 잡아야 한다&#x27;거나 &#x27;5백만 원에서 5억 원까지 다양합니다&#x27;처럼 답하는 경우가 많습니다. 구체적 범위가 없으면 정확한 견적 산출이 불가능하기 때문입니다. 핵심 기능 5개라도 적어서 전달하면 적어도 어느 구간인지 좁힐 수 있습니다. 위시켓은 프로젝트 등록 후 매니저 상담 단계에서 기능 목록을 함께 정리하므로, 정리가 안 된 상태에서 등록해도 괜찮습니다.</div>
+</div>
+</div>
+
+  <div class="cms-meta-area">
+    <h3 style="font-size:16px; font-weight:700; margin:0 0 16px 0; color:#666;">CMS 입력 필드</h3>
+    <table style="width:100%;border-collapse:collapse;margin:16px 0;">
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">써머리</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">비개발자도 업체가 알아듣는 요구사항 문서 쓰는 법</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">slug</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">non-developer-outsourcing-requirements-guide</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">날짜</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">2026-04-17</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">카테고리</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">IT 아웃소싱</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">태그</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">개발외주</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">메타 디스크립션</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">개발 용어 몰라도 됩니다. 사용자 시나리오 문장 30~50개와 참고 링크 3~5개면 외주 업체가 견적을 낼 수 있는 요구사항이 완성됩니다. 비개발자를 위한 실전 작성법을 확인해보세요.</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">Author</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">조가은 / 콘텐츠 마케터 — 위시켓 마케터 조가은입니다. 기업의 쉽고 안전한 IT 의사결정을 돕는 콘텐츠를 만듭니다.</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">TLDR</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">개발 용어를 몰라도 요구사항을 쓸 수 있습니다. &#x27;사용자가 무엇을 할 수 있어야 하는가&#x27;를 일상어 문장으로 30~50개 나열하고, 원하는 화면 느낌에 가까운 서비스 링크를 3~5개 모아두면 업체가 초기 견적을 낼 수 있는 재료가 갖춰집니다. 처음부터 완벽한 문서를 만들 필요는 없고, 이 정도 상태에서 위시켓에 프로젝트를 등록하면 매니저가 빠진 항목을 함께 짚어드립니다.
+</td>
+</tr>
+</table>
+  </div>
+
+  <table class="guide-box" style="width:100%;border:1px solid #D1D5DB;border-collapse:collapse;margin:20px 0;">
+<tr><td style="background:#F9FAFB;padding:16px 20px;border:1px solid #D1D5DB;">
+<p style="margin:0 0 10px 0;font-weight:700;font-size:16px;">🖼 썸네일 제작 가이드</p>
+<p style="margin:0 0 4px 0;"><b>스타일:</b> 단색 배경 + 텍스트</p>
+<p style="margin:0 0 4px 0;"><b>배경색:</b> #1A3A5C</p>
+<p style="margin:0 0 4px 0;"><b>제목 텍스트:</b></p>
+<p style="margin:0 0 4px 0;">　1줄: 비개발자가 쓰는</p>
+<p style="margin:0 0 4px 0;">　2줄: 외주 요구사항 작성법</p>
+<p style="margin:0 0 4px 0;"><b>장식 요소:</b> 문서 아이콘 + 체크리스트 모티프</p>
+<p style="margin:0;"><b>로고:</b> wishket 로고 좌상단</p>
+</td></tr>
+</table>
+
+  <h3 style="font-size:18px;font-weight:600;margin:32px 0 12px 0;">Embed 코드 (붙여넣기용)</h3>
+<div style="margin:16px 0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:14px;font-weight:600;color:#374151;">개발 용어 대신 &#x27;사용자 시나리오&#x27;로 쓰세요 — 이렇게 쓰면 막힙니다 · 이렇게 쓰면 전달됩니다</span><button onclick="copyCodeBlock(this)" style="background:#2477F3;color:#fff;border:none;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">복사</button></div><pre style="background:#1E293B;color:#E2E8F0;padding:12px;border-radius:8px;overflow-x:auto;font-size:11px;line-height:1.4;white-space:pre-wrap;max-height:200px;overflow-y:auto;">&lt;style&gt;
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:1.5rem 0;border:1px solid #E5E7EB;border-radius:12px;background:#fff}
+table.geo{width:100%;border-collapse:collapse;border-spacing:0;font-size:14px;line-height:1.6;table-layout:fixed}
+table.geo caption{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+table.geo thead th{padding:12px 18px;font-size:12.5px;font-weight:700;letter-spacing:.01em;text-align:left;border-bottom:1px solid #D1D1D9;background:#F6F6F9;vertical-align:bottom}
+table.geo thead th:first-child{color:#82828E;border-right:1px solid #D1D1D9}
+table.geo thead th:not(:first-child){color:#1A1A23}
+table.geo tbody th[scope=row]{padding:14px 18px;font-size:14px;font-weight:600;color:#1A1A23;text-align:left;border-bottom:1px solid #ECECF0;border-right:1px solid #ECECF0;background:#fff;vertical-align:top;word-break:keep-all}
+table.geo tbody td{padding:14px 18px;color:#3A3A47;border-bottom:1px solid #ECECF0;vertical-align:top;word-break:keep-all}
+table.geo tbody tr:nth-child(even) td,table.geo tbody tr:nth-child(even) th[scope=row]{background:#F9F9FB}
+table.geo tbody tr:hover td,table.geo tbody tr:hover th[scope=row]{background:#F0F0F5}
+table.geo tfoot td{padding:9px 18px;font-size:12px;color:#9CA3AF;border-top:1px solid #ECECF0;background:#F9F9FB}
+table.geo tfoot time{font-weight:500}
+@media(max-width:640px){table.geo{table-layout:auto}table.geo thead th,table.geo tbody th[scope=row],table.geo tbody td{padding:11px 14px;font-size:13px}table.geo tfoot td{padding:8px 14px}}
+&lt;/style&gt;
+&lt;div class=&quot;tbl-wrap&quot;&gt;&lt;table class=&quot;geo&quot;&gt;&lt;caption&gt;개발 용어 대신 &#x27;사용자 시나리오&#x27;로 쓰세요 — 이렇게 쓰면 막힙니다 · 이렇게 쓰면 전달됩니다&lt;/caption&gt;&lt;colgroup&gt;&lt;col style=&quot;width:25%&quot;/&gt;&lt;col style=&quot;width:75%&quot;/&gt;&lt;/colgroup&gt;&lt;thead&gt;&lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;이렇게 쓰면 막힙니다&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;이렇게 쓰면 전달됩니다&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;예약 기능&lt;/th&gt;&lt;td&gt;고객이 원하는 날짜와 시간대를 선택해서 예약할 수 있어야 한다. 예약 완료 후에는 확인 문자가 자동으로 발송된다&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;상품 등록 기능&lt;/th&gt;&lt;td&gt;직원이 상품 이름·가격·재고·사진 여러 장을 입력해 새 상품을 등록할 수 있어야 한다. 품절 시 &#x27;일시 품절&#x27; 상태로 바꿀 수 있다&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;후기 기능&lt;/th&gt;&lt;td&gt;구매자가 별점과 사진을 포함한 후기를 남길 수 있어야 하고, 관리자는 신고가 들어온 후기를 숨기거나 삭제할 수 있다&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;알림 기능&lt;/th&gt;&lt;td&gt;주문이 들어오면 담당 직원 이메일과 카카오 알림톡으로 내용이 전달되어야 한다&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;</pre></div>
+<div style="margin:16px 0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:14px;font-weight:600;color:#374151;">CTA 배너</span><button onclick="copyCodeBlock(this)" style="background:#2477F3;color:#fff;border:none;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">복사</button></div><pre style="background:#1E293B;color:#E2E8F0;padding:12px;border-radius:8px;overflow-x:auto;font-size:11px;line-height:1.4;white-space:pre-wrap;max-height:200px;overflow-y:auto;">&lt;div style=&quot;background:linear-gradient(135deg,#5E9ADE 0%,#7BB2E8 100%);border-radius:16px;padding:32px 30px;color:#fff;margin:40px 0 0;&quot;&gt;
+&lt;div style=&quot;font-size:12px;font-weight:600;letter-spacing:0.8px;opacity:0.75;margin-bottom:10px;text-transform:uppercase;&quot;&gt;다음 단계&lt;/div&gt;
+&lt;h3 style=&quot;font-size:20px;font-weight:800;line-height:1.45;margin-bottom:20px;color:#fff;letter-spacing:-0.3px;&quot;&gt;완벽하지 않아도 괜찮습니다. 지금 쓴 그 문장으로 시작할 수 있습니다.&lt;/h3&gt;
+&lt;div style=&quot;display:flex;flex-direction:column;gap:12px;margin-bottom:24px;&quot;&gt;&lt;div style=&quot;background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px;font-size:14.5px;line-height:1.65;&quot;&gt;&lt;span style=&quot;font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;&quot;&gt;참고 링크까지 모았는데 보내도 되는 수준인지 판단이 안 선다면&lt;/span&gt;위시켓에 프로젝트를 등록하면 매니저가 기능 목록을 직접 검토하고 빠진 항목을 짚어드립니다. 등록과 상담은 무료입니다.&lt;/div&gt;
+&lt;div style=&quot;background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px;font-size:14.5px;line-height:1.65;&quot;&gt;&lt;span style=&quot;font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;&quot;&gt;기능 문장과 링크는 모았지만 업체에 보내는 것이 여전히 불안하다면&lt;/span&gt;완벽한 문서가 아니어도 됩니다. 매니저와 함께 기능 목록을 다듬고 맞는 파트너를 찾아드립니다.&lt;/div&gt;&lt;/div&gt;&lt;div style=&quot;text-align:center;&quot;&gt;&lt;a href=&quot;https://wishket.com/project/free-consulting/?utm_source=blog_webflow&amp;amp;utm_medium=cta_banner&amp;amp;utm_campaign=260417_non-developer-outsourcing-requirements-guide&quot; style=&quot;display:inline-block;background:#fff;color:#2477F3;font-size:15px;font-weight:800;padding:13px 28px;border-radius:10px;text-decoration:none;&quot;&gt;매니저와 정리하기&lt;/a&gt;&lt;/div&gt;
+&lt;/div&gt;</pre></div>
+
+
+  <h3 style="font-size:18px;font-weight:600;margin:32px 0 12px 0;">JSON-LD (Custom Code에 붙여넣기)</h3>
+<pre style="background:#1E293B;color:#E2E8F0;padding:16px;border-radius:8px;overflow-x:auto;font-size:12px;line-height:1.5;white-space:pre-wrap;">&lt;script type="application/ld+json"&gt;
+{
+  &quot;@context&quot;: &quot;https://schema.org&quot;,
+  &quot;@type&quot;: &quot;BlogPosting&quot;,
+  &quot;headline&quot;: &quot;비개발자가 외주 업체에 보낼 요구사항, 이렇게 쓰면 됩니다&quot;,
+  &quot;description&quot;: &quot;개발 용어 몰라도 됩니다. 사용자 시나리오 문장 30~50개와 참고 링크 3~5개면 외주 업체가 견적을 낼 수 있는 요구사항이 완성됩니다. 비개발자를 위한 실전 작성법을 확인해보세요.&quot;,
+  &quot;datePublished&quot;: &quot;2026-04-17&quot;,
+  &quot;dateModified&quot;: &quot;2026-04-17&quot;,
+  &quot;author&quot;: {
+    &quot;@type&quot;: &quot;Person&quot;,
+    &quot;name&quot;: &quot;조가은&quot;
+  },
+  &quot;publisher&quot;: {
+    &quot;@type&quot;: &quot;Organization&quot;,
+    &quot;name&quot;: &quot;위시켓&quot;,
+    &quot;url&quot;: &quot;https://www.wishket.com&quot;
+  },
+  &quot;mainEntityOfPage&quot;: {
+    &quot;@type&quot;: &quot;WebPage&quot;
+  },
+  &quot;keywords&quot;: &quot;개발외주&quot;,
+  &quot;articleSection&quot;: &quot;IT 아웃소싱&quot;,
+  &quot;hasPart&quot;: [
+    {
+      &quot;@type&quot;: &quot;WebPageElement&quot;,
+      &quot;name&quot;: &quot;개발 용어 대신 &#x27;사용자 시나리오&#x27;로 쓰세요&quot;,
+      &quot;url&quot;: &quot;#개발-용어-대신-사용자-시나리오로-쓰세요&quot;
+    },
+    {
+      &quot;@type&quot;: &quot;WebPageElement&quot;,
+      &quot;name&quot;: &quot;화면 디자인은 말로 설명하지 말고 링크로 모으세요&quot;,
+      &quot;url&quot;: &quot;#화면-디자인은-말로-설명하지-말고-링크로-모으세요&quot;
+    },
+    {
+      &quot;@type&quot;: &quot;WebPageElement&quot;,
+      &quot;name&quot;: &quot;쓰긴 썼는데 이 수준이 맞는지 불안할 때&quot;,
+      &quot;url&quot;: &quot;#쓰긴-썼는데-이-수준이-맞는지-불안할-때&quot;
+    }
+  ]
+}
+&lt;/script&gt;
+&lt;script type="application/ld+json"&gt;
+{
+  &quot;@context&quot;: &quot;https://schema.org&quot;,
+  &quot;@type&quot;: &quot;FAQPage&quot;,
+  &quot;mainEntity&quot;: [
+    {
+      &quot;@type&quot;: &quot;Question&quot;,
+      &quot;name&quot;: &quot;요구사항 문서를 보냈는데 업체마다 견적이 너무 다르게 나오면 어떻게 하나요?&quot;,
+      &quot;acceptedAnswer&quot;: {
+        &quot;@type&quot;: &quot;Answer&quot;,
+        &quot;text&quot;: &quot;견적 차이가 크다면 업체마다 견적에 포함한 항목 범위가 다른 경우가 많습니다. 기획·디자인·서버 구축이 포함인지, 모바일 대응이 기본인지를 각 견적서에서 먼저 확인해야 합니다. 같은 요구사항이라도 업체가 어디까지를 범위로 해석하느냐에 따라 금액이 두 배 이상 벌어질 수 있어요. 위시켓에서는 매니저가 견적서를 함께 검토하면서 포함 범위 기준을 맞춰드립니다.&quot;
+      }
+    },
+    {
+      &quot;@type&quot;: &quot;Question&quot;,
+      &quot;name&quot;: &quot;외주 업체에 요구사항을 보낸 뒤 수정하고 싶으면 비용이 드나요?&quot;,
+      &quot;acceptedAnswer&quot;: {
+        &quot;@type&quot;: &quot;Answer&quot;,
+        &quot;text&quot;: &quot;계약 전 미팅 단계에서의 요구사항 수정은 보통 비용이 발생하지 않습니다. 문제는 계약 후에 범위를 바꿀 때인데, 이 경우 추가 비용과 일정 변경이 생기는 것이 일반적입니다. 처음 요구사항이 불완전해도 괜찮으니 일단 업체와 미팅을 시작해 구체화하는 게 현실적입니다. 변경 내용은 구두가 아닌 이메일이나 메신저로 합의를 남기는 것이 나중에 분쟁을 줄이는 방법입니다.&quot;
+      }
+    },
+    {
+      &quot;@type&quot;: &quot;Question&quot;,
+      &quot;name&quot;: &quot;외주 개발 후 유지보수는 어떤 방식으로 진행되고 비용은 얼마나 드나요?&quot;,
+      &quot;acceptedAnswer&quot;: {
+        &quot;@type&quot;: &quot;Answer&quot;,
+        &quot;text&quot;: &quot;납품 후 개발사가 귀책 사유로 발생한 버그는 하자보수 기간(보통 1~3개월) 내에 무상으로 수정합니다. 그 이후의 기능 추가·개선·OS 업데이트 대응은 별도 계약이 필요하며 유상입니다. 유지보수 계약 방식은 월 정액제(업무 시간 포함)와 건별 청구 방식이 있고, 서비스 복잡도에 따라 월 50만~300만 원대가 일반적입니다. 계약 전에 하자보수 기간과 유지보수 대응 가능 여부를 미리 확인해 두는 것이 좋습니다.&quot;
+      }
+    },
+    {
+      &quot;@type&quot;: &quot;Question&quot;,
+      &quot;name&quot;: &quot;요구사항 문서 없이 업체에 전화해서 대략적인 견적만 먼저 알 수는 없나요?&quot;,
+      &quot;acceptedAnswer&quot;: {
+        &quot;@type&quot;: &quot;Answer&quot;,
+        &quot;text&quot;: &quot;전화로 &#x27;어느 정도 드나요&#x27;라고 물으면 업체는 범위를 특정하지 못해 &#x27;기획부터 함께 잡아야 한다&#x27;거나 &#x27;5백만 원에서 5억 원까지 다양합니다&#x27;처럼 답하는 경우가 많습니다. 구체적 범위가 없으면 정확한 견적 산출이 불가능하기 때문입니다. 핵심 기능 5개라도 적어서 전달하면 적어도 어느 구간인지 좁힐 수 있습니다. 위시켓은 프로젝트 등록 후 매니저 상담 단계에서 기능 목록을 함께 정리하므로, 정리가 안 된 상태에서 등록해도 괜찮습니다.&quot;
+      }
+    }
+  ]
+}
+&lt;/script&gt;</pre>
+
+</div>
+
+<script>
+// contenteditable 변경 감지 + localStorage 자동저장
+var content = document.getElementById('cms-content');
+var status = document.getElementById('edit-status');
+var saveTimer;
+var STORAGE_KEY = 'wishket_draft_' + document.title.replace(/[^a-zA-Z0-9가-힣]/g, '_').substring(0, 60);
+var VERSION_KEY = STORAGE_KEY + '_ver';
+var CURRENT_VERSION = '20260417_115652';
+
+window.addEventListener('load', function() {
+  var saved = localStorage.getItem(STORAGE_KEY);
+  var savedVer = localStorage.getItem(VERSION_KEY);
+  if (saved && savedVer === CURRENT_VERSION) { content.innerHTML = saved; }
+  else { localStorage.removeItem(STORAGE_KEY); }
+  attachLinkHandlers();
+});
+
+content.addEventListener('input', function() {
+  status.textContent = '편집 중 (미저장)';
+  status.className = 'modified';
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(function() {
+    localStorage.setItem(STORAGE_KEY, content.innerHTML);
+    localStorage.setItem(VERSION_KEY, CURRENT_VERSION);
+    status.textContent = '자동저장됨';
+    status.className = '';
+  }, 3000);
+});
+
+function attachLinkHandlers() {
+  document.querySelectorAll('[contenteditable] a').forEach(function(a) {
+    a.addEventListener('click', function(e) {
+      if (e.metaKey || e.ctrlKey) { window.open(a.href, '_blank'); }
+    });
+    if (a.title.indexOf('Cmd+클릭') === -1) {
+      a.title = (a.title || '') + ' (Cmd+클릭으로 열기)';
+    }
+  });
+}
+
+function copyContent() {
+  var clone = content.cloneNode(true);
+  clone.querySelectorAll('.image-guide, table.image-guide, table.guide-box').forEach(function(el) { el.remove(); });
+  var text = clone.innerText;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(function() {
+      var btn = document.getElementById('copy-btn');
+      btn.textContent = '복사됨!';
+      setTimeout(function() { btn.textContent = '본문 복사'; }, 2000);
+    });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    var btn = document.getElementById('copy-btn');
+    btn.textContent = '복사됨!';
+    setTimeout(function() { btn.textContent = '본문 복사'; }, 2000);
+  }
+}
+
+function copyCodeBlock(btn) {
+  var pre = btn.parentElement.nextElementSibling;
+  if (!pre) return;
+  var text = pre.textContent;
+  navigator.clipboard.writeText(text).then(function() {
+    btn.textContent = '복사됨!';
+    setTimeout(function() { btn.textContent = '복사'; }, 2000);
+  });
+}
+
+window.addEventListener('beforeunload', function(e) {
+  if (status.className === 'modified') {
+    clearTimeout(saveTimer);
+    localStorage.setItem(STORAGE_KEY, content.innerHTML);
+    localStorage.setItem(VERSION_KEY, CURRENT_VERSION);
+    e.preventDefault();
+    e.returnValue = '';
+  }
+});
+</script>
+
+</body>
+</html>
