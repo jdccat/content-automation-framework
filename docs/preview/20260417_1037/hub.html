@@ -267,13 +267,10 @@
 <p>그리고 한 가지 꼭 챙겨야 할 게 있습니다. <strong>서버·도메인 계정은 반드시 우리 회사 명의로</strong> 만들어 달라고 요청하세요. 개발사 계정에 올라가 있으면 관계가 끝난 뒤 통제권을 가져오기가 까다로워집니다. 개발비와 별도로 서버 운영비(월 단위)와 도메인 비용은 계속 발생한다는 점도 미리 예산에 반영해 두셔야 합니다.</p>
 <h3>검수에서 확인할 것</h3>
 <p>납품 직전의 검수는 '개발사가 기능 테스트를 끝냈다'는 것과는 별개입니다. 개발사는 기능이 정상 작동하는지를 확인하는 역할이고, 클라이언트는 <strong>실제 업무 시나리오로 써봤을 때 작동하는지</strong>를 확인해야 합니다. 예를 들어 주문 관리 기능이라면, 단순히 '주문 버튼이 눌리는가'만 보는 게 아니라 '실제 고객이 모바일로 주문하고, 직원이 관리자 페이지에서 상태를 바꾸고, 주문이 완료되는 전체 흐름'을 처음부터 끝까지 한 번 돌려보는 거죠.</p>
-<ul>
-<li>[ ] 실제 업무 시나리오를 처음부터 끝까지 돌려봤는가?</li>
-<li>[ ] 모바일에서도 문제없이 작동하는가?</li>
-<li>[ ] 관리자 페이지에서 데이터 입력·수정·삭제가 의도대로 되는가?</li>
-<li>[ ] 서버·도메인이 우리 회사 명의로 설정되어 있는가?</li>
-<li>[ ] 소스코드와 배포 문서, 계정 정보를 인수인계 받았는가?</li>
-</ul>
+<div style="background:#F0F6FF;border-left:3px solid #2E6BAA;border-radius:0 14px 14px 0;padding:18px 20px;margin:30px 0;">
+<div style="font-size:13px;font-weight:700;color:#1A1A1A;margin-bottom:10px;display:flex;align-items:center;gap:6px;">체크리스트</div>
+<div style="font-size:14.5px;color:#1A1A1A;line-height:2.0;"><ul><li>실제 업무 시나리오를 처음부터 끝까지 돌려봤는가?</li><li>모바일에서도 문제없이 작동하는가?</li><li>관리자 페이지에서 데이터 입력·수정·삭제가 의도대로 되는가?</li><li>서버·도메인이 우리 회사 명의로 설정되어 있는가?</li><li>소스코드와 배포 문서, 계정 정보를 인수인계 받았는가?</li></ul></div>
+</div>
 <p>여기까지가 '어디서부터 시작해야 하나요'의 전체 그림입니다. 정리 - 탐색 - 견적 - 계약 - 개발 - 검수. 한 번에 다 완벽하게 할 필요는 없고, 각 단계에 들어설 때 그 단계만 신경 쓰면 됩니다. 그리고 혼자 판단이 어려운 지점이 생기면 매니저 상담을 활용하세요. 외주 경험이 없는 상태에서 모든 걸 혼자 결정하려고 하면 오히려 판단이 흐려집니다.</p>
 <h2 id="완벽한-준비보다-한-걸음을-먼저">완벽한 준비보다 한 걸음을 먼저</h2>
 <p>외주 개발은 한 번에 마스터할 수 있는 일이 아닙니다. 수많은 중소기업이 첫 외주를 시작할 때 막막해하고, 한 번 해보고 나서야 '아, 이렇게 돌아가는구나' 감을 잡습니다. 처음부터 모든 걸 완벽히 준비하려고 하면 오히려 한 발짝도 나아가지 못하게 됩니다.</p>
@@ -507,7 +504,7 @@ var status = document.getElementById('edit-status');
 var saveTimer;
 var STORAGE_KEY = 'wishket_draft_' + document.title.replace(/[^a-zA-Z0-9가-힣]/g, '_').substring(0, 60);
 var VERSION_KEY = STORAGE_KEY + '_ver';
-var CURRENT_VERSION = '20260417_115355';
+var CURRENT_VERSION = '20260417_134003';
 
 window.addEventListener('load', function() {
   var saved = localStorage.getItem(STORAGE_KEY);
