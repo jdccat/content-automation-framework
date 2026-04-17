@@ -230,7 +230,7 @@
 <p>소스코드를 못 받은 경험이 있다면, 이번 계약서에서 가장 먼저 확인할 것은 지재권 귀속 조항입니다.</p>
 <div style="background:#F0F6FF;border-left:3px solid #2E6BAA;border-radius:0 14px 14px 0;padding:18px 20px;margin:30px 0;">
 <div style="font-size:13px;font-weight:700;color:#1A1A1A;margin-bottom:10px;display:flex;align-items:center;gap:6px;">✅ 계약서 필수 확인 체크리스트</div>
-<div style="font-size:14.5px;color:#1A1A1A;line-height:2.0;"><ul><li>[ ] 소스코드를 포함한 지재권 일체가 발주사에 귀속된다는 조항이 있는가</li><li>[ ] 인수인계 문서 범위가 명시되어 있는가 (API 명세, 배포 절차, DB 구조 문서)</li><li>[ ] 하자보수 기간과 범위가 적혀 있는가 (하자보수는 개발사 귀책 버그 수정만 해당)</li><li>[ ] 런칭 후 유지보수 대응 방식이 합의되어 있는가 (별도 계약 또는 기간제 대응)</li></ul></div>
+<div style="font-size:14.5px;color:#1A1A1A;line-height:2.0;"><ul style="list-style:none;padding:0;margin:0;"><li style="margin-bottom:8px;padding-left:28px;position:relative;"><span style="position:absolute;left:0;top:2px;width:18px;height:18px;border:2px solid #2477F3;border-radius:4px;display:inline-block;"></span>소스코드를 포함한 지재권 일체가 발주사에 귀속된다는 조항이 있는가</li><li style="margin-bottom:8px;padding-left:28px;position:relative;"><span style="position:absolute;left:0;top:2px;width:18px;height:18px;border:2px solid #2477F3;border-radius:4px;display:inline-block;"></span>인수인계 문서 범위가 명시되어 있는가 (API 명세, 배포 절차, DB 구조 문서)</li><li style="margin-bottom:8px;padding-left:28px;position:relative;"><span style="position:absolute;left:0;top:2px;width:18px;height:18px;border:2px solid #2477F3;border-radius:4px;display:inline-block;"></span>하자보수 기간과 범위가 적혀 있는가 (하자보수는 개발사 귀책 버그 수정만 해당)</li><li style="margin-bottom:0;padding-left:28px;position:relative;"><span style="position:absolute;left:0;top:2px;width:18px;height:18px;border:2px solid #2477F3;border-radius:4px;display:inline-block;"></span>런칭 후 유지보수 대응 방식이 합의되어 있는가 (별도 계약 또는 기간제 대응)</li></ul></div>
 </div>
 <p>하자보수와 유지보수는 다릅니다. 하자보수는 개발 과정에서 생긴 버그를 무상으로 고쳐주는 것이고, 유지보수는 기능 변경이나 추가로 별도 계약이 필요해요. 이 구분을 모르면 납품 후에 "이건 하자보수 범위가 아닙니다"라는 답변을 듣고 당황하게 됩니다.</p>
 <p>업체와 연락이 끊긴 경험이 있다면, 이번에는 계약 전에 런칭 후 유지보수 대응이 가능한지를 먼저 물어보세요. 유지보수를 최초 계약에 포함하는 것은 현실적으로 어렵지만, 그 업체가 납품 후에도 기간제나 별도 계약으로 이어서 대응할 의사가 있는지는 확인할 수 있습니다.</p>
@@ -465,7 +465,7 @@ var status = document.getElementById('edit-status');
 var saveTimer;
 var STORAGE_KEY = 'wishket_draft_' + document.title.replace(/[^a-zA-Z0-9가-힣]/g, '_').substring(0, 60);
 var VERSION_KEY = STORAGE_KEY + '_ver';
-var CURRENT_VERSION = '2026-04-16';
+var CURRENT_VERSION = '2026-04-17';
 
 window.addEventListener('load', function() {
   var saved = localStorage.getItem(STORAGE_KEY);
