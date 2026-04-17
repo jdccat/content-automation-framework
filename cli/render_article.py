@@ -1223,9 +1223,12 @@ def render_article(writer_md_path: Path, assembler_yaml_path: Path) -> str:
     )
     template = env.get_template("article.html")
 
+    build_ts = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+
     return template.render(
         title=title,
         date=date,
+        build_ts=build_ts,
         jsonld_html=jsonld_html,
         thumbnail_html=thumbnail_html,
         tldr_html=tldr_html,

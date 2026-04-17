@@ -238,7 +238,7 @@ var status = document.getElementById('edit-status');
 var saveTimer;
 var STORAGE_KEY = 'wishket_draft_' + document.title.replace(/[^a-zA-Z0-9가-힣]/g, '_').substring(0, 60);
 var VERSION_KEY = STORAGE_KEY + '_ver';
-var CURRENT_VERSION = '{{ date }}';
+var CURRENT_VERSION = '{{ build_ts }}';
 
 window.addEventListener('load', function() {
   var saved = localStorage.getItem(STORAGE_KEY);
