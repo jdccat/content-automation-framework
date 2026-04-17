@@ -11,9 +11,11 @@ import argparse
 import html as html_mod
 import datetime
 import json
+import logging
 import re
 import sys
 import unicodedata
+from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any
 
@@ -120,6 +122,16 @@ BOX_STYLES = {
     "✅": {"border": "#2E6BAA", "bg": "#F0F6FF", "title_color": "#1A1A1A", "text_color": "#1A1A1A"},
     "💬": {"border": "#2E6BAA", "bg": "#F0F6FF", "title_color": "#1A1A1A", "text_color": "#1A1A1A"},
 }
+
+# Writer가 이모지 없이 볼드 제목으로 작성하는 박스 유형.
+# 첫 <strong> 텍스트가 이 중 하나로 시작하면 styled box로 변환.
+BOLD_TITLE_BOX_PATTERNS = [
+    "위시켓 매니저 Tip",
+    "용어 정의",
+    "체크리스트",
+    "FAQ",
+]
+DEFAULT_BOX_STYLE = {"border": "#2E6BAA", "bg": "#F0F6FF", "title_color": "#1A1A1A", "text_color": "#1A1A1A"}
 
 
 CASE_BADGE_COLORS = {
@@ -246,22 +258,33 @@ def convert_blockquote_boxes(html_content: str) -> str:
                 bq.replace_with(new_tag)
             continue
 
-        # ── Standard boxes (📌💡✅💬) ──
+        # ── Standard boxes (📌💡✅💬 or bold-title patterns) ──
         emoji = None
         for e in BOX_STYLES:
             if text.startswith(e):
                 emoji = e
                 break
-        if not emoji:
-            continue
 
-        style = BOX_STYLES[emoji]
         paragraphs = bq.find_all("p")
         if not paragraphs:
             continue
 
+        # Bold-title detection: first <strong> matches known patterns
         title_strong = paragraphs[0].find("strong")
-        title_text = title_strong.get_text(strip=True) if title_strong else paragraphs[0].get_text(strip=True).lstrip(emoji).strip()
+        bold_title_match = False
+        if not emoji and title_strong:
+            strong_text = title_strong.get_text(strip=True)
+            for pattern in BOLD_TITLE_BOX_PATTERNS:
+                if strong_text.startswith(pattern):
+                    bold_title_match = True
+                    break
+
+        if not emoji and not bold_title_match:
+            continue
+
+        style = BOX_STYLES.get(emoji, DEFAULT_BOX_STYLE)
+
+        title_text = title_strong.get_text(strip=True) if title_strong else paragraphs[0].get_text(strip=True).lstrip(emoji or "").strip()
 
         # python-markdown collapses consecutive > lines into a single <p>.
         # Body may live inside the first <p> (after the title line) AND/OR
@@ -276,10 +299,14 @@ def convert_blockquote_boxes(html_content: str) -> str:
         first_p_lines = first_p_inner.split("\n")
         body_from_first_p = "\n".join(first_p_lines[1:]).strip()
         if body_from_first_p:
-            # Convert list-like lines (- item) into <ul><li>
+            # Convert list-like lines (- item or - [ ] item) into <ul><li>
             list_lines = [l for l in body_from_first_p.split("\n") if l.strip()]
             if all(l.strip().startswith("- ") for l in list_lines):
-                items = "".join(f"<li>{l.strip()[2:]}</li>" for l in list_lines)
+                _li_prefix = re.compile(r"^-\s+(\[.\]\s+)?")
+                items = "".join(
+                    "<li>" + _li_prefix.sub("", l.strip()) + "</li>"
+                    for l in list_lines
+                )
                 body_from_first_p = f"<ul>{items}</ul>"
             else:
                 body_from_first_p = "<br/>".join(
@@ -334,7 +361,7 @@ def convert_blockquote_boxes(html_content: str) -> str:
             f'border-radius:0 14px 14px 0;padding:18px 20px;margin:30px 0;">\n'
             f'<div style="font-size:13px;font-weight:700;color:{style["title_color"]};'
             f'margin-bottom:10px;display:flex;align-items:center;gap:6px;">'
-            f'{emoji} {_esc(title_text)}</div>\n'
+            f'{(emoji + " ") if emoji else ""}{_esc(title_text)}</div>\n'
             f'<div style="font-size:14.5px;color:{style["text_color"]};line-height:2.0;">'
             f'{body_html}</div>\n'
             f'</div>'
@@ -1212,6 +1239,146 @@ def render_article(writer_md_path: Path, assembler_yaml_path: Path) -> str:
 
 
 # ---------------------------------------------------------------------------
+# 9. HTML Validation
+# ---------------------------------------------------------------------------
+
+logger = logging.getLogger(__name__)
+
+
+class _TagChecker(HTMLParser):
+    """Detect unclosed / mismatched tags using stdlib html.parser."""
+
+    # Tags that are self-closing (void elements) — no closing tag expected.
+    VOID_TAGS = frozenset({
+        "area", "base", "br", "col", "embed", "hr", "img", "input",
+        "link", "meta", "param", "source", "track", "wbr",
+    })
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.stack: list[tuple[str, int]] = []  # (tag, line)
+        self.errors: list[str] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag.lower() not in self.VOID_TAGS:
+            self.stack.append((tag.lower(), self.getpos()[0]))
+
+    def handle_endtag(self, tag: str) -> None:
+        tag_l = tag.lower()
+        if tag_l in self.VOID_TAGS:
+            return
+        # Walk the stack backwards to find a match
+        for i in range(len(self.stack) - 1, -1, -1):
+            if self.stack[i][0] == tag_l:
+                # Everything above this on the stack is unclosed
+                for j in range(len(self.stack) - 1, i, -1):
+                    unclosed_tag, unclosed_line = self.stack[j]
+                    self.errors.append(
+                        f"Unclosed <{unclosed_tag}> (opened near line {unclosed_line})"
+                    )
+                self.stack.pop(i)
+                # Remove the items we reported
+                self.stack = self.stack[:i] + self.stack[i:]
+                return
+        self.errors.append(f"Unexpected closing </{tag_l}> at line {self.getpos()[0]}")
+
+    def finish(self) -> list[str]:
+        for tag, line in self.stack:
+            self.errors.append(f"Unclosed <{tag}> (opened near line {line})")
+        return self.errors
+
+
+def validate_html(html_content: str) -> dict[str, Any]:
+    """Validate rendered HTML and auto-fix what we can.
+
+    Returns:
+        {"auto_fixed": [...], "warnings": [...], "clean_html": str}
+    """
+    auto_fixed: list[str] = []
+    warnings: list[str] = []
+    clean = html_content
+
+    # ------------------------------------------------------------------
+    # 1. Tag open/close check
+    # ------------------------------------------------------------------
+    checker = _TagChecker()
+    try:
+        checker.feed(html_content)
+        tag_errors = checker.finish()
+    except Exception:
+        tag_errors = []
+    for err in tag_errors:
+        warnings.append(f"[tag-mismatch] {err}")
+
+    # ------------------------------------------------------------------
+    # 2. Empty elements — remove empty <p>, <td>, <li>
+    # ------------------------------------------------------------------
+    _EMPTY_RE = re.compile(
+        r"<(p|td|li)(\s[^>]*)?>(\s|&nbsp;|&#160;)*</(p|td|li)>",
+        re.IGNORECASE,
+    )
+    while True:
+        match = _EMPTY_RE.search(clean)
+        if not match:
+            break
+        tag_name = match.group(1).lower()
+        auto_fixed.append(f"[empty-element] Removed empty <{tag_name}>: {match.group(0)[:80]}")
+        clean = clean[:match.start()] + clean[match.end():]
+
+    # ------------------------------------------------------------------
+    # 3. Internal anchor links — verify targets exist
+    # ------------------------------------------------------------------
+    href_re = re.compile(r'href="#([^"]+)"', re.IGNORECASE)
+    id_re = re.compile(r'\bid=["\']([^"\']+)["\']', re.IGNORECASE)
+
+    all_ids = {m.group(1) for m in id_re.finditer(clean)}
+    for m in href_re.finditer(clean):
+        target = m.group(1)
+        if target not in all_ids:
+            warnings.append(f"[broken-anchor] href=\"#{target}\" has no matching id in document")
+
+    # ------------------------------------------------------------------
+    # 4. Table column consistency
+    # ------------------------------------------------------------------
+    table_re = re.compile(r"<table[^>]*>(.*?)</table>", re.DOTALL | re.IGNORECASE)
+    row_re = re.compile(r"<tr[^>]*>(.*?)</tr>", re.DOTALL | re.IGNORECASE)
+    cell_re = re.compile(r"<(th|td)", re.IGNORECASE)
+
+    for table_match in table_re.finditer(clean):
+        table_html = table_match.group(1)
+        rows = row_re.findall(table_html)
+        if not rows:
+            continue
+        col_counts = [len(cell_re.findall(r)) for r in rows]
+        header_cols = col_counts[0] if col_counts else 0
+        for idx, cnt in enumerate(col_counts[1:], 2):
+            if cnt != header_cols:
+                # Extract a snippet for identification
+                snippet = table_match.group(0)[:60].replace("\n", " ")
+                warnings.append(
+                    f"[table-col-mismatch] Row {idx} has {cnt} cells, "
+                    f"header has {header_cols} (table: {snippet}...)"
+                )
+
+    # ------------------------------------------------------------------
+    # 5. contenteditable body must contain text
+    # ------------------------------------------------------------------
+    ce_re = re.compile(
+        r'<([a-z][a-z0-9]*)\s[^>]*contenteditable=["\']true["\'][^>]*>(.*?)</\1>',
+        re.DOTALL | re.IGNORECASE,
+    )
+    for m in ce_re.finditer(clean):
+        inner = re.sub(r"<[^>]+>", "", m.group(2))
+        if not inner.strip():
+            tag_name = m.group(1)
+            warnings.append(
+                f"[empty-contenteditable] <{tag_name} contenteditable=\"true\"> has no text content"
+            )
+
+    return {"auto_fixed": auto_fixed, "warnings": warnings, "clean_html": clean}
+
+
+# ---------------------------------------------------------------------------
 # CLI
 # ---------------------------------------------------------------------------
 
@@ -1242,6 +1409,15 @@ def main() -> None:
         sys.exit(1)
 
     html_content = render_article(args.writer_md, args.assembler_yaml)
+
+    # Validate and auto-fix
+    result = validate_html(html_content)
+    for fix in result["auto_fixed"]:
+        print(f"[auto-fix] {fix}", file=sys.stderr)
+    for warn in result["warnings"]:
+        print(f"[warning] {warn}", file=sys.stderr)
+    if result["auto_fixed"]:
+        html_content = result["clean_html"]
 
     output_path = args.output or _derive_output_path(args.writer_md)
     output_path.parent.mkdir(parents=True, exist_ok=True)
