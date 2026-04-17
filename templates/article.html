@@ -306,6 +306,9 @@ function copyCodeBlock(btn) {
 
 window.addEventListener('beforeunload', function(e) {
   if (status.className === 'modified') {
+    clearTimeout(saveTimer);
+    localStorage.setItem(STORAGE_KEY, content.innerHTML);
+    localStorage.setItem(VERSION_KEY, CURRENT_VERSION);
     e.preventDefault();
     e.returnValue = '';
   }
