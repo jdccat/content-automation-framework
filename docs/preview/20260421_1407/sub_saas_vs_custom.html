@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>이카운트로 될까, 맞춤 개발을 해야 할까</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+    font-size: 17px;
+    line-height: 2.0;
+    color: #1a1a1a;
+    background: #fff;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Toolbar (편집용) ── */
+  #toolbar {
+    position: fixed; top: 0; left: 0; right: 0;
+    background: #1E293B; color: #fff;
+    padding: 10px 20px;
+    display: flex; align-items: center; gap: 16px;
+    z-index: 9999; font-size: 14px;
+  }
+  #toolbar button {
+    background: #2477F3; color: #fff; border: none;
+    padding: 6px 16px; border-radius: 6px; cursor: pointer;
+    font-size: 13px; font-weight: 600;
+  }
+  #toolbar button:hover { background: #1B5FD1; }
+  #edit-status { color: #94A3B8; font-size: 12px; }
+  #edit-status.modified { color: #FBBF24; }
+
+  /* ── Layout ── */
+  .page-wrap {
+    max-width: 720px;
+    margin: 80px auto 80px;
+    padding: 0 20px;
+  }
+
+  /* ── Header ── */
+  .article-header { margin-bottom: 32px; }
+  .article-category {
+    font-size: 12px; font-weight: 600; color: #2477F3;
+    letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 12px;
+  }
+  h1 {
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 800; line-height: 1.35;
+    letter-spacing: -0.5px; color: #0d0d0d;
+    margin: 0 0 16px 0;
+  }
+  .article-meta { font-size: 13px; color: #999; }
+
+  /* ── Typography ── */
+  h2 {
+    font-size: 21px; font-weight: 700; color: #2477F3;
+    margin: 48px 0 16px 0; padding-bottom: 10px;
+    border-bottom: 2px solid #E5E7EB;
+    letter-spacing: -0.3px;
+  }
+  h3 {
+    font-size: 17px; font-weight: 700; color: #2477F3;
+    margin: 28px 0 10px 0;
+  }
+  p { margin: 0 0 30px 0; }
+  a { color: #2477F3; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  strong { font-weight: 700; }
+
+  /* ── Lists ── */
+  ul, ol { margin: 0 0 30px 0; padding-left: 22px; }
+  li { margin-bottom: 6px; line-height: 2.5; }
+  li::marker { color: #999; }
+
+  hr { border: none; border-top: 1px solid #e8e8e8; margin: 40px 0; }
+
+  /* ── GEO Table ── */
+  .tbl-wrap {
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    margin: 30px 0; border: 1px solid #e0e0e5;
+    border-radius: 12px; background: #fff;
+  }
+  table.geo {
+    width: 100%; border-collapse: collapse; border-spacing: 0;
+    font-size: 14.5px; line-height: 1.65; table-layout: fixed;
+  }
+  table.geo caption {
+    position: absolute; width: 1px; height: 1px;
+    overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap;
+  }
+  table.geo thead th {
+    padding: 12px 18px; font-size: 12.5px; font-weight: 700;
+    letter-spacing: 0.01em; text-align: left;
+    border-bottom: 1px solid #d1d1d9; background: #f6f6f9; vertical-align: bottom;
+  }
+  table.geo thead th:first-child { color: #82828e; border-right: 1px solid #d1d1d9; }
+  table.geo thead th:not(:first-child) { color: #1a1a23; }
+  table.geo tbody th[scope="row"] {
+    padding: 14px 18px; font-size: 14px; font-weight: 600; color: #1a1a23;
+    text-align: left; border-bottom: 1px solid #ececf0; border-right: 1px solid #ececf0;
+    background: #fff; vertical-align: top; word-break: keep-all;
+  }
+  table.geo tbody td {
+    padding: 14px 18px; color: #3a3a47;
+    border-bottom: 1px solid #ececf0; vertical-align: top; word-break: keep-all;
+  }
+  table.geo tbody tr:nth-child(even) td,
+  table.geo tbody tr:nth-child(even) th[scope="row"] { background: #f9f9fb; }
+  table.geo tbody tr:hover td,
+  table.geo tbody tr:hover th[scope="row"] { background: #f0f0f5; }
+  table.geo tfoot td {
+    padding: 9px 18px; font-size: 12px; color: #9ca3af;
+    border-top: 1px solid #ececf0; background: #f9f9fb;
+  }
+
+  /* ── TLDR (핵심 요약) ── */
+  .summary-box {
+    background: #F5F5F5;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 30px;
+  }
+  .summary-box p:first-child {
+    font-size: 13px; font-weight: 700; color: #1A1A1A;
+    margin-bottom: 8px; letter-spacing: 0.3px;
+  }
+  .summary-box p:not(:first-child) {
+    font-size: 15.5px; color: #1A1A1A; line-height: 1.75;
+  }
+  .summary-box p:last-child { margin-bottom: 0; }
+
+  /* ── FAQ ── */
+  .faq-list {
+    display: flex; flex-direction: column; gap: 0;
+    margin: 20px 0 24px; border: 1px solid #E5E7EB;
+    border-radius: 14px; overflow: hidden;
+  }
+  .faq-item { border-bottom: 1px solid #ebebeb; background: #fff; }
+  .faq-item:last-child { border-bottom: none; }
+  .faq-q {
+    font-size: 15px; font-weight: 700; color: #0d0d0d;
+    padding: 18px 20px 8px; display: flex; gap: 10px;
+  }
+  .faq-q .q-mark { color: #2477F3; font-weight: 800; font-size: 16px; flex-shrink: 0; }
+  .faq-a {
+    font-size: 14.5px; color: #444; line-height: 1.75;
+    padding: 0 20px 18px 44px;
+  }
+
+  /* ── Related ── */
+  .related-section { margin: 32px 0; }
+  .related-section h3 { font-size: 16px; font-weight: 700; margin-bottom: 12px; }
+  .related-section ul { list-style: none; padding: 0; }
+  .related-section li {
+    padding: 10px 0; border-bottom: 1px solid #f0f0f0;
+  }
+  .related-section li:last-child { border-bottom: none; }
+  .related-section a { font-size: 15px; font-weight: 500; }
+
+  /* ── Image guide box ── */
+  .image-guide, table.guide-box {
+    background: #FAFAFA; border: 2px solid #E5E7EB;
+    border-radius: 12px; padding: 16px 24px; margin: 30px -20px;
+  }
+
+  /* ── CMS meta area ── */
+  .cms-meta-area { background: #f9fafb; border-radius: 12px; padding: 20px; margin-top: 40px; }
+
+  /* ── Contenteditable ── */
+  [contenteditable="true"]:focus { outline: 2px solid #2477F3; outline-offset: 2px; border-radius: 4px; }
+  [contenteditable="true"]:hover { outline: 1px dashed #CBD5E1; outline-offset: 2px; border-radius: 4px; }
+  [contenteditable="true"]:focus:hover { outline: 2px solid #2477F3; outline-offset: 2px; }
+
+  /* ── Responsive ── */
+  @media (max-width: 640px) {
+    .page-wrap { padding: 0 16px; margin-top: 60px; }
+    h1 { font-size: 22px; }
+    h2 { font-size: 19px; }
+    table.geo { table-layout: auto; }
+    table.geo thead th, table.geo tbody th[scope="row"], table.geo tbody td {
+      padding: 11px 14px; font-size: 13px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- toolbar -->
+<div id="toolbar">
+  <button id="copy-btn" onclick="copyContent()">본문 복사</button>
+  <span id="edit-status">저장됨</span>
+</div>
+
+<div class="page-wrap">
+
+  <div class="article-header">
+    <h1 contenteditable="true">이카운트로 될까, 맞춤 개발을 해야 할까</h1>
+    <div class="article-meta"><time datetime="2026-04-21">2026-04-21</time></div>
+  </div>
+
+  <div id="cms-content" contenteditable="true" style="outline:none;">
+
+  <div class="summary-box">
+<p>💡 핵심 요약</p>
+<p>기성 ERP가 맞는지, 맞춤 개발이 필요한지는 &#x27;업무가 표준화돼 있느냐&#x27;는 막연한 기준으로는 판단하기 어렵습니다. 이카운트·더존 같은 SaaS ERP 데모를 열어서 우리가 매일 쓰는 핵심 업무가 기본 기능으로 돌아가는지 직접 확인하는 것이 가장 빠른 판별법입니다. 기본 기능으로는 안 되는 항목이 있을 때, 그 항목이 없으면 업무 자체가 막히는 것인지 있으면 좋은 것인지를 나눠보면 맞춤 개발로 넘어가야 할 경계선이 보입니다. 그 경계에서도 결론이 모호하다면, 기성을 중심에 두고 꼭 필요한 부분만 맞춤으로 붙이는 하이브리드 구성이 현실적인 세 번째 선택지입니다.</p>
+</div>
+
+  <p>ERP 자료를 찾다 보면 이런 말이 반복해 나옵니다. "업무가 표준화돼 있으면 기성 솔루션, 고유 업무가 많으면 맞춤 개발이 맞습니다." 맞는 말이긴 한데, 막상 우리 회사 업무에 대입해 보면 답이 잘 안 나옵니다. 재고·회계는 표준에 가까운 것 같고, 거래처 관리나 생산 스케줄링은 우리만의 방식이 있는 것 같고. 이 상태로 대표에게 기성 솔루션이 맞다고 단언할 근거가 없죠.</p>
+<p>표준이냐 고유냐라는 프레임은 개념으로는 맞지만 판단 기준으로는 너무 추상적입니다. 실제로 담당자가 근거 있게 보고하려면, 표준이라는 단어를 몇 가지 구체적 신호로 바꿔 볼 필요가 있습니다. 그 신호는 생각보다 단순합니다. 데모를 보고, 경계선을 확인하고, 섞어 쓰는 방식이 가능한지 점검하는 것. 이 글은 그 순서를 따라갑니다.</p>
+<h2 id="기성-솔루션에-맞는-회사는-어떤-신호를-보이나요">기성 솔루션에 맞는 회사는 어떤 신호를 보이나요?</h2>
+<p>우리 업무가 표준화돼 있는지를 고민하는 대신, 기성 SaaS ERP 데모를 직접 열어보고 우리 일상 업무가 기본 기능으로 돌아가는지 확인하면 기성으로 가도 되는지가 빠르게 판별됩니다. <a href="https://blog.wishket.com/blog/erp-program-korea-market-guide">중견·중소기업 ERP 프로그램 비교 가이드 2026</a>을 보면 이카운트, 더존, 영림원 같은 주요 SaaS ERP는 데모 영상이나 체험 계정을 제공합니다. 30분만 투자하면 됩니다.</p>
+<p>데모를 볼 때 체크할 항목은 제품 기능 전체가 아닙니다. <strong>우리 회사가 매일 쓰는 핵심 업무</strong>가 기본 설정 안에서 돌아가는지만 보면 됩니다.</p>
+<div style="background:#F0F6FF;border-left:3px solid #2E6BAA;border-radius:0 14px 14px 0;padding:18px 20px;margin:30px 0;">
+<div style="font-size:13px;font-weight:700;color:#1A1A1A;margin-bottom:10px;display:flex;align-items:center;gap:6px;">✅ 기성 ERP 데모에서 확인할 5가지</div>
+<div style="font-size:14.5px;color:#1A1A1A;line-height:2.0;"><ul><li>재고 입출고가 우리 창고·품목 체계로 설정 가능한가</li><li>회계·세무 기능이 우리 세무사 보고 양식과 연결 가능한가</li><li>급여·인사 기능이 우리 급여 규정(상여·수당 계산 방식)을 반영할 수 있는가</li><li>거래처·영업 관리가 우리 영업 프로세스(견적→수주→매출)와 순서가 맞는가</li><li>사용자 권한을 우리 부서 구조에 맞게 나눌 수 있는가</li></ul></div>
+</div>
+<p>위 다섯 가지가 기본 기능 설정으로 돌아간다면 기성 솔루션이 출발점입니다. 처음부터 맞춤 개발을 검토할 필요가 없습니다. 이 확인 없이 '우리 업무는 고유하다'는 인상만으로 맞춤 개발 견적을 받으러 가는 회사가 의외로 많거든요. 위시켓에 들어오는 ERP 구축 문의 중에도, 매니저와 첫 상담에서 데모만 열어봐도 됐겠다는 결론이 나오는 경우가 적지 않습니다.</p>
+<p>반대로 두세 가지 이상에서 우리 업무는 이 구조로는 안 된다는 결론이 나오면 다음 질문으로 넘어갑니다. 어디까지가 기성으로 커버되고, 어디부터가 맞춤인지를 나눠야 할 차례죠.</p>
+<h2 id="맞춤-개발로-넘어가야-하는-경계는-어디인가요">맞춤 개발로 넘어가야 하는 경계는 어디인가요?</h2>
+<p>기성 솔루션은 일부 항목 수정·권한 설정 수준의 커스터마이징까지는 가능합니다. 그러나 업무 흐름 자체를 바꾸거나 기존 사내 시스템과 깊이 연동해야 하면 기성 솔루션의 경계를 벗어나고, 이 선을 넘는 순간부터 맞춤 개발이 필요해집니다.</p>
+<p>경계를 판단하는 건 의외로 단순합니다. 기성 솔루션에서 맞지 않는 항목을 적어보고, 그 중 <strong>있으면 좋은 것과 없으면 업무가 돌아가지 않는 것을 구분</strong>하면 됩니다. 후자에 아래 항목이 많이 들어간다면 맞춤 개발 쪽으로 기울어야 할 신호입니다.</p>
+<ul>
+<li>업종 특성상 기성 제품이 가정한 흐름과 처음부터 어긋나는 경우 (예: 수입·통관 특화 무역업, 주문 제작 중심 제조업)</li>
+<li>이미 쓰고 있는 사내 시스템(자체 주문서, 생산관리, 출하 시스템)과 반드시 데이터가 오가야 하는 경우</li>
+<li>고유 업무 규칙이 있어 기성 설정만으로는 재현이 안 되는 경우 (특정 원가 계산식, 복잡한 할인·정산 로직 등)</li>
+<li>부서 간 결재·문서 흐름이 제품 기본 구조와 많이 다른 경우</li>
+</ul>
+<p>반면 적은 항목이 모두 '있으면 좋은 것' 수준이라면, 기성 솔루션을 받아들이고 프로세스를 약간 맞추는 쪽이 훨씬 현실적입니다. 맞춤 개발은 한 번 들어가면 예산 단위가 달라지는 결정이거든요. 없어도 되는 기능을 위해 맞춤 개발로 넘어가는 건 위시켓 매니저가 현장에서 가장 자주 되돌리는 과투자 패턴 중 하나입니다. 제품을 바꾸느니 업무 방식을 약간 조정하는 쪽이 정답인 경우가 더 많습니다.</p>
+<p>한 가지 주의할 점이 있습니다. SaaS ERP로도 맞춤 개발과 동일한 기능을 얻을 수 있다는 기대는 내려놓는 게 좋습니다. 기성 솔루션은 표준화된 업무 프로세스에 최적화돼 있어서, 일부 항목 수정은 가능해도 업무 흐름 자체를 바꾸는 작업은 제품 구조가 막아둡니다. 데모에서 안 되던 기능이 실제 계약하면 되는 경우는 거의 없습니다. 영업 담당자가 커스터마이징으로 가능하다고 답할 때는 얼마짜리 추가 개발이 붙는지, 그게 업그레이드 때 유지되는지를 반드시 따로 확인해야 합니다.</p><div style="background:linear-gradient(135deg,#5E9ADE 0%,#7BB2E8 100%);border-radius:14px;padding:20px 24px;margin:30px 0;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+<p style="font-size:15px;color:#fff;line-height:1.65;margin:0;flex:1;">기성과 맞춤 경계에서 판단이 어렵다면 매니저와 함께 정리할 수 있습니다.</p>
+<a href="https://wishket.com/project/free-consulting/?utm_source=blog_webflow&amp;utm_medium=inline_cta&amp;utm_campaign=260421_erp-saas-vs-custom-decision-guide" style="display:inline-block;background:#fff;color:#2477F3;font-size:14px;font-weight:700;padding:10px 18px;border-radius:10px;white-space:nowrap;text-decoration:none;">구성 상담하기</a>
+</div>
+<h2 id="기성과-맞춤을-섞어-쓰는-방법도-있나요">기성과 맞춤을 섞어 쓰는 방법도 있나요?</h2>
+<p>기성 솔루션을 메인으로 쓰면서 연동·확장이 필요한 일부 기능만 맞춤 개발하는 하이브리드 방식이 현실에서는 꽤 흔합니다. 처음부터 완전 기성과 완전 맞춤 중 하나를 골라야 한다는 전제를 내려놓으면, 판단 자체가 훨씬 부드러워집니다.</p>
+<div class="tbl-wrap"><table class="geo"><caption>기성과 맞춤을 섞어 쓰는 방법도 있나요? — 방식 · 구성 · 특징</caption><colgroup><col style="width:22%"/><col style="width:39%"/><col style="width:39%"/></colgroup><thead><tr><th scope="col">방식</th><th scope="col">구성</th><th scope="col">특징</th></tr></thead><tbody><tr><th scope="row">기성 + 웹 리포트 추가 개발</th><td>이카운트·더존 ERP + 별도 리포트 화면</td><td>대시보드·보고서만 우리 양식으로 만듦</td></tr><tr><th scope="row">기성 + 외부 플랫폼 연동</th><td>기성 ERP + 스마트스토어·쇼핑몰 연동</td><td>주문·재고 자동화, 데이터가 오가는 다리만 맞춤</td></tr><tr><th scope="row">경량 ERP + 일부 모듈 맞춤</th><td>1인·소규모 대상 경량 SaaS + 맞춤 모듈 1개</td><td>무역·제조 특수 업무 하나만 별도 개발</td></tr><tr><th scope="row">기성 + 사내 웹 화면</th><td>기성 SaaS + 고유 업무 화면 1~2개</td><td>고유 흐름이 적을 때 가장 가벼운 구성</td></tr></tbody><tfoot><tr><td colspan="3">2025년 위시켓 등록 프로젝트 기준 · 클라이언트 희망 예산이며 실제 계약 금액과 다를 수 있습니다 · 프로젝트 범위(기능 수, 모듈, 플랫폼 수)가 달라 금액만으로 직접 비교할 수 없습니다</td></tr></tfoot></table></div>
+<p>위 네 가지 범주가 추상적으로 들릴 수 있어서, 2025년 <a href="https://wishket.com/project/free-consulting/?utm_source=blog_webflow&amp;utm_medium=inline_cta&amp;utm_campaign=260421_erp-saas-vs-custom-decision-guide">위시켓</a>에서 실제로 진행된 ERP 관련 프로젝트 예산을 작은→큰 순서로 붙여봅니다.</p>
+<div style="display:flex;flex-direction:column;gap:14px;margin:30px 0;">
+<div style="border:1px solid #E5E7EB;border-radius:14px;padding:18px 20px;background:#fff;">
+<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;">
+<span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;background:#e8f5e9;color:#2e7d32;">저가 사례</span>
+<span style="font-size:15.5px;font-weight:700;color:#0d0d0d;line-height:1.4;">기존 ERP 데이터 연동 웹 리포트 생성 및 인쇄 기능 개발</span>
+</div>
+<div style="font-size:20px;font-weight:800;color:#2477F3;margin-bottom:4px;">500만 원</div>
+<div style="font-size:12.5px;color:#999;margin-bottom:10px;">웹 · 20일 · 연동+리포트 개발</div>
+<div style="font-size:14.5px;color:#444;line-height:2.0;">기성 ERP를 그대로 두고, 리포트 화면만 우리 양식에 맞춰 붙인 구성.</div>
+</div>
+<div style="border:1px solid #E5E7EB;border-radius:14px;padding:18px 20px;background:#fff;">
+<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;">
+<span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;background:#e3f2fd;color:#1565c0;">중가 사례</span>
+<span style="font-size:15.5px;font-weight:700;color:#0d0d0d;line-height:1.4;">스마트스토어-ERP 연동 재고관리 자동화 개발</span>
+</div>
+<div style="font-size:20px;font-weight:800;color:#2477F3;margin-bottom:4px;">1,000만 원</div>
+<div style="font-size:12.5px;color:#999;margin-bottom:10px;">웹 · 30일 · 외부 플랫폼 연동</div>
+<div style="font-size:14.5px;color:#444;line-height:2.0;">기성 ERP와 스마트스토어 사이에 주문·재고 데이터가 오가는 다리만 맞춤 개발.</div>
+</div>
+<div style="border:1px solid #E5E7EB;border-radius:14px;padding:18px 20px;background:#fff;">
+<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;">
+<span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;background:#fce4ec;color:#c62828;">고가 사례</span>
+<span style="font-size:15.5px;font-weight:700;color:#0d0d0d;line-height:1.4;">1인 무역 실무자를 위한 맞춤형 경량 ERP 개발</span>
+</div>
+<div style="font-size:20px;font-weight:800;color:#2477F3;margin-bottom:4px;">2,000만 원</div>
+<div style="font-size:12.5px;color:#999;margin-bottom:10px;">웹 · 90일 · 경량 맞춤 구축</div>
+<div style="font-size:14.5px;color:#444;line-height:2.0;">수입·통관 업무 특성상 기성이 맞지 않아, 꼭 필요한 모듈만 좁혀 경량으로 구축.</div>
+</div>
+</div>
+<p>세 사례 모두 전체 업무를 맞춤으로 새로 만들지 않습니다. 기성을 중심에 두거나, 한두 지점만 맞춤으로 붙이는 구조입니다. 수천만 원~수억 원 규모의 전면 맞춤 구축과 비교하면 진입 부담이 훨씬 작죠. 범위가 좁아지면 기간도, 실패 리스크도 같이 내려갑니다. 사례별 예산은 발주사가 제시한 예산이라 파트너 견적에 따라 달라질 수 있지만, 범위감 자체는 감을 잡는 기준점이 됩니다.</p>
+<p>그래서 기성이냐 맞춤이냐를 묻는 대신, <strong>어디까지 기성으로 가고 어디부터 맞춤으로 갈 것인가</strong>를 물어야 판단이 현실에 가까워집니다. 대부분의 중소·중견기업 ERP 프로젝트는 이 지점에서 방향이 결정된다고 봐도 큰 무리가 없습니다. 대표에게 수천만 원짜리 결정을 보고하기 전에, 섞어 쓰는 구성이 가능한지부터 한 번 검토해 보세요.</p>
+<p>이 단계에서 판단이 어렵다면 <a href="https://wishket.com/project/free-consulting/?utm_source=blog_webflow&amp;utm_medium=inline_cta&amp;utm_campaign=260421_erp-saas-vs-custom-decision-guide">위시켓</a> 매니저가 비슷한 규모의 사례와 우리 상황을 대조해 구성을 함께 잡아주기도 합니다. 프로젝트 등록과 매니저 상담은 무료이며, 계약 체결 전까지는 비용이 발생하지 않습니다.</p>
+
+  <div style="background:linear-gradient(135deg,#5E9ADE 0%,#7BB2E8 100%);border-radius:16px;padding:32px 30px;color:#fff;margin:40px 0 0;">
+<div style="font-size:12px;font-weight:600;letter-spacing:0.8px;opacity:0.75;margin-bottom:10px;text-transform:uppercase;">다음 단계</div>
+<h3 style="font-size:20px;font-weight:800;line-height:1.45;margin-bottom:20px;color:#fff;letter-spacing:-0.3px;">기성이냐 맞춤이냐보다, 어디까지 기성으로 갈 것인지가 핵심입니다</h3>
+<div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;"><div style="background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px;font-size:14.5px;line-height:1.65;"><span style="font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;">맞춤 개발이 필요해 보이는데 비용·기간 기준이 없다면</span>위시켓 매니저가 비슷한 규모의 실제 사례와 우리 상황을 대조해 구성을 함께 잡아드립니다. 프로젝트 등록과 상담은 무료입니다.</div>
+<div style="background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px;font-size:14.5px;line-height:1.65;"><span style="font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;">기성과 맞춤을 섞는 구성이 가능한지 확인하고 싶다면</span>매니저 상담에서 우리 업무 흐름에 맞는 하이브리드 구성 방향을 파트너 연결 전에 먼저 정리해드립니다.</div></div><div style="text-align:center;"><a href="https://wishket.com/project/free-consulting/?utm_source=blog_webflow&amp;utm_medium=cta_banner&amp;utm_campaign=260421_erp-saas-vs-custom-decision-guide" style="display:inline-block;background:#fff;color:#2477F3;font-size:15px;font-weight:800;padding:13px 28px;border-radius:10px;text-decoration:none;">매니저와 정리하기</a></div>
+</div>
+
+  <div class="related-section">
+  <h3>함께 읽으면 좋은 콘텐츠</h3>
+<ul>
+  <li><a href="https://blog.wishket.com/blog/erp-program-korea-market-guide">중견·중소기업 ERP 프로그램 비교 가이드 2026</a></li>
+  <li><a href="https://blog.wishket.com/blog/erp-program-vs-custom-build">ERP 프로그램 VS 자체 개발, 장단점 비교 총정리</a></li>
+  <li><a href="https://blog.wishket.com/blog/erp-development-guide">실무자를 위한 단계별 ERP 개발 가이드 2025</a></li>
+</ul>
+  </div>
+
+  </div>
+
+  <h2>자주 묻는 질문</h2>
+<div class="faq-list">
+<div class="faq-item">
+  <div class="faq-q"><span class="q-mark">Q.</span>기성 ERP 도입 후 맞춤 기능이 필요해지면 어떻게 해야 하나요?</div>
+  <div class="faq-a">기성 SaaS ERP는 계약 후에도 커스터마이징 추가 개발이 가능한 경우가 있지만, 업그레이드 시점에 해당 기능이 유지되는지 반드시 확인해야 합니다. 영업 담당자가 &#x27;가능하다&#x27;고 답해도 추가 비용이 붙거나, 버전 업데이트 때 기능이 초기화되는 사례가 있습니다. 처음부터 확장 가능성이 있다고 판단하면 기성 솔루션보다 API 연동이 가능한 경량 ERP를 기반으로 잡는 쪽이 나중 부담이 적습니다.</div>
+</div>
+<div class="faq-item">
+  <div class="faq-q"><span class="q-mark">Q.</span>ERP 도입 후 유지보수 비용은 얼마나 생각해야 하나요?</div>
+  <div class="faq-a">기성 SaaS ERP는 월 구독료에 유지보수가 포함되어 있어 별도 비용이 없지만, 맞춤 개발 ERP는 런칭 후 유지보수가 별도 계약·유상으로 이뤄집니다. 하자보수(계약 기간 내 개발사 귀책 버그 수정)와 유지보수(기능 추가·OS 업데이트 대응)는 다른 개념이므로 혼동하면 분쟁이 생깁니다. 맞춤 개발 ERP의 유지보수 연간 비용은 구축 비용의 10~20% 수준으로 예산을 잡아두는 것이 일반적입니다.</div>
+</div>
+<div class="faq-item">
+  <div class="faq-q"><span class="q-mark">Q.</span>기성 ERP와 맞춤 개발 ERP를 섞어 쓸 때 실제로 가장 많이 선택하는 구성은 무엇인가요?</div>
+  <div class="faq-a">위시켓에서 진행된 사례를 보면 기성 ERP를 그대로 두고 리포트·대시보드 화면만 별도로 개발하거나, 스마트스토어·쇼핑몰 주문 데이터와 ERP 사이에 연동 다리를 맞춤 개발하는 구성이 가장 많습니다. 예산 부담이 작고 기성 솔루션의 안정성을 유지하면서 우리 회사에 맞는 기능을 추가할 수 있어, 처음부터 전체 맞춤 개발로 가는 것보다 리스크가 낮습니다.</div>
+</div>
+<div class="faq-item">
+  <div class="faq-q"><span class="q-mark">Q.</span>맞춤 ERP 개발 프로젝트에서 기간이 예상보다 길어지는 주된 이유는 무엇인가요?</div>
+  <div class="faq-a">ERP 프로젝트 기간이 늘어나는 가장 큰 원인은 요구사항 변경과 데이터 마이그레이션 범위입니다. 기존 엑셀·레거시 시스템의 데이터를 새 ERP로 옮기는 작업이 기본 견적에 포함되지 않는 경우가 많고, 개발 중간에 부서별 추가 요청이 생기면 범위가 늘어납니다. 처음 견적 단계에서 &#x27;없으면 업무가 안 되는 기능&#x27;만으로 범위를 좁히고 데이터 이전 범위를 명확히 하면 기간 초과를 줄일 수 있습니다.</div>
+</div>
+</div>
+
+  <div class="cms-meta-area">
+    <h3 style="font-size:16px; font-weight:700; margin:0 0 16px 0; color:#666;">CMS 입력 필드</h3>
+    <table style="width:100%;border-collapse:collapse;margin:16px 0;">
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">써머리</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">기성 ERP와 맞춤 개발, 우리 회사는 어느 쪽인지 판단하는 실무 신호</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">slug</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">erp-saas-vs-custom-decision-guide</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">날짜</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">2026-04-21</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">카테고리</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">IT 아웃소싱</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">태그</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">ERP</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">메타 디스크립션</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">기성 ERP와 맞춤 개발 중 어느 쪽이 맞는지, 데모 확인부터 맞춤 개발 경계선까지 실무 판단 기준을 단계별로 정리했습니다. 하이브리드 구성 사례도 포함합니다.</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">Author</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">박민재 / 운영팀 리드 — 위시켓 운영팀 리드 박민재입니다. 기업과 IT 전문가의 최적 매칭을 설계합니다.</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">TLDR</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">기성 ERP가 맞는지, 맞춤 개발이 필요한지는 &#x27;업무가 표준화돼 있느냐&#x27;는 막연한 기준으로는 판단하기 어렵습니다. 이카운트·더존 같은 SaaS ERP 데모를 열어서 우리가 매일 쓰는 핵심 업무가 기본 기능으로 돌아가는지 직접 확인하는 것이 가장 빠른 판별법입니다. 기본 기능으로는 안 되는 항목이 있을 때, 그 항목이 없으면 업무 자체가 막히는 것인지 있으면 좋은 것인지를 나눠보면 맞춤 개발로 넘어가야 할 경계선이 보입니다. 그 경계에서도 결론이 모호하다면, 기성을 중심에 두고 꼭 필요한 부분만 맞춤으로 붙이는 하이브리드 구성이 현실적인 세 번째 선택지입니다.
+</td>
+</tr>
+</table>
+  </div>
+
+  <table class="guide-box" style="width:100%;border:1px solid #D1D5DB;border-collapse:collapse;margin:20px 0;">
+<tr><td style="background:#F9FAFB;padding:16px 20px;border:1px solid #D1D5DB;">
+<p style="margin:0 0 10px 0;font-weight:700;font-size:16px;">🖼 썸네일 제작 가이드</p>
+<p style="margin:0 0 4px 0;"><b>스타일:</b> 단색 배경 + 텍스트</p>
+<p style="margin:0 0 4px 0;"><b>배경색:</b> #1A3C6E</p>
+<p style="margin:0 0 4px 0;"><b>제목 텍스트:</b></p>
+<p style="margin:0 0 4px 0;">　1줄: 이카운트로 될까,</p>
+<p style="margin:0 0 4px 0;">　2줄: 맞춤 개발을 해야 할까</p>
+<p style="margin:0 0 4px 0;"><b>장식 요소:</b> 체크리스트 아이콘 + 분기 화살표</p>
+<p style="margin:0;"><b>로고:</b> wishket 로고 좌상단</p>
+</td></tr>
+</table>
+
+  <h3 style="font-size:18px;font-weight:600;margin:32px 0 12px 0;">Embed 코드 (붙여넣기용)</h3>
+<div style="margin:16px 0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:14px;font-weight:600;color:#374151;">기성과 맞춤을 섞어 쓰는 방법도 있나요? — 방식 · 구성 · 특징</span><button onclick="copyCodeBlock(this)" style="background:#2477F3;color:#fff;border:none;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">복사</button></div><pre style="background:#1E293B;color:#E2E8F0;padding:12px;border-radius:8px;overflow-x:auto;font-size:11px;line-height:1.4;white-space:pre-wrap;max-height:200px;overflow-y:auto;">&lt;style&gt;
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:1.5rem 0;border:1px solid #E5E7EB;border-radius:12px;background:#fff}
+table.geo{width:100%;border-collapse:collapse;border-spacing:0;font-size:14px;line-height:1.6;table-layout:fixed}
+table.geo caption{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+table.geo thead th{padding:12px 18px;font-size:12.5px;font-weight:700;letter-spacing:.01em;text-align:left;border-bottom:1px solid #D1D1D9;background:#F6F6F9;vertical-align:bottom}
+table.geo thead th:first-child{color:#82828E;border-right:1px solid #D1D1D9}
+table.geo thead th:not(:first-child){color:#1A1A23}
+table.geo tbody th[scope=row]{padding:14px 18px;font-size:14px;font-weight:600;color:#1A1A23;text-align:left;border-bottom:1px solid #ECECF0;border-right:1px solid #ECECF0;background:#fff;vertical-align:top;word-break:keep-all}
+table.geo tbody td{padding:14px 18px;color:#3A3A47;border-bottom:1px solid #ECECF0;vertical-align:top;word-break:keep-all}
+table.geo tbody tr:nth-child(even) td,table.geo tbody tr:nth-child(even) th[scope=row]{background:#F9F9FB}
+table.geo tbody tr:hover td,table.geo tbody tr:hover th[scope=row]{background:#F0F0F5}
+table.geo tfoot td{padding:9px 18px;font-size:12px;color:#9CA3AF;border-top:1px solid #ECECF0;background:#F9F9FB}
+table.geo tfoot time{font-weight:500}
+@media(max-width:640px){table.geo{table-layout:auto}table.geo thead th,table.geo tbody th[scope=row],table.geo tbody td{padding:11px 14px;font-size:13px}table.geo tfoot td{padding:8px 14px}}
+&lt;/style&gt;
+&lt;div class=&quot;tbl-wrap&quot;&gt;&lt;table class=&quot;geo&quot;&gt;&lt;caption&gt;기성과 맞춤을 섞어 쓰는 방법도 있나요? — 방식 · 구성 · 특징&lt;/caption&gt;&lt;colgroup&gt;&lt;col style=&quot;width:22%&quot;/&gt;&lt;col style=&quot;width:39%&quot;/&gt;&lt;col style=&quot;width:39%&quot;/&gt;&lt;/colgroup&gt;&lt;thead&gt;&lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;방식&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;구성&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;특징&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;기성 + 웹 리포트 추가 개발&lt;/th&gt;&lt;td&gt;이카운트·더존 ERP + 별도 리포트 화면&lt;/td&gt;&lt;td&gt;대시보드·보고서만 우리 양식으로 만듦&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;기성 + 외부 플랫폼 연동&lt;/th&gt;&lt;td&gt;기성 ERP + 스마트스토어·쇼핑몰 연동&lt;/td&gt;&lt;td&gt;주문·재고 자동화, 데이터가 오가는 다리만 맞춤&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;경량 ERP + 일부 모듈 맞춤&lt;/th&gt;&lt;td&gt;1인·소규모 대상 경량 SaaS + 맞춤 모듈 1개&lt;/td&gt;&lt;td&gt;무역·제조 특수 업무 하나만 별도 개발&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;기성 + 사내 웹 화면&lt;/th&gt;&lt;td&gt;기성 SaaS + 고유 업무 화면 1~2개&lt;/td&gt;&lt;td&gt;고유 흐름이 적을 때 가장 가벼운 구성&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;tfoot&gt;&lt;tr&gt;&lt;td colspan=&quot;3&quot;&gt;2025년 위시켓 등록 프로젝트 기준 · 클라이언트 희망 예산이며 실제 계약 금액과 다를 수 있습니다 · 프로젝트 범위(기능 수, 모듈, 플랫폼 수)가 달라 금액만으로 직접 비교할 수 없습니다&lt;/td&gt;&lt;/tr&gt;&lt;/tfoot&gt;&lt;/table&gt;&lt;/div&gt;</pre></div>
+<div style="margin:16px 0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:14px;font-weight:600;color:#374151;">사례: 기존 ERP 데이터 연동 웹 리포트 생성 및 인쇄 기능 개발</span><button onclick="copyCodeBlock(this)" style="background:#2477F3;color:#fff;border:none;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">복사</button></div><pre style="background:#1E293B;color:#E2E8F0;padding:12px;border-radius:8px;overflow-x:auto;font-size:11px;line-height:1.4;white-space:pre-wrap;max-height:200px;overflow-y:auto;">&lt;div style=&quot;border:1px solid #E5E7EB;border-radius:14px;padding:18px 20px;background:#fff;&quot;&gt;
+&lt;div style=&quot;display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;&quot;&gt;
+&lt;span style=&quot;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;background:#e8f5e9;color:#2e7d32;&quot;&gt;저가 사례&lt;/span&gt;
+&lt;span style=&quot;font-size:15.5px;font-weight:700;color:#0d0d0d;line-height:1.4;&quot;&gt;기존 ERP 데이터 연동 웹 리포트 생성 및 인쇄 기능 개발&lt;/span&gt;
+&lt;/div&gt;
+&lt;div style=&quot;font-size:20px;font-weight:800;color:#2477F3;margin-bottom:4px;&quot;&gt;500만 원&lt;/div&gt;
+&lt;div style=&quot;font-size:12.5px;color:#999;margin-bottom:10px;&quot;&gt;웹 · 20일 · 연동+리포트 개발&lt;/div&gt;
+&lt;div style=&quot;font-size:14.5px;color:#444;line-height:2.0;&quot;&gt;기성 ERP를 그대로 두고, 리포트 화면만 우리 양식에 맞춰 붙인 구성.&lt;/div&gt;
+&lt;/div&gt;</pre></div>
+<div style="margin:16px 0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:14px;font-weight:600;color:#374151;">사례: 스마트스토어-ERP 연동 재고관리 자동화 개발</span><button onclick="copyCodeBlock(this)" style="background:#2477F3;color:#fff;border:none;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">복사</button></div><pre style="background:#1E293B;color:#E2E8F0;padding:12px;border-radius:8px;overflow-x:auto;font-size:11px;line-height:1.4;white-space:pre-wrap;max-height:200px;overflow-y:auto;">&lt;div style=&quot;border:1px solid #E5E7EB;border-radius:14px;padding:18px 20px;background:#fff;&quot;&gt;
+&lt;div style=&quot;display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;&quot;&gt;
+&lt;span style=&quot;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;background:#e3f2fd;color:#1565c0;&quot;&gt;중가 사례&lt;/span&gt;
+&lt;span style=&quot;font-size:15.5px;font-weight:700;color:#0d0d0d;line-height:1.4;&quot;&gt;스마트스토어-ERP 연동 재고관리 자동화 개발&lt;/span&gt;
+&lt;/div&gt;
+&lt;div style=&quot;font-size:20px;font-weight:800;color:#2477F3;margin-bottom:4px;&quot;&gt;1,000만 원&lt;/div&gt;
+&lt;div style=&quot;font-size:12.5px;color:#999;margin-bottom:10px;&quot;&gt;웹 · 30일 · 외부 플랫폼 연동&lt;/div&gt;
+&lt;div style=&quot;font-size:14.5px;color:#444;line-height:2.0;&quot;&gt;기성 ERP와 스마트스토어 사이에 주문·재고 데이터가 오가는 다리만 맞춤 개발.&lt;/div&gt;
+&lt;/div&gt;</pre></div>
+<div style="margin:16px 0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:14px;font-weight:600;color:#374151;">사례: 1인 무역 실무자를 위한 맞춤형 경량 ERP 개발</span><button onclick="copyCodeBlock(this)" style="background:#2477F3;color:#fff;border:none;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">복사</button></div><pre style="background:#1E293B;color:#E2E8F0;padding:12px;border-radius:8px;overflow-x:auto;font-size:11px;line-height:1.4;white-space:pre-wrap;max-height:200px;overflow-y:auto;">&lt;div style=&quot;border:1px solid #E5E7EB;border-radius:14px;padding:18px 20px;background:#fff;&quot;&gt;
+&lt;div style=&quot;display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;&quot;&gt;
+&lt;span style=&quot;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;background:#fce4ec;color:#c62828;&quot;&gt;고가 사례&lt;/span&gt;
+&lt;span style=&quot;font-size:15.5px;font-weight:700;color:#0d0d0d;line-height:1.4;&quot;&gt;1인 무역 실무자를 위한 맞춤형 경량 ERP 개발&lt;/span&gt;
+&lt;/div&gt;
+&lt;div style=&quot;font-size:20px;font-weight:800;color:#2477F3;margin-bottom:4px;&quot;&gt;2,000만 원&lt;/div&gt;
+&lt;div style=&quot;font-size:12.5px;color:#999;margin-bottom:10px;&quot;&gt;웹 · 90일 · 경량 맞춤 구축&lt;/div&gt;
+&lt;div style=&quot;font-size:14.5px;color:#444;line-height:2.0;&quot;&gt;수입·통관 업무 특성상 기성이 맞지 않아, 꼭 필요한 모듈만 좁혀 경량으로 구축.&lt;/div&gt;
+&lt;/div&gt;</pre></div>
+<div style="margin:16px 0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:14px;font-weight:600;color:#374151;">인라인 CTA: 기성과 맞춤 경계에서 판단이 어렵다면 매니저와 함께 정리할 수 있습니다.</span><button onclick="copyCodeBlock(this)" style="background:#2477F3;color:#fff;border:none;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">복사</button></div><pre style="background:#1E293B;color:#E2E8F0;padding:12px;border-radius:8px;overflow-x:auto;font-size:11px;line-height:1.4;white-space:pre-wrap;max-height:200px;overflow-y:auto;">&lt;div style=&quot;background:linear-gradient(135deg,#5E9ADE 0%,#7BB2E8 100%);border-radius:14px;padding:20px 24px;margin:30px 0;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;&quot;&gt;
+&lt;p style=&quot;font-size:15px;color:#fff;line-height:1.65;margin:0;flex:1;&quot;&gt;기성과 맞춤 경계에서 판단이 어렵다면 매니저와 함께 정리할 수 있습니다.&lt;/p&gt;
+&lt;a href=&quot;https://wishket.com/project/free-consulting/?utm_source=blog_webflow&amp;amp;utm_medium=inline_cta&amp;amp;utm_campaign=260421_erp-saas-vs-custom-decision-guide&quot; style=&quot;display:inline-block;background:#fff;color:#2477F3;font-size:14px;font-weight:700;padding:10px 18px;border-radius:10px;white-space:nowrap;text-decoration:none;&quot;&gt;구성 상담하기&lt;/a&gt;
+&lt;/div&gt;</pre></div>
+<div style="margin:16px 0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:14px;font-weight:600;color:#374151;">CTA 배너 (종료)</span><button onclick="copyCodeBlock(this)" style="background:#2477F3;color:#fff;border:none;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">복사</button></div><pre style="background:#1E293B;color:#E2E8F0;padding:12px;border-radius:8px;overflow-x:auto;font-size:11px;line-height:1.4;white-space:pre-wrap;max-height:200px;overflow-y:auto;">&lt;div style=&quot;background:linear-gradient(135deg,#5E9ADE 0%,#7BB2E8 100%);border-radius:16px;padding:32px 30px;color:#fff;margin:40px 0 0;&quot;&gt;
+&lt;div style=&quot;font-size:12px;font-weight:600;letter-spacing:0.8px;opacity:0.75;margin-bottom:10px;text-transform:uppercase;&quot;&gt;다음 단계&lt;/div&gt;
+&lt;h3 style=&quot;font-size:20px;font-weight:800;line-height:1.45;margin-bottom:20px;color:#fff;letter-spacing:-0.3px;&quot;&gt;기성이냐 맞춤이냐보다, 어디까지 기성으로 갈 것인지가 핵심입니다&lt;/h3&gt;
+&lt;div style=&quot;display:flex;flex-direction:column;gap:12px;margin-bottom:24px;&quot;&gt;&lt;div style=&quot;background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px;font-size:14.5px;line-height:1.65;&quot;&gt;&lt;span style=&quot;font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;&quot;&gt;맞춤 개발이 필요해 보이는데 비용·기간 기준이 없다면&lt;/span&gt;위시켓 매니저가 비슷한 규모의 실제 사례와 우리 상황을 대조해 구성을 함께 잡아드립니다. 프로젝트 등록과 상담은 무료입니다.&lt;/div&gt;
+&lt;div style=&quot;background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px;font-size:14.5px;line-height:1.65;&quot;&gt;&lt;span style=&quot;font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;&quot;&gt;기성과 맞춤을 섞는 구성이 가능한지 확인하고 싶다면&lt;/span&gt;매니저 상담에서 우리 업무 흐름에 맞는 하이브리드 구성 방향을 파트너 연결 전에 먼저 정리해드립니다.&lt;/div&gt;&lt;/div&gt;&lt;div style=&quot;text-align:center;&quot;&gt;&lt;a href=&quot;https://wishket.com/project/free-consulting/?utm_source=blog_webflow&amp;amp;utm_medium=cta_banner&amp;amp;utm_campaign=260421_erp-saas-vs-custom-decision-guide&quot; style=&quot;display:inline-block;background:#fff;color:#2477F3;font-size:15px;font-weight:800;padding:13px 28px;border-radius:10px;text-decoration:none;&quot;&gt;매니저와 정리하기&lt;/a&gt;&lt;/div&gt;
+&lt;/div&gt;</pre></div>
+
+
+  <h3 style="font-size:18px;font-weight:600;margin:32px 0 12px 0;">JSON-LD (Custom Code에 붙여넣기)</h3>
+<pre style="background:#1E293B;color:#E2E8F0;padding:16px;border-radius:8px;overflow-x:auto;font-size:12px;line-height:1.5;white-space:pre-wrap;">&lt;script type="application/ld+json"&gt;
+{
+  &quot;@context&quot;: &quot;https://schema.org&quot;,
+  &quot;@type&quot;: &quot;BlogPosting&quot;,
+  &quot;headline&quot;: &quot;이카운트로 될까, 맞춤 개발을 해야 할까&quot;,
+  &quot;description&quot;: &quot;기성 ERP와 맞춤 개발 중 어느 쪽이 맞는지, 데모 확인부터 맞춤 개발 경계선까지 실무 판단 기준을 단계별로 정리했습니다. 하이브리드 구성 사례도 포함합니다.&quot;,
+  &quot;datePublished&quot;: &quot;2026-04-21&quot;,
+  &quot;dateModified&quot;: &quot;2026-04-21&quot;,
+  &quot;author&quot;: {
+    &quot;@type&quot;: &quot;Person&quot;,
+    &quot;name&quot;: &quot;박민재&quot;
+  },
+  &quot;publisher&quot;: {
+    &quot;@type&quot;: &quot;Organization&quot;,
+    &quot;name&quot;: &quot;위시켓&quot;,
+    &quot;url&quot;: &quot;https://www.wishket.com&quot;
+  },
+  &quot;mainEntityOfPage&quot;: {
+    &quot;@type&quot;: &quot;WebPage&quot;
+  },
+  &quot;keywords&quot;: &quot;ERP&quot;,
+  &quot;articleSection&quot;: &quot;IT 아웃소싱&quot;,
+  &quot;hasPart&quot;: [
+    {
+      &quot;@type&quot;: &quot;WebPageElement&quot;,
+      &quot;name&quot;: &quot;기성 솔루션에 맞는 회사는 어떤 신호를 보이나요?&quot;,
+      &quot;url&quot;: &quot;#기성-솔루션에-맞는-회사는-어떤-신호를-보이나요&quot;
+    },
+    {
+      &quot;@type&quot;: &quot;WebPageElement&quot;,
+      &quot;name&quot;: &quot;맞춤 개발로 넘어가야 하는 경계는 어디인가요?&quot;,
+      &quot;url&quot;: &quot;#맞춤-개발로-넘어가야-하는-경계는-어디인가요&quot;
+    },
+    {
+      &quot;@type&quot;: &quot;WebPageElement&quot;,
+      &quot;name&quot;: &quot;기성과 맞춤을 섞어 쓰는 방법도 있나요?&quot;,
+      &quot;url&quot;: &quot;#기성과-맞춤을-섞어-쓰는-방법도-있나요&quot;
+    }
+  ]
+}
+&lt;/script&gt;
+&lt;script type="application/ld+json"&gt;
+{
+  &quot;@context&quot;: &quot;https://schema.org&quot;,
+  &quot;@type&quot;: &quot;FAQPage&quot;,
+  &quot;mainEntity&quot;: [
+    {
+      &quot;@type&quot;: &quot;Question&quot;,
+      &quot;name&quot;: &quot;기성 ERP 도입 후 맞춤 기능이 필요해지면 어떻게 해야 하나요?&quot;,
+      &quot;acceptedAnswer&quot;: {
+        &quot;@type&quot;: &quot;Answer&quot;,
+        &quot;text&quot;: &quot;기성 SaaS ERP는 계약 후에도 커스터마이징 추가 개발이 가능한 경우가 있지만, 업그레이드 시점에 해당 기능이 유지되는지 반드시 확인해야 합니다. 영업 담당자가 &#x27;가능하다&#x27;고 답해도 추가 비용이 붙거나, 버전 업데이트 때 기능이 초기화되는 사례가 있습니다. 처음부터 확장 가능성이 있다고 판단하면 기성 솔루션보다 API 연동이 가능한 경량 ERP를 기반으로 잡는 쪽이 나중 부담이 적습니다.&quot;
+      }
+    },
+    {
+      &quot;@type&quot;: &quot;Question&quot;,
+      &quot;name&quot;: &quot;ERP 도입 후 유지보수 비용은 얼마나 생각해야 하나요?&quot;,
+      &quot;acceptedAnswer&quot;: {
+        &quot;@type&quot;: &quot;Answer&quot;,
+        &quot;text&quot;: &quot;기성 SaaS ERP는 월 구독료에 유지보수가 포함되어 있어 별도 비용이 없지만, 맞춤 개발 ERP는 런칭 후 유지보수가 별도 계약·유상으로 이뤄집니다. 하자보수(계약 기간 내 개발사 귀책 버그 수정)와 유지보수(기능 추가·OS 업데이트 대응)는 다른 개념이므로 혼동하면 분쟁이 생깁니다. 맞춤 개발 ERP의 유지보수 연간 비용은 구축 비용의 10~20% 수준으로 예산을 잡아두는 것이 일반적입니다.&quot;
+      }
+    },
+    {
+      &quot;@type&quot;: &quot;Question&quot;,
+      &quot;name&quot;: &quot;기성 ERP와 맞춤 개발 ERP를 섞어 쓸 때 실제로 가장 많이 선택하는 구성은 무엇인가요?&quot;,
+      &quot;acceptedAnswer&quot;: {
+        &quot;@type&quot;: &quot;Answer&quot;,
+        &quot;text&quot;: &quot;위시켓에서 진행된 사례를 보면 기성 ERP를 그대로 두고 리포트·대시보드 화면만 별도로 개발하거나, 스마트스토어·쇼핑몰 주문 데이터와 ERP 사이에 연동 다리를 맞춤 개발하는 구성이 가장 많습니다. 예산 부담이 작고 기성 솔루션의 안정성을 유지하면서 우리 회사에 맞는 기능을 추가할 수 있어, 처음부터 전체 맞춤 개발로 가는 것보다 리스크가 낮습니다.&quot;
+      }
+    },
+    {
+      &quot;@type&quot;: &quot;Question&quot;,
+      &quot;name&quot;: &quot;맞춤 ERP 개발 프로젝트에서 기간이 예상보다 길어지는 주된 이유는 무엇인가요?&quot;,
+      &quot;acceptedAnswer&quot;: {
+        &quot;@type&quot;: &quot;Answer&quot;,
+        &quot;text&quot;: &quot;ERP 프로젝트 기간이 늘어나는 가장 큰 원인은 요구사항 변경과 데이터 마이그레이션 범위입니다. 기존 엑셀·레거시 시스템의 데이터를 새 ERP로 옮기는 작업이 기본 견적에 포함되지 않는 경우가 많고, 개발 중간에 부서별 추가 요청이 생기면 범위가 늘어납니다. 처음 견적 단계에서 &#x27;없으면 업무가 안 되는 기능&#x27;만으로 범위를 좁히고 데이터 이전 범위를 명확히 하면 기간 초과를 줄일 수 있습니다.&quot;
+      }
+    }
+  ]
+}
+&lt;/script&gt;</pre>
+
+</div>
+
+<script>
+// contenteditable 변경 감지 + localStorage 자동저장
+var content = document.getElementById('cms-content');
+var status = document.getElementById('edit-status');
+var saveTimer;
+var STORAGE_KEY = 'wishket_draft_' + document.title.replace(/[^a-zA-Z0-9가-힣]/g, '_').substring(0, 60);
+var VERSION_KEY = STORAGE_KEY + '_ver';
+var CURRENT_VERSION = '20260421_152015';
+
+window.addEventListener('load', function() {
+  var saved = localStorage.getItem(STORAGE_KEY);
+  var savedVer = localStorage.getItem(VERSION_KEY);
+  if (saved && savedVer === CURRENT_VERSION) { content.innerHTML = saved; }
+  else { localStorage.removeItem(STORAGE_KEY); }
+  attachLinkHandlers();
+});
+
+content.addEventListener('input', function() {
+  status.textContent = '편집 중 (미저장)';
+  status.className = 'modified';
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(function() {
+    localStorage.setItem(STORAGE_KEY, content.innerHTML);
+    localStorage.setItem(VERSION_KEY, CURRENT_VERSION);
+    status.textContent = '자동저장됨';
+    status.className = '';
+  }, 3000);
+});
+
+function attachLinkHandlers() {
+  document.querySelectorAll('[contenteditable] a').forEach(function(a) {
+    a.addEventListener('click', function(e) {
+      if (e.metaKey || e.ctrlKey) { window.open(a.href, '_blank'); }
+    });
+    if (a.title.indexOf('Cmd+클릭') === -1) {
+      a.title = (a.title || '') + ' (Cmd+클릭으로 열기)';
+    }
+  });
+}
+
+function copyContent() {
+  var clone = content.cloneNode(true);
+  clone.querySelectorAll('.image-guide, table.image-guide, table.guide-box').forEach(function(el) { el.remove(); });
+  var text = clone.innerText;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(function() {
+      var btn = document.getElementById('copy-btn');
+      btn.textContent = '복사됨!';
+      setTimeout(function() { btn.textContent = '본문 복사'; }, 2000);
+    });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    var btn = document.getElementById('copy-btn');
+    btn.textContent = '복사됨!';
+    setTimeout(function() { btn.textContent = '본문 복사'; }, 2000);
+  }
+}
+
+function copyCodeBlock(btn) {
+  var pre = btn.parentElement.nextElementSibling;
+  if (!pre) return;
+  var text = pre.textContent;
+  navigator.clipboard.writeText(text).then(function() {
+    btn.textContent = '복사됨!';
+    setTimeout(function() { btn.textContent = '복사'; }, 2000);
+  });
+}
+
+window.addEventListener('beforeunload', function(e) {
+  if (status.className === 'modified') {
+    clearTimeout(saveTimer);
+    localStorage.setItem(STORAGE_KEY, content.innerHTML);
+    localStorage.setItem(VERSION_KEY, CURRENT_VERSION);
+    e.preventDefault();
+    e.returnValue = '';
+  }
+});
+</script>
+
+</body>
+</html>

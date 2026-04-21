@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>개발팀 없는 중소·중견기업의 ERP, 업체 알아보기 전에 먼저 판단할 3가지</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+    font-size: 17px;
+    line-height: 2.0;
+    color: #1a1a1a;
+    background: #fff;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Toolbar (편집용) ── */
+  #toolbar {
+    position: fixed; top: 0; left: 0; right: 0;
+    background: #1E293B; color: #fff;
+    padding: 10px 20px;
+    display: flex; align-items: center; gap: 16px;
+    z-index: 9999; font-size: 14px;
+  }
+  #toolbar button {
+    background: #2477F3; color: #fff; border: none;
+    padding: 6px 16px; border-radius: 6px; cursor: pointer;
+    font-size: 13px; font-weight: 600;
+  }
+  #toolbar button:hover { background: #1B5FD1; }
+  #edit-status { color: #94A3B8; font-size: 12px; }
+  #edit-status.modified { color: #FBBF24; }
+
+  /* ── Layout ── */
+  .page-wrap {
+    max-width: 720px;
+    margin: 80px auto 80px;
+    padding: 0 20px;
+  }
+
+  /* ── Header ── */
+  .article-header { margin-bottom: 32px; }
+  .article-category {
+    font-size: 12px; font-weight: 600; color: #2477F3;
+    letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 12px;
+  }
+  h1 {
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 800; line-height: 1.35;
+    letter-spacing: -0.5px; color: #0d0d0d;
+    margin: 0 0 16px 0;
+  }
+  .article-meta { font-size: 13px; color: #999; }
+
+  /* ── Typography ── */
+  h2 {
+    font-size: 21px; font-weight: 700; color: #2477F3;
+    margin: 48px 0 16px 0; padding-bottom: 10px;
+    border-bottom: 2px solid #E5E7EB;
+    letter-spacing: -0.3px;
+  }
+  h3 {
+    font-size: 17px; font-weight: 700; color: #2477F3;
+    margin: 28px 0 10px 0;
+  }
+  p { margin: 0 0 30px 0; }
+  a { color: #2477F3; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  strong { font-weight: 700; }
+
+  /* ── Lists ── */
+  ul, ol { margin: 0 0 30px 0; padding-left: 22px; }
+  li { margin-bottom: 6px; line-height: 2.5; }
+  li::marker { color: #999; }
+
+  hr { border: none; border-top: 1px solid #e8e8e8; margin: 40px 0; }
+
+  /* ── GEO Table ── */
+  .tbl-wrap {
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    margin: 30px 0; border: 1px solid #e0e0e5;
+    border-radius: 12px; background: #fff;
+  }
+  table.geo {
+    width: 100%; border-collapse: collapse; border-spacing: 0;
+    font-size: 14.5px; line-height: 1.65; table-layout: fixed;
+  }
+  table.geo caption {
+    position: absolute; width: 1px; height: 1px;
+    overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap;
+  }
+  table.geo thead th {
+    padding: 12px 18px; font-size: 12.5px; font-weight: 700;
+    letter-spacing: 0.01em; text-align: left;
+    border-bottom: 1px solid #d1d1d9; background: #f6f6f9; vertical-align: bottom;
+  }
+  table.geo thead th:first-child { color: #82828e; border-right: 1px solid #d1d1d9; }
+  table.geo thead th:not(:first-child) { color: #1a1a23; }
+  table.geo tbody th[scope="row"] {
+    padding: 14px 18px; font-size: 14px; font-weight: 600; color: #1a1a23;
+    text-align: left; border-bottom: 1px solid #ececf0; border-right: 1px solid #ececf0;
+    background: #fff; vertical-align: top; word-break: keep-all;
+  }
+  table.geo tbody td {
+    padding: 14px 18px; color: #3a3a47;
+    border-bottom: 1px solid #ececf0; vertical-align: top; word-break: keep-all;
+  }
+  table.geo tbody tr:nth-child(even) td,
+  table.geo tbody tr:nth-child(even) th[scope="row"] { background: #f9f9fb; }
+  table.geo tbody tr:hover td,
+  table.geo tbody tr:hover th[scope="row"] { background: #f0f0f5; }
+  table.geo tfoot td {
+    padding: 9px 18px; font-size: 12px; color: #9ca3af;
+    border-top: 1px solid #ececf0; background: #f9f9fb;
+  }
+
+  /* ── TLDR (핵심 요약) ── */
+  .summary-box {
+    background: #F5F5F5;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 30px;
+  }
+  .summary-box p:first-child {
+    font-size: 13px; font-weight: 700; color: #1A1A1A;
+    margin-bottom: 8px; letter-spacing: 0.3px;
+  }
+  .summary-box p:not(:first-child) {
+    font-size: 15.5px; color: #1A1A1A; line-height: 1.75;
+  }
+  .summary-box p:last-child { margin-bottom: 0; }
+
+  /* ── FAQ ── */
+  .faq-list {
+    display: flex; flex-direction: column; gap: 0;
+    margin: 20px 0 24px; border: 1px solid #E5E7EB;
+    border-radius: 14px; overflow: hidden;
+  }
+  .faq-item { border-bottom: 1px solid #ebebeb; background: #fff; }
+  .faq-item:last-child { border-bottom: none; }
+  .faq-q {
+    font-size: 15px; font-weight: 700; color: #0d0d0d;
+    padding: 18px 20px 8px; display: flex; gap: 10px;
+  }
+  .faq-q .q-mark { color: #2477F3; font-weight: 800; font-size: 16px; flex-shrink: 0; }
+  .faq-a {
+    font-size: 14.5px; color: #444; line-height: 1.75;
+    padding: 0 20px 18px 44px;
+  }
+
+  /* ── Related ── */
+  .related-section { margin: 32px 0; }
+  .related-section h3 { font-size: 16px; font-weight: 700; margin-bottom: 12px; }
+  .related-section ul { list-style: none; padding: 0; }
+  .related-section li {
+    padding: 10px 0; border-bottom: 1px solid #f0f0f0;
+  }
+  .related-section li:last-child { border-bottom: none; }
+  .related-section a { font-size: 15px; font-weight: 500; }
+
+  /* ── Image guide box ── */
+  .image-guide, table.guide-box {
+    background: #FAFAFA; border: 2px solid #E5E7EB;
+    border-radius: 12px; padding: 16px 24px; margin: 30px -20px;
+  }
+
+  /* ── CMS meta area ── */
+  .cms-meta-area { background: #f9fafb; border-radius: 12px; padding: 20px; margin-top: 40px; }
+
+  /* ── Contenteditable ── */
+  [contenteditable="true"]:focus { outline: 2px solid #2477F3; outline-offset: 2px; border-radius: 4px; }
+  [contenteditable="true"]:hover { outline: 1px dashed #CBD5E1; outline-offset: 2px; border-radius: 4px; }
+  [contenteditable="true"]:focus:hover { outline: 2px solid #2477F3; outline-offset: 2px; }
+
+  /* ── Responsive ── */
+  @media (max-width: 640px) {
+    .page-wrap { padding: 0 16px; margin-top: 60px; }
+    h1 { font-size: 22px; }
+    h2 { font-size: 19px; }
+    table.geo { table-layout: auto; }
+    table.geo thead th, table.geo tbody th[scope="row"], table.geo tbody td {
+      padding: 11px 14px; font-size: 13px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- toolbar -->
+<div id="toolbar">
+  <button id="copy-btn" onclick="copyContent()">본문 복사</button>
+  <span id="edit-status">저장됨</span>
+</div>
+
+<div class="page-wrap">
+
+  <div class="article-header">
+    <h1 contenteditable="true">개발팀 없는 중소·중견기업의 ERP, 업체 알아보기 전에 먼저 판단할 3가지</h1>
+    <div class="article-meta"><time datetime="2026-04-21">2026-04-21</time></div>
+  </div>
+
+  <div id="cms-content" contenteditable="true" style="outline:none;">
+
+  <div class="summary-box">
+<p>💡 핵심 요약</p>
+<p>IT 지식이나 개발팀 없이 ERP 도입을 시작할 때 막막한 이유는 선택지가 많아서가 아니라, 판단 순서가 없기 때문입니다. 업체를 찾기 전에 먼저 우리 회사가 겪는 업무 문제를 일상어로 적어두고, 기성 솔루션으로 해결될지 맞춤 개발이 필요한지 데모로 가늠하고, 필요 범위를 좁혀 예산 구간을 잡는 세 단계가 먼저입니다. 이 순서가 서면 업체 탐색이 비교로 이어지고, IT 담당자가 없어도 프로젝트가 표류하지 않는 구조를 만들 수 있습니다.</p>
+</div>
+
+  <p>대표에게 "ERP 한번 알아보라"는 지시를 받았습니다. 그런데 검색을 해보면 이카운트가 좋다, 더존이 중소기업 표준이다, 우리는 맞춤으로 가야 한다는 말이 뒤섞여 있습니다. 심지어 SaaS, 온프레미스, 클라우드 같은 용어까지 함께 따라붙습니다. 며칠 안에 대표에게 보고해야 하는데, 뭐부터 손을 대야 할지 감이 안 잡힙니다.</p>
+<p>ERP 도입이 막막한 건 선택지가 많아서가 아닙니다. 우리 회사 상황을 어느 순서로 좁혀야 하는지, 그 기준이 없기 때문입니다. 업체부터 찾으면 견적이 적정한지 판단이 안 되고, 방식부터 결정하려면 용어가 먼저 꼬여버리거든요. 그래서 이 글은 업체 탐색 전에 먼저 판단해야 할 세 가지를 순서대로 정리합니다. IT 지식이 없어도, 내부 개발팀이 없어도 따라갈 수 있는 순서입니다.</p>
+<h2 id="erp를-하려는데-어디서부터-시작해야-하나요">ERP를 하려는데 어디서부터 시작해야 하나요?</h2>
+<p>업체부터 알아보는 대신, 우리 회사가 지금 뭐 때문에 ERP가 필요한지를 일상어로 적어두는 것이 첫 단계입니다. 거창한 요구사항 명세서가 아닙니다. 업무를 하면서 반복해 겪고 있는 불편을 몇 줄로 메모하는 수준이면 충분합니다.</p>
+<p>일부 가이드는 부서별 요구사항을 구조화된 문서로 정리하라고 안내합니다. 틀린 말은 아니지만, IT 담당자가 없는 회사의 과장·차장이 혼자 할 수 있는 일은 아닙니다. 그건 이후에 매니저나 파트너와 함께 다듬을 일이고, 지금 혼자 해둬야 할 건 훨씬 간단합니다.</p>
+<div style="background:#F0F6FF;border-left:3px solid #2E6BAA;border-radius:0 14px 14px 0;padding:18px 20px;margin:30px 0;">
+<div style="font-size:13px;font-weight:700;color:#1A1A1A;margin-bottom:10px;display:flex;align-items:center;gap:6px;">💡 처음에 적어두면 좋은 5줄 메모</div>
+<div style="font-size:14.5px;color:#1A1A1A;line-height:2.0;"><ul><li>재고 수량이 장부와 실제가 매번 다릅니다</li><li>회계팀이 매달 엑셀을 다시 맞춥니다</li><li>영업팀 거래처 데이터가 개인 PC에 흩어져 있습니다</li><li>생산팀 자재 발주가 수기로 돌아갑니다</li><li>급여 정산할 때마다 인사팀이 야근을 합니다</li></ul></div>
+</div>
+<p>이 정도면 됩니다. 기술 용어 없이 지금 우리가 겪는 문제만 적혀 있습니다. 이런 문제 목록 없이 업체부터 만나면, 상대가 그래서 정확히 뭐가 필요하시냐고 물었을 때 답할 수가 없거든요. 업체는 대답을 듣고 범위를 잡는 사람이지, 우리 문제를 대신 찾아주는 사람이 아닙니다.</p>
+<p>문제 목록이 준비되면 자연스럽게 다음 질문이 떠오릅니다. 이 문제를 이카운트 같은 기성 솔루션으로 풀 수 있을까, 아니면 맞춤으로 개발해야 할까. 이 판단이 두 번째 단계입니다.</p>
+<h2 id="기성-erp-솔루션과-외주-맞춤-개발은-어떻게-다른가요">기성 ERP 솔루션과 외주 맞춤 개발은 어떻게 다른가요?</h2>
+<p>기성 ERP 솔루션은 이미 만들어진 제품을 월 구독료로 사서 쓰는 방식이고, 맞춤 개발은 우리 회사 업무에 맞게 처음부터 만드는 방식입니다. 이 둘은 비용 구조, 계약 형태, 유지보수 방식이 전부 다릅니다.</p>
+<p>여기서 먼저 정리해둘 것이 있습니다. SaaS냐 온프레미스냐, 그리고 기성이냐 맞춤이냐는 서로 다른 축입니다. 앞쪽은 서버를 누가 관리하느냐의 문제이고, 뒤쪽은 제품 자체가 기성품이냐 새로 만드느냐의 문제입니다. 검색하다 보면 두 축이 뒤섞여 나오는데, 지금 단계에서 판단해야 할 건 후자입니다.</p>
+<div class="tbl-wrap"><table class="geo"><caption>기성 ERP 솔루션과 외주 맞춤 개발은 어떻게 다른가요? — 구분 · 기성 솔루션 (이카운트·더존 등) · 맞춤 개발 (외주)</caption><colgroup><col style="width:22%"/><col style="width:39%"/><col style="width:39%"/></colgroup><thead><tr><th scope="col">구분</th><th scope="col">기성 솔루션 (이카운트·더존 등)</th><th scope="col">맞춤 개발 (외주)</th></tr></thead><tbody><tr><th scope="row">시작 방식</th><td>가입하고 바로 사용</td><td>요구사항 정리 → 견적 → 개발</td></tr><tr><th scope="row">비용 구조</th><td>월 구독료(사용자 수 기준)</td><td>프로젝트 단위 일시 투입 + 서버 운영비</td></tr><tr><th scope="row">도입 기간</th><td>수일~수주</td><td>수십일~수개월</td></tr><tr><th scope="row">커스터마이징</th><td>일부 항목 설정·권한 수정 수준</td><td>업무 흐름 전체 설계 가능</td></tr><tr><th scope="row">유지보수</th><td>구독료에 포함</td><td>런칭 후 별도 계약</td></tr></tbody></table></div>
+<p>판단의 출발점은 단순합니다. 우리 업무가 표준화된 흐름(재고·회계·급여·발주 등)에 가깝다면 기성 솔루션부터 검토하는 게 순서입니다. 반대로 우리 회사만의 업무 규칙이 많거나, 이미 쓰고 있는 사내 시스템과 반드시 연결되어야 하거나, 업종 특성상 기성 제품이 가정한 흐름과 크게 다르다면 맞춤 개발을 봐야 합니다.</p>
+<p>대부분의 중소·중견기업은 어느 쪽인지 애매한 상태에서 출발합니다. 그럴 땐 <a href="https://blog.wishket.com/blog/erp-program-korea-market-guide">중견·중소기업 ERP 프로그램 비교 가이드 2026</a>을 참고해 이카운트·더존 같은 주요 SaaS의 데모를 먼저 보는 게 빠릅니다. 데모에서 우리 주요 업무(재고 입출고, 급여 계산, 거래처 관리 등)가 기본 기능으로 돌아가는지 체크해 보면, 기성으로 가도 되는지 감이 빠르게 잡힙니다. 데모를 보고도 판단이 애매하면 이때부터 외부 상담을 붙여도 늦지 않습니다.</p>
+<p>방식이 대략 기울고 나면 다음 벽은 예산입니다. 맞춤 개발이라는 말이 붙는 순간 견적 범위가 수천만 원부터 수억 원으로 벌어지기 시작하거든요.</p>
+<h2 id="맞춤-개발-비용-왜-범위가-그렇게-넓은가요">맞춤 개발 비용, 왜 범위가 그렇게 넓은가요?</h2>
+<p>ERP 맞춤 개발 비용은 방식이 아닌, 요구사항의 범위가 결정합니다. 같은 ERP라는 이름을 가졌어도, 기존 시스템에 붙는 단위 기능 하나와 회사 전체 업무를 통합하는 시스템은 규모 자체가 다른 프로젝트입니다.</p>
+<p>즉, 맞춤 개발이면 얼마쯤 하느냐는 질문은 성립하지 않습니다. 업체가 답할 수 없다는 뜻은 아니고, 답이 너무 넓어서 아무 기준도 되지 못한다는 뜻입니다. 같은 질문을 이렇게 바꾸면 대화가 가능해집니다.</p>
+<ul>
+<li>❌ "우리는 얼마쯤 잡으면 될까요?"</li>
+<li>✅ "우리가 필요한 범위가 이 정도인데, 비슷한 범위의 사례는 어느 정도였나요?"</li>
+</ul>
+<p>2025년 위시켓에 등록된 ERP 신규 구축 프로젝트들을 보면, 기능 범위에 따라 대략 세 구간으로 갈립니다.</p>
+<div class="tbl-wrap"><table class="geo"><caption>맞춤 개발 비용, 왜 범위가 그렇게 넓은가요? — 범위 구간 · 대표 성격 · 일반적 기간</caption><colgroup><col style="width:22%"/><col style="width:39%"/><col style="width:39%"/></colgroup><thead><tr><th scope="col">범위 구간</th><th scope="col">대표 성격</th><th scope="col">일반적 기간</th></tr></thead><tbody><tr><th scope="row">연동·경량 ERP</th><td>기존 시스템에 붙는 단위 기능, 1인·소규모용 경량 ERP</td><td>20~90일</td></tr><tr><th scope="row">사내 업무 통합 ERP</th><td>생산·재고·매출 등 여러 부서 업무를 하나로 묶는 규모</td><td>90~150일</td></tr><tr><th scope="row">전사·다부서 통합 ERP</th><td>전 부서 통합 또는 외부 플랫폼과의 대규모 연동</td><td>180일 이상</td></tr></tbody><tfoot><tr><td colspan="3">2025년 위시켓 등록 프로젝트(ERP 신규 구축) 기준 · 클라이언트 희망 예산이며 실제 계약 금액과 다를 수 있습니다 · 기간은 발주자 제시 기준으로 실제 개발 기간과 다를 수 있습니다</td></tr></tfoot></table></div>
+<p>각 구간의 차이가 얼마나 큰지는 실제 사례를 같은 축에 놓고 보면 선명해집니다.</p>
+<div style="display:flex;flex-direction:column;gap:14px;margin:30px 0;">
+<div style="border:1px solid #E5E7EB;border-radius:14px;padding:18px 20px;background:#fff;">
+<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;">
+<span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;background:#e8f5e9;color:#2e7d32;">저가 사례</span>
+<span style="font-size:15.5px;font-weight:700;color:#0d0d0d;line-height:1.4;">스마트스토어-ERP 연동 재고관리 자동화 개발</span>
+</div>
+<div style="font-size:20px;font-weight:800;color:#2477F3;margin-bottom:4px;">1,000만 원</div>
+<div style="font-size:12.5px;color:#999;margin-bottom:10px;">30일 · 연동 단위 기능</div>
+<div style="font-size:14.5px;color:#444;line-height:2.0;">기존 ERP는 유지한 채, 외부 쇼핑몰과의 재고 데이터 동기화 기능만 별도 개발.</div>
+</div>
+<div style="border:1px solid #E5E7EB;border-radius:14px;padding:18px 20px;background:#fff;">
+<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;">
+<span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;background:#e3f2fd;color:#1565c0;">중가 사례</span>
+<span style="font-size:15.5px;font-weight:700;color:#0d0d0d;line-height:1.4;">사내 생산/재고/매출 통합 관리 ERP 시스템 구축</span>
+</div>
+<div style="font-size:20px;font-weight:800;color:#2477F3;margin-bottom:4px;">4,000만 원</div>
+<div style="font-size:12.5px;color:#999;margin-bottom:10px;">90일 · 사내 업무 통합</div>
+<div style="font-size:14.5px;color:#444;line-height:2.0;">여러 부서의 업무를 하나의 시스템으로 묶어 데이터 단절을 해소.</div>
+</div>
+<div style="border:1px solid #E5E7EB;border-radius:14px;padding:18px 20px;background:#fff;">
+<div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;">
+<span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;background:#fce4ec;color:#c62828;">고가 사례</span>
+<span style="font-size:15.5px;font-weight:700;color:#0d0d0d;line-height:1.4;">지게차/물류장비 판매/임대 업체 ERP 구축</span>
+</div>
+<div style="font-size:20px;font-weight:800;color:#2477F3;margin-bottom:4px;">1억 3,500만 원</div>
+<div style="font-size:12.5px;color:#999;margin-bottom:10px;">180일 · 전사 통합 (모바일+PC)</div>
+<div style="font-size:14.5px;color:#444;line-height:2.0;">업종 특화 업무 흐름 전반을 설계하고 모바일·PC 양쪽 인터페이스까지 포함.</div>
+</div>
+</div>
+<p>같은 ERP 구축이라는 키워드로 검색해도 이 세 사례는 성격이 완전히 다른 프로젝트입니다. 단위 기능 하나를 붙이는 일과 전사 시스템을 새로 세우는 일이 같은 기준으로 비교되면, 대표 보고 자리에서 숫자가 엉킵니다. 참고로 위 금액은 발주자가 매니저 상담을 거쳐 제시한 예산이며, 실제 계약 금액은 협의에 따라 달라질 수 있습니다.</p>
+<p>그래서 예산 감각을 잡는 순서는 이렇습니다. 앞서 적어둔 업무 문제 메모에서 있으면 좋은 것과 없으면 업무가 안 돌아가는 것을 구분합니다. 후자만 모아보면 우리가 실제로 필요한 범위가 어느 구간에 속하는지 대략적으로 가늠이 잡힙니다. 여기까지 와야 대표에게 "우리 범위는 중간 구간 정도로 보이고, 이 구간 사례는 대략 3개월에 4,000만 원대였다"는 형태로 보고할 근거가 생깁니다.</p>
+<p>물론 같은 구간 안에서도 사용자 수, 연동할 외부 시스템 개수, 맞춤 개발 필요 비율, 업종 특수성에 따라 금액은 또 달라집니다. 이 편차를 혼자 가늠하기 어렵다면, 위시켓 매니저가 유사 범위 사례와 대조해 주는 것도 가능한 선택지입니다.</p><div style="background:linear-gradient(135deg,#5E9ADE 0%,#7BB2E8 100%);border-radius:14px;padding:20px 24px;margin:30px 0;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+<p style="font-size:15px;color:#fff;line-height:1.65;margin:0;flex:1;">예산 범위가 애매하면 매니저와 유사 사례를 비교해 볼 수 있습니다.</p>
+<a href="https://wishket.com/project/free-consulting/?utm_source=blog_webflow&amp;utm_medium=inline_cta&amp;utm_campaign=260421_erp-outsourcing-guide-no-it-team" style="display:inline-block;background:#fff;color:#2477F3;font-size:14px;font-weight:700;padding:10px 18px;border-radius:10px;white-space:nowrap;text-decoration:none;">사례 비교 요청</a>
+</div>
+<h2 id="it-담당자가-없는데-외주를-맡기면-우리-쪽에서-뭘-해야-하나요">IT 담당자가 없는데 외주를 맡기면 우리 쪽에서 뭘 해야 하나요?</h2>
+<p>외주를 맡기더라도 업무 요구사항을 전달하는 일, 중간 결과물을 실제 업무 시나리오로 확인하는 일, 런칭 후 운영을 누가 맡을지 정하는 일은 발주사 쪽 책임입니다. 이건 어느 외주 프로젝트에서든 마찬가지이고, ERP는 특히 그 무게가 큽니다.</p>
+<p>외주를 맡기면 업체가 알아서 다 해준다는 기대가 ERP 프로젝트를 가장 자주 엎는 오해 중 하나입니다. 기술 구현은 업체가 합니다. 다만 업무가 어떻게 돌아가야 하는지 설명하고, 중간에 우리 현장과 맞는지 확인하고, 완성된 시스템을 누가 관리할지 정하는 일은 우리 회사 쪽에서 해야 일이 굴러갑니다.</p>
+<p>여기서 다음 질문이 따라옵니다. IT 담당자가 없는데 누가 하느냐는 것입니다. 이 자리에 필요한 건 IT 기술 지식이 아닙니다. 부서 간 업무를 가장 잘 아는 사람, 즉 현업에서 문제를 겪고 있는 총괄 1명이면 됩니다. 기술 판단은 파트너가 하고, 업무 판단은 이 총괄이 하는 구조입니다.</p>
+<p>발주사와 파트너, 그리고 위시켓 같은 중간 플랫폼이 있을 때 역할은 대략 이렇게 나뉩니다.</p>
+<ul>
+<li><strong>발주사 (우리 회사):</strong> 업무 요구사항 일상어 정리, 중간 결과물 현장 검수, 최종 검수, 런칭 후 운영 주체 결정</li>
+<li><strong>파트너 (개발사):</strong> 기술 설계, 개발, 기능 단위 테스트, 하자보수</li>
+<li><strong>위시켓 매니저:</strong> 견적 적정성 검토, 파트너 선별, 계약 단계 동반 확인</li>
+</ul>
+<p>이 구조로 보면 내부 담당자 없음이 프로젝트 불가능으로 이어지지는 않습니다. 총괄 1명이 업무 쪽을 잡고 나머지는 파트너와 매니저가 각자 자리에서 받아주면, ERP 같은 무거운 프로젝트도 표류하지 않고 굴러갑니다.</p>
+<p>더 욕심을 부리면 런칭 후 계획까지 처음부터 같이 봅니다. ERP는 만들어놓고 직원들이 안 쓰면 실패 프로젝트가 되는데, 그걸 막는 건 시스템 기능이 아닌, 사용 정착 계획입니다. 누가 교육을 설계하고, 초기 사용률을 어떻게 점검하고, 문제가 생길 때 어디로 문의해야 하는지까지 계약 단계에서 함께 짚어두면 런칭 후 한결 수월합니다.</p>
+<p>여기까지가 업체를 알아보기 전에 먼저 정리해야 할 세 개의 판단입니다. 첫째, 우리 회사 업무 문제를 다섯 줄로 적어둔다. 둘째, 기성 솔루션과 맞춤 개발 중 어느 쪽에 가까운지 데모로 가늠한다. 셋째, 필요 범위를 좁혀 예산 구간을 잡고 내부 총괄 1명을 정한다. 이 세 단계가 지나야 업체 탐색이 의미 있는 비교로 이어집니다.</p>
+<p>혼자 이 단계를 밟기 어렵거나, 이미 시작은 했는데 중간에 막혀 있다면 <a href="https://www.wishket.com/project/create/?utm_source=blog_webflow&amp;utm_medium=inline_cta&amp;utm_campaign=260421_erp-outsourcing-guide-no-it-team">위시켓</a>에 프로젝트를 등록해 매니저 상담부터 받아보는 것도 방법입니다. 방식 선택, 범위 조정, 파트너 선별까지 같이 봐주고 프로젝트 등록과 매니저 상담은 무료입니다. 기획 단계부터 아예 동반자가 필요한 상황이라면 AIDP(기획부터 구축·운영까지 직접 수행)도 선택지로 함께 볼 수 있습니다.</p>
+
+  <div style="background:linear-gradient(135deg,#5E9ADE 0%,#7BB2E8 100%);border-radius:16px;padding:32px 30px;color:#fff;margin:40px 0 0;">
+<div style="font-size:12px;font-weight:600;letter-spacing:0.8px;opacity:0.75;margin-bottom:10px;text-transform:uppercase;">다음 단계</div>
+<h3 style="font-size:20px;font-weight:800;line-height:1.45;margin-bottom:20px;color:#fff;letter-spacing:-0.3px;">혼자 이 단계를 밟기 어렵다면, 위시켓에 프로젝트를 등록해 보세요</h3>
+<div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;"><div style="background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px;font-size:14.5px;line-height:1.65;"><span style="font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;">아직 방식 선택도 안 된 상태라면</span>범위가 애매해도 괜찮습니다. 매니저가 기성 솔루션과 맞춤 개발 중 어느 쪽에 가까운지, 비슷한 규모의 사례는 어느 정도였는지 함께 정리해 드립니다.</div>
+<div style="background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px;font-size:14.5px;line-height:1.65;"><span style="font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;">이미 방향은 잡혔는데 내부 총괄이 없다면</span>IT 담당자가 없어도 됩니다. 견적 적정성 검토, 파트너 선별, 계약 확인까지 매니저가 동반합니다. 프로젝트 등록과 상담은 무료입니다.</div></div><div style="text-align:center;"><a href="https://www.wishket.com/project/create/?utm_source=blog_webflow&amp;utm_medium=cta_banner&amp;utm_campaign=260421_erp-outsourcing-guide-no-it-team" style="display:inline-block;background:#fff;color:#2477F3;font-size:15px;font-weight:800;padding:13px 28px;border-radius:10px;text-decoration:none;">매니저와 정리하기</a></div>
+</div>
+
+  <div class="related-section">
+  <h3>함께 읽으면 좋은 콘텐츠</h3>
+<ul>
+  <li><a href="https://blog.wishket.com/blog/erp-program-korea-market-guide">중견·중소기업 ERP 프로그램 비교 가이드 2026</a></li>
+  <li><a href="https://blog.wishket.com/blog/erp-program-types-and-how-to-choose">ERP 프로그램이란? 종류, 선택 기준까지 총정리</a></li>
+  <li><a href="https://blog.wishket.com/blog/outsourcing-development-complete-guide">개발 외주 가이드 : 비개발자를 위한 단계별 완전 정리</a></li>
+</ul>
+  </div>
+
+  </div>
+
+  <h2>자주 묻는 질문</h2>
+<div class="faq-list">
+<div class="faq-item">
+  <div class="faq-q"><span class="q-mark">Q.</span>중소기업 ERP 도입 후 유지보수는 어떻게 해야 하나요?</div>
+  <div class="faq-a">기성 SaaS ERP(이카운트·더존 등)는 구독료에 유지보수가 포함되어 별도 비용이 없지만, 맞춤 개발 ERP는 런칭 후 유지보수를 별도 계약으로 진행하는 것이 일반적입니다. 최초 계약 시 유지보수 범위를 확정하기는 어렵고, 실제로 운영해봐야 무엇이 필요한지 드러나기 때문입니다. 계약 단계에서 확인해야 할 것은 하자보수 기간(개발사 귀책 버그 무상 수정 기간)과 유지보수 대응이 가능한 파트너인지 여부입니다. 하자보수와 유지보수는 다른 개념이므로 혼동하지 않도록 주의하세요.</div>
+</div>
+<div class="faq-item">
+  <div class="faq-q"><span class="q-mark">Q.</span>ERP 구축 시 발생할 수 있는 주요 문제점은 무엇인가요?</div>
+  <div class="faq-a">실무에서 반복되는 문제는 크게 세 가지입니다. 첫째는 초기에 모든 부서를 한꺼번에 넣으려다 범위가 커져 프로젝트가 표류하는 경우입니다. 둘째는 시스템은 완성됐는데 직원들이 쓰지 않아 실패로 끝나는 경우로, 이는 기술 문제가 아니라 변화 관리 부재가 원인입니다. 셋째는 내부 담당자가 없어 업무 요구사항 전달·중간 검수·최종 검수가 제대로 돌지 않는 구조적 공백입니다. 세 문제 모두 계약 전 단계에서 범위·역할·사용 계획을 구체화하면 사전에 줄일 수 있습니다.</div>
+</div>
+<div class="faq-item">
+  <div class="faq-q"><span class="q-mark">Q.</span>ERP 도입에 정부 지원금을 활용할 수 있나요?</div>
+  <div class="faq-a">스마트공장 바우처, 디지털 전환 바우처 등 중소기업 대상 지원 제도가 있으며, ERP 구축이 지원 대상에 포함되는 경우가 있습니다. 다만 기업 자부담 비율(통상 30~50%)이 있고, 신청 조건·대상 기업 요건·지원 가능 솔루션이 제한될 수 있습니다. 지원금이 승인되더라도 &#x27;공짜&#x27;로 도입할 수 있는 것은 아니며, 지원 대상 여부는 해당 사업 공고를 기준으로 확인해야 합니다. 지원금 여부와 상관없이 우리 회사에 필요한 범위와 예산을 먼저 잡아두는 것이 순서입니다.</div>
+</div>
+<div class="faq-item">
+  <div class="faq-q"><span class="q-mark">Q.</span>SaaS ERP와 맞춤 개발 ERP를 병행하는 방식도 있나요?</div>
+  <div class="faq-a">있습니다. 기성 SaaS ERP를 주시스템으로 쓰면서, 기성 제품이 처리하지 못하는 일부 기능(예: 외부 쇼핑몰과의 재고 동기화, 사내 보고서 자동 생성)만 별도로 맞춤 개발하는 하이브리드 방식이 실무에서 꽤 활용됩니다. 위시켓에 등록된 사례 중 500만~1,000만 원대 단기 프로젝트가 상당수 이 구조입니다. 처음부터 전체 맞춤 개발로 가지 않아도 되므로, 기성 솔루션 데모를 먼저 해보고 안 되는 부분만 추가로 개발하는 접근이 리스크를 낮추는 방법 중 하나입니다.</div>
+</div>
+</div>
+
+  <div class="cms-meta-area">
+    <h3 style="font-size:16px; font-weight:700; margin:0 0 16px 0; color:#666;">CMS 입력 필드</h3>
+    <table style="width:100%;border-collapse:collapse;margin:16px 0;">
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">써머리</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">IT 팀 없는 중소·중견기업이 ERP 도입 시 가장 먼저 판단해야 할 것</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">slug</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">erp-outsourcing-guide-no-it-team</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">날짜</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">2026-04-21</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">카테고리</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">IT 아웃소싱</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">태그</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">ERP</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">메타 디스크립션</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">IT 팀 없이 ERP 도입이 막막하다면, 업체보다 먼저 봐야 할 3가지 판단 기준이 있습니다. 기성 솔루션과 맞춤 개발 선택, 비용 범위 감각, 내부 역할 정리를 순서대로 안내합니다.</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">Author</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">박민재 / 운영팀 리드 — 위시켓 운영팀 리드 박민재입니다. 기업과 IT 전문가의 최적 매칭을 설계합니다.</td>
+</tr>
+<tr>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;background:#F8FAFC;font-weight:600;width:140px;">TLDR</td>
+  <td style="border:1px solid #E2E8F0;padding:8px 12px;">IT 지식이나 개발팀 없이 ERP 도입을 시작할 때 막막한 이유는 선택지가 많아서가 아니라, 판단 순서가 없기 때문입니다. 업체를 찾기 전에 먼저 우리 회사가 겪는 업무 문제를 일상어로 적어두고, 기성 솔루션으로 해결될지 맞춤 개발이 필요한지 데모로 가늠하고, 필요 범위를 좁혀 예산 구간을 잡는 세 단계가 먼저입니다. 이 순서가 서면 업체 탐색이 비교로 이어지고, IT 담당자가 없어도 프로젝트가 표류하지 않는 구조를 만들 수 있습니다.</td>
+</tr>
+</table>
+  </div>
+
+  <table class="guide-box" style="width:100%;border:1px solid #D1D5DB;border-collapse:collapse;margin:20px 0;">
+<tr><td style="background:#F9FAFB;padding:16px 20px;border:1px solid #D1D5DB;">
+<p style="margin:0 0 10px 0;font-weight:700;font-size:16px;">🖼 썸네일 제작 가이드</p>
+<p style="margin:0 0 4px 0;"><b>스타일:</b> 단색 배경 + 텍스트</p>
+<p style="margin:0 0 4px 0;"><b>배경색:</b> #1A3A6B</p>
+<p style="margin:0 0 4px 0;"><b>제목 텍스트:</b></p>
+<p style="margin:0 0 4px 0;">　1줄: 개발팀 없는 중소·중견기업</p>
+<p style="margin:0 0 4px 0;">　2줄: ERP 도입, 어디서부터?</p>
+<p style="margin:0 0 4px 0;"><b>장식 요소:</b> 판단 기준 3가지 아이콘</p>
+<p style="margin:0;"><b>로고:</b> wishket 로고 좌상단</p>
+</td></tr>
+</table>
+
+  <h3 style="font-size:18px;font-weight:600;margin:32px 0 12px 0;">Embed 코드 (붙여넣기용)</h3>
+<div style="margin:16px 0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:14px;font-weight:600;color:#374151;">기성 ERP 솔루션과 외주 맞춤 개발은 어떻게 다른가요? — 구분 · 기성 솔루션 (이카운트·더존 등) · 맞춤 개발 (외주)</span><button onclick="copyCodeBlock(this)" style="background:#2477F3;color:#fff;border:none;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">복사</button></div><pre style="background:#1E293B;color:#E2E8F0;padding:12px;border-radius:8px;overflow-x:auto;font-size:11px;line-height:1.4;white-space:pre-wrap;max-height:200px;overflow-y:auto;">&lt;style&gt;
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:1.5rem 0;border:1px solid #E5E7EB;border-radius:12px;background:#fff}
+table.geo{width:100%;border-collapse:collapse;border-spacing:0;font-size:14px;line-height:1.6;table-layout:fixed}
+table.geo caption{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+table.geo thead th{padding:12px 18px;font-size:12.5px;font-weight:700;letter-spacing:.01em;text-align:left;border-bottom:1px solid #D1D1D9;background:#F6F6F9;vertical-align:bottom}
+table.geo thead th:first-child{color:#82828E;border-right:1px solid #D1D1D9}
+table.geo thead th:not(:first-child){color:#1A1A23}
+table.geo tbody th[scope=row]{padding:14px 18px;font-size:14px;font-weight:600;color:#1A1A23;text-align:left;border-bottom:1px solid #ECECF0;border-right:1px solid #ECECF0;background:#fff;vertical-align:top;word-break:keep-all}
+table.geo tbody td{padding:14px 18px;color:#3A3A47;border-bottom:1px solid #ECECF0;vertical-align:top;word-break:keep-all}
+table.geo tbody tr:nth-child(even) td,table.geo tbody tr:nth-child(even) th[scope=row]{background:#F9F9FB}
+table.geo tbody tr:hover td,table.geo tbody tr:hover th[scope=row]{background:#F0F0F5}
+table.geo tfoot td{padding:9px 18px;font-size:12px;color:#9CA3AF;border-top:1px solid #ECECF0;background:#F9F9FB}
+table.geo tfoot time{font-weight:500}
+@media(max-width:640px){table.geo{table-layout:auto}table.geo thead th,table.geo tbody th[scope=row],table.geo tbody td{padding:11px 14px;font-size:13px}table.geo tfoot td{padding:8px 14px}}
+&lt;/style&gt;
+&lt;div class=&quot;tbl-wrap&quot;&gt;&lt;table class=&quot;geo&quot;&gt;&lt;caption&gt;기성 ERP 솔루션과 외주 맞춤 개발은 어떻게 다른가요? — 구분 · 기성 솔루션 (이카운트·더존 등) · 맞춤 개발 (외주)&lt;/caption&gt;&lt;colgroup&gt;&lt;col style=&quot;width:22%&quot;/&gt;&lt;col style=&quot;width:39%&quot;/&gt;&lt;col style=&quot;width:39%&quot;/&gt;&lt;/colgroup&gt;&lt;thead&gt;&lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;구분&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;기성 솔루션 (이카운트·더존 등)&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;맞춤 개발 (외주)&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;시작 방식&lt;/th&gt;&lt;td&gt;가입하고 바로 사용&lt;/td&gt;&lt;td&gt;요구사항 정리 → 견적 → 개발&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;비용 구조&lt;/th&gt;&lt;td&gt;월 구독료(사용자 수 기준)&lt;/td&gt;&lt;td&gt;프로젝트 단위 일시 투입 + 서버 운영비&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;도입 기간&lt;/th&gt;&lt;td&gt;수일~수주&lt;/td&gt;&lt;td&gt;수십일~수개월&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;커스터마이징&lt;/th&gt;&lt;td&gt;일부 항목 설정·권한 수정 수준&lt;/td&gt;&lt;td&gt;업무 흐름 전체 설계 가능&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;유지보수&lt;/th&gt;&lt;td&gt;구독료에 포함&lt;/td&gt;&lt;td&gt;런칭 후 별도 계약&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;</pre></div>
+<div style="margin:16px 0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:14px;font-weight:600;color:#374151;">맞춤 개발 비용, 왜 범위가 그렇게 넓은가요? — 범위 구간 · 대표 성격 · 일반적 기간</span><button onclick="copyCodeBlock(this)" style="background:#2477F3;color:#fff;border:none;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">복사</button></div><pre style="background:#1E293B;color:#E2E8F0;padding:12px;border-radius:8px;overflow-x:auto;font-size:11px;line-height:1.4;white-space:pre-wrap;max-height:200px;overflow-y:auto;">&lt;style&gt;
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:1.5rem 0;border:1px solid #E5E7EB;border-radius:12px;background:#fff}
+table.geo{width:100%;border-collapse:collapse;border-spacing:0;font-size:14px;line-height:1.6;table-layout:fixed}
+table.geo caption{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+table.geo thead th{padding:12px 18px;font-size:12.5px;font-weight:700;letter-spacing:.01em;text-align:left;border-bottom:1px solid #D1D1D9;background:#F6F6F9;vertical-align:bottom}
+table.geo thead th:first-child{color:#82828E;border-right:1px solid #D1D1D9}
+table.geo thead th:not(:first-child){color:#1A1A23}
+table.geo tbody th[scope=row]{padding:14px 18px;font-size:14px;font-weight:600;color:#1A1A23;text-align:left;border-bottom:1px solid #ECECF0;border-right:1px solid #ECECF0;background:#fff;vertical-align:top;word-break:keep-all}
+table.geo tbody td{padding:14px 18px;color:#3A3A47;border-bottom:1px solid #ECECF0;vertical-align:top;word-break:keep-all}
+table.geo tbody tr:nth-child(even) td,table.geo tbody tr:nth-child(even) th[scope=row]{background:#F9F9FB}
+table.geo tbody tr:hover td,table.geo tbody tr:hover th[scope=row]{background:#F0F0F5}
+table.geo tfoot td{padding:9px 18px;font-size:12px;color:#9CA3AF;border-top:1px solid #ECECF0;background:#F9F9FB}
+table.geo tfoot time{font-weight:500}
+@media(max-width:640px){table.geo{table-layout:auto}table.geo thead th,table.geo tbody th[scope=row],table.geo tbody td{padding:11px 14px;font-size:13px}table.geo tfoot td{padding:8px 14px}}
+&lt;/style&gt;
+&lt;div class=&quot;tbl-wrap&quot;&gt;&lt;table class=&quot;geo&quot;&gt;&lt;caption&gt;맞춤 개발 비용, 왜 범위가 그렇게 넓은가요? — 범위 구간 · 대표 성격 · 일반적 기간&lt;/caption&gt;&lt;colgroup&gt;&lt;col style=&quot;width:22%&quot;/&gt;&lt;col style=&quot;width:39%&quot;/&gt;&lt;col style=&quot;width:39%&quot;/&gt;&lt;/colgroup&gt;&lt;thead&gt;&lt;tr&gt;&lt;th scope=&quot;col&quot;&gt;범위 구간&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;대표 성격&lt;/th&gt;&lt;th scope=&quot;col&quot;&gt;일반적 기간&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;연동·경량 ERP&lt;/th&gt;&lt;td&gt;기존 시스템에 붙는 단위 기능, 1인·소규모용 경량 ERP&lt;/td&gt;&lt;td&gt;20~90일&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;사내 업무 통합 ERP&lt;/th&gt;&lt;td&gt;생산·재고·매출 등 여러 부서 업무를 하나로 묶는 규모&lt;/td&gt;&lt;td&gt;90~150일&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th scope=&quot;row&quot;&gt;전사·다부서 통합 ERP&lt;/th&gt;&lt;td&gt;전 부서 통합 또는 외부 플랫폼과의 대규모 연동&lt;/td&gt;&lt;td&gt;180일 이상&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;tfoot&gt;&lt;tr&gt;&lt;td colspan=&quot;3&quot;&gt;2025년 위시켓 등록 프로젝트(ERP 신규 구축) 기준 · 클라이언트 희망 예산이며 실제 계약 금액과 다를 수 있습니다 · 기간은 발주자 제시 기준으로 실제 개발 기간과 다를 수 있습니다&lt;/td&gt;&lt;/tr&gt;&lt;/tfoot&gt;&lt;/table&gt;&lt;/div&gt;</pre></div>
+<div style="margin:16px 0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:14px;font-weight:600;color:#374151;">사례: 스마트스토어-ERP 연동 재고관리 자동화 개발</span><button onclick="copyCodeBlock(this)" style="background:#2477F3;color:#fff;border:none;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">복사</button></div><pre style="background:#1E293B;color:#E2E8F0;padding:12px;border-radius:8px;overflow-x:auto;font-size:11px;line-height:1.4;white-space:pre-wrap;max-height:200px;overflow-y:auto;">&lt;div style=&quot;border:1px solid #E5E7EB;border-radius:14px;padding:18px 20px;background:#fff;&quot;&gt;
+&lt;div style=&quot;display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;&quot;&gt;
+&lt;span style=&quot;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;background:#e8f5e9;color:#2e7d32;&quot;&gt;저가 사례&lt;/span&gt;
+&lt;span style=&quot;font-size:15.5px;font-weight:700;color:#0d0d0d;line-height:1.4;&quot;&gt;스마트스토어-ERP 연동 재고관리 자동화 개발&lt;/span&gt;
+&lt;/div&gt;
+&lt;div style=&quot;font-size:20px;font-weight:800;color:#2477F3;margin-bottom:4px;&quot;&gt;1,000만 원&lt;/div&gt;
+&lt;div style=&quot;font-size:12.5px;color:#999;margin-bottom:10px;&quot;&gt;30일 · 연동 단위 기능&lt;/div&gt;
+&lt;div style=&quot;font-size:14.5px;color:#444;line-height:2.0;&quot;&gt;기존 ERP는 유지한 채, 외부 쇼핑몰과의 재고 데이터 동기화 기능만 별도 개발.&lt;/div&gt;
+&lt;/div&gt;</pre></div>
+<div style="margin:16px 0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:14px;font-weight:600;color:#374151;">사례: 사내 생산/재고/매출 통합 관리 ERP 시스템 구축</span><button onclick="copyCodeBlock(this)" style="background:#2477F3;color:#fff;border:none;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">복사</button></div><pre style="background:#1E293B;color:#E2E8F0;padding:12px;border-radius:8px;overflow-x:auto;font-size:11px;line-height:1.4;white-space:pre-wrap;max-height:200px;overflow-y:auto;">&lt;div style=&quot;border:1px solid #E5E7EB;border-radius:14px;padding:18px 20px;background:#fff;&quot;&gt;
+&lt;div style=&quot;display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;&quot;&gt;
+&lt;span style=&quot;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;background:#e3f2fd;color:#1565c0;&quot;&gt;중가 사례&lt;/span&gt;
+&lt;span style=&quot;font-size:15.5px;font-weight:700;color:#0d0d0d;line-height:1.4;&quot;&gt;사내 생산/재고/매출 통합 관리 ERP 시스템 구축&lt;/span&gt;
+&lt;/div&gt;
+&lt;div style=&quot;font-size:20px;font-weight:800;color:#2477F3;margin-bottom:4px;&quot;&gt;4,000만 원&lt;/div&gt;
+&lt;div style=&quot;font-size:12.5px;color:#999;margin-bottom:10px;&quot;&gt;90일 · 사내 업무 통합&lt;/div&gt;
+&lt;div style=&quot;font-size:14.5px;color:#444;line-height:2.0;&quot;&gt;여러 부서의 업무를 하나의 시스템으로 묶어 데이터 단절을 해소.&lt;/div&gt;
+&lt;/div&gt;</pre></div>
+<div style="margin:16px 0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:14px;font-weight:600;color:#374151;">사례: 지게차/물류장비 판매/임대 업체 ERP 구축</span><button onclick="copyCodeBlock(this)" style="background:#2477F3;color:#fff;border:none;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">복사</button></div><pre style="background:#1E293B;color:#E2E8F0;padding:12px;border-radius:8px;overflow-x:auto;font-size:11px;line-height:1.4;white-space:pre-wrap;max-height:200px;overflow-y:auto;">&lt;div style=&quot;border:1px solid #E5E7EB;border-radius:14px;padding:18px 20px;background:#fff;&quot;&gt;
+&lt;div style=&quot;display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;&quot;&gt;
+&lt;span style=&quot;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;background:#fce4ec;color:#c62828;&quot;&gt;고가 사례&lt;/span&gt;
+&lt;span style=&quot;font-size:15.5px;font-weight:700;color:#0d0d0d;line-height:1.4;&quot;&gt;지게차/물류장비 판매/임대 업체 ERP 구축&lt;/span&gt;
+&lt;/div&gt;
+&lt;div style=&quot;font-size:20px;font-weight:800;color:#2477F3;margin-bottom:4px;&quot;&gt;1억 3,500만 원&lt;/div&gt;
+&lt;div style=&quot;font-size:12.5px;color:#999;margin-bottom:10px;&quot;&gt;180일 · 전사 통합 (모바일+PC)&lt;/div&gt;
+&lt;div style=&quot;font-size:14.5px;color:#444;line-height:2.0;&quot;&gt;업종 특화 업무 흐름 전반을 설계하고 모바일·PC 양쪽 인터페이스까지 포함.&lt;/div&gt;
+&lt;/div&gt;</pre></div>
+<div style="margin:16px 0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:14px;font-weight:600;color:#374151;">인라인 CTA: 예산 범위가 애매하면 매니저와 유사 사례를 비교해 볼 수 있습니다.</span><button onclick="copyCodeBlock(this)" style="background:#2477F3;color:#fff;border:none;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">복사</button></div><pre style="background:#1E293B;color:#E2E8F0;padding:12px;border-radius:8px;overflow-x:auto;font-size:11px;line-height:1.4;white-space:pre-wrap;max-height:200px;overflow-y:auto;">&lt;div style=&quot;background:linear-gradient(135deg,#5E9ADE 0%,#7BB2E8 100%);border-radius:14px;padding:20px 24px;margin:30px 0;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;&quot;&gt;
+&lt;p style=&quot;font-size:15px;color:#fff;line-height:1.65;margin:0;flex:1;&quot;&gt;예산 범위가 애매하면 매니저와 유사 사례를 비교해 볼 수 있습니다.&lt;/p&gt;
+&lt;a href=&quot;https://wishket.com/project/free-consulting/?utm_source=blog_webflow&amp;amp;utm_medium=inline_cta&amp;amp;utm_campaign=260421_erp-outsourcing-guide-no-it-team&quot; style=&quot;display:inline-block;background:#fff;color:#2477F3;font-size:14px;font-weight:700;padding:10px 18px;border-radius:10px;white-space:nowrap;text-decoration:none;&quot;&gt;사례 비교 요청&lt;/a&gt;
+&lt;/div&gt;</pre></div>
+<div style="margin:16px 0;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;"><span style="font-size:14px;font-weight:600;color:#374151;">CTA 배너 (종료)</span><button onclick="copyCodeBlock(this)" style="background:#2477F3;color:#fff;border:none;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">복사</button></div><pre style="background:#1E293B;color:#E2E8F0;padding:12px;border-radius:8px;overflow-x:auto;font-size:11px;line-height:1.4;white-space:pre-wrap;max-height:200px;overflow-y:auto;">&lt;div style=&quot;background:linear-gradient(135deg,#5E9ADE 0%,#7BB2E8 100%);border-radius:16px;padding:32px 30px;color:#fff;margin:40px 0 0;&quot;&gt;
+&lt;div style=&quot;font-size:12px;font-weight:600;letter-spacing:0.8px;opacity:0.75;margin-bottom:10px;text-transform:uppercase;&quot;&gt;다음 단계&lt;/div&gt;
+&lt;h3 style=&quot;font-size:20px;font-weight:800;line-height:1.45;margin-bottom:20px;color:#fff;letter-spacing:-0.3px;&quot;&gt;혼자 이 단계를 밟기 어렵다면, 위시켓에 프로젝트를 등록해 보세요&lt;/h3&gt;
+&lt;div style=&quot;display:flex;flex-direction:column;gap:12px;margin-bottom:24px;&quot;&gt;&lt;div style=&quot;background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px;font-size:14.5px;line-height:1.65;&quot;&gt;&lt;span style=&quot;font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;&quot;&gt;아직 방식 선택도 안 된 상태라면&lt;/span&gt;범위가 애매해도 괜찮습니다. 매니저가 기성 솔루션과 맞춤 개발 중 어느 쪽에 가까운지, 비슷한 규모의 사례는 어느 정도였는지 함께 정리해 드립니다.&lt;/div&gt;
+&lt;div style=&quot;background:rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px;font-size:14.5px;line-height:1.65;&quot;&gt;&lt;span style=&quot;font-weight:700;display:block;margin-bottom:4px;font-size:13px;opacity:0.85;&quot;&gt;이미 방향은 잡혔는데 내부 총괄이 없다면&lt;/span&gt;IT 담당자가 없어도 됩니다. 견적 적정성 검토, 파트너 선별, 계약 확인까지 매니저가 동반합니다. 프로젝트 등록과 상담은 무료입니다.&lt;/div&gt;&lt;/div&gt;&lt;div style=&quot;text-align:center;&quot;&gt;&lt;a href=&quot;https://www.wishket.com/project/create/?utm_source=blog_webflow&amp;amp;utm_medium=cta_banner&amp;amp;utm_campaign=260421_erp-outsourcing-guide-no-it-team&quot; style=&quot;display:inline-block;background:#fff;color:#2477F3;font-size:15px;font-weight:800;padding:13px 28px;border-radius:10px;text-decoration:none;&quot;&gt;매니저와 정리하기&lt;/a&gt;&lt;/div&gt;
+&lt;/div&gt;</pre></div>
+
+
+  <h3 style="font-size:18px;font-weight:600;margin:32px 0 12px 0;">JSON-LD (Custom Code에 붙여넣기)</h3>
+<pre style="background:#1E293B;color:#E2E8F0;padding:16px;border-radius:8px;overflow-x:auto;font-size:12px;line-height:1.5;white-space:pre-wrap;">&lt;script type="application/ld+json"&gt;
+{
+  &quot;@context&quot;: &quot;https://schema.org&quot;,
+  &quot;@type&quot;: &quot;BlogPosting&quot;,
+  &quot;headline&quot;: &quot;개발팀 없는 중소·중견기업의 ERP, 업체 알아보기 전에 먼저 판단할 3가지&quot;,
+  &quot;description&quot;: &quot;IT 팀 없이 ERP 도입이 막막하다면, 업체보다 먼저 봐야 할 3가지 판단 기준이 있습니다. 기성 솔루션과 맞춤 개발 선택, 비용 범위 감각, 내부 역할 정리를 순서대로 안내합니다.&quot;,
+  &quot;datePublished&quot;: &quot;2026-04-21&quot;,
+  &quot;dateModified&quot;: &quot;2026-04-21&quot;,
+  &quot;author&quot;: {
+    &quot;@type&quot;: &quot;Person&quot;,
+    &quot;name&quot;: &quot;박민재&quot;
+  },
+  &quot;publisher&quot;: {
+    &quot;@type&quot;: &quot;Organization&quot;,
+    &quot;name&quot;: &quot;위시켓&quot;,
+    &quot;url&quot;: &quot;https://www.wishket.com&quot;
+  },
+  &quot;mainEntityOfPage&quot;: {
+    &quot;@type&quot;: &quot;WebPage&quot;
+  },
+  &quot;keywords&quot;: &quot;ERP&quot;,
+  &quot;articleSection&quot;: &quot;IT 아웃소싱&quot;,
+  &quot;hasPart&quot;: [
+    {
+      &quot;@type&quot;: &quot;WebPageElement&quot;,
+      &quot;name&quot;: &quot;ERP를 하려는데 어디서부터 시작해야 하나요?&quot;,
+      &quot;url&quot;: &quot;#erp를-하려는데-어디서부터-시작해야-하나요&quot;
+    },
+    {
+      &quot;@type&quot;: &quot;WebPageElement&quot;,
+      &quot;name&quot;: &quot;기성 ERP 솔루션과 외주 맞춤 개발은 어떻게 다른가요?&quot;,
+      &quot;url&quot;: &quot;#기성-erp-솔루션과-외주-맞춤-개발은-어떻게-다른가요&quot;
+    },
+    {
+      &quot;@type&quot;: &quot;WebPageElement&quot;,
+      &quot;name&quot;: &quot;맞춤 개발 비용, 왜 범위가 그렇게 넓은가요?&quot;,
+      &quot;url&quot;: &quot;#맞춤-개발-비용-왜-범위가-그렇게-넓은가요&quot;
+    },
+    {
+      &quot;@type&quot;: &quot;WebPageElement&quot;,
+      &quot;name&quot;: &quot;IT 담당자가 없는데 외주를 맡기면 우리 쪽에서 뭘 해야 하나요?&quot;,
+      &quot;url&quot;: &quot;#it-담당자가-없는데-외주를-맡기면-우리-쪽에서-뭘-해야-하나요&quot;
+    }
+  ]
+}
+&lt;/script&gt;
+&lt;script type="application/ld+json"&gt;
+{
+  &quot;@context&quot;: &quot;https://schema.org&quot;,
+  &quot;@type&quot;: &quot;FAQPage&quot;,
+  &quot;mainEntity&quot;: [
+    {
+      &quot;@type&quot;: &quot;Question&quot;,
+      &quot;name&quot;: &quot;중소기업 ERP 도입 후 유지보수는 어떻게 해야 하나요?&quot;,
+      &quot;acceptedAnswer&quot;: {
+        &quot;@type&quot;: &quot;Answer&quot;,
+        &quot;text&quot;: &quot;기성 SaaS ERP(이카운트·더존 등)는 구독료에 유지보수가 포함되어 별도 비용이 없지만, 맞춤 개발 ERP는 런칭 후 유지보수를 별도 계약으로 진행하는 것이 일반적입니다. 최초 계약 시 유지보수 범위를 확정하기는 어렵고, 실제로 운영해봐야 무엇이 필요한지 드러나기 때문입니다. 계약 단계에서 확인해야 할 것은 하자보수 기간(개발사 귀책 버그 무상 수정 기간)과 유지보수 대응이 가능한 파트너인지 여부입니다. 하자보수와 유지보수는 다른 개념이므로 혼동하지 않도록 주의하세요.&quot;
+      }
+    },
+    {
+      &quot;@type&quot;: &quot;Question&quot;,
+      &quot;name&quot;: &quot;ERP 구축 시 발생할 수 있는 주요 문제점은 무엇인가요?&quot;,
+      &quot;acceptedAnswer&quot;: {
+        &quot;@type&quot;: &quot;Answer&quot;,
+        &quot;text&quot;: &quot;실무에서 반복되는 문제는 크게 세 가지입니다. 첫째는 초기에 모든 부서를 한꺼번에 넣으려다 범위가 커져 프로젝트가 표류하는 경우입니다. 둘째는 시스템은 완성됐는데 직원들이 쓰지 않아 실패로 끝나는 경우로, 이는 기술 문제가 아니라 변화 관리 부재가 원인입니다. 셋째는 내부 담당자가 없어 업무 요구사항 전달·중간 검수·최종 검수가 제대로 돌지 않는 구조적 공백입니다. 세 문제 모두 계약 전 단계에서 범위·역할·사용 계획을 구체화하면 사전에 줄일 수 있습니다.&quot;
+      }
+    },
+    {
+      &quot;@type&quot;: &quot;Question&quot;,
+      &quot;name&quot;: &quot;ERP 도입에 정부 지원금을 활용할 수 있나요?&quot;,
+      &quot;acceptedAnswer&quot;: {
+        &quot;@type&quot;: &quot;Answer&quot;,
+        &quot;text&quot;: &quot;스마트공장 바우처, 디지털 전환 바우처 등 중소기업 대상 지원 제도가 있으며, ERP 구축이 지원 대상에 포함되는 경우가 있습니다. 다만 기업 자부담 비율(통상 30~50%)이 있고, 신청 조건·대상 기업 요건·지원 가능 솔루션이 제한될 수 있습니다. 지원금이 승인되더라도 &#x27;공짜&#x27;로 도입할 수 있는 것은 아니며, 지원 대상 여부는 해당 사업 공고를 기준으로 확인해야 합니다. 지원금 여부와 상관없이 우리 회사에 필요한 범위와 예산을 먼저 잡아두는 것이 순서입니다.&quot;
+      }
+    },
+    {
+      &quot;@type&quot;: &quot;Question&quot;,
+      &quot;name&quot;: &quot;SaaS ERP와 맞춤 개발 ERP를 병행하는 방식도 있나요?&quot;,
+      &quot;acceptedAnswer&quot;: {
+        &quot;@type&quot;: &quot;Answer&quot;,
+        &quot;text&quot;: &quot;있습니다. 기성 SaaS ERP를 주시스템으로 쓰면서, 기성 제품이 처리하지 못하는 일부 기능(예: 외부 쇼핑몰과의 재고 동기화, 사내 보고서 자동 생성)만 별도로 맞춤 개발하는 하이브리드 방식이 실무에서 꽤 활용됩니다. 위시켓에 등록된 사례 중 500만~1,000만 원대 단기 프로젝트가 상당수 이 구조입니다. 처음부터 전체 맞춤 개발로 가지 않아도 되므로, 기성 솔루션 데모를 먼저 해보고 안 되는 부분만 추가로 개발하는 접근이 리스크를 낮추는 방법 중 하나입니다.&quot;
+      }
+    }
+  ]
+}
+&lt;/script&gt;</pre>
+
+</div>
+
+<script>
+// contenteditable 변경 감지 + localStorage 자동저장
+var content = document.getElementById('cms-content');
+var status = document.getElementById('edit-status');
+var saveTimer;
+var STORAGE_KEY = 'wishket_draft_' + document.title.replace(/[^a-zA-Z0-9가-힣]/g, '_').substring(0, 60);
+var VERSION_KEY = STORAGE_KEY + '_ver';
+var CURRENT_VERSION = '20260421_151634';
+
+window.addEventListener('load', function() {
+  var saved = localStorage.getItem(STORAGE_KEY);
+  var savedVer = localStorage.getItem(VERSION_KEY);
+  if (saved && savedVer === CURRENT_VERSION) { content.innerHTML = saved; }
+  else { localStorage.removeItem(STORAGE_KEY); }
+  attachLinkHandlers();
+});
+
+content.addEventListener('input', function() {
+  status.textContent = '편집 중 (미저장)';
+  status.className = 'modified';
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(function() {
+    localStorage.setItem(STORAGE_KEY, content.innerHTML);
+    localStorage.setItem(VERSION_KEY, CURRENT_VERSION);
+    status.textContent = '자동저장됨';
+    status.className = '';
+  }, 3000);
+});
+
+function attachLinkHandlers() {
+  document.querySelectorAll('[contenteditable] a').forEach(function(a) {
+    a.addEventListener('click', function(e) {
+      if (e.metaKey || e.ctrlKey) { window.open(a.href, '_blank'); }
+    });
+    if (a.title.indexOf('Cmd+클릭') === -1) {
+      a.title = (a.title || '') + ' (Cmd+클릭으로 열기)';
+    }
+  });
+}
+
+function copyContent() {
+  var clone = content.cloneNode(true);
+  clone.querySelectorAll('.image-guide, table.image-guide, table.guide-box').forEach(function(el) { el.remove(); });
+  var text = clone.innerText;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(function() {
+      var btn = document.getElementById('copy-btn');
+      btn.textContent = '복사됨!';
+      setTimeout(function() { btn.textContent = '본문 복사'; }, 2000);
+    });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    var btn = document.getElementById('copy-btn');
+    btn.textContent = '복사됨!';
+    setTimeout(function() { btn.textContent = '본문 복사'; }, 2000);
+  }
+}
+
+function copyCodeBlock(btn) {
+  var pre = btn.parentElement.nextElementSibling;
+  if (!pre) return;
+  var text = pre.textContent;
+  navigator.clipboard.writeText(text).then(function() {
+    btn.textContent = '복사됨!';
+    setTimeout(function() { btn.textContent = '복사'; }, 2000);
+  });
+}
+
+window.addEventListener('beforeunload', function(e) {
+  if (status.className === 'modified') {
+    clearTimeout(saveTimer);
+    localStorage.setItem(STORAGE_KEY, content.innerHTML);
+    localStorage.setItem(VERSION_KEY, CURRENT_VERSION);
+    e.preventDefault();
+    e.returnValue = '';
+  }
+});
+</script>
+
+</body>
+</html>
