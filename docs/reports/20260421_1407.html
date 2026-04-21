@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>블로그 전략 보고서</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Pretendard:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F6F5F1;--surface:#FFF;--border:#E2E0DB;--border-light:#EDECEA;--text:#1A1A1A;--text-secondary:#555;--text-muted:#999;--text-dim:#BBB;--hub:#1B7F79;--hub-light:#E6F5F4;--hub-bg:#F0FAF9;--sub1:#D94F4F;--sub1-light:#FDF0F0;--sub1-bg:#FEF6F6;--sub2:#C68A1D;--sub2-light:#FFF8EB;--sub2-bg:#FFFBF2;--sub3:#6C5CE7;--sub3-light:#F3F1FE;--sub3-bg:#F8F7FF;--emotion-high:#2ECC71;--emotion-mid:#F39C12;--emotion-low:#E74C3C;--basis-bg:#FAFAF8;--basis-border:#E8E7E3;--try-color:#1B7F79;--block-color:#D94F4F;--accent:#7C3AED;--accent-light:#EDE9FE;--radius:10px;--font:'Pretendard','Noto Sans KR',sans-serif;--font-mono:'JetBrains Mono',monospace;--col-w:260px;--row-label-w:88px}
+*{margin:0;padding:0;box-sizing:border-box}body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.7;-webkit-font-smoothing:antialiased;font-size:13.5px}
+.page-header{padding:48px 48px 0;max-width:1200px;margin:0 auto}.header-top{display:flex;align-items:flex-end;gap:16px;margin-bottom:10px;flex-wrap:wrap}.header-top h1{font-size:26px;font-weight:700;letter-spacing:-.5px;line-height:1.3}.header-badge{font-family:var(--font-mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);background:var(--accent-light);padding:4px 12px;border-radius:100px;margin-bottom:4px;flex-shrink:0}.header-desc{font-size:14px;color:var(--text-secondary);margin-bottom:8px;word-break:keep-all;line-height:1.7}.header-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}.meta-chip{font-family:var(--font-mono);font-size:10px;letter-spacing:.5px;color:var(--text-muted);background:var(--surface);border:1px solid var(--border);padding:3px 10px;border-radius:100px}
+.top-tabs{display:flex;gap:0;border-bottom:2px solid var(--border);max-width:1200px;margin:0 auto;padding:0 48px}.top-tab{padding:14px 24px;font-size:13px;font-weight:600;color:var(--text-muted);background:none;border:none;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .15s;letter-spacing:-.2px}.top-tab.active{color:var(--accent);border-bottom-color:var(--accent)}.top-tab:hover:not(.active){color:var(--text-secondary)}.top-tab .tab-num{font-family:var(--font-mono);font-size:10px;background:var(--border-light);color:var(--text-muted);padding:1px 6px;border-radius:4px;margin-left:6px}.top-tab.active .tab-num{background:var(--accent-light);color:var(--accent)}
+.tab-panel{display:none;max-width:1200px;margin:0 auto;padding:32px 48px 72px}.tab-panel.active{display:block}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px 26px;margin-bottom:18px}.card-title{font-family:var(--font-mono);font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);margin-bottom:12px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.badge{display:inline-flex;align-items:center;padding:2px 9px;border-radius:100px;font-family:var(--font-mono);font-size:10px;font-weight:500;letter-spacing:.3px;white-space:nowrap;margin:1px 2px}.b-purple{background:var(--accent-light);color:var(--accent);border:1px solid rgba(124,58,237,.2)}.b-hub{background:var(--hub-light);color:var(--hub);border:1px solid rgba(27,127,121,.2)}.b-sub1{background:var(--sub1-light);color:var(--sub1);border:1px solid rgba(217,79,79,.2)}.b-sub2{background:var(--sub2-light);color:var(--sub2);border:1px solid rgba(198,138,29,.2)}.b-sub3{background:var(--sub3-light);color:var(--sub3);border:1px solid rgba(108,92,231,.2)}.b-green{background:#E6F5F4;color:#1B7F79;border:1px solid rgba(27,127,121,.2)}.b-amber{background:#FEF3C7;color:#92400E;border:1px solid #FDE68A}.b-red{background:#FEE2E2;color:#DC2626;border:1px solid rgba(220,38,38,.2)}.b-gray{background:var(--border-light);color:var(--text-muted);border:1px solid var(--border)}
+.pill{display:inline-block;padding:3px 10px;border-radius:6px;font-size:11px;background:var(--border-light);color:var(--text-secondary);border:1px solid var(--border);margin:2px}
+table{width:100%;border-collapse:collapse}th{background:var(--basis-bg);text-align:left;padding:11px 16px;font-family:var(--font-mono);font-size:10px;font-weight:600;letter-spacing:.5px;color:var(--text-muted);border-bottom:1px solid var(--border)}td{padding:12px 16px;border-bottom:1px solid var(--border-light);font-size:12.5px;vertical-align:top;line-height:1.75;color:var(--text-secondary)}tr:last-child td{border-bottom:none}tr:hover td{background:rgba(0,0,0,.01)}.td-num{text-align:right;font-family:var(--font-mono);font-weight:600;font-variant-numeric:tabular-nums;color:var(--text)}
+td:first-child{color:var(--text);font-weight:500}
+ul.bullet{list-style:none;padding:0;margin:0}ul.bullet li{position:relative;padding:5px 0 5px 16px;font-size:12.5px;color:var(--text-secondary);line-height:1.75}ul.bullet li::before{content:"";position:absolute;left:0;top:12px;width:5px;height:5px;border-radius:50%;background:var(--border)}
+ul.bullet li strong{color:var(--text);font-weight:600}
+.dist-item{display:flex;align-items:center;margin-bottom:10px;font-size:12px}.dist-label{min-width:120px;color:var(--text-secondary);font-weight:500}.dist-bar-wrap{flex:1;height:6px;background:var(--border-light);border-radius:3px;margin:0 10px;overflow:hidden}.dist-bar-fill{height:100%;border-radius:3px}.dist-count{font-family:var(--font-mono);font-size:11px;font-weight:600;color:var(--text);min-width:36px;text-align:right}
+.correction{background:#F0FDF4;border:1px solid #BBF7D0;border-left:3px solid var(--hub);border-radius:0 6px 6px 0;padding:16px 20px;margin:10px 0;font-size:12.5px;line-height:1.75}.correction .claim{font-family:var(--font-mono);font-size:11px;color:var(--text-dim);margin-bottom:5px;font-style:italic}.correction .fix{color:#166534;font-weight:400}
+.warn-card{background:#FFF7ED;border:1px solid #FED7AA;border-left:3px solid #C2410C;border-radius:0 6px 6px 0;padding:16px 20px;margin:12px 0}.warn-card .lbl{font-family:var(--font-mono);font-size:9px;font-weight:600;letter-spacing:1px;color:#C2410C;margin-bottom:6px}.warn-card .txt{font-size:12px;color:#92400E;line-height:1.75}
+.reasoning-box{background:var(--basis-bg);border:1px solid var(--basis-border);border-left:3px solid var(--text-dim);border-radius:0 6px 6px 0;padding:16px 20px;margin-top:14px}.reasoning-box.rb-hub{border-left-color:var(--hub)}.reasoning-box.rb-sub1{border-left-color:var(--sub1)}.reasoning-box.rb-sub2{border-left-color:var(--sub2)}.reasoning-box.rb-sub3{border-left-color:var(--sub3)}.rb-label{font-family:var(--font-mono);font-size:9px;letter-spacing:1.2px;text-transform:uppercase;color:var(--text-dim);margin-bottom:6px}.rb-text{font-size:12px;color:var(--text-muted);word-break:keep-all;line-height:1.75}
+ul.check-list{list-style:none;padding:0;margin:0}ul.check-list li{position:relative;padding:6px 0 6px 24px;font-size:12.5px;color:var(--text-secondary);line-height:1.7}ul.check-list li::before{content:"";position:absolute;left:0;top:12px;width:10px;height:10px;border-radius:50%;border:2px solid var(--border)}ul.check-list li.ok::before{background:var(--hub);border-color:var(--hub)}ul.check-list li.no::before{background:var(--sub1);border-color:var(--sub1)}
+.hero{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px 30px;margin-bottom:24px;display:grid;grid-template-columns:1fr auto;gap:24px;align-items:start}.hero-body{min-width:0}.hero-title{font-size:16px;font-weight:700;color:var(--text);margin-bottom:8px;letter-spacing:-.3px}.hero-desc{font-size:13px;color:var(--text-muted);line-height:1.75;word-break:keep-all}.hero-stats{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start}.hero-stat{text-align:center;min-width:60px}.hero-stat-value{font-family:var(--font-mono);font-size:22px;font-weight:700;line-height:1.1}.hero-stat-label{font-family:var(--font-mono);font-size:9px;letter-spacing:.8px;text-transform:uppercase;color:var(--text-muted);margin-top:2px}
+.serp-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}.serp-header{padding:16px 20px 12px;border-bottom:1px solid var(--border-light);display:flex;align-items:center;gap:10px}.serp-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0}.serp-header-text{flex:1}.serp-header-title{font-size:13px;font-weight:700;color:var(--text)}.serp-header-sub{font-size:11px;color:var(--text-muted)}.serp-body{padding:16px 20px}.serp-item{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--border-light);font-size:12px;line-height:1.55}.serp-item:last-child{border-bottom:none}.serp-rank{font-family:var(--font-mono);font-size:10px;font-weight:600;color:var(--text-dim);min-width:20px;padding-top:2px}.serp-title{flex:1;color:var(--text-secondary)}.serp-date{font-family:var(--font-mono);font-size:10px;color:var(--text-dim);white-space:nowrap;opacity:.7}.serp-link{font-size:11px;color:var(--accent);text-decoration:none;flex-shrink:0;margin-left:6px;opacity:.7;transition:all .15s;background:var(--accent-light);padding:1px 5px;border-radius:4px}.serp-link:hover{opacity:1;background:var(--accent);color:#fff}.serp-insight{background:var(--basis-bg);border-top:1px solid var(--border-light);padding:16px 20px}.serp-insight-title{font-family:var(--font-mono);font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px}
+.serp-item:nth-child(n+6){opacity:.65}
+.ai-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:18px}.ai-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}.ai-card-header{padding:14px 18px 10px;display:flex;align-items:center;gap:8px}.ai-card-logo{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}.ai-card-name{font-size:13px;font-weight:700;color:var(--text)}.ai-card-status{font-family:var(--font-mono);font-size:10px;padding:2px 8px;border-radius:100px;margin-left:auto}.ai-card-body{padding:0 18px 16px}
+.section-title-bar{margin-top:36px}.stb-head{display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap}.stb-color{width:4px;height:48px;border-radius:2px;margin-top:2px;flex-shrink:0}.stb-content{flex:1;min-width:200px}.stb-overline{font-family:var(--font-mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px}.stb-question{font-size:19px;font-weight:700;line-height:1.4;word-break:keep-all;letter-spacing:-.3px}.stb-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.stb-tag{font-family:var(--font-mono);font-size:10px;letter-spacing:.5px;padding:3px 10px;border-radius:100px}
+.section-scroll{overflow-x:auto;margin-top:24px}.section-scroll::-webkit-scrollbar{height:5px}.section-scroll::-webkit-scrollbar-track{background:var(--border-light);border-radius:3px}.section-scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+.map-grid{display:grid;gap:0;min-width:fit-content;margin-bottom:8px}
+.rl{display:flex;align-items:center;justify-content:flex-end;padding-right:14px;font-family:var(--font-mono);font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);min-height:44px;border-right:2px solid var(--border)}.stage-cell{display:flex;align-items:center;justify-content:center;padding:6px 8px;position:relative}.stage-pill{color:#fff;padding:11px 0;border-radius:26px;font-size:13px;font-weight:600;text-align:center;width:100%;position:relative;z-index:2}.stage-id{font-family:var(--font-mono);font-size:10px;opacity:.7;margin-right:3px}.stage-cell:not(:last-child)::after{content:'';position:absolute;right:-4px;top:50%;transform:translateY(-50%);width:0;height:0;border-top:7px solid transparent;border-bottom:7px solid transparent;z-index:3;opacity:.45}
+.c-hub .stage-pill{background:var(--hub)}.c-hub .stage-cell:not(:last-child)::after{border-left:9px solid var(--hub)}.c-sub1 .stage-pill{background:var(--sub1)}.c-sub1 .stage-cell:not(:last-child)::after{border-left:9px solid var(--sub1)}.c-sub1 .rl{border-right-color:rgba(217,79,79,.25)}.c-sub2 .stage-pill{background:var(--sub2)}.c-sub2 .stage-cell:not(:last-child)::after{border-left:9px solid var(--sub2)}.c-sub2 .rl{border-right-color:rgba(198,138,29,.25)}.c-sub3 .stage-pill{background:var(--sub3)}.c-sub3 .stage-cell:not(:last-child)::after{border-left:9px solid var(--sub3)}.c-sub3 .rl{border-right-color:rgba(108,92,231,.25)}
+.emotion-strip{grid-column:2/-1;position:relative;height:150px;margin:0 8px}.emotion-strip.short{height:130px}.emotion-svg{width:100%;height:100%}.emotion-label{font-family:var(--font);font-size:11px;font-weight:600}.emotion-sublabel{font-family:var(--font);font-size:9px;fill:var(--text-muted)}
+.dc{padding:14px 16px;border-right:1px dashed var(--border-light);border-bottom:1px solid var(--border-light);font-size:12.5px;color:var(--text-secondary);word-break:keep-all;line-height:1.75}.dc:last-child{border-right:none}.dc.q{font-weight:600;color:var(--text);font-size:13.5px}
+.dc strong{color:var(--text);font-weight:600}.c-hub .dc.q{background:var(--hub-bg);border-bottom-color:var(--hub-light)}.c-hub .rl.q-label{background:var(--hub-bg)}.c-sub1 .dc.q{background:var(--sub1-bg);border-bottom-color:rgba(217,79,79,.12)}.c-sub1 .rl.q-label{background:var(--sub1-bg)}.c-sub2 .dc.q{background:var(--sub2-bg);border-bottom-color:rgba(198,138,29,.12)}.c-sub2 .rl.q-label{background:var(--sub2-bg)}.c-sub3 .dc.q{background:var(--sub3-bg);border-bottom-color:rgba(108,92,231,.12)}.c-sub3 .rl.q-label{background:var(--sub3-bg)}
+.dc.state-cell{font-size:11.5px;color:var(--text-muted);border-top:1px solid var(--border);line-height:1.7;font-style:italic}.dc.try-cell{font-size:11.5px;line-height:1.7}.try-line,.block-line{display:flex;align-items:flex-start;gap:6px;line-height:1.65}.try-line+.block-line{margin-top:8px}.try-ico{color:var(--try-color);font-size:8px;margin-top:5px;flex-shrink:0}.block-ico{color:var(--block-color);font-size:9px;margin-top:4px;flex-shrink:0;font-weight:700}.dc.basis-cell{background:var(--basis-bg);border-bottom-color:var(--basis-border);font-size:11px;color:var(--text-dim);line-height:1.7;padding:10px 16px}.rl.basis-label{background:var(--basis-bg)}.dc.flow-reason-cell{grid-column:2/-1;background:var(--basis-bg);border:1px solid var(--basis-border);border-left:none;font-size:11.5px;color:var(--text-dim);line-height:1.75;padding:12px 16px}.rl.flow-reason-label{background:var(--basis-bg);border-bottom:1px solid var(--basis-border)}.dc.branch-cell{text-align:center;border-bottom:none;padding:6px 12px}.branch-pill{font-family:var(--font-mono);font-size:10px;padding:3px 10px;border-radius:100px;display:inline-block}.dc.branch-cell.empty{color:var(--text-dim);font-size:11px}
+.hub-sub-connector{margin:32px 0 0}.connector-visual{display:flex;align-items:center;gap:10px;padding:20px 0 0;flex-wrap:wrap}.cv-line{height:2px;width:40px;border-radius:1px}.cv-label{font-family:var(--font-mono);font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:3px 12px;border-radius:100px}.cv-desc{font-size:11px;color:var(--text-muted);margin-left:4px}
+.legend-panel{margin:20px 0 0}.legend-panel details{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}.legend-panel summary{padding:14px 20px;font-family:var(--font-mono);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);cursor:pointer;user-select:none;list-style:none;display:flex;align-items:center;gap:8px}.legend-panel summary::before{content:'&#x25B8;';font-size:10px;transition:transform .2s}.legend-panel details[open] summary::before{transform:rotate(90deg)}.legend-panel summary::-webkit-details-marker{display:none}.lp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1px;background:var(--border-light);border-top:1px solid var(--border-light)}.lp-group{background:var(--surface);padding:16px 20px}.lp-group-title{font-family:var(--font-mono);font-size:9px;letter-spacing:1.2px;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px}.lp-item{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:12px;color:var(--text-secondary)}.lp-swatch{width:14px;height:14px;border-radius:3px;flex-shrink:0}.lp-swatch.circle{border-radius:50%}.lp-desc{color:var(--text-muted);font-size:11px}
+.inner-tabs{display:flex;gap:0;border-bottom:2px solid var(--border);margin:24px 0 0;position:sticky;top:0;z-index:10;background:var(--bg);padding-top:4px}.inner-tab{padding:10px 18px;font-size:12px;font-weight:600;color:var(--text-muted);background:none;border:none;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .15s;white-space:nowrap}.inner-tab.active{border-bottom-color:var(--hub);color:var(--hub)}.inner-tab[data-color="sub1"].active{border-bottom-color:var(--sub1);color:var(--sub1)}.inner-tab[data-color="sub2"].active{border-bottom-color:var(--sub2);color:var(--sub2)}.inner-tab[data-color="sub3"].active{border-bottom-color:var(--sub3);color:var(--sub3)}.inner-tab:hover:not(.active){color:var(--text-secondary)}.inner-panel{display:none}.inner-panel.active{display:block}
+/* SECTION HEADING */
+.sec-heading{display:flex;align-items:center;gap:10px;margin:28px 0 14px}.sec-heading-icon{font-size:16px;line-height:1}.sec-heading-text{font-size:14px;font-weight:700;color:var(--text);letter-spacing:-.2px}.sec-heading:first-child{margin-top:0}
+
+/* LOW VOLUME ROW */
+tr.vol-low td{color:var(--text-dim)}tr.vol-low td:first-child{font-weight:400}
+
+/* DATA ANGLE BOX */
+.angle-box{background:var(--basis-bg);border:1px solid var(--basis-border);border-radius:var(--radius);padding:18px 22px;margin-top:14px}
+.angle-item{margin-bottom:10px;font-size:12.5px;line-height:1.7}.angle-item:last-child{margin-bottom:0}
+.angle-item strong{color:var(--text);font-weight:600}.angle-item span{color:var(--text-muted)}
+
+/* FANOUT CARD */
+.fanout-grid{display:grid;gap:12px}.fanout-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px}
+.fanout-top{display:flex;align-items:flex-start;gap:12px;margin-bottom:8px}.fanout-q{flex:1;font-size:13px;font-weight:600;color:var(--text);line-height:1.5}
+.fanout-reason{font-size:11px;color:var(--text-dim);line-height:1.6}
+
+/* MISCONCEPTION ROW */
+.mis-row{display:flex;align-items:baseline;gap:0;padding:10px 0;border-bottom:1px solid var(--border-light)}
+.mis-row:last-child{border-bottom:none}
+.mis-belief-inline{flex:0 0 32%;font-size:12px;color:var(--text-muted);line-height:1.65;padding-right:12px}
+.mis-arrow-inline{flex-shrink:0;color:var(--text-dim);font-size:14px;margin:0 10px}
+.mis-reality-inline{flex:1;font-size:12.5px;color:var(--text);line-height:1.7;font-weight:500}
+
+/* KP CORRECTION */
+.kp-correction{display:flex;gap:0;margin-bottom:10px;border-radius:8px;overflow:hidden;border:1px solid var(--border-light)}
+.kp-correction:last-child{margin-bottom:0}
+.kp-claim{flex:0 0 40%;background:#FEF2F2;padding:12px 16px;font-size:11.5px;color:#991B1B;line-height:1.65;border-right:1px solid #FECACA}
+.kp-fix{flex:1;background:#F0FDF4;padding:12px 16px;font-size:12px;color:#166534;line-height:1.7}
+
+/* GUARDRAIL CARD */
+.gr-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;margin-bottom:10px}
+.gr-rule{font-size:13px;font-weight:600;color:var(--text);line-height:1.6;margin-bottom:6px}
+.gr-alt{font-size:11.5px;color:var(--text-muted);line-height:1.65;padding-left:14px;border-left:2px solid var(--border-light)}
+
+/* JOURNEY GRID OVERRIDES */
+.dc.try-row{border-bottom:1px dashed var(--border-light)}
+.dc.block-row{font-size:11.5px;color:var(--text-muted)}
+.block-row .block-line{gap:6px}
+
+.page-footer{padding:32px 48px 48px;max-width:1200px;margin:0 auto;font-family:var(--font-mono);font-size:10px;color:var(--text-dim);letter-spacing:.5px;border-top:1px solid var(--border)}
+@media(max-width:900px){.page-header,.top-tabs,.tab-panel{padding-left:24px;padding-right:24px}.two-col{grid-template-columns:1fr}.ai-grid{grid-template-columns:1fr}:root{--col-w:220px;--row-label-w:72px}.inner-tabs{overflow-x:auto}.hero{grid-template-columns:1fr}.hero-stats{margin-top:12px}}
+</style>
+</head>
+<body>
+
+
+<div class="page-header">
+  <div class="header-top">
+    <h1>it지식이없고내부개발팀이없는중소,중견 &mdash; 블로그 전략 보고서</h1>
+    <span class="header-badge">Strategy Report</span>
+  </div>
+  <div class="header-desc"><strong>포인트 질문:</strong> IT 지식이 없고 내부 개발팀이 없는 중소, 중견기업이 ERP를 구축하려는데, 어디서부터 시작해야 할까?</div>
+  <div class="header-meta">
+    <span class="meta-chip">2026-04-21</span>
+    <span class="meta-chip">Hub 1 + Sub 4</span>
+    <span class="meta-chip">위시켓 데이터 33건</span>
+    <span class="meta-chip">Persona: advisor</span>
+  </div>
+</div>
+
+
+<div class="top-tabs">
+  <button class="top-tab active" onclick="switchView('research')">리서치 분석<span class="tab-num">1</span></button>
+  <button class="top-tab" onclick="switchView('context')">방향 &amp; 제한사항<span class="tab-num">2</span></button>
+  <button class="top-tab" onclick="switchView('journey')">콘텐츠 기획 구조<span class="tab-num">3</span></button>
+</div>
+
+
+
+
+<div class="tab-panel active" id="view-research">
+
+<div class="hero">
+  <div class="hero-body">
+    <div class="hero-desc">이 질문을 검색하는 사람들이 어디서 정보를 찾고 있는지, AI는 어떤 답을 주고 있는지, 경쟁 콘텐츠는 무엇을 다루고 무엇을 빠뜨렸는지, 위시켓 데이터에서 어떤 인사이트를 뽑을 수 있는지를 정리합니다.</div>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="hero-stat-value" style="color:var(--hub)">20</div><div class="hero-stat-label">키워드</div></div>
+    <div class="hero-stat"><div class="hero-stat-value" style="color:var(--accent)">8</div><div class="hero-stat-label">PAA</div></div>
+    <div class="hero-stat"><div class="hero-stat-value" style="color:var(--sub1)">20</div><div class="hero-stat-label">SERP 결과</div></div>
+    <div class="hero-stat"><div class="hero-stat-value" style="color:var(--sub2)">33</div><div class="hero-stat-label">위시켓 데이터</div></div>
+  </div>
+</div>
+
+<div class="sec-heading"><span class="sec-heading-icon">&#x1F50D;</span><span class="sec-heading-text">검색 환경</span></div>
+
+<div class="two-col">
+  <div class="card">
+    <div class="card-title">검색량 (월간, 네이버 검색광고)</div>
+    <table><tr><th>키워드</th><th style="text-align:right">월간</th></tr>
+    <tr><td>ERP</td><td class="td-num">27300</td></tr><tr><td>마이그레이션</td><td class="td-num">7340</td></tr><tr><td>그룹웨어</td><td class="td-num">6080</td></tr><tr><td>MES</td><td class="td-num">5530</td></tr><tr><td>WMS</td><td class="td-num">2890</td></tr><tr><td>SAPERP</td><td class="td-num">1230</td></tr><tr><td>ECOUNT</td><td class="td-num">1110</td></tr><tr><td>ERP시스템</td><td class="td-num">1090</td></tr><tr><td>ECOUNTERP</td><td class="td-num">1030</td></tr><tr><td>ERP종류</td><td class="td-num">860</td></tr><tr><td>중소기업ERP</td><td class="td-num">540</td></tr><tr><td>ERP도입</td><td class="td-num">80</td></tr><tr><td>클라우드ERP</td><td class="td-num">40</td></tr><tr><td>ERP컨설팅</td><td class="td-num">30</td></tr><tr><td>ERP구축비용</td><td class="td-num">11</td></tr><tr><td>SAASERP</td><td class="td-num">11</td></tr><tr class="vol-low"><td>ERP구축절차</td><td class="td-num">2</td></tr><tr class="vol-low"><td>ERP도입실패</td><td class="td-num">2</td></tr><tr class="vol-low"><td>ERP외주개발</td><td class="td-num">2</td></tr><tr class="vol-low"><td>중소기업ERP구축</td><td class="td-num">2</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <div class="card-title">PAA (People Also Ask) &mdash; 8건</div>
+    <ul class="bullet"><li>중소기업 ERP 시스템이란 무엇인가요?</li><li>중소기업 ERP 구축 시 고려해야 할 주요 요소는 무엇인가요?</li><li>중소기업에 적합한 ERP 솔루션은 어떤 것들이 있나요?</li><li>중소기업 ERP 구축 비용은 얼마나 드나요?</li><li>중소기업 ERP 구축의 장점과 단점은 무엇인가요?</li><li>중소기업 ERP 구축을 위한 단계별 절차는 어떻게 되나요?</li><li>중소기업 ERP 구축 시 발생할 수 있는 주요 문제점은 무엇인가요?</li><li>중소기업 ERP 구축 후 유지보수는 어떻게 해야 하나요?</li></ul>
+    
+    <div style="margin-top:14px">
+      <div class="card-title">Google 자동완성</div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px"><span class="pill">중소기업 erp 구축 지원</span><span class="pill">중소기업 erp</span><span class="pill">중소기업 erp 비교</span></div>
+    </div>
+    
+  </div>
+</div>
+
+<div class="sec-heading"><span class="sec-heading-icon">&#x1F4CA;</span><span class="sec-heading-text">SERP 분석</span></div>
+
+<div style="display:flex;gap:8px;margin:0 0 14px">
+  <span class="badge b-green">스마트블록 노출</span>
+  <span class="badge b-gray">지식 스니펫 없음</span>
+</div>
+
+<div class="two-col" style="margin-bottom:14px">
+  
+  <div class="serp-card">
+    <div class="serp-header">
+      <div class="serp-icon" style="background:#03C75A">N</div>
+      <div class="serp-header-text"><div class="serp-header-title">네이버 블로그 SERP</div><div class="serp-header-sub">상위 10건</div></div>
+    </div>
+    <div class="serp-body">
+      
+      <div class="serp-item"><div class="serp-rank">1</div><div class="serp-title">중소기업 ERP 가성비 맞춰서 구축하려면</div><div class="serp-date">2025.07</div><a href="https://blog.naver.com/infermiera/223941252118" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">2</div><div class="serp-title">ERP 중소기업에서 꼭 필요한 시스템</div><div class="serp-date">2026.04</div><a href="https://blog.naver.com/annybox/224254728401" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">3</div><div class="serp-title">중소기업ERP 필요성 인식부터 성공적인 구축까지 안내</div><div class="serp-date">2025.12</div><a href="https://blog.naver.com/alstjgp48243/224127718102" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">4</div><div class="serp-title">중소기업ERP 생산성 정확도 동시에 높이는 유연한 구축 전략</div><div class="serp-date">2025.06</div><a href="https://blog.naver.com/jriden/223912481094" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">5</div><div class="serp-title">ERP 중소기업에서 도입 전 필수 체크</div><div class="serp-date">2026.03</div><a href="https://blog.naver.com/wlsp0312/224228110821" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">6</div><div class="serp-title">중소기업 ERP 구축 업체 서버 인프라 납품 사례</div><div class="serp-date">2026.03</div><a href="https://blog.naver.com/seyeoninet/224210589831" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">7</div><div class="serp-title">중소기업ERP 스마트공방 생산관리 구축사례</div><div class="serp-date">2025.02</div><a href="https://blog.naver.com/wookha94/223771951808" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">8</div><div class="serp-title">AI 도입 중소기업 ERP 구축부터 도입까지 한 번에 해결하는</div><div class="serp-date">2025.12</div><a href="https://blog.naver.com/aiexpert0720/224118895951" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">9</div><div class="serp-title">[정보] 중소기업 ERP, 우리 회사만의 시스템이 필요한 이유</div><div class="serp-date">2026.04</div><a href="https://blog.naver.com/tabebeto/224248686461" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">10</div><div class="serp-title">중소기업ERP 비용은 줄이고 효율은 극대화하기</div><div class="serp-date">2025.07</div><a href="https://blog.naver.com/alkadia0/223919197676" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+    </div>
+  </div>
+  
+  <div class="serp-card">
+    <div class="serp-header">
+      <div class="serp-icon" style="background:#4285F4">G</div>
+      <div class="serp-header-text"><div class="serp-header-title">Google SERP</div><div class="serp-header-sub">상위 10건</div></div>
+    </div>
+    <div class="serp-body">
+      
+      <div class="serp-item"><div class="serp-rank">1</div><div class="serp-title">중소기업 ERP, 도입 전에 꼭 알아야 할 5가지 핵심 기능 - 이노소프트기술</div><div class="serp-date">inno-soft.co.kr</div><a href="https://www.inno-soft.co.kr/%EC%A4%91%EC%86%8C%EA%B8%B0%EC%97%85-erp-%EB%8F%84%EC%9E%85-%EC%A0%84%EC%97%90-%EA%BC%AD-%EC%95%8C%EC%95%84%EC%95%BC-%ED%95%A0-5%EA%B0%80%EC%A7%80-%ED%95%B5%EC%8B%AC-%EA%B8%B0%EB%8A%A5/" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">2</div><div class="serp-title">2026 회사 규모별 ERP 추천: 스타트업부터 대기업, 단계별 최적 솔루션 비교 - 클로브 블로그</div><div class="serp-date">clobe.ai</div><a href="https://clobe.ai/blog/2026-company-size-erp-recommendation-startup-to-enterprise-staged-solutions" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">3</div><div class="serp-title">중소기업·스타트업 ERP, 어떻게 도입해야 할까? - 클로브 블로그</div><div class="serp-date">clobe.ai</div><a href="https://clobe.ai/blog/erp-adoption-for-smb-startup" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">4</div><div class="serp-title">중소중견기업에 적합한 ERP를 선택하는 방법</div><div class="serp-date">sap.com</div><a href="https://www.sap.com/korea/resources/erp-for-small-manufacturing-companies" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">5</div><div class="serp-title">성공적인 중소기업 ERP 도입을 위한 방법 - 요즘IT</div><div class="serp-date">yozm.wishket.com</div><a href="https://yozm.wishket.com/magazine/" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">6</div><div class="serp-title">중소기업 ERP 도입 가이드: 실패 없는 ERP 선택 - 웨이브온</div><div class="serp-date">waveon.io</div><a href="https://www.waveon.io/blog/small-business-erp-guide-successful-selection" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">7</div><div class="serp-title">중소기업에 알맞은 ERP 조건이란? 중소기업ERP | 이카운트</div><div class="serp-date">ecount.com</div><a href="https://www.ecount.com/us/ecount/trial/best-erp-for-smes" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">8</div><div class="serp-title">중견·중소기업 ERP 프로그램 비교 가이드 2026</div><div class="serp-date">wishket.com</div><a href="https://blog.wishket.com/blog/erp-program-korea-market-guide" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">9</div><div class="serp-title">제조업 ERP 도입, 왜 지금이 최적기일까? (재고부터 원가까지 한 번에 잡기) - 이노소프트기술</div><div class="serp-date">inno-soft.co.kr</div><a href="https://www.inno-soft.co.kr/%EC%A0%9C%EC%A1%B0%EC%97%85-erp-%EB%8F%84%EC%9E%85-%EC%99%9C-%EC%A7%80%EA%B8%88%EC%9D%B4-%EC%B5%9C%EC%A0%81%EA%B8%B0%EC%9D%BC%EA%B9%8C-%EC%9E%AC%EA%B3%A0%EB%B6%80%ED%84%B0-%EC%9B%90%EA%B0%80/" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">10</div><div class="serp-title">ERP 뜻부터 대표적 ERP 추천, ERP 구축 방법 3가지 - Codex - 다빈치 블로그</div><div class="serp-date">dvn.ci</div><a href="https://www.dvn.ci/blog/erp-%EB%9C%BB%EB%B6%80%ED%84%B0-%EB%8C%80%ED%91%9C%EC%A0%81-erp-%EC%B6%94%EC%B2%9C-erp-%EA%B5%AC%EC%B6%95-%EB%B0%A9%EB%B2%95-3%EA%B0%80%EC%A7%80-36276" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+    </div>
+  </div>
+</div>
+
+
+<div class="card">
+  <div class="two-col">
+    <div>
+      <div class="card-title">경쟁글 공통 관찰</div>
+      <ul class="bullet"><li>네이버·구글 상위 결과 10건 중 8건 이상이 'SaaS/클라우드형 vs. 온프레미스 구축형' 선택 비교를 핵심 논점으로 다룸</li><li>경쟁글 다수가 이카운트, 더존, 영림원을 대표 국내 솔루션으로 공통 언급</li><li>Pain Point(재고 불일치, 엑셀 이중 작업, 부서 간 데이터 단절) 진단을 도입 시작점으로 제시하는 글이 다수</li><li>단계적 도입(모든 모듈 한 번에 아닌 핵심 부서·기능부터 시작)을 권장하는 흐름이 공통적으로 관찰됨</li><li>업체 홍보성 글이 절반 이상으로, 특정 솔루션·업체로의 전환 유도를 구조적으로 삽입</li></ul>
+    </div>
+    <div>
+      <div class="card-title">경쟁글에서 빠진 각도 (우리 기회)</div>
+      <ul class="bullet"><li>ERP 도입 전 IT 비전문가가 혼자 수행할 수 있는 업무 현황 진단 방법(구체 체크리스트 등) 제시 없음</li><li>정부 지원 프로그램(스마트공장 바우처, 중소기업 디지털 전환 지원) 활용 절차를 구체적으로 다룬 글 없음</li><li>ERP 외주 개발사·SI 업체를 통한 맞춤 구축 시 업체 선정 기준과 계약 주의사항을 다룬 글 없음</li><li>ERP 도입 실패 후 재시도 시 어떻게 접근이 달라져야 하는지 다룬 글 없음</li><li>중견기업과 중소기업 간 도입 방식의 구체적 차이를 세분화한 글 없음</li></ul>
+    </div>
+  </div>
+</div>
+
+<div class="sec-heading"><span class="sec-heading-icon">&#x1F916;</span><span class="sec-heading-text">AI 검색 응답 분석</span></div>
+
+<div class="ai-grid">
+  
+  <div class="ai-card" style="border-bottom:3px solid #10A37F;opacity:1">
+    <div class="ai-card-header">
+      <div class="ai-card-logo" style="background:#10A37F">C</div>
+      <div class="ai-card-name">ChatGPT</div>
+      <span class="ai-card-status" style="background:#D1FAE5;color:#059669">수집 완료</span>
+    </div>
+    <div class="ai-card-body">
+      <p style="font-size:11.5px;color:var(--text-secondary);line-height:1.5">
+        단계별 순서 나열형 (목표 설정 → 요구사항 분석 → 유형 선택 → 벤더 선정 → 예산 수립 → 구현 → 교육 → 데이터 이전 순서, 10단계 내외)
+      </p>
+      <div style="font-size:11px;color:var(--text-muted);margin-top:4px">인용 2건 &middot; 위시켓 <span style="color:var(--sub1);font-weight:600">미언급</span></div>
+    </div>
+  </div>
+  
+  <div class="ai-card" style="border-bottom:3px solid #D4A574;opacity:1">
+    <div class="ai-card-header">
+      <div class="ai-card-logo" style="background:#D4A574">A</div>
+      <div class="ai-card-name">Claude</div>
+      <span class="ai-card-status" style="background:#D1FAE5;color:#059669">수집 완료</span>
+    </div>
+    <div class="ai-card-body">
+      <p style="font-size:11.5px;color:var(--text-secondary);line-height:1.5">
+        단계별 가이드형 (현황 진단 → 전략 선택 → 단계적 도입 순서, 3단계 대분류 + 세부 항목)
+      </p>
+      <div style="font-size:11px;color:var(--text-muted);margin-top:4px">인용 5건 &middot; 위시켓 <span style="color:var(--hub);font-weight:600">언급됨</span></div>
+    </div>
+  </div>
+  
+  <div class="ai-card" style="border-bottom:3px solid #4285F4;opacity:1">
+    <div class="ai-card-header">
+      <div class="ai-card-logo" style="background:#4285F4">G</div>
+      <div class="ai-card-name">Gemini</div>
+      <span class="ai-card-status" style="background:#D1FAE5;color:#059669">수집 완료</span>
+    </div>
+    <div class="ai-card-body">
+      <p style="font-size:11.5px;color:var(--text-secondary);line-height:1.5">
+        단계별 로드맵형 (Pain Point 진단 → SaaS ERP 선택 → 벤더 선정 → 구현 → 안정화, 5단계 구성, 단계 이름에 번호 명시)
+      </p>
+      <div style="font-size:11px;color:var(--text-muted);margin-top:4px">인용 0건 &middot; 위시켓 <span style="color:var(--hub);font-weight:600">언급됨</span></div>
+    </div>
+  </div>
+  
+</div>
+
+
+
+
+
+
+
+<div class="inner-tabs" style="margin-top:12px">
+  
+  <button class="inner-tab active" style="border-bottom-color:#10A37F;color:#10A37F" onclick="switchAiTab('ai-chatgpt',this,'#10A37F')">ChatGPT</button>
+  
+  <button class="inner-tab" style="" onclick="switchAiTab('ai-claude',this,'#D4A574')">Claude</button>
+  
+  <button class="inner-tab" style="" onclick="switchAiTab('ai-gemini',this,'#4285F4')">Gemini</button>
+  
+</div>
+
+<div class="inner-panel active" id="ai-chatgpt">
+
+<div class="two-col" style="margin-top:14px">
+  <div class="card" style="margin-bottom:0">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+      <div class="card-title" style="margin-bottom:0">ChatGPT 응답</div>
+      <span style="font-size:11px;color:var(--text-muted)">위시켓 <span style="color:var(--sub1);font-weight:600">미언급</span></span>
+    </div>
+    <p style="font-size:11px;color:var(--text-dim);margin-bottom:10px">단계별 순서 나열형 (목표 설정 → 요구사항 분석 → 유형 선택 → 벤더 선정 → 예산 수립 → 구현 → 교육 → 데이터 이전 순서, 10단계 내외)</p>
+    <ul class="bullet"><li>도입 목적(목표)을 먼저 명확히 설정해야 한다고 3회 모두 언급</li><li>부서별 요구사항 수집 및 Pain Point 파악을 첫 번째 또는 두 번째 단계로 제시</li><li>내부 개발팀 없는 기업에는 클라우드형(SaaS) ERP를 권장하고, 온프레미스·자체개발은 피하도록 안내</li><li>국내 솔루션으로 이카운트, 더존, 영림원을 반복 언급</li><li>예산 수립 시 초기 비용 외에 유지보수·교육 비용 포함한 TCO 고려를 권장</li><li>의사결정팀(각 부서 이해관계자) 구성을 프로젝트 초기에 권장</li><li>파일럿 테스트 또는 단계적 도입 전략을 제안</li><li>사용자 교육과 변화 관리를 구현 후 단계로 포함</li><li>데이터 마이그레이션을 별도 단계로 언급</li><li>ERP 전문 컨설턴트·SI 업체 활용을 권고</li></ul>
+  </div>
+  <div>
+    <div class="card" style="margin-bottom:10px">
+      <div class="card-title">인용 소스 (2)</div>
+      
+      <div class="serp-item"><div class="serp-rank">1</div><div class="serp-title">smartcost.tistory.com</div><a href="https://smartcost.tistory.com/entry/2025-erp-implementation-cost" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">2</div><div class="serp-title">jungwonlabs.com</div><a href="https://www.jungwonlabs.com/" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+    </div>
+    <div class="card" style="margin-bottom:0">
+      <div class="card-title" style="color:var(--sub1)">누락 각도 (5)</div>
+      <ul class="bullet"><li>도입 전 업무 프로세스 재정비(BPR) 여부를 먼저 판단해야 하는 관점 부재</li><li>정부 지원 사업(스마트공장, 디지털 전환 바우처 등) 활용 방법 미언급</li><li>ERP 도입 실패 사례 및 실패 원인 분석 없음</li><li>업종별(제조·유통·서비스) 모듈 우선순위 차이 미언급</li><li>ERP 도입 후 내부 담당자 역할과 운영 체계 구축 방안 부재</li></ul>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<div class="inner-panel" id="ai-claude">
+
+<div class="two-col" style="margin-top:14px">
+  <div class="card" style="margin-bottom:0">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+      <div class="card-title" style="margin-bottom:0">Claude 응답</div>
+      <span style="font-size:11px;color:var(--text-muted)">위시켓 <span style="color:var(--hub);font-weight:600">언급됨</span></span>
+    </div>
+    <p style="font-size:11px;color:var(--text-dim);margin-bottom:10px">단계별 가이드형 (현황 진단 → 전략 선택 → 단계적 도입 순서, 3단계 대분류 + 세부 항목)</p>
+    <ul class="bullet"><li>ERP 도입 전 현재 업무 현황(AS-IS) 파악을 첫 단계로 강조</li><li>내부 관리 인력이 없는 기업은 온프레미스 방식이 아닌 클라우드(SaaS) ERP 필수라고 명시</li><li>기성 ERP 솔루션 도입, 자체 개발, 개발업체를 통한 맞춤형 구축 등 3가지 방법 구분 제시</li><li>이카운트, 더존 iCUBE/Amaranth 10, 영림원 K-System을 국내 대표 솔루션으로 소개</li><li>한 번에 전체 도입 시도 시 실패 가능성 높으므로 단계적 도입 권장</li><li>ERP 도입 과정의 가장 큰 실패 요인으로 '시스템 과도한 복잡성'과 '초기 도입 단계 혼란'을 언급</li><li>부서 간 데이터 불일치, 엑셀 반복 작업을 도입 시점 판단 신호로 제시</li><li>비즈니스 목표와 ERP로 해결하려는 문제를 이해하는 것이 중요하다고 강조</li></ul>
+  </div>
+  <div>
+    <div class="card" style="margin-bottom:10px">
+      <div class="card-title">인용 소스 (5)</div>
+      
+      <div class="serp-item"><div class="serp-rank">1</div><div class="serp-title">waveon.io</div><a href="https://www.waveon.io/blog/small-business-erp-guide-successful-selection" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">2</div><div class="serp-title">dvn.ci</div><a href="https://www.dvn.ci/blog/erp-뜻부터-대표적-erp-추천-erp-구축-방법-3가지-36276" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">3</div><div class="serp-title">sap.com</div><a href="https://www.sap.com/korea/resources/erp-for-small-manufacturing-companies" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">4</div><div class="serp-title">yozm.wishket.com</div><a href="https://yozm.wishket.com/magazine/" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">5</div><div class="serp-title">clobe.ai</div><a href="https://clobe.ai/blog/erp-adoption-for-smb-startup" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+    </div>
+    <div class="card" style="margin-bottom:0">
+      <div class="card-title" style="color:var(--sub1)">누락 각도 (4)</div>
+      <ul class="bullet"><li>ERP 도입 시 필요한 내부 프로젝트 담당자(PM) 역할 및 역량 기준 미언급</li><li>정부 지원 사업(스마트공장 보급·확산, 디지털 전환 바우처) 활용 경로 미언급</li><li>ERP 구축 업체 선정 기준(포트폴리오, 유지보수 SLA 등) 미언급</li><li>도입 후 운영 단계에서 발생하는 저항(직원 반발, 사용률 저하) 대응 방법 미언급</li></ul>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<div class="inner-panel" id="ai-gemini">
+
+<div class="two-col" style="margin-top:14px">
+  <div class="card" style="margin-bottom:0">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+      <div class="card-title" style="margin-bottom:0">Gemini 응답</div>
+      <span style="font-size:11px;color:var(--text-muted)">위시켓 <span style="color:var(--hub);font-weight:600">언급됨</span></span>
+    </div>
+    <p style="font-size:11px;color:var(--text-dim);margin-bottom:10px">단계별 로드맵형 (Pain Point 진단 → SaaS ERP 선택 → 벤더 선정 → 구현 → 안정화, 5단계 구성, 단계 이름에 번호 명시)</p>
+    <ul class="bullet"><li>IT 기술 지식보다 '회사 업무 흐름 정리'부터 시작해야 한다고 3회 모두 강조</li><li>Pain Point 파악(재고, 회계 연동, 원가 계산, 결재 프로세스 등) 작업을 첫 단계로 제시</li><li>내부 개발팀이 없는 기업은 자체 개발 및 온프레미스 구축형을 '절대 피해야' 한다고 명시적으로 경고</li><li>SaaS/클라우드형 ERP를 강력 권장하며 이카운트, 더존(비즈온/Amaranth 10), 영림원(K-System)을 국내 대표 사례로 반복 제시</li><li>이카운트를 '가성비 가장 좋은 중소기업 표준 솔루션'으로 구체적 언급</li><li>모든 기능을 한꺼번에 도입하지 말고 가장 시급한 부서부터 시작하는 단계적 접근 반복 강조</li><li>SaaS ERP의 장점으로 '서버 관리·보안·업데이트를 ERP 업체가 처리'를 명시</li><li>중소벤처기업부 주관 정부 지원 사업 존재를 언급(구체 경로는 미제시)</li></ul>
+  </div>
+  <div>
+    <div class="card" style="margin-bottom:10px">
+      <div class="card-title">인용 소스 (3)</div>
+      
+      <div class="serp-item"><div class="serp-rank">1</div><div class="serp-title">wishket.com</div><a href="https://wishket.com/library/contents/210/" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">2</div><div class="serp-title">dandykorea.net</div><a href="https://dandykorea.net/" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+      <div class="serp-item"><div class="serp-rank">3</div><div class="serp-title">mss.go.kr</div><a href="https://mss.go.kr/" target="_blank" class="serp-link">&#x2197;</a></div>
+      
+    </div>
+    <div class="card" style="margin-bottom:0">
+      <div class="card-title" style="color:var(--sub1)">누락 각도 (5)</div>
+      <ul class="bullet"><li>ERP 도입 비용 구조(라이선스, 구축, 유지보수 비중) 세부 설명 부재</li><li>ERP 도입 후 현업 담당자 교육 및 변화 관리 방법 미언급</li><li>업종별(제조·유통·서비스업) 필요 모듈 차이 설명 부재</li><li>ERP 도입 실패 후 재도전 시 주의사항 미언급</li><li>외주 개발사·SI 업체 선정 기준 및 위시켓 같은 플랫폼 활용법 미언급</li></ul>
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+<div class="sec-heading"><span class="sec-heading-icon">&#x1F4C8;</span><span class="sec-heading-text">위시켓 데이터 인사이트</span></div>
+
+
+
+
+
+<div class="warn-card" style="margin-bottom:14px">
+  <div class="lbl">DATA NOTE</div>
+  <div class="txt">사례들은 프로젝트 범위(기능 수, 모듈, 플랫폼 수)가 서로 달라 비용만으로 직접 비교할 수 없다. 'ERP 구축'이라는 같은 키워드를 가졌어도 단순 연동 기능 개발(500만 원, 20일)과 물류 전체 통합 시스템(1억 3,500만 원, 180일)은 완전히 다른 프로젝트다. 사례 제시 목적은 '이 정도 범위면 이 정도 예산'이라는 기준점 제공이며, '맞춤 ERP가 이 가격이다'는 단정으로 사용해서는 안 된다. 예산 수치는 발주자가 제시한 예산이며 최종 계약금액과 다를 수 있다</div>
+</div>
+
+
+
+<div class="two-col" style="margin-bottom:14px">
+  <div>
+    
+    <div class="card" style="margin-bottom:0">
+      <div class="card-title" style="color:var(--hub)">&#x1F4A1; 데이터 활용 각도</div>
+      
+      <div style="font-size:12.5px;line-height:1.7;margin-bottom:10px"><strong style="color:var(--text)">기능 범위별 예산 분포 비교</strong><br><span style="color:var(--text-muted);font-size:12px">단순 연동·보조 기능(500~1,000만 원)부터 완전 통합 맞춤 ERP(5,000만~1억 원 이상)까지 범위감을 '작은→큰' 순 사례 카드로 보여줄 수 있다. 독자가 자신의 필요 범위와 비교할 수 있도록 각 사례에 포함 기능을 함께 표시</span></div>
+      
+      <div style="font-size:12.5px;line-height:1.7;margin-bottom:10px"><strong style="color:var(--text)">ERP 구축 기간 분포</strong><br><span style="color:var(--text-muted);font-size:12px">전체 ERP 프로젝트 기준 Q1=30일, median=90일, Q3=150일. '3개월~5개월이 일반적 범위'라는 기준점을 줄 수 있다. 단, 기간은 요구사항 범위에 따라 20일~210일까지 편차가 크므로 주의</span></div>
+      
+      <div style="font-size:12.5px;line-height:1.7;margin-bottom:0"><strong style="color:var(--text)">업종별 ERP 사례 분포</strong><br><span style="color:var(--text-muted);font-size:12px">물류/유통, 제조, 서비스업, 식품 등 업종별로 다른 모듈 필요성을 사례로 보여줄 수 있다. 독자가 자신의 업종과 유사한 사례를 찾아 요구사항 판단에 활용할 수 있도록 지원</span></div>
+      
+    </div>
+    
+  </div>
+  <div>
+    
+    <div class="card" style="margin-bottom:0">
+      <div class="card-title">예산 분포 (33건)</div>
+      <table><tr><th>구분</th><th style="text-align:right">Q1</th><th style="text-align:right">Q3</th></tr>
+      <tr><td><strong>전체</strong></td><td class="td-num">2,000만</td><td class="td-num">8,000만</td></tr>
+      </table>
+      <p style="font-size:10px;color:var(--text-dim);margin-top:8px">* 33건은 집계 통계를 콘텐츠에 인용하기에 50건 미만이다. 중위값·Q1·Q3 수치는 본문에 직접 인용하지 않고, 개별 사례 카드 중심으로 구성한다. work_type_exact='new' 조건을 사용했으므로 순수 신...</p>
+    </div>
+    
+    
+  </div>
+</div>
+
+
+
+<div class="card">
+  <div class="card-title">&#x1F4CB; 프로젝트 사례 (12건)</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px">
+    
+    <div style="background:var(--basis-bg);border:1px solid var(--basis-border);border-radius:8px;padding:14px 16px">
+      <div style="font-size:12.5px;font-weight:600;color:var(--text);line-height:1.5;margin-bottom:8px">기존 ERP 데이터 연동 웹 리포트 생성 및 인쇄 기능 개발</div>
+      <div style="display:flex;gap:12px;font-family:var(--font-mono);font-size:12px">
+        <span style="color:var(--hub);font-weight:600">500만 원</span>
+        <span style="color:var(--text-muted)">20일</span>
+      </div>
+      <div style="font-size:10px;color:var(--text-dim);margin-top:6px">ERP 연동 단위 기능 개발 (소규모)</div>
+    </div>
+    
+    <div style="background:var(--basis-bg);border:1px solid var(--basis-border);border-radius:8px;padding:14px 16px">
+      <div style="font-size:12.5px;font-weight:600;color:var(--text);line-height:1.5;margin-bottom:8px">스마트스토어-ERP 연동 재고관리 자동화 개발</div>
+      <div style="display:flex;gap:12px;font-family:var(--font-mono);font-size:12px">
+        <span style="color:var(--hub);font-weight:600">1,000만 원</span>
+        <span style="color:var(--text-muted)">30일</span>
+      </div>
+      <div style="font-size:10px;color:var(--text-dim);margin-top:6px">ERP 연동 단위 기능 개발 (소규모)</div>
+    </div>
+    
+    <div style="background:var(--basis-bg);border:1px solid var(--basis-border);border-radius:8px;padding:14px 16px">
+      <div style="font-size:12.5px;font-weight:600;color:var(--text);line-height:1.5;margin-bottom:8px">1인 무역 실무자를 위한 맞춤형 경량 ERP 개발</div>
+      <div style="display:flex;gap:12px;font-family:var(--font-mono);font-size:12px">
+        <span style="color:var(--hub);font-weight:600">2,000만 원</span>
+        <span style="color:var(--text-muted)">90일</span>
+      </div>
+      <div style="font-size:10px;color:var(--text-dim);margin-top:6px">소규모 맞춤 ERP 신규 구축</div>
+    </div>
+    
+    <div style="background:var(--basis-bg);border:1px solid var(--basis-border);border-radius:8px;padding:14px 16px">
+      <div style="font-size:12.5px;font-weight:600;color:var(--text);line-height:1.5;margin-bottom:8px">Odoo 기반 ERP 구축</div>
+      <div style="display:flex;gap:12px;font-family:var(--font-mono);font-size:12px">
+        <span style="color:var(--hub);font-weight:600">2,000만 원</span>
+        <span style="color:var(--text-muted)">20일</span>
+      </div>
+      <div style="font-size:10px;color:var(--text-dim);margin-top:6px">오픈소스 기반 ERP 커스터마이징</div>
+    </div>
+    
+    <div style="background:var(--basis-bg);border:1px solid var(--basis-border);border-radius:8px;padding:14px 16px">
+      <div style="font-size:12.5px;font-weight:600;color:var(--text);line-height:1.5;margin-bottom:8px">무인 매장 관리를 위한 안드로이드 키오스크 및 웹 ERP 개발</div>
+      <div style="display:flex;gap:12px;font-family:var(--font-mono);font-size:12px">
+        <span style="color:var(--hub);font-weight:600">4,000만 원</span>
+        <span style="color:var(--text-muted)">120일</span>
+      </div>
+      <div style="font-size:10px;color:var(--text-dim);margin-top:6px">중규모 맞춤 ERP 신규 구축 (앱+웹 복합)</div>
+    </div>
+    
+    <div style="background:var(--basis-bg);border:1px solid var(--basis-border);border-radius:8px;padding:14px 16px">
+      <div style="font-size:12.5px;font-weight:600;color:var(--text);line-height:1.5;margin-bottom:8px">사내 생산/재고/매출 통합 관리 ERP 시스템 구축</div>
+      <div style="display:flex;gap:12px;font-family:var(--font-mono);font-size:12px">
+        <span style="color:var(--hub);font-weight:600">4,000만 원</span>
+        <span style="color:var(--text-muted)">90일</span>
+      </div>
+      <div style="font-size:10px;color:var(--text-dim);margin-top:6px">중규모 맞춤 ERP 신규 구축 (웹)</div>
+    </div>
+    
+    <div style="background:var(--basis-bg);border:1px solid var(--basis-border);border-radius:8px;padding:14px 16px">
+      <div style="font-size:12.5px;font-weight:600;color:var(--text);line-height:1.5;margin-bottom:8px">통합 업무관리 CRM/ERP 웹 시스템 구축</div>
+      <div style="display:flex;gap:12px;font-family:var(--font-mono);font-size:12px">
+        <span style="color:var(--hub);font-weight:600">5,000만 원</span>
+        <span style="color:var(--text-muted)">90일</span>
+      </div>
+      <div style="font-size:10px;color:var(--text-dim);margin-top:6px">중규모 맞춤 ERP 신규 구축 (CRM 포함)</div>
+    </div>
+    
+    <div style="background:var(--basis-bg);border:1px solid var(--basis-border);border-radius:8px;padding:14px 16px">
+      <div style="font-size:12.5px;font-weight:600;color:var(--text);line-height:1.5;margin-bottom:8px">유통업체 전용 커스텀 ERP 시스템 구축</div>
+      <div style="display:flex;gap:12px;font-family:var(--font-mono);font-size:12px">
+        <span style="color:var(--hub);font-weight:600">5,000만 원</span>
+        <span style="color:var(--text-muted)">150일</span>
+      </div>
+      <div style="font-size:10px;color:var(--text-dim);margin-top:6px">중규모 맞춤 ERP 신규 구축 (웹+PC 복합)</div>
+    </div>
+    
+    <div style="background:var(--basis-bg);border:1px solid var(--basis-border);border-radius:8px;padding:14px 16px">
+      <div style="font-size:12.5px;font-weight:600;color:var(--text);line-height:1.5;margin-bottom:8px">저작물/정산/회원 관리 ERP 구축</div>
+      <div style="display:flex;gap:12px;font-family:var(--font-mono);font-size:12px">
+        <span style="color:var(--hub);font-weight:600">7,000만 원</span>
+        <span style="color:var(--text-muted)">150일</span>
+      </div>
+      <div style="font-size:10px;color:var(--text-dim);margin-top:6px">중대규모 맞춤 ERP 신규 구축</div>
+    </div>
+    
+    <div style="background:var(--basis-bg);border:1px solid var(--basis-border);border-radius:8px;padding:14px 16px">
+      <div style="font-size:12.5px;font-weight:600;color:var(--text);line-height:1.5;margin-bottom:8px">웹 발주 사이트 및 ERP 구축</div>
+      <div style="display:flex;gap:12px;font-family:var(--font-mono);font-size:12px">
+        <span style="color:var(--hub);font-weight:600">9,000만 원</span>
+        <span style="color:var(--text-muted)">150일</span>
+      </div>
+      <div style="font-size:10px;color:var(--text-dim);margin-top:6px">중대규모 맞춤 ERP 신규 구축 (발주 포털 포함)</div>
+    </div>
+    
+    <div style="background:var(--basis-bg);border:1px solid var(--basis-border);border-radius:8px;padding:14px 16px">
+      <div style="font-size:12.5px;font-weight:600;color:var(--text);line-height:1.5;margin-bottom:8px">지게차/물류장비 판매/임대 업체 ERP 구축</div>
+      <div style="display:flex;gap:12px;font-family:var(--font-mono);font-size:12px">
+        <span style="color:var(--hub);font-weight:600">1억 3,500만 원</span>
+        <span style="color:var(--text-muted)">180일</span>
+      </div>
+      <div style="font-size:10px;color:var(--text-dim);margin-top:6px">대규모 맞춤 ERP 신규 구축 (모바일+PC 포함)</div>
+    </div>
+    
+    <div style="background:var(--basis-bg);border:1px solid var(--basis-border);border-radius:8px;padding:14px 16px">
+      <div style="font-size:12.5px;font-weight:600;color:var(--text);line-height:1.5;margin-bottom:8px">식품 판매 재고관리 시스템 구축 및 ERP 연동</div>
+      <div style="display:flex;gap:12px;font-family:var(--font-mono);font-size:12px">
+        <span style="color:var(--hub);font-weight:600">2억 5,000만 원</span>
+        <span style="color:var(--text-muted)">210일</span>
+      </div>
+      <div style="font-size:10px;color:var(--text-dim);margin-top:6px">대규모 ERP 연동 복합 시스템 구축</div>
+    </div>
+    
+  </div>
+</div>
+
+
+
+
+<div class="sec-heading"><span class="sec-heading-icon">&#x1F33F;</span><span class="sec-heading-text">팬아웃 제안 (추가 콘텐츠 후보)</span></div>
+
+
+<div class="fanout-grid">
+  
+  <div class="fanout-item">
+    <div class="fanout-top">
+      <div class="fanout-q">중소기업 ERP, SaaS 솔루션으로 할까 외주 개발로 할까? 판단 기준 3가지</div>
+      <span class="badge b-purple">중소기업 ERP SaaS 외주 비교</span>
+    </div>
+    <div class="fanout-reason">축2(AI 응답) 3종 모두 SaaS vs. 구축형 선택을 핵심 논점으로 제시. 축3(경쟁글)에서도 비교가 공통 주제이나 '외주 개발'과 'SaaS' 선택 판단 기준을 명시적으로 다룬 글이 없음. 기발행 ERP 글들은 업체 선정·비용에 집중하여 이전 단계 판단 가이드 공백 존재</div>
+  </div>
+  
+  <div class="fanout-item">
+    <div class="fanout-top">
+      <div class="fanout-q">비개발자가 ERP 도입 전에 스스로 업무 현황을 정리하는 방법</div>
+      <span class="badge b-purple">ERP 도입 준비 업무 현황 분석</span>
+    </div>
+    <div class="fanout-reason">축2(AI 응답)에서 Pain Point 파악·AS-IS 분석을 첫 번째 단계로 3종 모두 언급. 축3(경쟁글)에서 공통 missing_angle로 'IT 비전문자가 혼자 수행할 수 있는 현황 진단 방법'이 없음. 축1(PAA)에서도 '구축 시 고려 요소'가 상위 질문으로 확인됨</div>
+  </div>
+  
+  <div class="fanout-item">
+    <div class="fanout-top">
+      <div class="fanout-q">중소기업 ERP 구축, 정부 지원 사업 어떻게 활용할 수 있나?</div>
+      <span class="badge b-purple">중소기업 ERP 정부지원</span>
+    </div>
+    <div class="fanout-reason">축2(Gemini analytical)에서 중소벤처기업부 주관 지원 사업을 인용. 축3(경쟁글)에서 정부 지원 프로그램을 구체적으로 다룬 글이 없다는 공백 확인. 축1(query_volume) 연관 키워드에서 '바우처'(13,910) 높은 검색량 확인</div>
+  </div>
+  
+  <div class="fanout-item">
+    <div class="fanout-top">
+      <div class="fanout-q">ERP 구축 외주 맡길 때, IT 모르는 담당자가 계약서에서 꼭 확인해야 할 것</div>
+      <span class="badge b-purple">ERP 외주 계약 주의사항</span>
+    </div>
+    <div class="fanout-reason">축3(경쟁글)에서 외주 개발사 선정 기준·계약 주의사항을 다룬 경쟁글이 없다는 공백 확인. 축2(Claude analytical)에서 '구축 업체 선정 기준(포트폴리오, 유지보수 SLA 등)'을 missing_angle로 도출. 기발행 글 'ERP 외주 업체 선정 기준'과 연계 sub 콘텐츠로 적합</div>
+  </div>
+  
+  <div class="fanout-item">
+    <div class="fanout-top">
+      <div class="fanout-q">ERP 도입했는데 직원들이 안 쓴다면? 현장 안착 실패를 막는 법</div>
+      <span class="badge b-purple">ERP 도입 실패 직원 저항</span>
+    </div>
+    <div class="fanout-reason">축2(AI 응답)에서 사용자 교육·변화 관리를 missing_angle로 Claude와 Gemini 모두 지적. 축1(PAA)에서 '구축 시 발생할 수 있는 주요 문제점'이 PAA 8번째 질문으로 확인. 경쟁글에서 도입 후 운영 단계의 직원 저항 대응 콘텐츠 없음</div>
+  </div>
+  
+</div>
+
+
+</div>
+
+
+
+
+
+<div class="tab-panel" id="view-context">
+
+<div class="hero">
+  <div class="hero-body">
+    <div class="hero-desc">콘텐츠를 쓸 때 지켜야 할 방향과 넘지 말아야 할 선을 정의합니다.</div>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="hero-stat-value" style="color:var(--sub1)">6</div><div class="hero-stat-label">독자 오해</div></div>
+    <div class="hero-stat"><div class="hero-stat-value" style="color:var(--accent)">7</div><div class="hero-stat-label">용어 규칙</div></div>
+    <div class="hero-stat"><div class="hero-stat-value" style="color:var(--sub2)">10</div><div class="hero-stat-label">Don'ts</div></div>
+    <div class="hero-stat"><div class="hero-stat-value" style="color:var(--hub)">5</div><div class="hero-stat-label">AI 교정</div></div>
+  </div>
+</div>
+
+
+<div class="sec-heading"><span class="sec-heading-icon">&#x1F4A1;</span><span class="sec-heading-text">독자 오해 교정</span></div>
+<div class="card">
+  
+  <div class="mis-row">
+    <div class="mis-belief-inline">ERP는 대기업만 하는 것이다. 중소기업에는 너무 크고 비싸다</div>
+    <div class="mis-arrow-inline">&rarr;</div>
+    <div class="mis-reality-inline">이카운트, 더존 같은 SaaS ERP는 월 수십만 원 수준으로 중소기업도 도입 가능. 맞춤 개발 ERP도 요구사항 범위에 따라 2,000만 원대부터 시작 가능</div>
+  </div>
+  
+  <div class="mis-row">
+    <div class="mis-belief-inline">IT 지식이 없으면 ERP를 도입할 수 없다</div>
+    <div class="mis-arrow-inline">&rarr;</div>
+    <div class="mis-reality-inline">SaaS ERP는 IT 지식 없이도 구독·사용 가능하도록 설계되어 있다. 맞춤 개발도 업무 요구사항은 비개발자가 일상어로 설명하면 되며, 기술 판단은 파트너가 담당한다</div>
+  </div>
+  
+  <div class="mis-row">
+    <div class="mis-belief-inline">ERP를 외주로 맡기면 개발사가 알아서 다 해준다</div>
+    <div class="mis-arrow-inline">&rarr;</div>
+    <div class="mis-reality-inline">업무 요구사항 정리, 중간 검수, 최종 검수, 유지보수 계획 수립 등 클라이언트가 해야 할 일이 있다. 내부 담당자가 아무도 없으면 프로젝트가 표류한다</div>
+  </div>
+  
+  <div class="mis-row">
+    <div class="mis-belief-inline">SaaS ERP(이카운트, 더존)를 쓰면 맞춤 개발 ERP와 동일한 기능을 얻을 수 있다</div>
+    <div class="mis-arrow-inline">&rarr;</div>
+    <div class="mis-reality-inline">SaaS ERP는 표준화된 업무 프로세스에 최적화되어 있다. 기업 고유의 업무 방식이 복잡하거나, 기존 시스템과의 연동이 필수인 경우 솔루션의 커스터마이징 한계에 부딪힐 수 있다</div>
+  </div>
+  
+  <div class="mis-row">
+    <div class="mis-belief-inline">ERP 도입이 완료되면 직원들이 자연스럽게 잘 쓸 것이다</div>
+    <div class="mis-arrow-inline">&rarr;</div>
+    <div class="mis-reality-inline">직원들의 거부감과 낮은 사용률이 ERP 도입 실패의 주요 원인 중 하나다. 기술 도입보다 변화 관리가 더 어려운 경우도 많다</div>
+  </div>
+  
+  <div class="mis-row">
+    <div class="mis-belief-inline">정부 지원금을 받으면 ERP를 거의 공짜로 도입할 수 있다</div>
+    <div class="mis-arrow-inline">&rarr;</div>
+    <div class="mis-reality-inline">스마트공장 바우처, 디지털 전환 바우처 등은 기업 자부담 비율이 있으며, 신청 조건·대상 기업 요건·지원 상한이 있다. 지원금이 승인되어도 지원 대상 솔루션 제약이 있을 수 있다</div>
+  </div>
+  
+</div>
+
+
+<div class="sec-heading"><span class="sec-heading-icon">&#x1F4DD;</span><span class="sec-heading-text">용어 규칙 &amp; 서비스 경계</span></div>
+<div class="two-col">
+  
+  <div class="card">
+    <div class="card-title">용어 교정</div>
+    <table><tr><th style="color:var(--sub1)">사용 금지</th><th style="color:var(--hub)">올바른 표현</th></tr>
+    <tr><td>ERP 외주</td><td>ERP 맞춤 개발 외주 (또는 ERP 구축 외주)</td></tr><tr><td>ERP 솔루션 개발</td><td>ERP 솔루션 도입 (또는 ERP 솔루션 사용)</td></tr><tr><td>유지보수</td><td>하자보수 / 유지보수 (상황에 따라 구분)</td></tr><tr><td>클라이언트</td><td>발주사 (블로그 일반 독자 맥락에서) / 클라이언트 (위시켓 플랫폼 맥락에서)</td></tr><tr><td>파트너</td><td>개발사 (일반 맥락) / 파트너 (위시켓 플랫폼 맥락)</td></tr><tr><td>ERP 개발비</td><td>ERP 구축 예산 (또는 ERP 외주 예산)</td></tr><tr><td>SaaS ERP 비용</td><td>SaaS ERP 구독료 (또는 월 이용료)</td></tr>
+    </table>
+  </div>
+  
+  <div class="card">
+    
+    <div class="card-title" style="color:var(--hub)">&#x2705; 주장 가능</div>
+    <ul class="check-list"><li class="ok">위시켓에 프로젝트를 등록하면 영업일 24시간 이내에 매니저가 연락한다</li><li class="ok">매니저가 견적 적정성, 요구사항 구체화, 파트너 선별까지 무료로 함께 진행한다</li><li class="ok">위시켓에는 ERP·업무시스템 구축 경험이 있는 파트너 풀이 있고, 이전 프로젝트 평가를 확인할 수 있다</li><li class="ok">위시켓 표준계약서에는 하자보수, 지재권 귀속, 대금보호 조항이 포함된다</li><li class="ok">대금보호(에스크로) 시스템으로 클라이언트 예치금을 검수 완료 후 파트너에게 지급한다</li><li class="ok">프로젝트 등록과 매니저 상담은 무료이며, 계약 체결 전까지 비용이 발생하지 않는다</li><li class="ok">IT팀이 없고 기획부터 도움이 필요한 경우 AIDP(기획→구축→운영·AI 고도화까지 직접 수행)를 선택지로 안내할 수 있다</li></ul>
+    
+    
+    <div class="card-title" style="margin-top:20px;color:var(--sub1)">&#x26D4; 주장 불가</div>
+    <ul class="check-list"><li class="no">위시켓이 ERP 프로젝트의 성공을 보장한다</li><li class="no">위시켓 매니저가 ERP 프로젝트를 직접 관리한다 (매니저 = PM 아님)</li><li class="no">대금보호로 ERP 프로젝트 리스크가 완전히 제거된다</li><li class="no">위시켓이 ERP 외부에서 이미 진행 중인 프로젝트를 중재하거나 이관받는다</li><li class="no">위시켓이 SaaS ERP 솔루션(이카운트, 더존 등)의 도입을 직접 지원한다</li></ul>
+    
+  </div>
+</div>
+
+
+<div class="sec-heading"><span class="sec-heading-icon">&#x1F6A7;</span><span class="sec-heading-text">집필 가드레일</span></div>
+
+<div class="gr-card">
+  <div class="gr-rule">&#x2716; 솔루션 납품 전제의 조언을 맞춤 개발에 적용하지 않는다</div>
+  <div class="gr-alt">&#x2192; 독자 상황이 SaaS 솔루션인지 맞춤 외주인지 먼저 구분하고, 각 유형에 맞는 안내만 제공한다</div>
+</div>
+
+<div class="gr-card">
+  <div class="gr-rule">&#x2716; 클라우드/온프레미스(서버 구성)와 SaaS/맞춤 개발(제품 유형)을 같은 축에서 비교하지 않는다</div>
+  <div class="gr-alt">&#x2192; 서버 관리 방식(클라우드/온프레미스)과 제품 유형(기성 솔루션/맞춤 개발)을 분리하여 설명한다. 비개발자에게는 '서버를 직접 관리하느냐 여부'와 '기존 제품을 쓰느냐 처음부터 만드느냐'로 구분해서 안내한다</div>
+</div>
+
+<div class="gr-card">
+  <div class="gr-rule">&#x2716; '내부 개발팀이 없으면 온프레미스를 절대 피해야 한다'고 단정하지 않는다</div>
+  <div class="gr-alt">&#x2192; '일반적으로 내부 인력이 없으면 관리 부담이 적은 클라우드/SaaS가 출발점이다'로 표현하되, 예외 상황이 있을 수 있음을 언급한다</div>
+</div>
+
+<div class="gr-card">
+  <div class="gr-rule">&#x2716; 유지보수를 최초 ERP 구축 계약에 포함하라고 권유하지 않는다</div>
+  <div class="gr-alt">&#x2192; '유지보수 대응이 가능한지만 미리 확인하세요'로 안내한다</div>
+</div>
+
+<div class="gr-card">
+  <div class="gr-rule">&#x2716; '유지보수 계약을 동시에 별지로 체결하라'고 조언하지 않는다</div>
+  <div class="gr-alt">&#x2192; '유지보수는 런칭 후 별도 계약이 일반적이다'로 안내한다</div>
+</div>
+
+<div class="gr-card">
+  <div class="gr-rule">&#x2716; ERP 도입 프로세스를 10단계 체크리스트로 안내하지 않는다</div>
+  <div class="gr-alt">&#x2192; '핵심 2~3가지를 독자가 하고, 나머지는 매니저·파트너와 함께'라는 역할 분담 구조로 설명한다</div>
+</div>
+
+<div class="gr-card">
+  <div class="gr-rule">&#x2716; '개발사가 기획을 도와줄 것이다'라고 기대하게 만들지 않는다</div>
+  <div class="gr-alt">&#x2192; '기획이 어려우면 기획부터 별도로 의뢰하거나, 위시켓 매니저와 상담하며 요구사항을 정리하는 방법도 있다'로 안내한다</div>
+</div>
+
+<div class="gr-card">
+  <div class="gr-rule">&#x2716; ERP 구축 비용을 방식별로 단정하지 않는다 ('SaaS가 싸다', '맞춤 개발이 비싸다' 등)</div>
+  <div class="gr-alt">&#x2192; '요구사항 범위와 파트너에 따라 다르다'를 전제로 실제 사례 범위를 제공한다</div>
+</div>
+
+<div class="gr-card">
+  <div class="gr-rule">&#x2716; '서버·도메인은 개발사가 세팅해줍니다'라고 서술하지 않는다</div>
+  <div class="gr-alt">&#x2192; '서버·도메인 계정은 우리 회사 명의로 생성해달라고 요청하세요'로 안내한다</div>
+</div>
+
+<div class="gr-card">
+  <div class="gr-rule">&#x2716; 'ERP는 아이디어만 있으면 맞춤 개발로 바로 시작할 수 있다'는 환상을 심지 않는다</div>
+  <div class="gr-alt">&#x2192; '현재 업무 흐름을 먼저 정리하면 견적이 구체적으로 나온다'는 순서를 안내한다</div>
+</div>
+
+
+
+
+<div class="sec-heading"><span class="sec-heading-icon">&#x1F527;</span><span class="sec-heading-text">AI 응답 교정</span></div>
+<div class="card" style="padding:16px 20px">
+  
+  <div class="kp-correction">
+    <div class="kp-claim">AI 응답(ChatGPT, Claude, Gemini) 3종 모두 '내부 개발팀이 없는 기업은 클라우드형(SaaS) ERP를 권장하고, 온프레미스·자체개발은 피하도록' 강하게 안내한다</div>
+    <div class="kp-fix">SaaS가 일반적 출발점인 것은 맞으나, 특정 산업(제조, 보안이 중요한 분야)이나 기존 레거시 시스템 연동이 필수인 경우 맞춤 개발이 필요할 수 있다. '절대 피해야 한다'는 단정 표현은 독자 상황을 지나치게 단순화한다. '관리 부담이 적어 일반적으로 SaaS를 권장하나, 업무 복잡도·연동 요구에 따라 선택이 달라진다'로 표현해야 한다</div>
+  </div>
+  
+  <div class="kp-correction">
+    <div class="kp-claim">경쟁글 및 AI 응답이 'SaaS vs 온프레미스 구축형' 비교를 핵심 논점으로 다룬다</div>
+    <div class="kp-fix">서버 구성(SaaS·클라우드 vs 온프레미스)과 제품 유형(기성 솔루션 vs 맞춤 개발)은 다른 축이다. 이를 같은 선상에서 비교하면 독자가 개념을 혼동한다. 비교 프레임은 '기성 솔루션 도입 vs 맞춤 외주 개발'로 설정하고, 서버 구성은 별도로 설명하는 것이 업계 현실에 맞다</div>
+  </div>
+  
+  <div class="kp-correction">
+    <div class="kp-claim">AI 응답들이 '부서별 요구사항 수집 및 Pain Point 파악'을 첫 번째 단계로 제시하며, 이를 독자가 스스로 수행하는 것으로 안내한다</div>
+    <div class="kp-fix">tech_zero 독자는 요구사항을 구조화된 문서로 작성하는 것 자체가 어렵다. 나열은 할 수 있어도 빠진 게 뭔지 모른다. '부서별 요구사항 수집'을 권유하면 독자에게 전문가 수준의 과제를 주는 것이다. 대신 '지금 어떤 문제 때문에 ERP가 필요한지 일상어로 정리하면 충분하고, 나머지는 매니저·파트너가 함께 정리해준다'는 방식으로 안내해야 한다</div>
+  </div>
+  
+  <div class="kp-correction">
+    <div class="kp-claim">AI 응답이 'ERP 전문 컨설턴트·SI 업체 활용을 권고'하는데, 이를 마치 별도로 찾아야 하는 과정처럼 제시한다</div>
+    <div class="kp-fix">위시켓 맥락에서는 매니저가 파트너 연결·견적 상담·미팅까지 동반한다. 독자에게 ERP 컨설턴트를 '별도로 찾아서 계약하라'고 안내하는 것은 위시켓 서비스 구조와 맞지 않는다. '위시켓에 등록하면 매니저가 ERP 경험이 있는 파트너를 연결하고 견적 상담까지 무료로 지원한다'는 구조로 연결해야 한다</div>
+  </div>
+  
+  <div class="kp-correction">
+    <div class="kp-claim">일부 AI 응답이 '이카운트를 가성비 가장 좋은 중소기업 표준 솔루션'으로 구체적으로 언급한다</div>
+    <div class="kp-fix">특정 솔루션을 '표준' 또는 '가장 좋다'고 단정하는 것은 위시켓 블로그에서 지양해야 할 과장 프레이밍이다. 독자 상황(업종, 사용자 수, 연동 필요 시스템)에 따라 적합한 솔루션이 다르다. 솔루션 이름을 나열할 수 있지만 특정 솔루션을 '최고' 또는 '표준'으로 단정하지 않는다</div>
+  </div>
+  
+</div>
+
+
+</div>
+
+
+
+
+
+<div class="tab-panel" id="view-journey">
+
+<div class="hero">
+  <div class="hero-body">
+    <div class="hero-desc">독자가 누구인지, 어떤 감정 상태에서 이 질문을 검색하는지를 먼저 정의하고, 그 독자의 사고 흐름에 맞춘 콘텐츠 기획을 저니맵 형태로 보여줍니다.</div>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="hero-stat-value" style="color:var(--hub)">1</div><div class="hero-stat-label">Hub</div></div>
+    <div class="hero-stat"><div class="hero-stat-value" style="color:var(--sub1)">4</div><div class="hero-stat-label">Sub</div></div>
+    <div class="hero-stat"><div class="hero-stat-value" style="color:var(--accent)">16</div><div class="hero-stat-label">총 섹션</div></div>
+    <div class="hero-stat"><div class="hero-stat-value" style="color:var(--sub2)">8</div><div class="hero-stat-label">페인포인트</div></div>
+  </div>
+</div>
+
+
+<div class="two-col">
+  <div class="card">
+    <div class="card-title">독자 프로필</div>
+    <p style="font-size:13px;color:var(--text);line-height:1.7;margin-bottom:14px">ERP 도입을 결정했지만 IT 지식과 사내 개발팀이 없어 '어떤 방식으로 시작해야 하는지' 자체를 판단하지 못하는 중소·중견기업 실무 담당자(또는 대표)</p>
+    
+    <div class="card-title">독자 세그먼트</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px"><span class="badge b-gray">size_small</span><span class="badge b-gray">size_mid</span><span class="badge b-gray">size_large</span><span class="badge b-gray">exp_first</span><span class="badge b-gray">stage_ready</span><span class="badge b-gray">tech_zero</span><span class="badge b-gray">tech_foggy</span></div>
+    
+    
+    <div class="reasoning-box rb-hub" style="margin-top:14px">
+      <div class="rb-label">Reader Profile Reasoning</div>
+      <div class="rb-text">질문에 'IT 지식이 없고 내부 개발팀이 없는 중소·중견기업'이 명시되어 있고, context reader_context에서 tech_zero + exp_first + stage_ready + size_mid가 핵심 축이다. AI 검색 3개 모두 비전문자를 전제로 답변하고, 연관 검색 상위가 '중소기업 erp 비교', '중소기업 erp 구축 지원'이라는 점에서 '판단 기준이 없어 외부 정보를 찾는 초보 의사결정자' 프로필이 일관된다. 3개 문제 상황 모두 '도입은 결정했으나 방식 판단이 막힘'이 공통이므로 이를 상위 프로필로 잡았다.</div>
+    </div>
+    
+  </div>
+  <div class="card">
+    
+    <div class="card-title">페인포인트</div>
+    <ul class="bullet"><li>뭐가 ERP이고 뭐가 업무 시스템인지 구분이 안 된다. 솔루션 도입인지, 맞춤 개발인지조차 판단이 안 된다</li><li>이카운트, 더존 같은 솔루션을 써야 하는지, 외주로 개발해야 하는지 기준이 없다</li><li>업무 흐름 정리를 어떻게 해야 하는지 모른다. IT 용어를 모르니 파트너에게 설명조차 못 할 것 같다</li><li>견적을 받아도 적정한지 모른다. 수천만 원부터 수억 원까지 범위가 너무 넓다</li><li>IT 담당자가 없으니 프로젝트를 누가 관리하는지, 내부에서 뭘 해야 하는지 모른다</li><li>도입 후 유지보수를 어떻게 해야 하는지 막막하다. 개발사가 없어지면 어쩌나 하는 불안</li><li>직원들이 새 시스템을 거부할 것 같은 불안. 돈만 쓰고 실패할까 봐 두렵다</li><li>정부 지원금이 있다는 말은 들었는데, 어떻게 신청하고 얼마나 받을 수 있는지 모른다</li></ul>
+    
+  </div>
+</div>
+
+
+<div class="inner-tabs">
+  <button class="inner-tab active" data-color="hub" onclick="switchInner('jm-hub',this)">Hub: IT 지식과 개발팀이 없는 중소·중견...</button>
+  
+  <button class="inner-tab" data-color="sub1" onclick="switchInner('jm-sub1',this)">Sub 1: 우리 회사가 기성 ERP 솔루션과...</button>
+  
+  <button class="inner-tab" data-color="sub2" onclick="switchInner('jm-sub2',this)">Sub 2: ERP 구축 예산은 왜 500만 ...</button>
+  
+  <button class="inner-tab" data-color="sub3" onclick="switchInner('jm-sub3',this)">Sub 3: 중소기업이 ERP 구축에 정부 지...</button>
+  
+  <button class="inner-tab" data-color="sub4" onclick="switchInner('jm-sub4',this)">Sub 4: ERP 도입에 한 번 실패한 기업...</button>
+  
+</div>
+
+
+<div class="inner-panel active" id="jm-hub">
+  <div class="section-title-bar">
+    <div class="stb-head">
+      <div class="stb-color" style="background:var(--hub)"></div>
+      <div class="stb-content">
+        <div class="stb-overline" style="color:var(--hub)">Hub &mdash; 메인 콘텐츠</div>
+        <div class="stb-question">IT 지식과 개발팀이 없는 중소·중견기업이 ERP 도입을 처음 시작할 때, 어떤 순서로 무엇을 먼저 판단해야 하나요?</div>
+        <div class="stb-tags">
+          <span class="stb-tag" style="background:var(--hub-light);color:var(--hub)">4 steps</span>
+          <span class="stb-tag" style="background:var(--hub-light);color:var(--hub)">&rarr; sub_saas_vs_custom</span><span class="stb-tag" style="background:var(--hub-light);color:var(--hub)">&rarr; sub_budget_range</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="reasoning-box rb-hub"><div class="rb-label">Flow Reasoning</div><div class="rb-text">독자는 ERP 도입을 결정했지만 '어디서부터'가 막혀 있다. AI 3개 모두 '현황 정리 → 방식 선택 → 파트너 선정 → 비용 판단 → 내부 역할' 순서를 공유하되, 첫 단계인 '현황 정리'를 전문가 수준으로 요구하는 공통 함정이 있다. context research_corrections에서 '부서별 요구사항 수집을 독자 혼자 수행하게 하면 안 된다', 'SaaS vs 온프레미스가 아니라 기성 솔루션 vs 맞춤 개발로 비교해야 한다'는 두 가지 교정 지시가 핵심이다. 따라서 flow는 ① 왜 바로 업체부터 알아보면 안 되는지(순서 교정) → ② 기성 SaaS vs 맞춤 개발 판단 기준 → ③ 비용 감각(방식이 아닌 범위가 비용을 결정한다) → ④ 외주를 가더라도 내부에서 해야 하는 것(도입 후 안착까지) 순으로 배치한다. 경쟁글 top_articles 2건이 '순서가 결과를 좌우한다', '필요한지 먼저 판단' 순서를 따르고 있어 hub 구조가 AI·경쟁글 공통 패턴과 정합한다. 차별화는 flow 자체에 내장된 '역할 분담 구조'와 'SaaS/맞춤 개념 분리'에서 나온다.</div></div>
+    
+  </div>
+
+  <div class="section-scroll"><div class="map-grid c-hub" style="grid-template-columns:var(--row-label-w) repeat(4,var(--col-w))">
+  
+  <div class="rl" style="min-height:auto">&#x1F3F7;&#xFE0F; Stage</div>
+  <div class="stage-cell"><div class="stage-pill">H1</div></div><div class="stage-cell"><div class="stage-pill">H2</div></div><div class="stage-cell"><div class="stage-pill">H3</div></div><div class="stage-cell"><div class="stage-pill">H4</div></div>
+  <div class="rl" style="min-height:auto">&#x1F4C8; 감정</div>
+  <div class="emotion-strip"><svg class="emotion-svg" viewBox="0 0 1040 150" preserveAspectRatio="none">
+<rect x="0" y="0" width="260" height="150" fill="rgba(231,76,60,.04)" rx="4"/>
+<rect x="260" y="0" width="260" height="150" fill="rgba(243,156,18,.04)" rx="4"/>
+<rect x="520" y="0" width="260" height="150" fill="rgba(243,156,18,.04)" rx="4"/>
+<rect x="780" y="0" width="260" height="150" fill="rgba(46,204,113,.04)" rx="4"/>
+<text x="130" y="90" text-anchor="middle" style="font-size:18px">😯</text>
+<circle cx="130" cy="110" r="6" fill="var(--emotion-low)"/>
+<text x="130" y="128" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-low)">막막</text>
+<text x="130" y="146" text-anchor="middle" class="emotion-sublabel">ERP를 하려는?</text>
+<text x="390" y="55" text-anchor="middle" style="font-size:18px">🤔</text>
+<circle cx="390" cy="75" r="6" fill="var(--emotion-mid)"/>
+<text x="390" y="93" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-mid)">답답</text>
+<text x="390" y="146" text-anchor="middle" class="emotion-sublabel">기성 ERP 솔?</text>
+<text x="650" y="55" text-anchor="middle" style="font-size:18px">🤔</text>
+<circle cx="650" cy="75" r="6" fill="var(--emotion-mid)"/>
+<text x="650" y="93" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-mid)">갈팡질팡</text>
+<text x="650" y="146" text-anchor="middle" class="emotion-sublabel">ERP 맞춤 개?</text>
+<text x="910" y="20" text-anchor="middle" style="font-size:18px">😌</text>
+<circle cx="910" cy="40" r="6" fill="var(--emotion-high)"/>
+<text x="910" y="58" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-high)">안심</text>
+<text x="910" y="146" text-anchor="middle" class="emotion-sublabel">IT 담당자가 ?</text>
+</svg></div>
+  <div class="rl">&#x1F4AD; 상태</div>
+  <div class="dc state-cell">대표가 'ERP 알아보라'고 지시했는데, 인터넷에 '이카운트 좋다', '더존이 낫다', '맞춤 개발해야 한다' 같은 말이 섞여 있어 뭐부터 손대야 할지 막막하다</div><div class="dc state-cell">업무 문제는 적어봤는데, 이카운트·더존 같은 기성 솔루션을 쓰는 것과 맞춤으로 개발하는 것이 뭐가 다른지 자체가 헷갈린다</div><div class="dc state-cell">방식은 대충 잡았는데, 맞춤 개발로 가면 견적이 '2,000만 원부터 수억 원'이라는 말이 있어서 우리 예산이 적정한지 감이 안 잡힌다</div><div class="dc state-cell">예산 감도 잡고 파트너도 만나봐야 할 것 같은데, IT 담당자가 없는 회사에서 '외주를 맡기면 업체가 알아서 다 해주지 않나?' 싶으면서도 뭔가 찜찜하다</div>
+  <div class="rl q-label">&#x2753; 질문</div>
+  <div class="dc q">ERP를 하려는데 어디서부터 시작해야 하나요?</div><div class="dc q">기성 ERP 솔루션을 쓰는 것과 외주로 맞춤 개발하는 것은 어떻게 다른가요?</div><div class="dc q">ERP 맞춤 개발은 비용이 왜 이렇게 범위가 넓은가요? 우리 예산으로 가능한가요?</div><div class="dc q">IT 담당자가 없는데 외주를 맡기면 우리 쪽에서 해야 할 일이 있나요?</div>
+  <div class="rl">&#x1F4A1; 핵심 답변</div>
+  <div class="dc">업체를 먼저 알아보기보다 '우리 회사가 지금 뭐 때문에 ERP가 필요한지'를 일상어로 정리하는 것이 첫 단계다. 부서별 요구사항을 구조화된 문서로 작성하라는 조언은 IT 담당자 기준의 과제다. 지금은 '재고가 실제 수량과 다르다', '회계팀이 매달 엑셀을 다시 맞춘다' 같은 수준으로 적어두면 충분하고, 나머지 정리는 이후 매니저·파트너와 함께 다듬을 수 있다.</div><div class="dc">기성 솔루션은 이미 만들어진 제품을 월 구독료로 쓰는 방식이고, 맞춤 개발은 우리 회사 업무에 맞게 처음부터 만드는 방식이다. 비용 구조, 계약 형태, 유지보수 방식이 완전히 다르기 때문에 두 방식을 같은 기준으로 비교하려 하면 판단이 오히려 어려워진다. 표준화된 업무(재고·회계·급여 등)가 중심이면 기성 솔루션이 출발점이 되고, 우리 회사만의 업무 흐름이나 기존 시스템 연동이 필수이면 맞춤 개발을 검토하는 것이 일반적 순서다.</div><div class="dc">ERP 맞춤 개발 비용은 '방식'이 아니라 '요구사항 범위'가 결정한다. 기존 ERP와 연동되는 단위 기능 하나를 추가하는 프로젝트와, 회사 전체 업무를 통합하는 프로젝트는 같은 'ERP'라는 이름을 가졌어도 완전히 다른 규모다. 따라서 '얼마면 되나요'가 아니라 '우리가 필요한 범위가 이 정도인데, 이 정도 범위의 비슷한 사례는 어느 정도였나'로 질문을 바꾸면 기준점이 생긴다. 범위를 특정하기 어려우면 위시켓 매니저와 상담하면서 사례 범위와 대조해 보는 것도 방법이다.</div><div class="dc">외주를 맡기더라도 업무 요구사항을 일상어로 전달하고, 중간에 결과물을 실제 업무 시나리오로 확인하고, 런칭 후 운영을 누가 맡을지 정하는 일은 회사 쪽 책임이다. 다만 이 담당자에게 IT 기술 지식은 필요하지 않다. 부서장 중 한 명이 총괄로 지정되고, 위시켓 매니저가 견적 검토·파트너 선별·계약서 확인까지 동반하면 IT 담당자가 없어도 프로젝트가 표류하지 않는다. 기획 단계부터 도움이 필요하면 AIDP(기획~구축~운영을 직접 수행)를 선택지로 검토할 수도 있다.</div>
+  <div class="rl">&#x25B6;&#xFE0F; 도전</div>
+  <div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> '우리 회사가 지금 겪는 업무 문제'를 메모지에 다섯 줄 정도로 적어본다</div></div><div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 우리 회사 업무가 '표준화된 흐름에 가까운지, 기업 고유의 흐름이 많은지' 대표·부서장과 한 번 이야기해 본다</div></div><div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 위시켓 블로그에 실린 실제 ERP 구축 사례(기능 범위·예산·기간이 공개된 것)를 몇 개 찾아 우리 필요 범위와 대조해 본다</div></div><div class="dc try-row"><span style="color:var(--text-dim);font-size:11px">&mdash;</span></div>
+  <div class="rl">&#x2716; 다음 문제</div>
+  <div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 정리는 했는데, 이 문제를 이카운트 같은 기성 솔루션으로 풀 수 있는지 맞춤 개발을 해야 하는지 판단이 안 선다</div></div><div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 얘기해 보니 '표준에 가까운 것 같기도, 고유한 부분도 있는 것 같기도' 애매하다. 게다가 'SaaS', '클라우드', '온프레미스' 같은 용어가 혼재되어 있어 용어부터 꼬인다</div></div><div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 사례를 봤는데 우리 회사와 정확히 같지 않아서 어디까지 우리 예산에 맞는 범위로 잡아야 하는지, 범위를 좁히면 뭐가 빠지는지 감이 안 잡힌다</div></div><div class="dc block-row"><span style="color:var(--text-dim);font-size:11px">&mdash;</span></div>
+  <div class="rl basis-label">&#x1F4CE; 근거</div>
+  <div class="dc basis-cell">h1은 포인트 질문 '어디서부터'의 출발점이다. 연관 검색 상위가 '구축 지원', '비교'이고 PAA 2번째가 '구축 시 고려 요소'인 점에서 독자는 방식 판단 이전에 '내가 혼자 뭘 해야 하는지' 자체가 막혀 있다. AI 3개가 공통으로 '업무 현황 정리'를 첫 단계로 제시하지만 context research_corrections에서 tech_zero 독자에게 이 과제를 그대로 주면 안 된다고 명시하므로, 수준을 낮춘 첫 단계로 배치했다.</div><div class="dc basis-cell">h1의 block(기성이냐 맞춤이냐 판단 불가)이 이 노드를 직접 요청한다. AI 3개 공통으로 SaaS vs 구축형을 첫 번째 판단 논점으로 제시하고, 경쟁글 common_topics에서도 10건 중 8건이 이 비교를 다룬다. 다만 context research_corrections가 'SaaS vs 온프레미스가 아니라 기성 솔루션 vs 맞춤 개발로 비교해야 한다'고 지시하므로 프레이밍을 교정했다. PAA 3번째 '적합한 솔루션', 4번째 '구축 비용'도 이 판단에서 파생된다.</div><div class="dc basis-cell">h2에서 방식을 잡은 뒤 자연스럽게 '그럼 얼마인가'로 넘어가는 순서다. PAA 4번째가 '구축 비용', 볼륨 키워드에서 'ERP구축비용'이 상위권에 있다. AI 3개 모두 비용 항목을 포함하되 context industry_context의 dont에서 '비용을 방식별로 단정하지 말라'고 지시하므로, 비용의 결정 요인을 '방식'이 아닌 '범위'로 프레이밍했다. context data.validated_samples 15건이 500만 원~2억 5,000만 원 범위를 커버하여 사례 대조가 실질적으로 가능하다.</div><div class="dc basis-cell">h3에서 범위·예산을 잡은 뒤 남는 마지막 장벽은 '내부 인력 부재'라는 감정적 불안이다. context reader_misconceptions 3번 '외주 맡기면 개발사가 알아서 다 해준다'가 이 노드의 필요성을 직접 지목하고, AI missing_angles에서 Claude·Gemini가 공통으로 '내부 PM 역할·운영 체계 부재'를 지적한다. context journey_mapping.cta_direction의 '매니저가 방식 선택부터 함께 상담한다' 메시지와 AIDP 병행 안내가 이 노드에서 자연스럽게 결합된다.</div>
+  <div class="rl" style="border-bottom:none">&#x2935;&#xFE0F; 분기</div>
+  <div class="dc branch-cell empty">&mdash;</div><div class="dc branch-cell"><span class="branch-pill" style="background:var(--sub1-light);color:var(--sub1)">&#x2193; sub_saas_vs_custom</span></div><div class="dc branch-cell"><span class="branch-pill" style="background:var(--sub2-light);color:var(--sub2)">&#x2193; sub_budget_range</span></div><div class="dc branch-cell empty">&mdash;</div>
+  </div></div>
+</div>
+
+
+
+<div class="inner-panel" id="jm-sub1">
+  
+  <div class="hub-sub-connector"><div class="connector-visual">
+    <div class="cv-line" style="background:var(--hub)"></div>
+    <span class="cv-label" style="background:var(--hub-light);color:var(--hub)">Hub h2</span>
+    <span style="color:var(--text-dim)">&rarr;</span>
+    <div class="cv-line" style="background:var(--sub1)"></div>
+    <span class="cv-label" style="background:#FDF0F0;color:#D94F4F">sub_saas_vs_custom</span>
+    <span class="cv-desc">depth &mdash; 우리 회사가 기성 ERP 솔루션과 맞춤 외주 개발 중 어느 쪽에 해당하는...</span>
+  </div></div>
+  
+
+  <div class="section-title-bar">
+    <div class="stb-head">
+      <div class="stb-color" style="background:var(--sub1)"></div>
+      <div class="stb-content">
+        <div class="stb-overline" style="color:var(--sub1)">Sub Content 1 &mdash; depth from h2</div>
+        <div class="stb-question">우리 회사가 기성 ERP 솔루션과 맞춤 외주 개발 중 어느 쪽에 해당하는지 어떻게 판단할 수 있나요?</div>
+        <div class="stb-tags">
+          <span class="stb-tag" style="background:#FDF0F0;color:#D94F4F">3 steps</span>
+          <span class="stb-tag" style="background:#FDF0F0;color:#D94F4F">source: depth</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="reasoning-box rb-sub1"><div class="rb-label">Selection Reasoning</div><div class="rb-text">hub h2가 '기성 솔루션 vs 맞춤 개발'의 원리를 제시하지만, 실제로 담당자가 대표·부서장에게 '우리는 어느 쪽이 맞다'고 보고하려면 판단 기준이 구체적이어야 한다. 연관 검색 상위 '중소기업 erp 비교'가 540 볼륨으로 단독 1위이고, PAA 3번째 '적합한 솔루션'이 상위 질문이다. 경쟁글 missing_angles에서 '기성 솔루션 vs 맞춤 외주 판단 기준을 명시적으로 다룬 글이 없음'이 명시된다. hub은 개념 구분까지, sub는 자사 상황에 대입하는 실무 판단 기준까지 깊이를 확장한다.</div></div>
+    
+  </div>
+
+  <div class="section-scroll"><div class="map-grid c-sub1" style="grid-template-columns:var(--row-label-w) repeat(3,var(--col-w))">
+  
+  
+  <div class="rl flow-reason-label">흐름 근거</div><div class="dc flow-reason-cell">hub h2는 '두 방식이 다르다'를 설명하는 데서 끝나지만, 담당자가 실제로 마주하는 상황은 '우리가 어느 쪽에 해당하는지' 판단이다. flow는 ① hub을 읽고 왔지만 자사 업무가 어느 쪽인지 판단이 안 서는 출발점 → ② 기성 솔루션이 적합한 구체적 신호 → ③ 맞춤 개발이 필요한 구체적 신호 → ④ 경계에 있을 때의 실무 대응으로 전개한다. 이 순서는 독자가 '우리는 기성인가, 맞춤인가, 애매한가' 셋 중 하나로 귀결되도록 설계되었다.</div>
+  
+  <div class="rl" style="min-height:auto">&#x1F3F7;&#xFE0F; Stage</div>
+  <div class="stage-cell"><div class="stage-pill">S1_1</div></div><div class="stage-cell"><div class="stage-pill">S1_2</div></div><div class="stage-cell"><div class="stage-pill">S1_3</div></div>
+  <div class="rl" style="min-height:auto">&#x1F4C8; 감정</div>
+  <div class="emotion-strip short"><svg class="emotion-svg" viewBox="0 0 780 130" preserveAspectRatio="none">
+<rect x="0" y="0" width="260" height="130" fill="rgba(231,76,60,.04)" rx="4"/>
+<rect x="260" y="0" width="260" height="130" fill="rgba(243,156,18,.04)" rx="4"/>
+<rect x="520" y="0" width="260" height="130" fill="rgba(46,204,113,.04)" rx="4"/>
+<text x="130" y="90" text-anchor="middle" style="font-size:18px">😯</text>
+<circle cx="130" cy="110" r="6" fill="var(--emotion-low)"/>
+<text x="130" y="128" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-low)">불안</text>
+<text x="130" y="126" text-anchor="middle" class="emotion-sublabel">우리 회사가 기?</text>
+<text x="390" y="55" text-anchor="middle" style="font-size:18px">🤔</text>
+<circle cx="390" cy="75" r="6" fill="var(--emotion-mid)"/>
+<text x="390" y="93" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-mid)">관망</text>
+<text x="390" y="126" text-anchor="middle" class="emotion-sublabel">맞춤 개발까지 ?</text>
+<text x="650" y="20" text-anchor="middle" style="font-size:18px">😌</text>
+<circle cx="650" cy="40" r="6" fill="var(--emotion-high)"/>
+<text x="650" y="58" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-high)">안심</text>
+<text x="650" y="126" text-anchor="middle" class="emotion-sublabel">기성 솔루션과 ?</text>
+</svg></div>
+  <div class="rl">&#x1F4AD; 상태</div>
+  <div class="dc state-cell">hub을 읽고 기성 솔루션과 맞춤 개발이 다르다는 건 알았는데, 우리 회사 업무가 '표준에 가깝다'는 말이 정확히 뭘 뜻하는지 애매해서 대표에게 근거 있게 보고할 수 없다</div><div class="dc state-cell">데모를 봤더니 일부는 맞고 일부는 안 맞는다. 이 정도면 맞춤 개발을 해야 한다는 뜻인지, 기성 솔루션에 조금만 손대면 되는지 판단이 안 선다</div><div class="dc state-cell">우리 상황이 '기성으로는 부족하고 맞춤이 필요해 보이는' 쪽으로 기운 것 같은데, 바로 맞춤 개발 파트너를 찾아야 할지 아니면 둘을 섞는 방식도 있는지 모르겠다</div>
+  <div class="rl q-label">&#x2753; 질문</div>
+  <div class="dc q">우리 회사가 기성 솔루션에 맞는지, 맞춤 개발이 필요한지 판단하는 구체적 신호는 뭔가요?</div><div class="dc q">맞춤 개발까지 가야 하는 기준선은 어디인가요?</div><div class="dc q">기성 솔루션과 맞춤 개발을 섞어 쓰는 방법도 있나요?</div>
+  <div class="rl">&#x1F4A1; 핵심 답변</div>
+  <div class="dc">'표준 업무'인지 아닌지는 추상적 기준이라 막연할 수밖에 없다. 대신 몇 가지 실무 신호로 바꿔 보면 판단이 훨씬 명확해진다. 이카운트·더존 같은 기성 솔루션 데모를 받아보고 '재고·회계·급여·발주 등 우리가 매일 쓰는 기능이 기본으로 제공되는가', '일부 항목 수정·권한 설정 수준으로 우리 업무가 돌아가는가'를 확인하면 기성으로 가도 되는지 빠르게 알 수 있다.</div><div class="dc">기성 솔루션은 일부 항목을 수정하는 수준의 커스터마이징은 가능하지만, 업무 흐름 자체를 바꾸거나 기존 레거시 시스템과 깊게 연동해야 하면 한계에 부딪힌다. 우리 회사만의 업무 규칙이 많거나, 이미 쓰고 있는 시스템(사내 주문서·생산관리·출하 시스템 등)과 반드시 연결되어야 하거나, 업종 특성상 기성 제품이 가정한 흐름과 너무 다른 경우라면 맞춤 개발이 현실적이다. 이 판단이 혼자 어려우면 위시켓 매니저가 실제 사례와 비교하며 함께 정리해준다.</div><div class="dc">'기성 솔루션을 메인으로 쓰면서 연동·확장이 필요한 일부만 맞춤 개발'하는 하이브리드 방식도 현실에서 흔하다. 기존 ERP와 연동되는 웹 리포트를 별도로 개발하거나, 스마트스토어 같은 외부 플랫폼과 ERP를 연결하는 연동 기능만 맞춤 개발로 의뢰하는 사례들이 있다. 완전 맞춤 개발과 기성 솔루션 사이의 제3의 선택지가 있음을 알면 처음부터 수천만~수억 원 규모의 판단을 내리지 않아도 된다.</div>
+  <div class="rl">&#x25B6;&#xFE0F; 도전</div>
+  <div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 이카운트·더존 등 2~3개 SaaS ERP 데모 영상을 보고 우리 주요 업무(예: 재고 입출고, 급여 계산, 거래처 관리)가 기본 기능으로 처리되는지 체크한다</div></div><div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 우리 회사의 '기성 솔루션으로 안 될 것 같은' 항목을 3~5개 적고, 그중 '있으면 좋은 것'과 '없으면 업무 자체가 막히는 것'을 구분해 본다</div></div><div class="dc try-row"><span style="color:var(--text-dim);font-size:11px">&mdash;</span></div>
+  <div class="rl">&#x2716; 다음 문제</div>
+  <div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 기본 기능으로 커버되는 부분도 있고, 우리만의 업무(예: 특정 계산 방식, 외부 시스템 연동)는 안 맞는 부분도 있어서 결론이 애매하다</div></div><div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 정리해 봤더니 '없으면 안 되는 것'이 많다. 그런데 이걸 맞춤 개발로 가면 비용이 얼마나 더 드는지, 기간은 얼마나 길어지는지 기준이 없다</div></div><div class="dc block-row"><span style="color:var(--text-dim);font-size:11px">&mdash;</span></div>
+  <div class="rl basis-label" style="border-bottom:none">&#x1F4CE; 근거</div>
+  <div class="dc basis-cell" style="border-bottom:none">hub h2의 block이 '표준이냐 고유냐 애매하다'였으므로, 이 sub의 첫 노드는 '그 애매함을 어떻게 구체화하나'에서 출발한다. AI 3개가 공통으로 이카운트·더존·영림원을 대표 SaaS로 반복 언급하고, Claude·Gemini가 '부서 간 데이터 불일치·엑셀 반복 작업'을 도입 신호로 제시한 점을 구체 체크 항목으로 치환했다.</div><div class="dc basis-cell" style="border-bottom:none">s1_1의 block(기본도 있고 안 맞는 것도 있음)이 이 노드를 요청한다. context reader_misconceptions 4번 'SaaS로도 맞춤 개발과 동일 기능을 얻는다'를 해소하면서 판단선을 제공한다. AI Claude key_points '기성 ERP, 자체 개발, 개발업체 맞춤 구축 3가지 방법 구분'이 이 노드의 근거다.</div><div class="dc basis-cell" style="border-bottom:none">s1_2에서 '맞춤 개발이 필요해 보인다'는 결론이 나왔을 때 바로 대규모 외주로 가기 전 중간 선택지를 제시한다. context validated_samples에서 500~1,000만 원대 'ERP 연동 단위 기능' 사례가 복수 존재하는 점이 이 노드를 실제 사례로 뒷받침한다. AI missing_angles에서 다루지 않은 각도이지만 데이터로는 실재하는 옵션이다.</div>
+  </div></div>
+</div>
+
+<div class="inner-panel" id="jm-sub2">
+  
+  <div class="hub-sub-connector"><div class="connector-visual">
+    <div class="cv-line" style="background:var(--hub)"></div>
+    <span class="cv-label" style="background:var(--hub-light);color:var(--hub)">Hub h3</span>
+    <span style="color:var(--text-dim)">&rarr;</span>
+    <div class="cv-line" style="background:var(--sub2)"></div>
+    <span class="cv-label" style="background:#FFF8EB;color:#C68A1D">sub_budget_range</span>
+    <span class="cv-desc">example &mdash; ERP 구축 예산은 왜 500만 원대부터 수억 원까지 펼쳐져 있고, 우리...</span>
+  </div></div>
+  
+
+  <div class="section-title-bar">
+    <div class="stb-head">
+      <div class="stb-color" style="background:var(--sub2)"></div>
+      <div class="stb-content">
+        <div class="stb-overline" style="color:var(--sub2)">Sub Content 2 &mdash; example from h3</div>
+        <div class="stb-question">ERP 구축 예산은 왜 500만 원대부터 수억 원까지 펼쳐져 있고, 우리 회사 범위는 어디에 해당하나요?</div>
+        <div class="stb-tags">
+          <span class="stb-tag" style="background:#FFF8EB;color:#C68A1D">3 steps</span>
+          <span class="stb-tag" style="background:#FFF8EB;color:#C68A1D">source: example</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="reasoning-box rb-sub2"><div class="rb-label">Selection Reasoning</div><div class="rb-text">hub h3이 '비용은 범위가 결정한다'를 원리로 제시하지만, 독자가 대표에게 예산을 보고하려면 '어느 범위면 얼마 정도'라는 사례 기반 기준점이 필요하다. context data.validated_samples 15건이 500만 원~2억 5,000만 원까지 넓은 범위를 커버하고, data_angles의 '기능 범위별 예산 분포 비교'가 feasibility 충분으로 판정되어 있다. hub에서 사례를 전체 나열하지 않고 원리만 제시했으므로, sub에서 사례 중심으로 '작은→큰 범위' 순 배치가 가능하다. hub과 다른 데이터 각도로 중복이 없다.</div></div>
+    
+  </div>
+
+  <div class="section-scroll"><div class="map-grid c-sub2" style="grid-template-columns:var(--row-label-w) repeat(3,var(--col-w))">
+  
+  
+  <div class="rl flow-reason-label">흐름 근거</div><div class="dc flow-reason-cell">hub h3은 '범위가 비용을 결정한다'는 원리까지 제시한다. 이 sub는 그 원리를 실제 사례로 해부하는 구조다. ① 사례가 왜 필요한지(hub을 읽은 독자의 남은 궁금증) → ② 작은 범위(500만~2,000만 원대) 연동·경량 ERP → ③ 중규모(4,000만~9,000만 원대) 업무 통합 ERP → ④ 대규모(1억 원 이상) 전사 통합의 범위감을 보여준다. 이 순서는 독자가 '우리 범위가 어디에 해당하는지' 스스로 대입하며 읽을 수 있도록 작은 것부터 큰 것으로 전개한다.</div>
+  
+  <div class="rl" style="min-height:auto">&#x1F3F7;&#xFE0F; Stage</div>
+  <div class="stage-cell"><div class="stage-pill">S2_1</div></div><div class="stage-cell"><div class="stage-pill">S2_2</div></div><div class="stage-cell"><div class="stage-pill">S2_3</div></div>
+  <div class="rl" style="min-height:auto">&#x1F4C8; 감정</div>
+  <div class="emotion-strip short"><svg class="emotion-svg" viewBox="0 0 780 130" preserveAspectRatio="none">
+<rect x="0" y="0" width="260" height="130" fill="rgba(231,76,60,.04)" rx="4"/>
+<rect x="260" y="0" width="260" height="130" fill="rgba(243,156,18,.04)" rx="4"/>
+<rect x="520" y="0" width="260" height="130" fill="rgba(46,204,113,.04)" rx="4"/>
+<text x="130" y="90" text-anchor="middle" style="font-size:18px">😯</text>
+<circle cx="130" cy="110" r="6" fill="var(--emotion-low)"/>
+<text x="130" y="128" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-low)">불안</text>
+<text x="130" y="126" text-anchor="middle" class="emotion-sublabel">ERP 구축 사?</text>
+<text x="390" y="55" text-anchor="middle" style="font-size:18px">🤔</text>
+<circle cx="390" cy="75" r="6" fill="var(--emotion-mid)"/>
+<text x="390" y="93" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-mid)">관망</text>
+<text x="390" y="126" text-anchor="middle" class="emotion-sublabel">작은 범위의 E?</text>
+<text x="650" y="20" text-anchor="middle" style="font-size:18px">😌</text>
+<circle cx="650" cy="40" r="6" fill="var(--emotion-high)"/>
+<text x="650" y="58" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-high)">안심</text>
+<text x="650" y="126" text-anchor="middle" class="emotion-sublabel">같은 범위 안에?</text>
+</svg></div>
+  <div class="rl">&#x1F4AD; 상태</div>
+  <div class="dc state-cell">hub을 읽고 '범위가 비용을 결정한다'는 건 알았는데, 우리 회사 필요 범위가 어디에 해당하는지 구체적 기준점이 없어 대표에게 숫자로 보고할 수 없다</div><div class="dc state-cell">사례가 여러 개 있는데, 같은 ERP라는 이름 아래 500만 원대부터 1억 원 이상까지 펼쳐져 있어 뭐가 뭔지 뒤엉켜 보인다</div><div class="dc state-cell">구간은 잡았는데, 같은 구간 안에서 우리 프로젝트가 어느 쪽으로 기울지 미리 가늠할 수 있는 방법이 있는지 궁금하다</div>
+  <div class="rl q-label">&#x2753; 질문</div>
+  <div class="dc q">ERP 구축 사례는 실제로 어떤 범위에서 어느 정도 예산이었나요?</div><div class="dc q">작은 범위의 ERP 프로젝트는 어떤 기능이고, 큰 범위는 어떻게 다른가요?</div><div class="dc q">같은 범위 안에서 비용을 가르는 요인은 뭔가요?</div>
+  <div class="rl">&#x1F4A1; 핵심 답변</div>
+  <div class="dc">'ERP'라는 같은 이름을 가진 프로젝트도 '기존 ERP와 붙는 단위 기능 하나'부터 '물류 전체를 통합하는 시스템'까지 규모가 완전히 다르다. 실제 사례를 작은 범위부터 큰 범위 순으로 보면 우리 회사 필요 범위가 어느 부근에 있는지 대략적인 기준점을 잡을 수 있다. 단, 사례의 예산은 발주자가 제시한 예산이므로 최종 계약 금액은 협의에 따라 달라질 수 있다.</div><div class="dc">ERP 프로젝트는 기능 범위에 따라 크게 세 구간으로 나뉜다. '기존 시스템과 연동되는 단위 기능·경량 ERP'는 500~2,000만 원대에서 20~90일, '사내 업무 통합(생산·재고·매출 등)'은 4,000~9,000만 원대에서 90~150일, '전사·다부서 통합 ERP 또는 외부 플랫폼과의 대규모 연동'은 1억 원 이상에서 180일 이상 구간에 자리한다. 같은 'ERP'라도 이 세 구간은 프로젝트 성격이 완전히 다르다.</div><div class="dc">같은 구간 안에서도 '사용자 수·연동해야 하는 외부 시스템 개수·맞춤 개발 필요 비율(기성 대비)·업종 특수성'이 금액을 가른다. 특히 기존에 쓰던 시스템과 데이터 마이그레이션 범위가 클수록 기간과 금액이 함께 늘어나는 경향이 있다. 이런 변수들을 미리 정리해 가면 파트너와 미팅할 때 견적의 편차가 어디서 오는지 훨씬 빠르게 이해할 수 있다.</div>
+  <div class="rl">&#x25B6;&#xFE0F; 도전</div>
+  <div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 우리 회사가 필요하다고 생각한 기능 목록(hub에서 정리한 5줄 메모)을 '있으면 좋은 것 / 없으면 안 되는 것'으로 나누고, 후자만 모으면 어느 범위에 속하는지 가늠해 본다</div></div><div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 우리 필요 범위가 '연동 단위 기능 / 사내 업무 통합 / 전사 통합' 중 어디에 가까운지 감을 잡고, 유사 구간의 사례를 한 번 더 살펴본다</div></div><div class="dc try-row"><span style="color:var(--text-dim);font-size:11px">&mdash;</span></div>
+  <div class="rl">&#x2716; 다음 문제</div>
+  <div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 범위는 대략 잡혔는데, 같은 '중규모' 안에서도 왜 4,000만 원짜리와 9,000만 원짜리가 존재하는지 차이가 뭔지 모르겠다</div></div><div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 우리 범위는 '사내 업무 통합'에 가까운 것 같은데, 같은 구간 안에서도 사례별로 기간·금액 차이가 크고 그 차이가 우리에게도 해당할지 모르겠다</div></div><div class="dc block-row"><span style="color:var(--text-dim);font-size:11px">&mdash;</span></div>
+  <div class="rl basis-label" style="border-bottom:none">&#x1F4CE; 근거</div>
+  <div class="dc basis-cell" style="border-bottom:none">hub h3의 block(사례와 우리 회사가 정확히 같지 않아 대입이 어렵다)이 이 sub의 첫 노드를 요청한다. context data.validated_stats의 usage_note에서 '개별 사례 카드 중심으로 구성'이 명시되어 있어 이 순서가 데이터 가이드와 정합한다.</div><div class="dc basis-cell" style="border-bottom:none">s2_1의 block(같은 구간 내 편차)을 해소하기 위해 구간을 명확히 3분하는 노드다. context data.validated_samples의 comparable_group 필드가 이미 '소규모 연동/중규모 맞춤/중대규모/대규모'로 구분되어 있어 이 3구간 분류가 데이터 구조와 정합한다. 구체 수치 인용 대신 구간만 제시하여 basis 규칙('집계 통계를 본문에 직접 인용하지 않음')을 지켰다.</div><div class="dc basis-cell" style="border-bottom:none">s2_2의 block(같은 구간 내 편차)을 마무리하는 노드다. context industry_context.dont '비용을 방식별로 단정하지 말라'를 따르면서, 범위 결정 요인을 '사용자 수·연동 시스템·맞춤 비율·업종'으로 구체화했다. AI missing_angles에서 ChatGPT가 '업종별 모듈 우선순위 차이'를 지적한 것과 Claude가 '업체 선정 기준'을 지적한 것이 이 노드의 근거다.</div>
+  </div></div>
+</div>
+
+<div class="inner-panel" id="jm-sub3">
+  
+  <div class="hub-sub-connector"><div class="connector-visual">
+    <span class="cv-label" style="background:#F3F1FE;color:#6C5CE7">sub_govt_support</span>
+    <span class="cv-desc">독립 Branch &mdash; 중소기업이 ERP 구축에 정부 지원금을 활용하려 할 때, 실제로 어떤 구...</span>
+  </div></div>
+  
+
+  <div class="section-title-bar">
+    <div class="stb-head">
+      <div class="stb-color" style="background:var(--sub3)"></div>
+      <div class="stb-content">
+        <div class="stb-overline" style="color:var(--sub3)">Sub Content 3 &mdash; branch Independent Branch</div>
+        <div class="stb-question">중소기업이 ERP 구축에 정부 지원금을 활용하려 할 때, 실제로 어떤 구조로 작동하고 뭐부터 결정해야 하나요?</div>
+        <div class="stb-tags">
+          <span class="stb-tag" style="background:#F3F1FE;color:#6C5CE7">3 steps</span>
+          <span class="stb-tag" style="background:#F3F1FE;color:#6C5CE7">source: branch</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="reasoning-box rb-sub3"><div class="rb-label">Selection Reasoning</div><div class="rb-text">problem_contexts[1](소기업 대표가 정부 지원금을 전제로 ERP 검토)가 hub h1의 state(업체 알아보기 직전, 방식 선택 고민)와 다른 출발점이다. 정부 지원금이 전제되면 '지원 대상 솔루션이 제한되는 경우'가 있어 방식 선택 자체가 바뀐다. 연관 키워드 '바우처' 13,910 볼륨이 실재 수요를 뒷받침하고, 경쟁글 missing_angles와 fanout_proposals 3번이 이 주제의 공백을 명시한다. context reader_misconceptions 6번 '지원금으로 공짜 도입 가능'이 branch 독자의 핵심 오해다. 다만 실제 신청 절차는 회차·지자체별로 상이하므로 '일반적 구조와 확인 지점'까지만 다룬다.</div></div>
+    
+  </div>
+
+  <div class="section-scroll"><div class="map-grid c-sub3" style="grid-template-columns:var(--row-label-w) repeat(3,var(--col-w))">
+  
+  
+  <div class="rl flow-reason-label">흐름 근거</div><div class="dc flow-reason-cell">branch 독자는 '정부 지원금이 있다'는 말을 듣고 왔지만, 정부 지원 프로그램의 실제 구조와 자부담·제약을 모른다. flow는 ① 지원금을 공짜로 오해하는 출발점 → ② 지원 제도가 실제로 어떻게 작동하는가(자부담·대상 제약) → ③ 지원금과 방식 선택을 어떻게 맞물리게 가져가야 하는가 순으로 전개한다. hub과 독립된 흐름이지만, 마지막 노드에서 '지원금 여부와 무관하게 필요한 기본 판단'을 다시 짚어 hub으로의 자연스러운 연결을 남긴다. context industry_context.dont '공짜 표현 금지'와 reader_misconceptions 6번을 각 노드가 교정한다.</div>
+  
+  <div class="rl" style="min-height:auto">&#x1F3F7;&#xFE0F; Stage</div>
+  <div class="stage-cell"><div class="stage-pill">S3_1</div></div><div class="stage-cell"><div class="stage-pill">S3_2</div></div><div class="stage-cell"><div class="stage-pill">S3_3</div></div>
+  <div class="rl" style="min-height:auto">&#x1F4C8; 감정</div>
+  <div class="emotion-strip short"><svg class="emotion-svg" viewBox="0 0 780 130" preserveAspectRatio="none">
+<rect x="0" y="0" width="260" height="130" fill="rgba(231,76,60,.04)" rx="4"/>
+<rect x="260" y="0" width="260" height="130" fill="rgba(243,156,18,.04)" rx="4"/>
+<rect x="520" y="0" width="260" height="130" fill="rgba(46,204,113,.04)" rx="4"/>
+<text x="130" y="90" text-anchor="middle" style="font-size:18px">😯</text>
+<circle cx="130" cy="110" r="6" fill="var(--emotion-low)"/>
+<text x="130" y="128" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-low)">불안</text>
+<text x="130" y="126" text-anchor="middle" class="emotion-sublabel">중소기업이 ER?</text>
+<text x="390" y="55" text-anchor="middle" style="font-size:18px">🤔</text>
+<circle cx="390" cy="75" r="6" fill="var(--emotion-mid)"/>
+<text x="390" y="93" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-mid)">관망</text>
+<text x="390" y="126" text-anchor="middle" class="emotion-sublabel">정부 지원금을 ?</text>
+<text x="650" y="20" text-anchor="middle" style="font-size:18px">😌</text>
+<circle cx="650" cy="40" r="6" fill="var(--emotion-high)"/>
+<text x="650" y="58" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-high)">안심</text>
+<text x="650" y="126" text-anchor="middle" class="emotion-sublabel">정부 지원금과 ?</text>
+</svg></div>
+  <div class="rl">&#x1F4AD; 상태</div>
+  <div class="dc state-cell">상공회의소·지인에게 '스마트공장 바우처로 ERP를 거의 공짜로 했다'는 말을 듣고 관심이 커졌는데, 막상 '무엇을 어디서 어떻게 신청하는지' 자체가 어둡다</div><div class="dc state-cell">공고를 봤는데 자부담과 지원 상한이 함께 걸려 있어서, 정작 우리가 얼마를 내야 하는지 계산이 안 된다</div><div class="dc state-cell">지원금과 방식 선택이 맞물려 있다는 걸 알게 됐는데, 그러면 우리는 뭐부터 결정해야 하는 건지 순서가 뒤엉킨다</div>
+  <div class="rl q-label">&#x2753; 질문</div>
+  <div class="dc q">중소기업이 ERP 구축에 활용할 수 있는 정부 지원 사업은 어떤 게 있나요?</div><div class="dc q">정부 지원금을 받아도 우리 회사가 내야 하는 비용은 어떻게 정해지나요?</div><div class="dc q">정부 지원금과 ERP 방식 선택, 뭐부터 결정해야 하나요?</div>
+  <div class="rl">&#x1F4A1; 핵심 답변</div>
+  <div class="dc">중소기업이 ERP 도입에 활용할 수 있는 정부 지원 프로그램은 중소벤처기업부 주관 스마트공장 보급·확산 사업, 디지털 전환(DX) 바우처, 지자체별 지원 사업 등 여러 경로가 있다. 다만 각 사업마다 대상 기업 요건(업종·규모), 연간 회차, 자부담 비율, 지원 상한 금액이 다르기 때문에 '정부 지원금 = 공짜'라는 인식으로 접근하면 오히려 시간과 기회를 잃는다. 큰 틀을 이해하는 것부터 시작한다.</div><div class="dc">대부분의 지원 사업은 '총 프로젝트 비용 × 자부담 비율'로 회사 부담이 결정되고, 여기에 '연간 지원 상한 금액'이 따로 걸린다. 예를 들어 총 비용이 상한을 넘어가면 초과분은 전액 자부담이다. 또 사업에 따라 '지정된 공급기업'에서만 구축해야 지원금이 나오는 제약이 있을 수도 있는데, 이 경우 '아무 업체나' 쓸 수 없기 때문에 방식·파트너 선택의 자유도가 줄어든다. 이 구조를 먼저 이해하고 사업을 선택해야 실제 절감 효과를 계산할 수 있다.</div><div class="dc">정부 지원금은 '우리 회사에 필요한 방식을 먼저 판단한 뒤, 그 방식에 맞는 지원 사업을 찾는' 순서가 현실적이다. 지원금부터 맞춰서 방식을 결정하면 우리 업무에 안 맞는 솔루션에 돈을 묶어두게 되고, 지원 사업이 불발됐을 때 계획 자체가 멈춘다. 반대로 방식이 먼저 서 있으면 지원금이 되면 좋고, 안 되어도 진행할 수 있다. 방식 판단이 어려우면 위시켓 매니저와 상담하면서 방식·예산·지원 가능성을 함께 정리할 수 있다.</div>
+  <div class="rl">&#x25B6;&#xFE0F; 도전</div>
+  <div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 중소벤처기업부(mss.go.kr)나 스마트공장 지원 홈페이지에서 올해 공고된 사업 목록을 한 번 훑어보고, 우리 업종·규모가 대상에 포함되는지 확인한다</div></div><div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 우리가 관심 있는 사업의 자부담 비율과 상한 금액을 찾아 적어두고, 예상 프로젝트 규모(hub 사례 대입치)와 곱해 대략적 자부담 금액을 가늠한다</div></div><div class="dc try-row"><span style="color:var(--text-dim);font-size:11px">&mdash;</span></div>
+  <div class="rl">&#x2716; 다음 문제</div>
+  <div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 공고는 봤는데 '자부담', '지원 상한', '지정 공급기업' 같은 용어가 나와서 실제로 얼마가 내 주머니에서 나가는지 계산이 안 된다</div></div><div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 자부담은 계산했는데, 지원금이 되는 방식이 '지정 솔루션'에 묶여 있다고 하니 우리가 원하는 맞춤 개발은 안 될 수도 있다. 그러면 지원금을 포기할 것인지, 방식을 바꿀 것인지 결정이 필요하다</div></div><div class="dc block-row"><span style="color:var(--text-dim);font-size:11px">&mdash;</span></div>
+  <div class="rl basis-label" style="border-bottom:none">&#x1F4CE; 근거</div>
+  <div class="dc basis-cell" style="border-bottom:none">connections_axis situation 분기의 출발점. Gemini key_points에서 '중소벤처기업부 주관 정부 지원 사업 존재를 언급(구체 경로는 미제시)'이 이 사가 갖는 공백을 직접 지목한다. 경쟁글 missing_angles에서도 '정부 지원 프로그램 활용 절차 부재'가 공백으로 명시된다. context industry_context.dont '공짜 표현 금지'를 따라 첫 문장에서 인식 교정을 함께 수행했다.</div><div class="dc basis-cell" style="border-bottom:none">s3_1의 block(자부담·상한 용어 미이해)을 해소하고 context reader_misconceptions 6번 '정부 지원금으로 공짜 도입' 오해를 구체 구조로 교정한다. context industry_context.dont '공짜 표현 금지'와 직접 연결되는 노드다.</div><div class="dc basis-cell" style="border-bottom:none">s3_2의 block(지원금이 방식을 제약함)을 해소하며 hub flow와 자연스럽게 연결되는 마무리. branch 독자에게 '방식 판단이 먼저'라는 hub의 논리를 branch 맥락에서 재확인한다. context cta_direction의 '매니저가 방식 선택부터 함께 상담한다' 메시지가 이 노드의 마무리에 자연스럽게 결합된다.</div>
+  </div></div>
+</div>
+
+<div class="inner-panel" id="jm-sub4">
+  
+  <div class="hub-sub-connector"><div class="connector-visual">
+    <span class="cv-label" style="background:#FDF2F8;color:#E84393">sub_retry</span>
+    <span class="cv-desc">독립 Branch &mdash; ERP 도입에 한 번 실패한 기업이 다시 시도할 때, 지난번과 무엇을 다...</span>
+  </div></div>
+  
+
+  <div class="section-title-bar">
+    <div class="stb-head">
+      <div class="stb-color" style="background:var(--sub4)"></div>
+      <div class="stb-content">
+        <div class="stb-overline" style="color:var(--sub4)">Sub Content 4 &mdash; branch Independent Branch</div>
+        <div class="stb-question">ERP 도입에 한 번 실패한 기업이 다시 시도할 때, 지난번과 무엇을 다르게 해야 같은 실패를 반복하지 않을까요?</div>
+        <div class="stb-tags">
+          <span class="stb-tag" style="background:#FDF2F8;color:#E84393">3 steps</span>
+          <span class="stb-tag" style="background:#FDF2F8;color:#E84393">source: branch</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="reasoning-box rb-sub4"><div class="rb-label">Selection Reasoning</div><div class="rb-text">problem_contexts[2](과거 ERP 도입 실패 경험 후 재도전)가 hub의 '처음 시작' 독자와 학습 출발점이 다르다. 이 독자는 '방식 선택'이 아니라 '저번에 왜 실패했는지, 이번에 어떻게 달라야 하는지'가 핵심 고민이다. PAA 7번째 '주요 문제점', Claude·Gemini가 공통으로 missing_angle로 지목한 '사용자 교육·변화 관리·직원 저항', 경쟁글 missing_angles의 '재시도 시 접근 방법 부재'가 수요를 뒷받침한다. hub h1의 state(처음 도입 검토)에 진입할 수 없는 독자이므로 branch가 적합하다.</div></div>
+    
+  </div>
+
+  <div class="section-scroll"><div class="map-grid c-sub4" style="grid-template-columns:var(--row-label-w) repeat(3,var(--col-w))">
+  
+  
+  <div class="rl flow-reason-label">흐름 근거</div><div class="dc flow-reason-cell">branch 독자는 이전 실패 원인을 자기 탓으로 규정짓기 쉽다. flow는 ① 실패를 자기 탓으로만 보는 출발점 → ② ERP 실패의 구조적 원인 3가지(범위 확대·변화 관리 부재·내부 담당자 부재) → ③ 재시도 시 달리 해야 할 것 순으로 전개한다. 첫 번째 시도와 다른 점은 '실패 원인에서 역설계한 접근'이어야 하므로, 마지막 노드는 hub의 원칙('범위 작게, 내부 총괄 1명, 매니저와 동반')을 재시도 독자 맥락에서 재확인한다.</div>
+  
+  <div class="rl" style="min-height:auto">&#x1F3F7;&#xFE0F; Stage</div>
+  <div class="stage-cell"><div class="stage-pill">S4_1</div></div><div class="stage-cell"><div class="stage-pill">S4_2</div></div><div class="stage-cell"><div class="stage-pill">S4_3</div></div>
+  <div class="rl" style="min-height:auto">&#x1F4C8; 감정</div>
+  <div class="emotion-strip short"><svg class="emotion-svg" viewBox="0 0 780 130" preserveAspectRatio="none">
+<rect x="0" y="0" width="260" height="130" fill="rgba(231,76,60,.04)" rx="4"/>
+<rect x="260" y="0" width="260" height="130" fill="rgba(243,156,18,.04)" rx="4"/>
+<rect x="520" y="0" width="260" height="130" fill="rgba(46,204,113,.04)" rx="4"/>
+<text x="130" y="90" text-anchor="middle" style="font-size:18px">😯</text>
+<circle cx="130" cy="110" r="6" fill="var(--emotion-low)"/>
+<text x="130" y="128" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-low)">불안</text>
+<text x="130" y="126" text-anchor="middle" class="emotion-sublabel">ERP 도입에 ?</text>
+<text x="390" y="55" text-anchor="middle" style="font-size:18px">🤔</text>
+<circle cx="390" cy="75" r="6" fill="var(--emotion-mid)"/>
+<text x="390" y="93" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-mid)">관망</text>
+<text x="390" y="126" text-anchor="middle" class="emotion-sublabel">재시도할 때 범?</text>
+<text x="650" y="20" text-anchor="middle" style="font-size:18px">😌</text>
+<circle cx="650" cy="40" r="6" fill="var(--emotion-high)"/>
+<text x="650" y="58" text-anchor="middle" class="emotion-label" style="fill:var(--emotion-high)">안심</text>
+<text x="650" y="126" text-anchor="middle" class="emotion-sublabel">내부 담당자가 ?</text>
+</svg></div>
+  <div class="rl">&#x1F4AD; 상태</div>
+  <div class="dc state-cell">1~2년 전에 ERP를 도입했는데 직원들이 결국 엑셀로 돌아갔거나, 프로젝트가 기한·예산을 크게 넘겼다. 이번에 다시 해야 하는데 '우리가 뭘 잘못했는지' 정리가 안 된다</div><div class="dc state-cell">실패 원인을 '직원 사용 + 내부 담당자 부재'로 정리했는데, 이번에 같은 문제를 막으려면 뭘 달리 해야 하는지 구체가 없다</div><div class="dc state-cell">범위를 좁히는 계획은 세웠는데, 정작 '내부 총괄 담당자 없음'과 '직원 저항'은 어떻게 해결해야 하는지 여전히 막막하다</div>
+  <div class="rl q-label">&#x2753; 질문</div>
+  <div class="dc q">ERP 도입에 한 번 실패했는데, 우리 회사가 특별히 잘못한 걸까요?</div><div class="dc q">재시도할 때 범위와 순서는 어떻게 달리 가져가야 하나요?</div><div class="dc q">내부 담당자가 없는 상태에서 재시도하려면 어떻게 해야 하나요?</div>
+  <div class="rl">&#x1F4A1; 핵심 답변</div>
+  <div class="dc">ERP 도입 실패를 회사 문제로만 보면 같은 실수를 반복하기 쉽다. 업계에서 반복적으로 보이는 실패 구조는 크게 세 가지다. ① 초기에 모든 부서를 한 번에 넣으려다 프로젝트가 커져서 표류하는 경우, ② 시스템은 잘 만들어졌는데 직원 교육·변화 관리가 비어 사용률이 낮은 경우, ③ 외주를 맡기고 내부 총괄 담당자가 없어 소통·검수가 제대로 돌지 않은 경우. 지난 실패가 이 중 어디에 해당하는지 먼저 구분하는 것이 재시도의 출발점이다.</div><div class="dc">재시도 프로젝트는 '한 번에 전체 도입' 대신 가장 시급한 부서·기능부터 좁게 시작해 성공 경험을 쌓는 방식이 현실적이다. 예를 들어 재고·회계 한 가지 모듈만 먼저 안정화하고, 그 결과를 본 뒤 다음 단계로 확장하는 단계적 도입을 택한다. 범위를 좁히면 직원 교육도 집중할 수 있고, 내부 담당자의 부담도 줄어든다. 첫 시도에서 '한꺼번에'가 실패 원인이었다면 이번에는 '좁게, 단계적으로'가 핵심 차이가 된다.</div><div class="dc">ERP 재시도에서 가장 중요한 두 가지는 '내부 총괄 1명 지정'과 '도입과 별개인 변화 관리 계획'이다. 내부 총괄은 IT 기술 지식이 있어야 하는 자리가 아니라, 부서 간 업무를 가장 잘 아는 사람이면 된다. 변화 관리는 '사용자 교육 일정·초기 사용률 점검·작은 성공 공유' 같은 운영 활동이다. 혼자 이 두 가지를 설계하기 어렵다면 위시켓 매니저가 재도입 프로젝트 상담에서 '내부 담당자 역할 정리·사용자 교육 단계 포함 여부'를 함께 짚어준다.</div>
+  <div class="rl">&#x25B6;&#xFE0F; 도전</div>
+  <div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 지난 프로젝트를 돌아보며 '시스템 자체 문제 / 직원 사용 문제 / 내부 담당자 부재'로 실패 원인을 구분해 본다</div></div><div class="dc try-row"><div class="try-line"><span class="try-ico">&#x25B6;</span> 가장 시급하고 효과가 명확한 모듈(재고·회계·급여 중 1개) 하나를 먼저 도입 대상으로 좁히고, 나머지는 2단계로 미루는 계획을 그려본다</div></div><div class="dc try-row"><span style="color:var(--text-dim);font-size:11px">&mdash;</span></div>
+  <div class="rl">&#x2716; 다음 문제</div>
+  <div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 대략 '직원 사용 문제와 내부 담당자 부재가 섞여 있었다'는 정리는 됐는데, 이번에 어떻게 달리 해야 그 문제가 반복되지 않을지 구체가 없다</div></div><div class="dc block-row"><div class="block-line"><span class="block-ico">&#x2715;</span> 범위는 좁혔는데, 내부 담당자는 여전히 없고 직원 사용률을 끌어올릴 방법을 모르겠다</div></div><div class="dc block-row"><span style="color:var(--text-dim);font-size:11px">&mdash;</span></div>
+  <div class="rl basis-label" style="border-bottom:none">&#x1F4CE; 근거</div>
+  <div class="dc basis-cell" style="border-bottom:none">branch 독자의 감정적 출발점(자기 탓)을 구조적 원인으로 전환한다. Claude key_points '초기 도입 단계 혼란·시스템 과도한 복잡성이 가장 큰 실패 요인', context reader_misconceptions 5번 '직원들이 자연스럽게 잘 쓸 것'이 이 3가지 구분의 근거다. fanout_proposals 5번 'ERP 도입했는데 직원들이 안 쓴다면'과 직접 맞닿는다.</div><div class="dc basis-cell" style="border-bottom:none">s4_1의 block(구체 대응 부재)을 해소한다. AI 3개 공통 key_point인 '단계적 도입 권장'이 근거이고, context journey_mapping.knowledge_for '기획 단계에서 범위 조정'과 정합한다.</div><div class="dc basis-cell" style="border-bottom:none">s4_2의 block(담당자·저항)을 마무리하며 branch 독자를 CTA로 연결한다. context reader_misconceptions 3번 '외주 맡기면 알아서 다 해준다'와 5번 '직원이 자연스럽게 쓴다'를 동시에 교정한다. context cta_direction의 '매니저가 방식부터 상담' 메시지가 재시도 맥락에서 자연스럽게 결합된다.</div>
+  </div></div>
+</div>
+
+
+</div>
+
+
+<div class="page-footer">
+  Strategy Report &middot; it지식이없고내부개발팀이없는중소,중견 &middot; 2026-04-21 &middot; 20260421_1407_it지식이없고내부개발팀이없는중소,중견
+</div>
+
+<script>
+function switchView(id){
+  document.querySelectorAll('.top-tab').forEach(function(b){b.classList.remove('active')});
+  document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active')});
+  document.getElementById('view-'+id).classList.add('active');
+  var labels={'research':'리서치','context':'방향','journey':'콘텐츠'};
+  document.querySelectorAll('.top-tab').forEach(function(b){if(b.textContent.indexOf(labels[id])!==-1)b.classList.add('active')});
+}
+function switchInner(panelId,btn){
+  var parent=btn.parentElement;
+  parent.querySelectorAll('.inner-tab').forEach(function(b){b.classList.remove('active');b.style.borderBottomColor='';b.style.color=''});
+  var container=parent.parentElement;
+  container.querySelectorAll(':scope > .inner-panel').forEach(function(p){p.classList.remove('active')});
+  btn.classList.add('active');
+  document.getElementById(panelId).classList.add('active');
+}
+function switchAiTab(panelId,btn,color){
+  var parent=btn.parentElement;
+  parent.querySelectorAll('.inner-tab').forEach(function(b){b.classList.remove('active');b.style.borderBottomColor='';b.style.color=''});
+  var panels=[];
+  var sib=parent.nextElementSibling;
+  while(sib&&sib.classList.contains('inner-panel')){panels.push(sib);sib=sib.nextElementSibling}
+  panels.forEach(function(p){p.classList.remove('active')});
+  btn.classList.add('active');
+  btn.style.borderBottomColor=color;
+  btn.style.color=color;
+  document.getElementById(panelId).classList.add('active');
+}
+</script>
+</body>
+</html>
